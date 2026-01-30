@@ -1,3 +1,118 @@
+.main {
+  padding: 48px 0;
+}
 
+.title {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 111%;
+  text-align: center;
+  color: #0f172b;
+  margin-bottom: 16px;
+}
 
+.text {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 156%;
+  text-align: center;
+  color: #45556c;
+  margin-bottom: 48px;
+}
 
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 48px;
+
+  @media screen and (min-width: 1440px) {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 302px));
+  }
+}
+
+.list_item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  width: 100%;
+  height: 222px;
+  padding: 25px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.list_title {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  color: #0f172b;
+  margin-bottom: 8px;
+}
+
+.list_text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 143%;
+  text-align: center;
+  color: #45556c;
+}
+
+.card {
+  display: block;
+  border-radius: 12px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card:hover,
+.card:focus {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.icon {
+  stroke: #fff;
+  fill: transparent;
+  transition: transform 0.2s ease;
+}
+
+.icon_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 39359600px;
+  padding: 0px;
+  width: 79px;
+  height: 79px;
+  margin-bottom: 16px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover .icon,
+.card:focus .icon,
+.card:hover .icon_container,
+.card:focus .icon_container {
+  transform: scale(1.1);
+}
+
+.icon_color_segnalazione {
+  background: linear-gradient(135deg, #2b7fff 0%, #155dfc 100%);
+}
+
+.icon_color_responsabile {
+  background: linear-gradient(135deg, #00c950 0%, #00a63e 100%);
+}
+
+.icon_color_manutentori {
+  background: linear-gradient(135deg, #ff6900 0%, #f54900 100%);
+}
+
+.icon_color_sicurezza {
+  background: linear-gradient(135deg, #fb2c36 0%, #e7000b 100%);
+}
