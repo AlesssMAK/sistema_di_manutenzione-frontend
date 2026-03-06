@@ -107,9 +107,29 @@
   font-size: 14px;
   line-height: 20px;
   color: #0a0a0a;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.1s ease;
 }
 
 .exit_icon {
   stroke: #0a0a0a;
-  fill: transparent;
+  fill: none;
+  transition: stroke 0.2s ease;
+}
+
+.exit_btn:hover,
+.exit_btn:focus {
+  background: #e9ebef;
+}
+
+.exit_btn:active {
+  background: #2563eb;
+  color: #fff;
+  transform: scale(0.97);
+}
+
+.exit_btn:active .exit_icon {
+  stroke: #fff;
 }

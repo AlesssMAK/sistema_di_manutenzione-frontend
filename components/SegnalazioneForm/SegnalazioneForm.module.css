@@ -1,0 +1,157 @@
+.segnalazione_form_container {
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+  padding: 24px;
+}
+
+.info_list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.info_title {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #45556c;
+}
+
+.info_text {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  color: #0a0a0a;
+}
+
+.form_title {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  color: #0a0a0a;
+  margin-bottom: 8px;
+}
+
+.form_item {
+  margin-bottom: 24px;
+}
+
+/*-------------- Tipologia /*--------------*/
+
+.form_item_tipologia {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tipologia_label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tipologia_input input[type='radio'] {
+  border: none;
+  border-radius: 39359600px;
+  width: 15px;
+  height: 15px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0);
+  overflow: hidden;
+  border-color: transparent;
+}
+
+.tipologia_text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 14px;
+  color: #0a0a0a;
+}
+
+/*-------------- Tipologia /*--------------*/
+/*-------------- Note e Descrizione /*--------------*/
+
+.textarea {
+  border: 1.17px solid rgba(0, 0, 0, 0);
+  border-radius: 8px;
+  background: #f3f3f5;
+  padding: 8px 12px;
+  min-height: 63px;
+  width: 100%;
+  resize: none;
+}
+
+.textarea::placeholder {
+  font-family: var(--font-family);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #717182;
+}
+
+/*-------------- Note e Descrizione /*--------------*/
+/*-------------- Immagini --------------*/
+
+.upload_input {
+  display: none;
+}
+
+.upload_label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.17px solid #cad5e2;
+  border-radius: 8px;
+  padding: 17px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.upload_label:hover,
+.upload_label:focus {
+  background: #e9ebef;
+}
+
+.upload_label:active {
+  background: #2563eb;
+  transform: scale(0.97);
+}
+
+.upload_text_container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload_icon {
+  fill: transparent;
+  stroke: #90a1b9;
+  transition: stroke 0.2 ease;
+}
+
+.upload_label:active .upload_icon {
+  stroke: #fff;
+}
+
+.upload_text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #45556c;
+  transition: color 0.2 ease;
+}
+
+.upload_label:active .upload_text {
+  color: #fff;
+}
+
+/*-------------- Immagini --------------*/
