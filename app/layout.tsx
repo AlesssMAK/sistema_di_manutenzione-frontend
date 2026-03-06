@@ -33,10 +33,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${arimoSans.variable} ${cousineSans.variable} ${interSans.variable}`}
-      >
+    <html
+      lang="en"
+      className={`${arimoSans.variable} ${cousineSans.variable} ${interSans.variable}`}
+    >
+      <body>
         <Toaster position="bottom-right" />
         {modal}
         {children}

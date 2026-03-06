@@ -1,0 +1,135 @@
+.header {
+  padding: 10px 0;
+  background: #fff;
+  border-bottom: 1.17px solid #e2e8f0;
+}
+
+.header_container {
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.logo_container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+
+  @media screen and (min-width: 768px) {
+    margin-bottom: 0;
+  }
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  padding: 0px;
+  width: 44px;
+  height: 44px;
+  background: #155dfc;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
+  color: #fff;
+}
+
+.logo_title_container {
+  flex-direction: column;
+}
+
+.logo_title {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 28px;
+  color: #0a0a0a;
+}
+
+.logo_page_name {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #45556c;
+}
+
+.user_container {
+  display: flex;
+  justify-content: space-between;
+
+  @media screen and (min-width: 768px) {
+    gap: 16px;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.user {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #f1f5f9;
+  min-width: 121px;
+  height: 36px;
+}
+
+.user_icon {
+  stroke: #45556c;
+  fill: transparent;
+}
+
+.user_name {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #0a0a0a;
+}
+
+.exit_btn {
+  display: flex;
+  gap: 13px;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 8px 12px;
+  height: 36px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #0a0a0a;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.exit_icon {
+  stroke: #0a0a0a;
+  fill: none;
+  transition: stroke 0.2s ease;
+}
+
+.exit_btn:hover,
+.exit_btn:focus {
+  background: #e9ebef;
+}
+
+.exit_btn:active {
+  background: #2563eb;
+  color: #fff;
+  transform: scale(0.97);
+}
+
+.exit_btn:active .exit_icon {
+  stroke: #fff;
+}

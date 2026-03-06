@@ -1,13 +1,9 @@
 :root {
   --background: #f8fafc;
   --foreground: #0f172b;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-family: var(--font-arimo-sans);
+  --second-family: var(--font-cousine-sans);
+  --third-family: var(--font-inter-sans);
 }
 
 html,
@@ -19,7 +15,7 @@ body {
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-arimo-sans);
+  font-family: var(--font-family);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -52,6 +48,10 @@ h5,
 h6 {
   margin: 0;
   padding: 0;
+}
+
+.section {
+  padding: 32px 0;
 }
 
 .container {
