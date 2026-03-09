@@ -1,5 +1,6 @@
 import SegnalazioneForm from '@/components/SegnalazioneForm/SegnalazioneForm';
 import css from './SegnalazionePage.module.css';
+import AuthForm from '@/components/forms/AuthForm/AuthForm';
 
 const SegnalazionePage = () => {
   return (
@@ -10,6 +11,7 @@ const SegnalazionePage = () => {
           <p className={css.text}>
             Compila il modulo per segnalare un guasto o anomalia
           </p>
+          <AuthForm />
           <SegnalazioneForm />
         </div>
       </section>
