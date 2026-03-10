@@ -1,29 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { logErrorResponse } from '../../_utils/utils';
 import { isAxiosError } from 'axios';
-import { cookies } from 'next/headers';
 import { api } from '../../api';
+import { cookies } from 'next/headers';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const cookieStore = await cookies();
+    const cookieStore = cookies();
 
-    const accessToken = cookieStore.get('accessToken')?.value;
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-
-    await api.post('auth/logout', null, {
+    const res = await api.get('user/me', {
       headers: {
-        Cookie: `accessToken=${accessToken}; refreshToken=${refreshToken}`,
+        Cookie: cookieStore.toString(),
       },
     });
-
-    cookieStore.delete('accessToken');
-    cookieStore.delete('refreshToken');
-
-    return NextResponse.json(
-      { message: 'Logged out successfully' },
-      { status: 200 }
-    );
+    return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);

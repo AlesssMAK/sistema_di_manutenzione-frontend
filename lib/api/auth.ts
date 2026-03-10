@@ -34,9 +34,28 @@ export const logout = async (): Promise<void> => {
   await nextServer.post('/auth/logout');
 };
 
+interface CheckSessionRequest {
+  success: boolean;
+}
+
+export const checkSession = async (): Promise<boolean> => {
+  await nextServer.post<CheckSessionRequest>('/auth/refresh');
+  return true;
+};
+
 // ----------------------------------------------------Auth----------------------------------------------------//
 
 export const getUsers = async () => {
   const { data } = await nextServer.get<User>('/users');
   return data;
+};
+
+interface getMeRespons {
+  success: boolean;
+  user: User;
+}
+
+export const getMe = async () => {
+  const me = await nextServer.get<getMeRespons>('user/me');
+  return me.data.user;
 };
