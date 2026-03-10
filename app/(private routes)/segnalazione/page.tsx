@@ -1,7 +1,7 @@
 import SegnalazioneForm from '@/components/SegnalazioneForm/SegnalazioneForm';
 import css from './SegnalazionePage.module.css';
 
-const SegnalazionePage = () => {
+const SegnalazionePage = async () => {
   return (
     <main>
       <section className="section">
