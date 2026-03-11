@@ -74,3 +74,27 @@ h6 {
     padding: 0 80px;
   }
 }
+
+/* -----------------button----------------- */
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+}
+
+.button_blue {
+  background: #2563eb;
+  color: #fff;
+}
+
+.button_white {
+  background: #fff;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  color: #0a0a0a;
+}

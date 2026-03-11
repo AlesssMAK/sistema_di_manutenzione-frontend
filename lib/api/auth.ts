@@ -20,14 +20,18 @@ export const register = async (data: RegisterRequest) => {
   return res.data;
 };
 
+interface LoginOperatorRequest {
+  fullName: String;
+  personalCode: String;
+}
 interface LoginRequest {
   email: String;
   password: String;
 }
 
-export const login = async (data: LoginRequest) => {
+export const login = async (data: LoginOperatorRequest) => {
   const res = await nextServer.post('/auth/login', data);
-  return res;
+  return res.data;
 };
 
 export const logout = async (): Promise<void> => {
@@ -45,6 +49,8 @@ export const checkSession = async (): Promise<boolean> => {
 
 // ----------------------------------------------------Auth----------------------------------------------------//
 
+// ----------------------------------------------------Users----------------------------------------------------//
+
 export const getUsers = async () => {
   const { data } = await nextServer.get<User>('/users');
   return data;
@@ -59,3 +65,5 @@ export const getMe = async () => {
   const me = await nextServer.get<getMeRespons>('user/me');
   return me.data.user;
 };
+
+// ----------------------------------------------------Users----------------------------------------------------//

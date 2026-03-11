@@ -1,6 +1,14 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
 import css from './Header.module.css';
 
 const Header = () => {
+  const router = useRouter();
+  const handleLoginClick = () => {
+    router.push('/login');
+  };
+
   return (
     <header className={css.header}>
       <div className="container">
@@ -19,6 +27,13 @@ const Header = () => {
               </svg>
               <p className={css.user_name}>User</p>
             </div>
+            <button
+              type="button"
+              className={css.exit_btn}
+              onClick={handleLoginClick}
+            >
+              login
+            </button>
             <button className={css.exit_btn}>
               <svg className={css.exit_icon} width="16" height="16">
                 <use href="/sprite.svg#exit"></use>

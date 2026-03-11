@@ -1,7 +1,8 @@
-import SegnalazioneForm from '@/components/SegnalazioneForm/SegnalazioneForm';
-import css from './SegnalazionePage.module.css';
+// import SegnalazioneForm from '@/components/SegnalazioneForm/SegnalazioneForm';
+import LoginForm from '@/components/forms/LoginForm/LoginForm';
+import css from './OperatorePage.module.css';
 
-const SegnalazionePage = async () => {
+const SperatorePage = async () => {
   return (
     <main>
       <section className="section">
@@ -10,11 +11,11 @@ const SegnalazionePage = async () => {
           <p className={css.text}>
             Compila il modulo per segnalare un guasto o anomalia
           </p>
-          <SegnalazioneForm />
+          {/* <SegnalazioneForm /> */}
         </div>
       </section>
     </main>
   );
 };
 
-export default SegnalazionePage;
+export default SperatorePage;

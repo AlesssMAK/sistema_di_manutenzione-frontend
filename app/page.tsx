@@ -8,10 +8,10 @@ export default function Home() {
         <h1 className={css.title}>Sistema di Manutenzione e Segnalazioni</h1>
         <p className={css.text}>Seleziona il tuo ruolo per accedere</p>
         <div className={css.list}>
-          <Link href="/segnalazione" className={css.card}>
+          <Link href="/operatore" className={css.card}>
             <div className={css.list_item}>
               <div
-                className={`${css.icon_container} ${css.icon_color_segnalazione}`}
+                className={`${css.icon_container} ${css.icon_color_operatore}`}
               >
                 <svg width="40" height="40" className={css.icon}>
                   <use href="/sprite.svg#clipboard">df</use>
