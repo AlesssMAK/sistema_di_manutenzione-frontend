@@ -1,0 +1,21 @@
+{
+  "login": {
+    "title": "Log in as",
+    "roleOperatore": "Operator",
+    "roleResponsabile": "Supervisor",
+    "roleManuntentore": "Maintenance Technician",
+    "roleSicurezza": "Safety (HSE)",
+    "subtitleOperator": "Enter your full name and personal code to continue",
+    "subtitleOther": "Enter your email and password to continue",
+    "fullName": "Full name",
+    "personalCode": "Personal code",
+    "placeholderFullNameOperatore": "Enter name",
+    "placeholderPersonalCodeOperatore": "Enter code",
+    "placeholderEmail": "Enter email",
+    "placeholderPassword": "Enter password",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Log in",
+    "cancel": "Cancel"
+  }
+}

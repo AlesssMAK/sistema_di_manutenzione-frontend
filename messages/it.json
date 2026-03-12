@@ -1,0 +1,19 @@
+{"login": {
+    "title": "Accedi come",
+    "roleOperatore": "Operatore",
+    "roleResponsabile": "Responsabile",
+    "roleManuntentore": "Manuntentore",
+    "roleSicurezza": "Sicurezza (HSE)",
+    "subtitleOperator": "Inserisci il tuo nome completo e il codice personale per continuare",
+    "subtitleOther": "Inserisci la tua email e la tua password per continuare",
+    "fullName": "Nome completo",
+    "personalCode": "Codice di accesso",
+    "placeholderFullNameOperatore": "Inserisci nome",
+    "placeholderPersonalCodeOperatore": "Inserisci codice",
+    "placeholderEmail": "Inserisci email",
+    "placeholderPassword": "Inserisci password",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Accedi",
+    "cancel": "Annulla"
+}}

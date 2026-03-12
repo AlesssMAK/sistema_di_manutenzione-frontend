@@ -1,0 +1,21 @@
+{
+  "login": {
+    "title": "Iniciar sesión como",
+    "roleOperatore": "Operador",
+    "roleResponsabile": "Supervisor",
+    "roleManuntentore": "Técnico de Mantenimiento",
+    "roleSicurezza": "Seguridad (HSE)",
+    "subtitleOperator": "Introduce tu nombre completo y tu código personal para continuar",
+    "subtitleOther": "Introduce tu correo electrónico y tu contraseña para continuar",
+    "fullName": "Nombre completo",
+    "personalCode": "Código personal",
+    "placeholderFullNameOperatore": "Introduce tu nombre",
+    "placeholderPersonalCodeOperatore": "Introduce tu código",
+    "placeholderEmail": "Introduce tu correo electrónico",
+    "placeholderPassword": "Introduce tu contraseña",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Iniciar sesión",
+    "cancel": "Cancelar"
+  }
+}
