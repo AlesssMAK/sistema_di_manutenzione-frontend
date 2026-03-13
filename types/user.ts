@@ -13,3 +13,8 @@ export interface User {
 export interface userRoles {
   role: 'operator' | 'admin' | 'manager' | 'maintenanceWorker' | 'safety';
 }
+
+export interface getMeRespons {
+  success: boolean;
+  user: User;
+}

@@ -21,6 +21,7 @@ interface LoginFormProps {
 const LoginForm = ({ onClose }: LoginFormProps) => {
   const t = useTranslations('login');
   const setUser = useAuthStore(state => state.setUser);
+
   const {
     register,
     handleSubmit,
@@ -34,13 +35,13 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
       fullName: value.fullName,
       personalCode: value.personalCode,
     });
+
     setUser(data.user);
     reset();
     onClose();
   };
 
   const { user } = useAuthStore();
-  console.log(user);
 
   return (
     <Modal onClose={onClose}>
@@ -49,21 +50,19 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
         <p className={css.logit_subtitle}>{t('subtitleOperator')}</p>
         <form onSubmit={handleSubmit(onLoginSubmit)} className={css.form}>
           <div className={css.input_container}>
-            <label htmlFor="nome-operatore">{t('fullName')}</label>
+            <p>{t('fullName')}</p>
             <Input
               {...register('fullName')}
               type="text"
               placeholder={t('placeholderFullNameOperatore')}
-              name="nome-operatore"
             />
           </div>
           <div className={css.input_container}>
-            <label htmlFor="code-operatore">{t('personalCode')}</label>
+            <p>{t('personalCode')}</p>
             <Input
               {...register('personalCode')}
               type="password"
               placeholder={t('placeholderPersonalCodeOperatore')}
-              name="code-operatore"
             />
           </div>
           <div className={css.btn_container}>

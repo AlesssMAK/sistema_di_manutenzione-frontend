@@ -48,22 +48,3 @@ export const checkSession = async (): Promise<boolean> => {
 };
 
 // ----------------------------------------------------Auth----------------------------------------------------//
-
-// ----------------------------------------------------Users----------------------------------------------------//
-
-export const getUsers = async () => {
-  const { data } = await nextServer.get<User>('/users');
-  return data;
-};
-
-interface getMeRespons {
-  success: boolean;
-  user: User;
-}
-
-export const getMe = async () => {
-  const me = await nextServer.get<getMeRespons>('user/me');
-  return me.data.user;
-};
-
-// ----------------------------------------------------Users----------------------------------------------------//
