@@ -15,5 +15,15 @@
     "email": "Email",
     "password": "Password",
     "submit": "Accedi",
-    "cancel": "Annulla"
-}}
+    "cancel": "Annulla",
+    "errors": {
+      "required": "Campo obbligatorio",
+      "invalidIdentifier": "Formato non valido (email o nome completo)",
+      "invalidSecret": "Formato non valido (password o codice personale)"
+    }
+}
+
+
+
+
+}

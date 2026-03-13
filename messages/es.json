@@ -16,6 +16,12 @@
     "email": "Correo electrónico",
     "password": "Contraseña",
     "submit": "Iniciar sesión",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "errors": {
+      "required": "Campo obligatorio",
+      "invalidIdentifier": "Formato no válido (correo electrónico o nombre completo)",
+      "invalidSecret": "Formato no válido (contraseña o código personal)"
+    }
   }
+
 }

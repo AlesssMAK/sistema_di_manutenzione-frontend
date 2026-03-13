@@ -8,11 +8,13 @@ import { login } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/authStore';
 import Modal from '@/components/UI/Modal/Modal';
 import { useTranslations } from 'next-intl';
-
-interface LofinFormData {
-  fullName: string;
-  personalCode: string;
-}
+import {
+  createLoginSchema,
+  isEmail,
+  isPersonalCode,
+  LoginFormData,
+} from '@/validation/loginValidation';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface LoginFormProps {
   onClose: () => void;
@@ -20,6 +22,7 @@ interface LoginFormProps {
 
 const LoginForm = ({ onClose }: LoginFormProps) => {
   const t = useTranslations('login');
+  const schema = createLoginSchema(t);
   const setUser = useAuthStore(state => state.setUser);
 
   const {
@@ -27,14 +30,28 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<LofinFormData>();
+  } = useForm({ resolver: yupResolver(schema) });
 
-  const onLoginSubmit = async (value: LofinFormData) => {
-    console.log(value);
-    const data = await login({
-      fullName: value.fullName,
-      personalCode: value.personalCode,
-    });
+  const onLoginSubmit = async (value: LoginFormData) => {
+    const { identifier, secret } = value;
+
+    const payload: any = {};
+
+    if (isEmail(identifier)) {
+      payload.email = identifier;
+    } else {
+      payload.fullName = identifier;
+    }
+
+    if (isPersonalCode(secret)) {
+      payload.personalCode = secret;
+    } else {
+      payload.password = secret;
+    }
+
+    console.log('Payload:', payload);
+
+    const data = await login(payload);
 
     setUser(data.user);
     reset();
@@ -52,7 +69,7 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
           <div className={css.input_container}>
             <p>{t('fullName')}</p>
             <Input
-              {...register('fullName')}
+              {...register('identifier')}
               type="text"
               placeholder={t('placeholderFullNameOperatore')}
             />
@@ -60,7 +77,7 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
           <div className={css.input_container}>
             <p>{t('personalCode')}</p>
             <Input
-              {...register('personalCode')}
+              {...register('secret')}
               type="password"
               placeholder={t('placeholderPersonalCodeOperatore')}
             />

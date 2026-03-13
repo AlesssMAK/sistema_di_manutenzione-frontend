@@ -16,6 +16,12 @@
     "email": "Email",
     "password": "Password",
     "submit": "Log in",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "errors": {
+      "required": "This field is required",
+      "invalidIdentifier": "Invalid format (email or full name)",
+      "invalidSecret": "Invalid format (password or personal code)"
+    }
   }
+
 }

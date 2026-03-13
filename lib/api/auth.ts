@@ -1,3 +1,4 @@
+import { LoginFormData } from '@/validation/loginValidation';
 import nextServer from './api';
 import {
   CheckSessionRequest,
@@ -11,7 +12,7 @@ export const register = async (data: RegisterRequest) => {
   return res.data;
 };
 
-export const login = async (data: LoginOperatorRequest | LoginRequest) => {
+export const login = async (data: LoginFormData) => {
   const res = await nextServer.post('/auth/login', data);
   return res.data;
 };
