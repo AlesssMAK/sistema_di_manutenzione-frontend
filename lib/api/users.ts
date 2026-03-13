@@ -1,4 +1,4 @@
-import { getMeRespons, User } from '@/types/user';
+import { getMeRespons, User } from '@/types/userTypes';
 import nextServer from './api';
 
 export const getUsers = async () => {
