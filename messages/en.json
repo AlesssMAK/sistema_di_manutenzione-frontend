@@ -1,0 +1,32 @@
+{
+  "login": {
+    "title": "Login",
+    "titleForLoginHomePage": "Log in as",
+    "roleOperatore": "Operator",
+    "roleResponsabile": "Manager",
+    "roleManuntentore": "Maintenance",
+    "roleSicurezza": "Safety (HSE)",
+    "subtitle": "To continue, enter your email or full name and your password or personal code",
+    "subtitleOperator": "Enter your full name and personal code to continue",
+    "subtitleOther": "Enter your email and password to continue",
+    "inputIdentifier": "Email or full name",
+    "inputSecret": "Password or code",
+    "fullName": "Full name",
+    "personalCode": "Access code",
+    "email": "Email",
+    "password": "Password",
+    "placeholderEmailOrFullName": "Enter email or full name",
+    "placeholderPasswordOrPersonalCode": "Enter password or code",
+    "placeholderFullNameOperatore": "Enter full name",
+    "placeholderPersonalCodeOperatore": "Enter code",
+    "placeholderEmail": "Enter email",
+    "placeholderPassword": "Enter password",
+    "submit": "Login",
+    "cancel": "Cancel",
+    "errors": {
+      "required": "Field is required",
+      "invalidIdentifier": "Invalid format (email or full name)",
+      "invalidSecret": "Invalid format (password or personal code)"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{"login": {
+    "title": "Accedi",
+    "titleForLoginHomePage": "Accedi come",
+    "roleOperatore": "Operatore",
+    "roleResponsabile": "Responsabile",
+    "roleManuntentore": "Manuntentore",
+    "roleSicurezza": "Sicurezza (HSE)",
+    "subtitle": "Per continuare inserisci la tua email o il nome completo e la tua password o il codice personale",
+    "subtitleOperator": "Inserisci il tuo nome completo e il codice personale per continuare",
+    "subtitleOther": "Inserisci la tua email e la tua password per continuare",
+    "inputIdentifier": "Email o nome completo",
+    "inputSecret": "Password o codice",
+    "fullName": "Nome completo",
+    "personalCode": "Codice di accesso",
+    "email": "Email",
+    "password": "Password",
+    "placeholderEmailOrFullName": "Inserisci email o nome completo",
+    "placeholderPasswordOrPersonalCode": "Inserisci password o codice",
+    "placeholderFullNameOperatore": "Inserisci nome",
+    "placeholderPersonalCodeOperatore": "Inserisci codice",
+    "placeholderEmail": "Inserisci email",
+    "placeholderPassword": "Inserisci password",
+    "submit": "Accedi",
+    "cancel": "Annulla",
+    "errors": {
+      "required": "Campo obbligatorio",
+      "invalidIdentifier": "Formato non valido (email o nome completo)",
+      "invalidSecret": "Formato non valido (password o codice personale)"
+    }
+},
+
+"header": {
+"navItem1": "Ruoli",
+"navItem2": "Report"
+}
+}

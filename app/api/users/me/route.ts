@@ -4,11 +4,11 @@ import { isAxiosError } from 'axios';
 import { api } from '../../api';
 import { cookies } from 'next/headers';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
 
-    const res = await api.get('user/me', {
+    const res = await api.get('users/me', {
       headers: {
         Cookie: cookieStore.toString(),
       },

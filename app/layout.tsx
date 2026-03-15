@@ -3,6 +3,8 @@ import { Arimo, Cousine, Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import AuthProvider from '@/providers/AuthProvider/AuthProvider';
+import { NextIntlClientProvider } from 'next-intl';
+import Header from '@/components/Header/Header';
 
 const arimoSans = Arimo({
   variable: '--font-arimo-sans',
@@ -39,11 +41,14 @@ export default function RootLayout({
       className={`${arimoSans.variable} ${cousineSans.variable} ${interSans.variable}`}
     >
       <body>
-        <AuthProvider>
-          <Toaster position="bottom-right" />
-          {modal}
-          {children}
-        </AuthProvider>
+        <NextIntlClientProvider>
+          <AuthProvider>
+            <Toaster position="bottom-right" />
+            <Header />
+            {modal}
+            {children}
+          </AuthProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -1,8 +1,8 @@
 'use client';
 
-import css from './Modal.module.css';
 import { createPortal } from 'react-dom';
-import { useEffect } from 'react';
+import css from './Modal.module.css';
+import { useEffect, useState } from 'react';
 
 export interface ModalProps {
   onClose: () => void;
@@ -10,6 +10,7 @@ export interface ModalProps {
 }
 
 const Modal = ({ onClose, children }: ModalProps) => {
+  const [mounted, setMounted] = useState(false);
   const handleBackdropClick = (ev: React.MouseEvent<HTMLDivElement>) => {
     if (ev.target === ev.currentTarget) {
       onClose();
@@ -17,6 +18,7 @@ const Modal = ({ onClose, children }: ModalProps) => {
   };
 
   useEffect(() => {
+    setMounted(true);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();
@@ -24,13 +26,16 @@ const Modal = ({ onClose, children }: ModalProps) => {
     };
 
     document.addEventListener('keydown', handleKeyDown);
-    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
     };
   }, [onClose]);
+
+  if (!mounted) return null;
+
   return createPortal(
     <div
       onClick={handleBackdropClick}
