@@ -56,41 +56,39 @@ const Header = () => {
               </svg>
             </Button>
           )}
-          <div className={css.nav_and_user_container}>
+          <nav className={css.nav}>
+            <ul className={css.nav_list}>
+              <li className={css.nav_list_item}>
+                <Link href="/" onClick={close}>
+                  {t('navItem1')}{' '}
+                </Link>
+              </li>
+              <li className={css.nav_list_item}>
+                <Link href="/reports-and-communications" onClick={close}>
+                  {t('navItem2')}
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          <div className={css.user_container}>
             {isAuthenticated ? (
               <>
-                <nav>
-                  <ul className={css.nav_list}>
-                    <li className={css.nav_list_item}>
-                      <Link href="/" onClick={close}>
-                        {t('navItem1')}{' '}
-                      </Link>
-                    </li>
-                    <li className={css.nav_list_item}>
-                      <Link href="/reports-and-communications" onClick={close}>
-                        {t('navItem2')}
-                      </Link>
-                    </li>
-                  </ul>
-                </nav>
-                <div className={css.user_container}>
-                  <div className={css.user}>
-                    <svg className={css.user_icon} width="16" height="16">
-                      <use href="/sprite.svg#user"></use>
-                    </svg>
-                    <p className={css.user_name}>{user?.fullName}</p>
-                  </div>
-                  <Button
-                    className={`${css.exit_btn} button button--white`}
-                    width={121}
-                    onClick={handleLogout}
-                  >
-                    <svg className={css.exit_icon} width="16" height="16">
-                      <use href="/sprite.svg#exit"></use>
-                    </svg>
-                    <span className={css.btn_text}>Esci</span>
-                  </Button>
+                <div className={css.user}>
+                  <svg className={css.user_icon} width="16" height="16">
+                    <use href="/sprite.svg#user"></use>
+                  </svg>
+                  <p className={css.user_name}>{user?.fullName}</p>
                 </div>
+                <Button
+                  className={`${css.exit_btn} button button--white`}
+                  width={121}
+                  onClick={handleLogout}
+                >
+                  <svg className={css.exit_icon} width="16" height="16">
+                    <use href="/sprite.svg#exit"></use>
+                  </svg>
+                  <span className={css.btn_text}>Esci</span>
+                </Button>
               </>
             ) : (
               <Button
