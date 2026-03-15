@@ -65,7 +65,7 @@ export default function HomeClient() {
                   <use href="/sprite.svg#shield-check">df</use>
                 </svg>
               </div>
-              <h3 className={css.list_title}>Manutentore</h3>
+              <h3 className={css.list_title}>Sicurezza (HSE)</h3>
               <p className={css.list_text}>
                 Monitora segnalazioni di sicurezza
               </p>

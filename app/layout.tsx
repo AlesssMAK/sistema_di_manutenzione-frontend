@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import AuthProvider from '@/providers/AuthProvider/AuthProvider';
 import { NextIntlClientProvider } from 'next-intl';
+import Header from '@/components/Header/Header';
 
 const arimoSans = Arimo({
   variable: '--font-arimo-sans',
@@ -43,6 +44,7 @@ export default function RootLayout({
         <NextIntlClientProvider>
           <AuthProvider>
             <Toaster position="bottom-right" />
+            <Header />
             {modal}
             {children}
           </AuthProvider>

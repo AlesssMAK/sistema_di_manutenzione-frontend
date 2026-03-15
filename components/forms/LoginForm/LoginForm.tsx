@@ -1,13 +1,10 @@
 'use client';
 
-import Input from '@/components/UI/Input/Input';
-import css from './LoginForm.module.css';
 import Button from '@/components/UI/Button/Button';
-import { useForm } from 'react-hook-form';
+import Input from '@/components/UI/Input/Input';
+import Modal from '@/components/UI/Modal/Modal';
 import { login } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/authStore';
-import Modal from '@/components/UI/Modal/Modal';
-import { useTranslations } from 'next-intl';
 import {
   createLoginSchema,
   isEmail,
@@ -15,6 +12,9 @@ import {
   LoginFormData,
 } from '@/validation/loginValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslations } from 'next-intl';
+import { useForm } from 'react-hook-form';
+import css from './LoginForm.module.css';
 
 interface LoginFormProps {
   onClose: () => void;
@@ -64,34 +64,34 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
     <Modal onClose={onClose}>
       <div className={css.login_container}>
         <h1 className={css.logit_title}>{t('title')}</h1>
-        <p className={css.logit_subtitle}>{t('subtitleOperator')}</p>
+        <p className={css.logit_subtitle}>{t('subtitle')}</p>
         <form onSubmit={handleSubmit(onLoginSubmit)} className={css.form}>
           <div className={css.input_container}>
-            <p>{t('fullName')}</p>
+            <p>{t('inputIdentifier')}</p>
             <Input
               {...register('identifier')}
               type="text"
-              placeholder={t('placeholderFullNameOperatore')}
+              placeholder={t('placeholderEmailOrFullName')}
             />
           </div>
           <div className={css.input_container}>
-            <p>{t('personalCode')}</p>
+            <p>{t('inputSecret')}</p>
             <Input
               {...register('secret')}
               type="password"
-              placeholder={t('placeholderPersonalCodeOperatore')}
+              placeholder={t('placeholderPasswordOrPersonalCode')}
             />
           </div>
           <div className={css.btn_container}>
             <Button
               type="button"
-              className="button button_white"
+              className="button button--white"
               width="100%"
               onClick={onClose}
             >
               {t('cancel')}
             </Button>
-            <Button type="submit" className="button button_blue" width="100%">
+            <Button type="submit" className="button button--blue" width="100%">
               {t('submit')}
             </Button>
           </div>

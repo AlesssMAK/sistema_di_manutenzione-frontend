@@ -1,21 +1,27 @@
 {
   "login": {
-    "title": "Iniciar sesión como",
+    "title": "Iniciar sesión",
+    "titleForLoginHomePage": "Iniciar sesión como",
     "roleOperatore": "Operador",
-    "roleResponsabile": "Supervisor",
-    "roleManuntentore": "Técnico de Mantenimiento",
+    "roleResponsabile": "Responsable",
+    "roleManuntentore": "Mantenimiento",
     "roleSicurezza": "Seguridad (HSE)",
+    "subtitle": "Para continuar, introduce tu correo electrónico o nombre completo y tu contraseña o código personal",
     "subtitleOperator": "Introduce tu nombre completo y tu código personal para continuar",
     "subtitleOther": "Introduce tu correo electrónico y tu contraseña para continuar",
+    "inputIdentifier": "Correo electrónico o nombre completo",
+    "inputSecret": "Contraseña o código",
     "fullName": "Nombre completo",
-    "personalCode": "Código personal",
-    "placeholderFullNameOperatore": "Introduce tu nombre",
-    "placeholderPersonalCodeOperatore": "Introduce tu código",
-    "placeholderEmail": "Introduce tu correo electrónico",
-    "placeholderPassword": "Introduce tu contraseña",
+    "personalCode": "Código de acceso",
     "email": "Correo electrónico",
     "password": "Contraseña",
-    "submit": "Iniciar sesión",
+    "placeholderEmailOrFullName": "Introduce correo electrónico o nombre completo",
+    "placeholderPasswordOrPersonalCode": "Introduce contraseña o código",
+    "placeholderFullNameOperatore": "Introduce nombre completo",
+    "placeholderPersonalCodeOperatore": "Introduce código",
+    "placeholderEmail": "Introduce correo electrónico",
+    "placeholderPassword": "Introduce contraseña",
+    "submit": "Entrar",
     "cancel": "Cancelar",
     "errors": {
       "required": "Campo obligatorio",
@@ -23,5 +29,4 @@
       "invalidSecret": "Formato no válido (contraseña o código personal)"
     }
   }
-
 }
