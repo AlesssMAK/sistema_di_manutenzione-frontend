@@ -31,6 +31,37 @@
 
 "header": {
 "navItem1": "Ruoli",
-"navItem2": "Report"
+"navItem2": "Report",
+"exit": "Esci",
+"login": "Accede"
+},
+
+"AdminPage": {
+  "titlePageForStore": "Amministratore"
+},
+
+"maintenanceWorkerPage": {
+  "titlePageForStore": "Manutentore"
+},
+
+"ManagerPage": {
+  "titlePageForStore": "Responsabile"
+},
+
+"OperatorPage": {
+  "titlePageForStore": "Operatore"
+},
+
+"SafetyPage": {
+  "titlePageForStore": "Sicurezza (HSE)"
+},
+
+"reportsAndCommunicationsPage": {
+  "titlePageForStore": "Report"
+},
+
+"RolesPage": {
+  "titlePageForStore": "Ruoli"
 }
+
 }

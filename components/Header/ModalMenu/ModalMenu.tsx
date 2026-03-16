@@ -84,7 +84,7 @@ const ModalMenu = ({
                     <svg className={css.exit_icon} width="16" height="16">
                       <use href="/sprite.svg#exit"></use>
                     </svg>
-                    <span className={css.btn_text}>Esci</span>
+                    <span className={css.btn_text}>{t('exit')}</span>
                   </Button>
                 </>
               ) : (
@@ -94,7 +94,7 @@ const ModalMenu = ({
                   onClick={handleLoginClick}
                   width={121}
                 >
-                  login
+                  {t('login')}
                 </Button>
               )}
             </div>

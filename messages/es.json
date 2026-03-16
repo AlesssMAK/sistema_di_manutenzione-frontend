@@ -28,5 +28,41 @@
       "invalidIdentifier": "Formato no válido (correo electrónico o nombre completo)",
       "invalidSecret": "Formato no válido (contraseña o código personal)"
     }
-  }
+  },
+
+  "header": {
+  "navItem1": "Roles",
+  "navItem2": "Reportes",
+  "exit": "Salir",
+  "login": "Acceder"
+},
+
+"AdminPage": {
+  "titlePageForStore": "Administrador"
+},
+
+"maintenanceWorkerPage": {
+  "titlePageForStore": "Mantenedor"
+},
+
+"ManagerPage": {
+  "titlePageForStore": "Responsable"
+},
+
+"OperatorPage": {
+  "titlePageForStore": "Operador"
+},
+
+"SafetyPage": {
+  "titlePageForStore": "Seguridad (HSE)"
+},
+
+"reportsAndCommunicationsPage": {
+  "titlePageForStore": "Reportes"
+},
+
+"RolesPage": {
+  "titlePageForStore": "Roles"
+}
+
 }

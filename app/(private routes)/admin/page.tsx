@@ -1,5 +1,11 @@
+import AdminPageClient from './adminPage.client';
+
 const AdminPage = () => {
-  return <div>AdminPage</div>;
+  return (
+    <div>
+      <AdminPageClient />
+    </div>
+  );
 };
 
 export default AdminPage;

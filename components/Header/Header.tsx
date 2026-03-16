@@ -9,10 +9,12 @@ import { useState } from 'react';
 import ModalMenu from './ModalMenu/ModalMenu';
 import { useTranslations } from 'use-intl';
 import { logout } from '@/lib/api/auth';
+import { usePageStore } from '@/lib/store/pageStore';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const t = useTranslations('header');
+  const { pageTitle } = usePageStore();
 
   const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
   const router = useRouter();
@@ -39,7 +41,7 @@ const Header = () => {
               <div className={css.logo}>SM</div>
               <div className={css.logo_title_container}>
                 <h2 className={css.logo_title}>Sistema Manutenzione</h2>
-                <p className={css.logo_page_name}>page</p>
+                <p className={css.logo_page_name}>{pageTitle}</p>
               </div>
             </div>
           </Link>
@@ -87,7 +89,7 @@ const Header = () => {
                   <svg className={css.exit_icon} width="16" height="16">
                     <use href="/sprite.svg#exit"></use>
                   </svg>
-                  <span className={css.btn_text}>Esci</span>
+                  <span className={css.btn_text}>{t('exit')}</span>
                 </Button>
               </>
             ) : (
@@ -97,7 +99,7 @@ const Header = () => {
                 onClick={handleLoginClick}
                 width={121}
               >
-                login
+                {t('login')}
               </Button>
             )}
           </div>

@@ -101,18 +101,18 @@
   transform: scale(1.1);
 }
 
-.icon_color_operatore {
+.icon_color_operator {
   background: linear-gradient(135deg, #2b7fff 0%, #155dfc 100%);
 }
 
-.icon_color_responsabile {
+.icon_color_manager {
   background: linear-gradient(135deg, #00c950 0%, #00a63e 100%);
 }
 
-.icon_color_manutentori {
+.icon_color_maintenance {
   background: linear-gradient(135deg, #ff6900 0%, #f54900 100%);
 }
 
-.icon_color_sicurezza {
+.icon_color_safety {
   background: linear-gradient(135deg, #fb2c36 0%, #e7000b 100%);
 }

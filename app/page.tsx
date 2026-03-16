@@ -1,5 +1,5 @@
-import HomeClient from './HomeClient';
+import RolesClient from './Roles.client';
 
-export default function Home() {
-  return <HomeClient />;
+export default function RolesPage() {
+  return <RolesClient />;
 }
