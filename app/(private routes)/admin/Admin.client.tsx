@@ -4,7 +4,7 @@ import { usePageStore } from '@/lib/store/pageStore';
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
 
-const AdminPageClient = () => {
+const AdminClient = () => {
   const t = useTranslations('AdminPage');
   const setPageTitle = usePageStore(state => state.setPageTitle);
 
@@ -15,4 +15,4 @@ const AdminPageClient = () => {
   return <div>AdminPage</div>;
 };
 
-export default AdminPageClient;
+export default AdminClient;

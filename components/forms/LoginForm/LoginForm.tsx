@@ -49,16 +49,12 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
       payload.password = secret;
     }
 
-    console.log('Payload:', payload);
+    const { user } = await login(payload);
 
-    const data = await login(payload);
-
-    setUser(data.user);
+    setUser(user);
     reset();
     onClose();
   };
-
-  const { user } = useAuthStore();
 
   return (
     <Modal onClose={onClose}>
