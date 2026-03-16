@@ -9,10 +9,12 @@ import { useState } from 'react';
 import ModalMenu from './ModalMenu/ModalMenu';
 import { useTranslations } from 'use-intl';
 import { logout } from '@/lib/api/auth';
+import { usePageStore } from '@/lib/store/pageStore';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const t = useTranslations('header');
+  const { pageTitle } = usePageStore();
 
   const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
   const router = useRouter();
@@ -39,7 +41,7 @@ const Header = () => {
               <div className={css.logo}>SM</div>
               <div className={css.logo_title_container}>
                 <h2 className={css.logo_title}>Sistema Manutenzione</h2>
-                <p className={css.logo_page_name}>page</p>
+                <p className={css.logo_page_name}>{pageTitle}</p>
               </div>
             </div>
           </Link>
@@ -56,41 +58,39 @@ const Header = () => {
               </svg>
             </Button>
           )}
-          <div className={css.nav_and_user_container}>
+          <nav className={css.nav}>
+            <ul className={css.nav_list}>
+              <li className={css.nav_list_item}>
+                <Link href="/" onClick={close}>
+                  {t('navItem1')}{' '}
+                </Link>
+              </li>
+              <li className={css.nav_list_item}>
+                <Link href="/reports-and-communications" onClick={close}>
+                  {t('navItem2')}
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          <div className={css.user_container}>
             {isAuthenticated ? (
               <>
-                <nav>
-                  <ul className={css.nav_list}>
-                    <li className={css.nav_list_item}>
-                      <Link href="/" onClick={close}>
-                        {t('navItem1')}{' '}
-                      </Link>
-                    </li>
-                    <li className={css.nav_list_item}>
-                      <Link href="/reports-and-communications" onClick={close}>
-                        {t('navItem2')}
-                      </Link>
-                    </li>
-                  </ul>
-                </nav>
-                <div className={css.user_container}>
-                  <div className={css.user}>
-                    <svg className={css.user_icon} width="16" height="16">
-                      <use href="/sprite.svg#user"></use>
-                    </svg>
-                    <p className={css.user_name}>{user?.fullName}</p>
-                  </div>
-                  <Button
-                    className={`${css.exit_btn} button button--white`}
-                    width={121}
-                    onClick={handleLogout}
-                  >
-                    <svg className={css.exit_icon} width="16" height="16">
-                      <use href="/sprite.svg#exit"></use>
-                    </svg>
-                    <span className={css.btn_text}>Esci</span>
-                  </Button>
+                <div className={css.user}>
+                  <svg className={css.user_icon} width="16" height="16">
+                    <use href="/sprite.svg#user"></use>
+                  </svg>
+                  <p className={css.user_name}>{user?.fullName}</p>
                 </div>
+                <Button
+                  className={`${css.exit_btn} button button--white`}
+                  width={121}
+                  onClick={handleLogout}
+                >
+                  <svg className={css.exit_icon} width="16" height="16">
+                    <use href="/sprite.svg#exit"></use>
+                  </svg>
+                  <span className={css.btn_text}>{t('exit')}</span>
+                </Button>
               </>
             ) : (
               <Button
@@ -99,7 +99,7 @@ const Header = () => {
                 onClick={handleLoginClick}
                 width={121}
               >
-                login
+                {t('login')}
               </Button>
             )}
           </div>

@@ -3,18 +3,28 @@
 import Link from 'next/link';
 import css from './page.module.css';
 import { useAuthStore } from '@/lib/store/authStore';
+import { useTranslations } from 'next-intl';
+import { usePageStore } from '@/lib/store/pageStore';
+import { useEffect } from 'react';
 
-export default function HomeClient() {
+export default function RolesClient() {
+  const t = useTranslations('RolesPage');
+  const setPageTitle = usePageStore(state => state.setPageTitle);
+
+  useEffect(() => {
+    setPageTitle(t('titlePageForStore'));
+  }, []);
+
   return (
     <main className={css.main}>
       <div className="container">
         <h1 className={css.title}>Sistema di Manutenzione e Segnalazioni</h1>
         <p className={css.text}>Seleziona il tuo ruolo per accedere</p>
         <div className={css.list}>
-          <Link href="/operatore" className={css.card}>
+          <Link href="/operator" className={css.card}>
             <div className={css.list_item}>
               <div
-                className={`${css.icon_container} ${css.icon_color_operatore}`}
+                className={`${css.icon_container} ${css.icon_color_operator}`}
               >
                 <svg width="40" height="40" className={css.icon}>
                   <use href="/sprite.svg#clipboard">df</use>
@@ -26,10 +36,10 @@ export default function HomeClient() {
               </p>
             </div>
           </Link>
-          <Link href="/responsabile" className={css.card}>
+          <Link href="/manager" className={css.card}>
             <div className={css.list_item}>
               <div
-                className={`${css.icon_container} ${css.icon_color_responsabile}`}
+                className={`${css.icon_container} ${css.icon_color_manager}`}
               >
                 <svg width="40" height="40" className={css.icon}>
                   <use href="/sprite.svg#squares">df</use>
@@ -41,10 +51,10 @@ export default function HomeClient() {
               </p>
             </div>
           </Link>
-          <Link href="/manutentori" className={css.card}>
+          <Link href="/maintenance-worker" className={css.card}>
             <div className={css.list_item}>
               <div
-                className={`${css.icon_container} ${css.icon_color_manutentori}`}
+                className={`${css.icon_container} ${css.icon_color_maintenance}`}
               >
                 <svg width="40" height="40" className={css.icon}>
                   <use href="/sprite.svg#crewdriver">df</use>
@@ -56,11 +66,9 @@ export default function HomeClient() {
               </p>
             </div>
           </Link>
-          <Link href="/sicurezza" className={css.card}>
+          <Link href="/safety" className={css.card}>
             <div className={css.list_item}>
-              <div
-                className={`${css.icon_container} ${css.icon_color_sicurezza}`}
-              >
+              <div className={`${css.icon_container} ${css.icon_color_safety}`}>
                 <svg width="40" height="40" className={css.icon}>
                   <use href="/sprite.svg#shield-check">df</use>
                 </svg>

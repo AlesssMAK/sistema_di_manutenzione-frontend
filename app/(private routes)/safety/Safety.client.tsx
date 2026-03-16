@@ -1,18 +1,17 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import css from './reportsAndCommunications.module.css';
 import { usePageStore } from '@/lib/store/pageStore';
 import { useEffect } from 'react';
 
-const ReportsAndCommunicationsClient = () => {
-  const t = useTranslations('reportsAndCommunicationsPage');
+const SafetyClient = () => {
+  const t = useTranslations('SafetyPage');
   const setPageTitle = usePageStore(state => state.setPageTitle);
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
   }, []);
-  return <div> ReportsAndCommunicationsClient </div>;
+  return <div>SafetyClient</div>;
 };
 
-export default ReportsAndCommunicationsClient;
+export default SafetyClient;

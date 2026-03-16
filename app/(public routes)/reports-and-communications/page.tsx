@@ -1,7 +1,13 @@
+import ReportsAndCommunicationsClient from './reportsAndCommunications.client';
 import css from './reportsAndCommunications.module.css';
 
-const reportsAndCommunicationsPage = () => {
-  return <div> reportsAndCommunicationsPage </div>;
+const ReportsAndCommunicationsPage = () => {
+  return (
+    <div>
+      {' '}
+      <ReportsAndCommunicationsClient />
+    </div>
+  );
 };
 
-export default reportsAndCommunicationsPage;
+export default ReportsAndCommunicationsPage;

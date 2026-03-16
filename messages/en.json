@@ -28,5 +28,42 @@
       "invalidIdentifier": "Invalid format (email or full name)",
       "invalidSecret": "Invalid format (password or personal code)"
     }
-  }
+  },
+
+  "header": {
+  "navItem1": "Roles",
+  "navItem2": "Reports",
+  "exit": "Logout",
+  "login": "Login"
+},
+
+"AdminPage": {
+  "titlePageForStore": "Administrator"
+},
+
+"maintenanceWorkerPage": {
+  "titlePageForStore": "Maintenance Worker"
+},
+
+"ManagerPage": {
+  "titlePageForStore": "Manager"
+},
+
+"OperatorPage": {
+  "titlePageForStore": "Operator"
+},
+
+"SafetyPage": {
+  "titlePageForStore": "Safety (HSE)"
+},
+
+"reportsAndCommunicationsPage": {
+  "titlePageForStore": "Reports"
+},
+
+"RolesPage": {
+  "titlePageForStore": "Roles"
+}
+
+
 }
