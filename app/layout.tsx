@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 import AuthProvider from '@/providers/AuthProvider/AuthProvider';
 import { NextIntlClientProvider } from 'next-intl';
 import Header from '@/components/Header/Header';
+import { cookies } from 'next/headers';
 
 const arimoSans = Arimo({
   variable: '--font-arimo-sans',

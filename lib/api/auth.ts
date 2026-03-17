@@ -1,11 +1,6 @@
-import { LoginFormData } from '@/validation/loginValidation';
+import { LoginFormData } from '@/lib/validation/loginValidation';
+import { CheckSessionRequest, RegisterRequest } from '@/types/authType';
 import nextServer from './api';
-import {
-  CheckSessionRequest,
-  LoginOperatorRequest,
-  LoginRequest,
-  RegisterRequest,
-} from '@/types/authType';
 
 export const register = async (data: RegisterRequest) => {
   const res = await nextServer.post('/auth/register', data);

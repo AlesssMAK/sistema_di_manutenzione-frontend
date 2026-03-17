@@ -30,6 +30,7 @@ const Header = () => {
   const handleLogout = async () => {
     await logout();
     clearIsAuthenticated();
+    window.location.href = '/';
   };
 
   return (

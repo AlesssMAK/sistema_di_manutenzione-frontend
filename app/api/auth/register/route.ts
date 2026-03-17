@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
         const options = {
           expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
           path: parsed.Path,
-          maxAge: Number(['Max-Age']),
+          maxAge: Number(parsed['Max-Age']),
         };
 
         if (parsed.accessToken) {
