@@ -1,6 +1,6 @@
 import OperatorPageClient from './OperatorPage.client';
 
-const OperatorPage = async () => {
+const OperatorPage = () => {
   return <OperatorPageClient />;
 };
 

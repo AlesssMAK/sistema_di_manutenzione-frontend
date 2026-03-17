@@ -2,7 +2,6 @@
 
 import Button from '@/components/UI/Button/Button';
 import Input from '@/components/UI/Input/Input';
-import Modal from '@/components/UI/Modal/Modal';
 import { login } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/authStore';
 import {
@@ -10,20 +9,19 @@ import {
   isEmail,
   isPersonalCode,
   LoginFormData,
-} from '@/validation/loginValidation';
+} from '@/lib/validation/loginValidation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import css from './LoginForm.module.css';
+import { useRouter } from 'next/navigation';
+import { roleRoutes } from '@/constants/roleRoutes';
 
-interface LoginFormProps {
-  onClose: () => void;
-}
-
-const LoginForm = ({ onClose }: LoginFormProps) => {
+const LoginForm = () => {
   const t = useTranslations('login');
   const schema = createLoginSchema(t);
   const setUser = useAuthStore(state => state.setUser);
+  const router = useRouter();
 
   const {
     register,
@@ -37,6 +35,8 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
 
     const payload: any = {};
 
+    console.log(payload);
+
     if (isEmail(identifier)) {
       payload.email = identifier;
     } else {
@@ -49,55 +49,56 @@ const LoginForm = ({ onClose }: LoginFormProps) => {
       payload.password = secret;
     }
 
-    console.log('Payload:', payload);
+    const { user } = await login(payload);
+    setUser(user);
 
-    const data = await login(payload);
+    const routes = roleRoutes[user.role];
+    const route = routes[0] ?? '/login';
+    router.push(`${route}`);
 
-    setUser(data.user);
     reset();
-    onClose();
   };
 
-  const { user } = useAuthStore();
+  const onClose = () => {
+    router.back();
+  };
 
   return (
-    <Modal onClose={onClose}>
-      <div className={css.login_container}>
-        <h1 className={css.logit_title}>{t('title')}</h1>
-        <p className={css.logit_subtitle}>{t('subtitle')}</p>
-        <form onSubmit={handleSubmit(onLoginSubmit)} className={css.form}>
-          <div className={css.input_container}>
-            <p>{t('inputIdentifier')}</p>
-            <Input
-              {...register('identifier')}
-              type="text"
-              placeholder={t('placeholderEmailOrFullName')}
-            />
-          </div>
-          <div className={css.input_container}>
-            <p>{t('inputSecret')}</p>
-            <Input
-              {...register('secret')}
-              type="password"
-              placeholder={t('placeholderPasswordOrPersonalCode')}
-            />
-          </div>
-          <div className={css.btn_container}>
-            <Button
-              type="button"
-              className="button button--white"
-              width="100%"
-              onClick={onClose}
-            >
-              {t('cancel')}
-            </Button>
-            <Button type="submit" className="button button--blue" width="100%">
-              {t('submit')}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </Modal>
+    <div className={css.login_container}>
+      <h1 className={css.logit_title}>{t('title')}</h1>
+      <p className={css.logit_subtitle}>{t('subtitle')}</p>
+      <form onSubmit={handleSubmit(onLoginSubmit)} className={css.form}>
+        <div className={css.input_container}>
+          <p>{t('inputIdentifier')}</p>
+          <Input
+            {...register('identifier')}
+            type="text"
+            placeholder={t('placeholderEmailOrFullName')}
+          />
+        </div>
+        <div className={css.input_container}>
+          <p>{t('inputSecret')}</p>
+          <Input
+            {...register('secret')}
+            type="password"
+            placeholder={t('placeholderPasswordOrPersonalCode')}
+          />
+        </div>
+        <div className={css.btn_container}>
+          <Button
+            type="button"
+            className="button button--white"
+            width="100%"
+            onClick={onClose}
+          >
+            {t('cancel')}
+          </Button>
+          <Button type="submit" className="button button--blue" width="100%">
+            {t('submit')}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 };
 

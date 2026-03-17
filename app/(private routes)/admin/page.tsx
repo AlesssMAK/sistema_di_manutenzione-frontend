@@ -1,4 +1,4 @@
-import AdminPageClient from './adminPage.client';
+import AdminPageClient from './Admin.client';
 
 const AdminPage = () => {
   return (
