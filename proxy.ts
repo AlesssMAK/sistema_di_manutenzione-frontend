@@ -20,13 +20,15 @@ export async function proxy(request: NextRequest) {
     if (isProtected) {
       const { ok } = await handleSessionRefresh(accessToken, refreshToken);
 
-      if (!ok) {
-        return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
-      }
+      // розкомітити після написання всього коду
 
-      if (!isAllowed(role, pathname)) {
-        return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
-      }
+      // if (!ok) {
+      //   return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+      // }
+
+      // if (!isAllowed(role, pathname)) {
+      //   return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+      // }
     }
 
     return NextResponse.next();
@@ -37,10 +39,10 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/admin/:path*',
-    '/manager/:path*',
-    '/maintenance-worker/:path*',
-    '/operator/:path*',
-    '/safety/:path*',
+    // '/admin/:path*',
+    // '/manager/:path*',
+    // '/maintenance-worker/:path*',    <----  // розкомітити після написання всього коду
+    // '/operator/:path*',
+    // '/safety/:path*',
   ],
 };
