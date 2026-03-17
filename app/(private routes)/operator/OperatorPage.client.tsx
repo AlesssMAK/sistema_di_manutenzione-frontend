@@ -5,7 +5,7 @@ import css from './OperatorPage.module.css';
 import { usePageStore } from '@/lib/store/pageStore';
 import { useEffect } from 'react';
 
-const OperatorPageClient = async () => {
+const OperatorPageClient = () => {
   const t = useTranslations('OperatorPage');
   const setPageTitle = usePageStore(state => state.setPageTitle);
 

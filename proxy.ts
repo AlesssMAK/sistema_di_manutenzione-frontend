@@ -9,10 +9,20 @@ export async function proxy(request: NextRequest) {
   const accessToken = cookieStore.get('accessToken')?.value;
   const refreshToken = cookieStore.get('refreshToken')?.value;
   const role = request.cookies.get('role')?.value;
-
   const { pathname } = request.nextUrl;
+  const isLoginRoute = pathname.startsWith('/login');
 
   try {
+    if (isLoginRoute) {
+      const { ok } = await handleSessionRefresh(accessToken, refreshToken);
+
+      if (ok) {
+        return NextResponse.redirect(new URL('/', request.nextUrl.origin));
+      }
+
+      return NextResponse.next();
+    }
+
     const isProtected = Object.values(roleRoutes)
       .flat()
       .some(route => pathname.startsWith(route));
@@ -33,12 +43,16 @@ export async function proxy(request: NextRequest) {
 
     return NextResponse.next();
   } catch {
+    console.log('catch proxy');
+
     return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
   }
 }
 
 export const config = {
   matcher: [
+    '/login',
+
     // '/admin/:path*',
     // '/manager/:path*',
     // '/maintenance-worker/:path*',    <----  // розкомітити після написання всього коду
