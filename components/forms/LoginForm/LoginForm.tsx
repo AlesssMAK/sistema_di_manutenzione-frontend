@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import css from './LoginForm.module.css';
 import { useRouter } from 'next/navigation';
+import { roleRoutes } from '@/constants/roleRoutes';
 
 const LoginForm = () => {
   const t = useTranslations('login');
@@ -51,16 +52,14 @@ const LoginForm = () => {
     const { user } = await login(payload);
     setUser(user);
 
-    if (user.role === 'admin') {
-      router.push('/admin');
-    }
+    const routes = roleRoutes[user.role];
+    const route = routes[0] ?? '/login';
+    router.push(`${route}`);
 
     reset();
   };
 
   const onClose = () => {
-    console.log('close');
-
     router.back();
   };
 
