@@ -1,0 +1,33 @@
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f9fafb;
+  color: #0f172b;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  padding: 2rem;
+}
+
+.error h1 {
+  font-size: 6rem;
+  font-weight: 800;
+  color: red;
+  margin-bottom: 1rem;
+}
+
+.error h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #0f172b;
+}
+
+.error p {
+  font-size: 1.125rem;
+  color: #45556c;
+  margin-bottom: 2rem;
+  max-width: 500px;
+}

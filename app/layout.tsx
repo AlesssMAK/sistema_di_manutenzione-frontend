@@ -4,6 +4,7 @@ import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import AuthProvider from '@/providers/AuthProvider/AuthProvider';
 import { NextIntlClientProvider } from 'next-intl';
+import ScrollToTopButton from '@/components/UI/ScrollToTopBtn/ScrollToTopButton';
 
 const arimoSans = Arimo({
   variable: '--font-arimo-sans',
@@ -45,6 +46,7 @@ export default function RootLayout({
             <Toaster position="bottom-right" />
             {modal}
             {children}
+            <ScrollToTopButton showAfter={700} />
           </AuthProvider>
         </NextIntlClientProvider>
       </body>
