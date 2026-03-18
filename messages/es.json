@@ -69,6 +69,10 @@
   "title": "Página no encontrada",
   "description": "Lamentablemente, la página que buscas no existe o ha sido movida.",
   "backHome": "Volver a la página principal"
+},
+
+"loader": {
+  "loading": "Cargando, por favor espera..."
 }
 
 
