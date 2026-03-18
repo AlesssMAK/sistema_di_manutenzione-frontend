@@ -63,6 +63,13 @@
 
 "RolesPage": {
   "titlePageForStore": "Roles"
+},
+
+"NotFound": {
+  "title": "Página no encontrada",
+  "description": "Lamentablemente, la página que buscas no existe o ha sido movida.",
+  "backHome": "Volver a la página principal"
 }
+
 
 }
