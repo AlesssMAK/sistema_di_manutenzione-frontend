@@ -23,6 +23,7 @@
     "placeholderPassword": "Enter password",
     "submit": "Login",
     "cancel": "Cancel",
+    "formError": "Check the entered data",
     "errors": {
       "required": "Field is required",
       "invalidIdentifier": "Invalid format (email or full name)",
@@ -73,6 +74,14 @@
 
 "loader": {
   "loading": "Loading, please wait..."
+},
+
+"Error":{
+  "errorTitle": "Something went wrong!",
+  "errorMessage": "Sorry. An error occurred while processing your request.",
+  "tryAgain": "Try again",
+  "goHome": "Go to home"
 }
+
 
 }

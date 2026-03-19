@@ -16,6 +16,8 @@ import { useForm } from 'react-hook-form';
 import css from './LoginForm.module.css';
 import { useRouter } from 'next/navigation';
 import { roleRoutes } from '@/constants/roleRoutes';
+import { ApiError } from '@/app/api/api';
+import toast from 'react-hot-toast';
 
 const LoginForm = () => {
   const t = useTranslations('login');
@@ -31,32 +33,40 @@ const LoginForm = () => {
   } = useForm({ resolver: yupResolver(schema) });
 
   const onLoginSubmit = async (value: LoginFormData) => {
-    const { identifier, secret } = value;
+    try {
+      const { identifier, secret } = value;
 
-    const payload: any = {};
+      const payload: any = {};
 
-    console.log(payload);
+      if (isEmail(identifier)) {
+        payload.email = identifier;
+      } else {
+        payload.fullName = identifier;
+      }
 
-    if (isEmail(identifier)) {
-      payload.email = identifier;
-    } else {
-      payload.fullName = identifier;
+      if (isPersonalCode(secret)) {
+        payload.personalCode = secret;
+      } else {
+        payload.password = secret;
+      }
+
+      const { user } = await login(payload);
+      setUser(user);
+
+      const routes = roleRoutes[user.role];
+      const route = routes[0] ?? '/login';
+      router.push(`${route}`);
+
+      reset();
+    } catch (error) {
+      const apiError = error as ApiError;
+
+      if (apiError.response?.status === 400) {
+        toast.error(t('formError'));
+      } else {
+        toast.error(t('formError'));
+      }
     }
-
-    if (isPersonalCode(secret)) {
-      payload.personalCode = secret;
-    } else {
-      payload.password = secret;
-    }
-
-    const { user } = await login(payload);
-    setUser(user);
-
-    const routes = roleRoutes[user.role];
-    const route = routes[0] ?? '/login';
-    router.push(`${route}`);
-
-    reset();
   };
 
   const onClose = () => {
@@ -68,21 +78,29 @@ const LoginForm = () => {
       <h1 className={css.logit_title}>{t('title')}</h1>
       <p className={css.logit_subtitle}>{t('subtitle')}</p>
       <form onSubmit={handleSubmit(onLoginSubmit)} className={css.form}>
-        <div className={css.input_container}>
-          <p>{t('inputIdentifier')}</p>
-          <Input
-            {...register('identifier')}
-            type="text"
-            placeholder={t('placeholderEmailOrFullName')}
-          />
-        </div>
-        <div className={css.input_container}>
-          <p>{t('inputSecret')}</p>
-          <Input
-            {...register('secret')}
-            type="password"
-            placeholder={t('placeholderPasswordOrPersonalCode')}
-          />
+        <div className={css.inputs_container}>
+          <div className={css.input_container}>
+            <p>{t('inputIdentifier')}</p>
+            <Input
+              {...register('identifier')}
+              type="text"
+              placeholder={t('placeholderEmailOrFullName')}
+            />
+            {errors.identifier && (
+              <p className={css.error}>{errors.identifier.message}</p>
+            )}
+          </div>
+          <div className={css.input_container}>
+            <p>{t('inputSecret')}</p>
+            <Input
+              {...register('secret')}
+              type="password"
+              placeholder={t('placeholderPasswordOrPersonalCode')}
+            />
+            {errors.secret && (
+              <p className={css.error}>{errors.secret.message}</p>
+            )}
+          </div>
         </div>
         <div className={css.btn_container}>
           <Button
