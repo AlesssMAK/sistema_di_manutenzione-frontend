@@ -13,15 +13,15 @@ export async function proxy(request: NextRequest) {
   const isLoginRoute = pathname.startsWith('/login');
 
   try {
-    if (isLoginRoute) {
-      const { ok } = await handleSessionRefresh(accessToken, refreshToken);
+    // if (isLoginRoute) {
+    //   const { ok } = await handleSessionRefresh(accessToken, refreshToken);
 
-      if (ok) {
-        return NextResponse.redirect(new URL('/', request.nextUrl.origin));
-      }
+    //   if (ok) {
+    //     return NextResponse.redirect(new URL('/', request.nextUrl.origin));
+    //   }
 
-      return NextResponse.next();
-    }
+    //   return NextResponse.next();
+    // }
 
     const isProtected = Object.values(roleRoutes)
       .flat()
@@ -51,8 +51,7 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/login',
-
+    // '/login',
     // '/admin/:path*',
     // '/manager/:path*',
     // '/maintenance-worker/:path*',    <----  // розкомітити після написання всього коду
