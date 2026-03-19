@@ -1,3 +1,15 @@
 .login_container {
   padding: 25px;
 }
+
+.input_container {
+  position: relative;
+}
+
+.error {
+  position: absolute;
+  color: red;
+  font-size: 12px;
+  bottom: -16px;
+  left: 8px;
+}

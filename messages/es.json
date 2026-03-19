@@ -21,6 +21,7 @@
     "placeholderPersonalCodeOperatore": "Introduce código",
     "placeholderEmail": "Introduce correo electrónico",
     "placeholderPassword": "Introduce contraseña",
+    "formError": "Verifica los datos ingresados",
     "submit": "Entrar",
     "cancel": "Cancelar",
     "errors": {
@@ -73,7 +74,15 @@
 
 "loader": {
   "loading": "Cargando, por favor espera..."
+},
+
+"Error": {
+  "errorTitle": "Algo salió mal!",
+  "errorMessage": "Lo sentimos. Ocurrió un error al procesar tu solicitud.",
+  "tryAgain": "Intentar de nuevo",
+  "goHome": "Ir a home"
 }
+
 
 
 }
