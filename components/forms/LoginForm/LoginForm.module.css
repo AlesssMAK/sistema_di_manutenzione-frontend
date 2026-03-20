@@ -1,5 +1,66 @@
 .login_container {
-  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  padding: 24px;
+
+  @media screen and (min-width: 1440px) {
+    max-width: 768px;
+  }
+}
+
+.logit_title {
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1;
+  color: #0a0a0a;
+  margin-bottom: 10px;
+
+  @media screen and (min-width: 768px) {
+    font-size: 36px;
+    margin-bottom: 14px;
+  }
+}
+
+.logit_subtitle {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #717182;
+  margin-bottom: 24px;
+
+  @media screen and (min-width: 768px) {
+    font-size: 20px;
+    margin-bottom: 40px;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+
+  @media screen and (min-width: 768px) {
+    font-size: 18px;
+    gap: 40px;
+  }
+}
+
+.inputs_container {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.btn_container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
 }
 
 .input_container {
@@ -9,7 +70,7 @@
 .error {
   position: absolute;
   color: red;
-  font-size: 12px;
+  font-size: 11px;
   bottom: -16px;
   left: 8px;
 }

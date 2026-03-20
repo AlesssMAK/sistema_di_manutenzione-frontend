@@ -80,7 +80,6 @@ const LoginForm = () => {
       <form onSubmit={handleSubmit(onLoginSubmit)} className={css.form}>
         <div className={css.inputs_container}>
           <div className={css.input_container}>
-            <p>{t('inputIdentifier')}</p>
             <Input
               {...register('identifier')}
               type="text"
@@ -91,7 +90,6 @@ const LoginForm = () => {
             )}
           </div>
           <div className={css.input_container}>
-            <p>{t('inputSecret')}</p>
             <Input
               {...register('secret')}
               type="password"
@@ -108,10 +106,16 @@ const LoginForm = () => {
             className="button button--white"
             width="100%"
             onClick={onClose}
+            height={44}
           >
             {t('cancel')}
           </Button>
-          <Button type="submit" className="button button--blue" width="100%">
+          <Button
+            type="submit"
+            className="button button--blue"
+            width="100%"
+            height={44}
+          >
             {t('submit')}
           </Button>
         </div>
