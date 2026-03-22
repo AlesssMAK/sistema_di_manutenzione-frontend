@@ -81,6 +81,24 @@
   "errorMessage": "Lo sentimos. Ocurrió un error al procesar tu solicitud.",
   "tryAgain": "Intentar de nuevo",
   "goHome": "Ir a home"
+},
+
+"TypeFault": {
+    "PRODUCTION": "Producción",
+    "SAFETY": "Seguridad"
+  },
+
+  "StatusFault": {
+    "CREATED": "Creado",
+    "IN_PROGRESS": "En progreso",
+    "COMPLETED": "Completado",
+    "SUSPENDED": "Suspendido"
+  },
+
+  "Priority": {
+  "Low": "Baja",
+  "Medium": "Media",
+  "High": "Alta"
 }
 
 

@@ -10,6 +10,7 @@ import ModalMenu from './ModalMenu/ModalMenu';
 import { useTranslations } from 'use-intl';
 import { logout } from '@/lib/api/auth';
 import { usePageStore } from '@/lib/store/pageStore';
+import LanguageToggleButton from '../LanguageSwitcher/LanguageSwitcher';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
