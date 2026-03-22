@@ -23,3 +23,19 @@
   width: 824px;
   background: #fff;
 }
+.faultCard {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 35px;
+  border-bottom: 1.17px solid #00c950;
+  border-left: 3.52px solid #00c950;
+  border-right: 1.17px solid #00c950;
+  border-top: 1.17px solid #00c950;
+  border-radius: 12px;
+  padding: 15px 0px 0px 15px;
+  width: 773px;
+  height: 340px;
+  background: #fff;
+}

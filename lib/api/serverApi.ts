@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import axios from 'axios';
 import nextServer from './api';
 import { getMeRespons, User } from '@/types/userTypes';
 import type { FaultCard } from '@/types/faultType';
@@ -34,8 +35,11 @@ export const fetchFaultCards = async ({
   page = 1,
   limit = 2,
 }: FaultCardsQueryParams = {}): Promise<FetchFaultCardsParams> => {
+  // const cookieStore = await cookies();
+  // const allCookies = cookieStore.toString();
   const res = await nextServer.get('/fault', {
     params: { page, perPage: limit },
+    // headers: { Cookie: cookieStore.toString() },
   });
 
   return {
