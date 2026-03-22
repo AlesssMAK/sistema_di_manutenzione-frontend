@@ -26,3 +26,7 @@ export interface FaultCard {
   img?: string;
   managerComment?: string;
 }
+export interface FaultCardsQueryParams {
+  page?: number;
+  limit?: number;
+}

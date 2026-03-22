@@ -1,6 +1,13 @@
 import { cookies } from 'next/headers';
 import nextServer from './api';
 import { getMeRespons, User } from '@/types/userTypes';
+import type { FaultCard } from '@/types/faultType';
+import { FaultCardsQueryParams } from '@/types/faultType';
+
+export interface FetchFaultCardsParams {
+  items: FaultCard[];
+  total: number;
+}
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
@@ -21,4 +28,18 @@ export const getServerMe = async (): Promise<User> => {
   });
 
   return data.user;
+};
+
+export const fetchFaultCards = async ({
+  page = 1,
+  limit = 2,
+}: FaultCardsQueryParams = {}): Promise<FetchFaultCardsParams> => {
+  const res = await nextServer.get('/fault', {
+    params: { page, perPage: limit },
+  });
+
+  return {
+    items: res.data.fault || [],
+    total: res.data.totalFault || 0,
+  };
 };
