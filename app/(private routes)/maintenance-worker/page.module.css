@@ -1,0 +1,7 @@
+.pageWorkerContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-top: 32px;
+  padding-bottom: 40px;
+}

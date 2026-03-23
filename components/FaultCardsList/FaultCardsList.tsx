@@ -11,7 +11,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   }
 
   return (
-    <div className={css.container}>
+    <div className={css.containerFaultCardList}>
       <h3 className={css.datanowForList}>Data</h3>
       <ul className={css.faultList}>
         {faults.map(fault => (
