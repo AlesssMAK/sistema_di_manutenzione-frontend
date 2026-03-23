@@ -9,7 +9,11 @@ const maintenanceWorkerPage = async () => {
   return (
     <div>
       <MaintenanceWorkerClient />
-      <div className={css.pageWorkerContainer}>
+      <h2 className={css.workerHeaderPage}>Pianificazione Manutentore</h2>
+      <p className={css.workerTextPage}>
+        Visualizza e gestisci gli interventi pianificati
+      </p>
+      <div className={css.workerContainer}>
         <CalendarBlock />
         <FaultCardsList faults={items} />
       </div>

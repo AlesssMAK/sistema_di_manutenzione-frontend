@@ -1,4 +1,16 @@
-.pageWorkerContainer {
+.workerHeaderPage {
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.2;
+  color: #0a0a0a;
+}
+.workerTextPage {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #45556c;
+}
+.workerContainer {
   display: flex;
   align-items: flex-start;
   gap: 14px;
