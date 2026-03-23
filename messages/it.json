@@ -80,7 +80,25 @@
   "errorMessage": "Spiacenti. Si è verificato un errore durante l'elaborazione della tua richiesta.",
   "tryAgain": "Riprova",
   "goHome": "Vai alla home"
-}
+},
+
+"TypeFault": {
+    "PRODUCTION": "Produzione",
+    "SAFETY": "Sicurezza"
+  },
+
+  "StatusFault": {
+    "CREATED": "Creato",
+    "IN_PROGRESS": "In corso",
+    "COMPLETED": "Completato",
+    "SUSPENDED": "Sospeso"
+  },
+
+  "Priority": {
+    "Low": "Bassa",
+    "Medium": "Media",
+    "High": "Alta"
+  }
 
 
 

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import css from './LanguageSwitcher.module.css';
 
-export default function LanguageToggleButton() {
+const LanguageToggleButton = () => {
   const router = useRouter();
   const [locale, setLocale] = useState('it');
 
@@ -35,4 +35,6 @@ export default function LanguageToggleButton() {
       {locale === 'IT' ? 'UA' : 'EN'}
     </button>
   );
-}
+};
+
+export default LanguageToggleButton;

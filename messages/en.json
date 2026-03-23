@@ -81,7 +81,24 @@
   "errorMessage": "Sorry. An error occurred while processing your request.",
   "tryAgain": "Try again",
   "goHome": "Go to home"
-}
+},
 
+"TypeFault": {
+    "PRODUCTION": "Production",
+    "SAFETY": "Safety"
+  },
+
+  "StatusFault": {
+    "CREATED": "Created",
+    "IN_PROGRESS": "In progress",
+    "COMPLETED": "Completed",
+    "SUSPENDED": "Suspended"
+  },
+
+  "Priority": {
+    "Low": "Low",
+    "Medium": "Medium",
+    "High": "High"
+  }
 
 }

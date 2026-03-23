@@ -4,10 +4,21 @@ import { useTranslations } from 'next-intl';
 import css from './OperatorPage.module.css';
 import { usePageStore } from '@/lib/store/pageStore';
 import { useEffect } from 'react';
+import { getUsers } from '@/lib/api/users';
+import { getAllFaults } from '@/lib/api/faults';
 
 const OperatorPageClient = () => {
   const t = useTranslations('OperatorPage');
   const setPageTitle = usePageStore(state => state.setPageTitle);
+
+  useEffect(() => {
+    const allFault = async () => {
+      const fault = await getAllFaults();
+      console.log(fault);
+    };
+
+    allFault();
+  }, []);
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
