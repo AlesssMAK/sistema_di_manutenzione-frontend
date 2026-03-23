@@ -1,5 +1,9 @@
-export type StatusFaultType = 'Creato' | 'In corso' | 'Completato' | 'Sospeso';
-export type PriorityFaultType = 'Bassa' | 'Media' | 'Alta';
+
+export type StatusFaultType = 'Created' | 'In progress' | 'Completed' | 'Suspended';
+export type PriorityFaultType = 'Low' | 'Medium' | 'High';
+export type TypeFault = 'Production' | 'Safety';
+export type FaultAction = 'created' | 'updated';
+
 export interface FaultCard {
   id: string;
   faultId: string;
@@ -26,7 +30,42 @@ export interface FaultCard {
   img?: string;
   managerComment?: string;
 }
+
 export interface FaultCardsQueryParams {
   page?: number;
   limit?: number;
+}
+  
+export interface Fault {
+  _id: string;
+  faultId: string;
+  nameOperator: string;
+  userId: string;
+  dataCreated: string;
+  timeCreated: string;
+  plantId: string;
+  partId: string;
+  typefault: PriorityFaultType;
+  statusfault: StatusFaultType;
+  comment: string;
+  img?: string;
+  priority: TypePriority;
+  assignedMaintainers: string[];
+  managerComment?: string;
+  deadline?: string;
+  plannedDate?: string;
+  plannedTime?: string;
+  estimatedDuration: number;
+  managerId?: string;
+  commentMaintenanceWorker?: string;
+  history: FaultHistory[];
+}
+
+
+export interface FaultHistory {
+  action: FaultAction;
+  userId?: string;
+  userName?: string;
+  changes?: Record<string, unknown>;
+  timestamp: string;
 }
