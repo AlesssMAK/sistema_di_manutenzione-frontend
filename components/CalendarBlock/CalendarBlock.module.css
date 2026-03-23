@@ -1,0 +1,19 @@
+.calendarBlockContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 39px;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 23px 0px 0px 23px;
+  width: 400px;
+  height: 816px;
+  background: #fff;
+}
+.calendarHeader {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.4;
+  color: #0a0a0a;
+}

@@ -1,3 +1,41 @@
+
+export type StatusFaultType = 'Created' | 'In progress' | 'Completed' | 'Suspended';
+export type PriorityFaultType = 'Low' | 'Medium' | 'High';
+export type TypeFault = 'Production' | 'Safety';
+export type FaultAction = 'created' | 'updated';
+
+export interface FaultCard {
+  id: string;
+  faultId: string;
+
+  plantId: {
+    _id: string;
+    namePlant: string;
+    code: string;
+  };
+  partId: {
+    namePartPlant: string;
+    codePartPlant: string;
+  };
+  nameOperator: string;
+  userId: string;
+
+  statusfault: StatusFaultType;
+  comment: string;
+  priority: PriorityFaultType;
+  deadline?: string;
+  plannedDate?: string;
+  plannedTime?: string;
+  estimatedDuration?: number;
+  img?: string;
+  managerComment?: string;
+}
+
+export interface FaultCardsQueryParams {
+  page?: number;
+  limit?: number;
+}
+  
 export interface Fault {
   _id: string;
   faultId: string;
@@ -7,8 +45,8 @@ export interface Fault {
   timeCreated: string;
   plantId: string;
   partId: string;
-  typefault: TypeFault;
-  statusfault: StatusFault;
+  typefault: PriorityFaultType;
+  statusfault: StatusFaultType;
   comment: string;
   img?: string;
   priority: TypePriority;
@@ -23,25 +61,6 @@ export interface Fault {
   history: FaultHistory[];
 }
 
-export enum TypePriority {
-  LOW = 'Low',
-  MEDIUM = 'Medium',
-  HIGH = 'High',
-}
-
-export enum TypeFault {
-  PRODUCTION = 'Production',
-  SAFETY = 'Safety',
-}
-
-export enum StatusFault {
-  CREATED = 'Created',
-  IN_PROGRESS = 'In progress',
-  COMPLETED = 'Completed',
-  SUSPENDED = 'Suspended',
-}
-
-export type FaultAction = 'created' | 'updated';
 
 export interface FaultHistory {
   action: FaultAction;
