@@ -82,3 +82,37 @@
   height: 11px;
   background: #f0b100;
 }
+.buttonAlta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-left: 2.35px solid #fb2c36;
+  border-radius: 4px;
+  padding: 0 12px;
+  width: 349px;
+  height: 35px;
+  background: #f0fdf4;
+}
+
+.alta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #c10007;
+}
+
+.altaSpan {
+  display: block;
+  flex-shrink: 0;
+  border-radius: 2px;
+  width: 11px;
+  height: 11px;
+  background: #fb2c36;
+}
