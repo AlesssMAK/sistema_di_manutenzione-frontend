@@ -1,13 +1,19 @@
-import { Fault } from '@/types/faultType';
+import { FaultCard } from '@/types/faultType';
 import nextServer from './api';
 
-export const getAllFaults = async () => {
-  const res = await nextServer.get<Fault>('/faults');
-  console.log(res.data);
-  return res.data;
-};
+export interface FetchFaultCardsParams {
+  items: FaultCard[];
+  total: number;
+}
 
-export const getFaultById = async (faultId: string) => {
-  const res = await nextServer.get<Fault>(`/faults/${faultId}`);
-  return res.data;
+export const fetchFaultCards = async ({
+  page = 1,
+  limit = 2,
+}): Promise<FetchFaultCardsParams> => {
+  const res = await nextServer.get('/faults');
+  console.log('RESPONSE FROM SERVER:', res.data);
+  return {
+    items: res.data.fault || [],
+    total: res.data.totalFault || 0,
+  };
 };

@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import axios from 'axios';
 import nextServer from './api';
 import { getMeRespons, User } from '@/types/userTypes';
 
