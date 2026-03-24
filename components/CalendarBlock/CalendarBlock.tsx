@@ -1,4 +1,5 @@
 import Calendar from '../Calendar/Calendar';
+import FilterPriorityBar from '../FilterPriorityBar/FilterPriorityBar';
 import css from './CalendarBlock.module.css';
 
 const CalendarBlock = () => {
@@ -6,6 +7,7 @@ const CalendarBlock = () => {
     <div className={css.calendarBlockContainer}>
       <h3 className={css.calendarHeader}>Calendario</h3>
       <Calendar />
+      <FilterPriorityBar />
     </div>
   );
 };
