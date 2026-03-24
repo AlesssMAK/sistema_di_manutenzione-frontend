@@ -2,7 +2,7 @@ import MaintenanceWorkerClient from './MaintenanceWorker.client';
 
 const maintenanceWorkerPage = () => {
   return (
-    <div>
+    <div className="container">
       <MaintenanceWorkerClient />
     </div>
   );
