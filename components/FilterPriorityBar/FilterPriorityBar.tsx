@@ -10,7 +10,11 @@ const FilterPriorityBar = () => {
             <span className={css.bassaSpan}></span>Priorità Bassa
           </button>
         </li>
-        <li className={css.buttonAll}></li>
+        <li className={css.buttonMedia}>
+          <button className={css.media}>
+            <span className={css.mediaSpan}></span>Priorità Media
+          </button>
+        </li>
         <li className={css.buttonAll}></li>
       </ul>
     </div>
