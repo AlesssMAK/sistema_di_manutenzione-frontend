@@ -4,10 +4,14 @@ const FilterPriorityBar = () => {
   return (
     <div>
       <h3 className={css.headersFilter}>Legenda Priorità</h3>
-      <ul>
-        <li></li>
-        <li></li>
-        <li></li>
+      <ul className={css.listPriority}>
+        <li className={css.buttonBassa}>
+          <button className={css.bassa}>
+            <span className={css.bassaSpan}></span>Priorità Bassa
+          </button>
+        </li>
+        <li className={css.buttonAll}></li>
+        <li className={css.buttonAll}></li>
       </ul>
     </div>
   );
