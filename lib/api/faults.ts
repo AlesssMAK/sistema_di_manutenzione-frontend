@@ -2,7 +2,12 @@ import { Fault } from '@/types/faultType';
 import nextServer from './api';
 
 export const getAllFaults = async () => {
-  const data = await nextServer.get<Fault>('/faults');
-  console.log(data.data);
-  return data.data;
+  const res = await nextServer.get<Fault>('/faults');
+  console.log(res.data);
+  return res.data;
+};
+
+export const getFaultById = async (faultId: string) => {
+  const res = await nextServer.get<Fault>(`/faults/${faultId}`);
+  return res.data;
 };

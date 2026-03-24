@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { logErrorResponse } from '../../_utils/utils';
 import { isAxiosError } from 'axios';
 import { api } from '../../api';
