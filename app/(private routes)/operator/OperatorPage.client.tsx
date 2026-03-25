@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import css from './OperatorPage.module.css';
 import { usePageStore } from '@/lib/store/pageStore';
 import { useEffect } from 'react';
+import ReportForm from '@/components/forms/ReportForm/ReportForm';
 
 const OperatorPageClient = () => {
   const t = useTranslations('OperatorPage');
@@ -16,11 +17,11 @@ const OperatorPageClient = () => {
     <main>
       <section className="section">
         <div className="container">
-          <h1 className={css.title}>Nuova Segnalazione</h1>
+          <h1 className={css.title}>Nuova Report</h1>
           <p className={css.text}>
             Compila il modulo per segnalare un guasto o anomalia
           </p>
-          {/* <SegnalazioneForm /> */}
+          <ReportForm />
         </div>
       </section>
     </main>

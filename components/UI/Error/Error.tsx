@@ -11,7 +11,7 @@ type ErrorProps = {
 };
 
 export default function ErrorPage({ error, reset }: ErrorProps) {
-  const t = useTranslations('error');
+  const t = useTranslations('Error');
   useEffect(() => {
     console.error(error);
   }, [error]);

@@ -99,6 +99,24 @@
     "Low": "Low",
     "Medium": "Medium",
     "High": "High"
+  },
+
+  "ReportForm": {
+    "reportId": "Report ID",
+    "operator": "Operator",
+    "date": "Date",
+    "time": "Time",
+    "plantMachine": "Plant / Machine *",
+    "plantSection": "Plant section *",
+    "type": "Type *",
+    "production": "Production",
+    "safety": "Safety",
+    "notesDescription": "Notes and Description *",
+    "describeIssue": "Describe the issue encountered...",
+    "images": "Images",
+    "clickToUpload": "Click to upload images",
+    "cancel": "Cancel",
+    "sendReport": "Send Report"
   }
 
 }
