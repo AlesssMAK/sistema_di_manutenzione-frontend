@@ -1,19 +1,12 @@
 import { NextResponse } from 'next/server';
-import { logErrorResponse } from '../../_utils/utils';
 import { isAxiosError } from 'axios';
+import { logErrorResponse } from '../../_utils/utils';
 import { api } from '../../api';
-import { cookies } from 'next/headers';
 
 export async function GET() {
   try {
-    const cookieStore = await cookies();
-
-    const res = await api.get('users/me', {
-      headers: {
-        Cookie: cookieStore.toString(),
-      },
-    });
-    return NextResponse.json(res.data, { status: res.status });
+    const res = await api.get('/generate/password');
+    return NextResponse.json(res.data);
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);

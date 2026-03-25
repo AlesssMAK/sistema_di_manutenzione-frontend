@@ -98,7 +98,25 @@
     "Low": "Bassa",
     "Medium": "Media",
     "High": "Alta"
-  }
+  },
+
+  "ReportForm": {
+    "reportId": "ID Segnalazione",
+    "operator": "Operatore",
+    "date": "Data",
+    "time": "Ora",
+    "plantMachine": "Impianto / Macchina *",
+    "plantSection": "Parte di impianto *",
+    "type": "Tipologia *",
+    "production": "Produzione",
+    "safety": "Sicurezza",
+    "notesDescription": "Note e Descrizione *",
+    "describeIssue": "Descrivi il problema riscontrato...",
+    "images": "Immagini",
+    "clickToUpload": "Clicca per caricare immagini",
+    "cancel": "Cancella",
+    "sendReport": "Invia Segnalazione"
+}
 
 
 

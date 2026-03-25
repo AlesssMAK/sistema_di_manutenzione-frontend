@@ -99,6 +99,24 @@
   "Low": "Baja",
   "Medium": "Media",
   "High": "Alta"
+},
+
+"ReportForm": {
+    "reportId": "ID de la señalación",
+    "operator": "Operador",
+    "date": "Fecha",
+    "time": "Hora",
+    "plantMachine": "Instalación / Máquina *",
+    "plantSection": "Parte de la instalación *",
+    "type": "Tipología *",
+    "production": "Producción",
+    "safety": "Seguridad",
+    "notesDescription": "Notas y Descripción *",
+    "describeIssue": "Describe el problema encontrado...",
+    "images": "Imágenes",
+    "clickToUpload": "Haz clic para cargar imágenes",
+    "cancel": "Cancelar",
+    "sendReport": "Enviar Reporte"
 }
 
 
