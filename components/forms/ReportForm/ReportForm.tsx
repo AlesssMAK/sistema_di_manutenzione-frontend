@@ -6,6 +6,8 @@ import Button from '@/components/UI/Button/Button';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useEffect, useState } from 'react';
 import { generateId } from '@/lib/api/generate';
+import Input from '@/components/UI/Input/Input';
+import { getAllPlants } from '@/lib/api/plants';
 
 const ReportForm = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
@@ -21,6 +23,15 @@ const ReportForm = () => {
       setGeneratedId(reportId);
     };
     getId();
+  }, []);
+
+  useEffect(() => {
+    const allPlants = async () => {
+      const plants = await getAllPlants();
+      console.log(plants);
+    };
+
+    allPlants();
   }, []);
 
   useEffect(() => {
@@ -42,6 +53,7 @@ const ReportForm = () => {
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('reportId')}</h3>
             <p className={css.info_text}>{generatedId}</p>
+            <Input type="hidden" name="generatedId" value={generatedId} />
           </li>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('operator')}</h3>
@@ -50,10 +62,12 @@ const ReportForm = () => {
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('date')}</h3>
             <p className={css.info_text}>{date}</p>
+            <Input type="hidden" name="generatedId" value={date} />
           </li>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('time')}</h3>
             <p className={css.info_text}>{currentTime}</p>
+            <Input type="hidden" name="generatedId" value={currentTime} />
           </li>
         </ul>
         <div className={css.form_item}>
@@ -68,7 +82,7 @@ const ReportForm = () => {
           <h3 className={css.form_title}>{t('type')}</h3>
           <div className={css.form_item_type}>
             <label className={css.type_label}>
-              <input
+              <Input
                 type="radio"
                 name="status"
                 className={css.type_input}
@@ -77,7 +91,7 @@ const ReportForm = () => {
               <p className={css.type_text}>{t('production')}</p>
             </label>
             <label className={css.type_label}>
-              <input
+              <Input
                 type="radio"
                 name="status"
                 className={css.type_input}
@@ -103,7 +117,7 @@ const ReportForm = () => {
         <div className={css.form_item}>
           <h3 className={css.form_title}>{t('images')}</h3>
           <label className={css.upload_label}>
-            <input type="file" className={css.upload_input} accept="image/*" />
+            <Input type="file" className={css.upload_input} accept="image/*" />
             <div className={css.upload_text_container}>
               <svg width="32" height="32" className={css.upload_icon}>
                 <use href="/sprite.svg#load"></use>
