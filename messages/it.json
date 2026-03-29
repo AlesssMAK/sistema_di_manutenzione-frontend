@@ -75,7 +75,7 @@
   "loading": "Caricamento in corso, attendere..."
 },
 
-"error": {
+"Error": {
   "errorTitle": "Qualcosa è andato storto!",
   "errorMessage": "Spiacenti. Si è verificato un errore durante l'elaborazione della tua richiesta.",
   "tryAgain": "Riprova",
@@ -106,7 +106,9 @@
     "date": "Data",
     "time": "Ora",
     "plantMachine": "Impianto / Macchina *",
-    "plantSection": "Parte di impianto *",
+    "plantPart": "Parte di impianto *",
+    "selectPlant": "Seleziona impianto",
+    "selectPlantPart": "Seleziona parte di impianto",
     "type": "Tipologia *",
     "production": "Produzione",
     "safety": "Sicurezza",
@@ -116,6 +118,7 @@
     "clickToUpload": "Clicca per caricare immagini",
     "cancel": "Cancella",
     "sendReport": "Invia Segnalazione"
+
 }
 
 

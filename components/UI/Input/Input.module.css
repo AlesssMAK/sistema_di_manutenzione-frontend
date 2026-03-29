@@ -1,6 +1,5 @@
 .input_container {
   position: relative;
-  width: 100%;
 }
 
 .input {
@@ -14,16 +13,16 @@
 }
 
 .input:focus {
-  border-color: var(--primary-color);
+  border-color: #2563eb;
   box-shadow: 0 4px 12px rgba(16, 57, 49, 0.3);
 }
 
 .input::placeholder {
   font-family: var(--font-family);
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 20px;
-  color: #11101c;
+  color: #717182;
 }
 
 .icon_btn {
@@ -35,6 +34,7 @@
   right: 18px;
   transform: translateY(-50%);
   z-index: 10;
+  background-color: transparent;
 }
 
 .icon_btn svg {
@@ -43,5 +43,5 @@
 
 .icon {
   stroke: #11101c;
-  fill: #fff;
+  fill: none;
 }

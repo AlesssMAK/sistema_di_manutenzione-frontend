@@ -1,0 +1,35 @@
+.noFound {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 24px;
+  background: var(--background);
+  padding: 24px;
+
+  @media screen and (min-width: 768px) {
+    gap: 36px;
+    padding: 48px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    padding: 72px;
+  }
+}
+
+.noFoundTitle {
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 1.33333;
+  text-align: center;
+  color: #2563eb;
+}
+
+.noFoundMessage {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.25;
+  color: rgba(17, 16, 28, 0.5);
+  text-align: center;
+}

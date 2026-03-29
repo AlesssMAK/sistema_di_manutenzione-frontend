@@ -41,21 +41,24 @@
   margin-bottom: 24px;
 }
 
-/*-------------- Tipologia /*--------------*/
+/*-------------- Plant--------------*/
 
-.form_item_tipologia {
+/*-------------- Plant--------------*/
+/*-------------- Tipologia--------------*/
+
+.form_item_type {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.tipologia_label {
+.type_label {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.tipologia_input input[type='radio'] {
+.type_input input[type='radio'] {
   border: none;
   border-radius: 39359600px;
   width: 15px;
@@ -66,7 +69,7 @@
   border-color: transparent;
 }
 
-.tipologia_text {
+.type_text {
   font-weight: 400;
   font-size: 14px;
   line-height: 14px;
