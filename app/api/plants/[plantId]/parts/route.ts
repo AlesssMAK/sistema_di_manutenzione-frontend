@@ -1,11 +1,20 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { isAxiosError } from 'axios';
-import { api } from '../../api';
-import { logErrorResponse } from '../../_utils/utils';
+import { logErrorResponse } from '@/app/api/_utils/utils';
+import { api } from '@/app/api/api';
 
-export async function POST() {
+export async function GET(
+  req: NextRequest,
+  {
+    params,
+  }: {
+    params: Promise<{ plantId: string }>;
+  }
+) {
   try {
-    const res = await api.post('/plants/parts');
+    const { plantId } = await params;
+    const res = await api.get(`/plants/${plantId}/parts`);
+
     return NextResponse.json(res.data);
   } catch (error) {
     if (isAxiosError(error)) {
