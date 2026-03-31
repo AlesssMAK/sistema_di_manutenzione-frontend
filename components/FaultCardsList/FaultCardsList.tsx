@@ -1,3 +1,4 @@
+import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
 
@@ -17,17 +18,25 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
         {faults.map(fault => (
           <li key={fault.id} className={css.faultCard}>
             <div className={css.content}>
-              <div className={css.header}>
-                <span className={css.faultId}>{fault.faultId}</span>
-                <span className={css.status}>{fault.statusfault}</span>
-              </div>
+              <div>
+                <div className={css.header}>
+                  <span className={css.faultId}>{fault.faultId}</span>
+                  <div className={css.headerButton}>
+                    <span className={css.status}>{fault.statusfault}</span>
+                    <button type="button" className={css.buttonInProgress}>
+                      In progress
+                    </button>
+                  </div>
+                </div>
 
-              <div className={css.details}>
+                <div className={css.details}>
+                  <p className={css.namePlant}>
+                    <strong>Установка:</strong> {fault.plantId?.namePlant}
+                  </p>
+                </div>
                 <p>
-                  <strong>Оборудование:</strong> {fault.plantId?.namePlant}
-                </p>
-                <p>
-                  <strong>Узел:</strong> {fault.partId?.namePartPlant}
+                  <strong>Часть установки:</strong>{' '}
+                  {fault.partId?.namePlantPart}
                 </p>
                 <p>
                   <strong>Приоритет:</strong> {fault.priority}
