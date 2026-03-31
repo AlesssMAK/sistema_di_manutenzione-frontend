@@ -56,6 +56,8 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                     <p className={css.value}>{fault.partId?.namePlantPart}</p>
                     <span className={css.label}>Плановое время</span>
                     <p className={css.value}>{fault.plannedTime}</p>
+                    <span className={css.label}>Срок выполнения</span>
+                    <p className={css.value}>{fault.deadline}</p>
                   </div>
 
                   {/* Правая колонка */}
@@ -70,7 +72,12 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 </div>
               </div>
 
-              {fault.comment && <p className={css.comment}>{fault.comment}</p>}
+              {fault.comment && (
+                <div className={css.commentContainer}>
+                  <h4 className={css.commentLabel}>Комментарий:</h4>
+                  <p className={css.commentText}>{fault.comment}</p>
+                </div>
+              )}
             </div>
           </li>
         ))}
