@@ -34,6 +34,12 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                     <strong>Установка:</strong> {fault.plantId?.namePlant}
                   </p>
                 </div>
+                <Button
+                  type="button"
+                  className="button--white"
+                  width="100%"
+                  height={44}
+                ></Button>
                 <p>
                   <strong>Часть установки:</strong>{' '}
                   {fault.partId?.namePlantPart}
