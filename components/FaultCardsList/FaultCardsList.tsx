@@ -37,9 +37,13 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 <Button
                   type="button"
                   className="button--white"
-                  width="100%"
-                  height={44}
-                ></Button>
+                  width={115}
+                  height={23}
+                >
+                  <svg className={css.user_icon} width="16" height="16">
+                    <use href="/sprite.svg#user"></use>
+                  </svg>
+                </Button>
                 <p>
                   <strong>Часть установки:</strong>{' '}
                   {fault.partId?.namePlantPart}
