@@ -39,7 +39,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 <Button
                   type="button"
                   className="button--white"
-                  width={121}
+                  width={160}
                   height={30}
                 >
                   <div className={css.user}>
@@ -49,13 +49,25 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                     <p className={css.user_name}>{user?.fullName}</p>
                   </div>
                 </Button>
-                <p>
-                  <strong>Часть установки:</strong>{' '}
-                  {fault.partId?.namePlantPart}
-                </p>
-                <p>
-                  <strong>Приоритет:</strong> {fault.priority}
-                </p>
+                <div className={css.detailsGrid}>
+                  {/* Левая колонка */}
+                  <div className={css.detailItem}>
+                    <span className={css.label}>Часть установки</span>
+                    <p className={css.value}>{fault.partId?.namePlantPart}</p>
+                    <span className={css.label}>Плановое время</span>
+                    <p className={css.value}>{fault.plannedTime}</p>
+                  </div>
+
+                  {/* Правая колонка */}
+                  <div className={css.detailItem}>
+                    <span className={css.label}>Приоритет</span>
+                    <p className={`${css.value} ${css.priorityValue}`}>
+                      {fault.priority}
+                    </p>
+                    <span className={css.label}>Общее время выполнения</span>
+                    <p className={css.value}>{fault.estimatedDuration}</p>
+                  </div>
+                </div>
               </div>
 
               {fault.comment && <p className={css.comment}>{fault.comment}</p>}
