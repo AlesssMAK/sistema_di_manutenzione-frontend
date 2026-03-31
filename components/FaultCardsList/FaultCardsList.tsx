@@ -1,6 +1,7 @@
 import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
+import { useAuthStore } from '@/lib/store/authStore';
 
 interface FaultCardsListProps {
   faults: FaultCard[];
@@ -10,6 +11,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   if (!faults || faults.length === 0) {
     return <div className={css.container}>Задач пока нет</div>;
   }
+  const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
 
   return (
     <div className={css.containerFaultCardList}>
@@ -37,12 +39,15 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 <Button
                   type="button"
                   className="button--white"
-                  width={115}
-                  height={23}
+                  width={121}
+                  height={30}
                 >
-                  <svg className={css.user_icon} width="16" height="16">
-                    <use href="/sprite.svg#user"></use>
-                  </svg>
+                  <div className={css.user}>
+                    <svg className={css.user_icon} width="12" height="12">
+                      <use href="/sprite.svg#user"></use>
+                    </svg>
+                    <p className={css.user_name}>{user?.fullName}</p>
+                  </div>
                 </Button>
                 <p>
                   <strong>Часть установки:</strong>{' '}

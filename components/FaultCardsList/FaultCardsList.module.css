@@ -88,3 +88,29 @@
   color: #45556c;
   margin-bottom: 8px;
 }
+.user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.user_icon {
+  display: block;
+  flex-shrink: 0;
+  stroke: #45556c;
+  fill: transparent;
+}
+
+.user_name {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.33333;
+  color: #193cb8;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
