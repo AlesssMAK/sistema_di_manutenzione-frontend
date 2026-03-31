@@ -17,8 +17,8 @@ export interface FaultCard {
     code: string;
   };
   partId: {
-    namePartPlant: string;
-    codePartPlant: string;
+    namePlantPart: string;
+    codePlantPart: string;
   };
   nameOperator: string;
   userId: string;
