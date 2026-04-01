@@ -2,6 +2,7 @@ import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
 import { useAuthStore } from '@/lib/store/authStore';
+import DateNow from '../DateNow/DateNow';
 
 interface FaultCardsListProps {
   faults: FaultCard[];
@@ -15,7 +16,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
 
   return (
     <div className={css.containerFaultCardList}>
-      <h3 className={css.datanowForList}>Data</h3>
+      <DateNow />
       <ul className={css.faultList}>
         {faults.map(fault => (
           <li key={fault.id} className={css.faultCard}>
