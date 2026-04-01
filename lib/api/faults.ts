@@ -1,4 +1,4 @@
-import { FaultCard } from '@/types/faultType';
+import { Fault, FaultCard, ReportFormValues } from '@/types/faultType';
 import nextServer from './api';
 
 export interface FetchFaultCardsParams {
@@ -16,4 +16,26 @@ export const fetchFaultCards = async ({
     items: res.data.fault || [],
     total: res.data.totalFault || 0,
   };
+};
+
+export const createFault = async (data: ReportFormValues) => {
+  const formData = new FormData();
+
+  formData.append('faultId', data.faultId);
+  formData.append('dataCreated', data.dataCreated);
+  formData.append('timeCreated', data.timeCreated);
+  formData.append('plantId', data.plantId);
+  formData.append('partId', data.partId);
+  formData.append('typefault', data.typefault);
+  formData.append('comment', data.comment);
+
+  if (data.img instanceof File) {
+    formData.append('img', data.img);
+  } else {
+    formData.append('img', '');
+  }
+
+  const res = await nextServer.post('/faults', formData);
+
+  return res.data;
 };

@@ -118,7 +118,8 @@
     "images": "Images",
     "clickToUpload": "Click to upload images",
     "cancel": "Cancel",
-    "sendReport": "Send Report"
+    "sendReport": "Send Report",
+    "reportCreatedSuccessfully": "Report created successfully"
   }
 
 }

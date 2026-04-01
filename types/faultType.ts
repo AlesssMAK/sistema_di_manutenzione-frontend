@@ -71,3 +71,14 @@ export interface FaultHistory {
   changes?: Record<string, unknown>;
   timestamp: string;
 }
+
+export interface ReportFormValues {
+  faultId: string;
+  dataCreated: string;
+  timeCreated: string;
+  plantId: string;
+  partId: string;
+  typefault: TypeFault;
+  comment: string;
+  img: File | null;
+}

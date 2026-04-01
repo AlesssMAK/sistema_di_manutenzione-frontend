@@ -13,6 +13,10 @@ import { useForm, useWatch } from 'react-hook-form';
 import { Plant } from '@/types/plantType';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import { PlantPart } from '@/types/partPlant';
+import { reportSchema } from '@/lib/validation/reportFormValidation';
+import { ReportFormValues } from '@/types/faultType';
+import { createFault } from '@/lib/api/faults';
+import toast from 'react-hot-toast';
 
 const ReportForm = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
@@ -25,14 +29,11 @@ const ReportForm = () => {
   const [selectedPlantPartLabel, setSelectedPlantPartLabel] = useState<
     string | null
   >(null);
-  const [isSelectedPlantPartId, setIsSelectedPlantPartId] = useState<
-    string | null
-  >(null);
 
   const t = useTranslations('ReportForm');
   const { user } = useAuthStore();
   const now = new Date();
-  const date = now.toLocaleDateString('it-IT');
+  const date = now.toISOString().split('T')[0];
 
   const {
     register,
@@ -41,17 +42,29 @@ const ReportForm = () => {
     setValue,
     control,
     formState: { errors, isSubmitting },
-  } = useForm({
-    // resolver: yupResolver(),
+  } = useForm<ReportFormValues>({
+    resolver: yupResolver(reportSchema),
+    defaultValues: {
+      img: null,
+    },
   });
 
   useEffect(() => {
     const getId = async () => {
       const reportId = await generateId();
       setGeneratedId(reportId);
+      setValue('faultId', reportId);
     };
     getId();
   }, []);
+
+  useEffect(() => {
+    setValue('dataCreated', date);
+  }, [date, setValue]);
+
+  useEffect(() => {
+    setValue('timeCreated', currentTime);
+  }, [currentTime, setValue]);
 
   useEffect(() => {
     const allPlants = async () => {
@@ -73,7 +86,7 @@ const ReportForm = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const selectedPlantId = useWatch({ control, name: 'plant' });
+  const selectedPlantId = useWatch({ control, name: 'plantId' });
   const plantOptions = isPlants.map(p => `${p.namePlant} - ${p.code}`);
 
   useEffect(() => {
@@ -91,16 +104,37 @@ const ReportForm = () => {
   const plantPartOptions = isPlantParts.map(
     p => `${p.namePlantPart} - ${p.codePlantPart}`
   );
-  const selectedPlantPartId = useWatch({ control, name: 'plantPart' });
+
+  const selectedPlantPartId = useWatch({ control, name: 'partId' });
+  const onReportSubmit = async (data: ReportFormValues) => {
+    try {
+      console.log(data);
+
+      await createFault({
+        faultId: data.faultId,
+        dataCreated: data.dataCreated,
+        timeCreated: data.timeCreated,
+        plantId: data.plantId,
+        partId: data.partId,
+        typefault: data.typefault,
+        comment: data.comment,
+        img: data.img,
+      });
+      toast.success(t('reportCreatedSuccessfully'));
+    } catch {}
+  };
 
   return (
-    <form className={css.form}>
+    <form onSubmit={handleSubmit(onReportSubmit)} className={css.form}>
       <div className={css.report_form_container}>
         <ul className={css.info_list}>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('reportId')}</h3>
             <p className={css.info_text}>{generatedId}</p>
-            <Input type="hidden" name="generatedId" value={generatedId} />
+            <Input type="hidden" {...register('faultId')} />
+            {errors.faultId && (
+              <p className={css.error}>{errors.faultId.message}</p>
+            )}
           </li>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('operator')}</h3>
@@ -108,13 +142,19 @@ const ReportForm = () => {
           </li>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('date')}</h3>
-            <p className={css.info_text}>{date}</p>
-            <Input type="hidden" name="generatedId" value={date} />
+            <p className={css.info_text}>{now.toLocaleDateString('it-IT')}</p>
+            <Input type="hidden" {...register('dataCreated')} />
+            {errors.dataCreated && (
+              <p className={css.error}>{errors.dataCreated.message}</p>
+            )}
           </li>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('time')}</h3>
             <p className={css.info_text}>{currentTime}</p>
-            <Input type="hidden" name="generatedId" value={currentTime} />
+            <Input type="hidden" {...register('timeCreated')} />
+            {errors.timeCreated && (
+              <p className={css.error}>{errors.timeCreated.message}</p>
+            )}
           </li>
         </ul>
 
@@ -129,13 +169,16 @@ const ReportForm = () => {
                 p => `${p.namePlant} - ${p.code}` === label
               );
 
-              setValue('plant', plant?._id);
+              setValue('plantId', plant?._id || '');
               setSelectedPlantLabel(label);
               setSelectedPlantPartLabel('');
             }}
             disabled={false}
           />
-          <Input type="hidden" name="plant" value={selectedPlantId || ''} />
+          <Input type="hidden" {...register('plantId')} />
+          {errors.plantId && (
+            <p className={css.error}>{errors.plantId.message}</p>
+          )}
         </div>
 
         <div className={css.form_item}>
@@ -145,20 +188,19 @@ const ReportForm = () => {
             options={plantPartOptions}
             selectedValue={selectedPlantPartLabel}
             onSelect={label => {
-              const plant = isPlantParts.find(
+              const part = isPlantParts.find(
                 p => `${p.namePlantPart} - ${p.codePlantPart}` === label
               );
 
-              setValue('plantPart', plant?._id);
+              setValue('partId', part?._id || '');
               setSelectedPlantPartLabel(label);
             }}
             disabled={!selectedPlantId}
           />
-          <Input
-            type="hidden"
-            name="plantPart"
-            value={selectedPlantPartId || ''}
-          />
+          <Input type="hidden" {...register('partId')} />
+          {errors.partId && (
+            <p className={css.error}>{errors.partId.message}</p>
+          )}
         </div>
 
         {/* type */}
@@ -166,23 +208,26 @@ const ReportForm = () => {
           <h3 className={css.form_title}>{t('type')}</h3>
           <div className={css.form_item_type}>
             <label className={css.type_label}>
-              <Input
+              <input
                 type="radio"
-                name="status"
                 className={css.type_input}
-                value="produzione"
+                value="Production"
+                {...register('typefault')}
               />
               <p className={css.type_text}>{t('production')}</p>
             </label>
             <label className={css.type_label}>
-              <Input
+              <input
                 type="radio"
-                name="status"
                 className={css.type_input}
-                value="sicurezza"
+                value="Safety"
+                {...register('typefault')}
               />
               <p className={css.type_text}>{t('safety')}</p>
             </label>
+            {errors.typefault && (
+              <p className={css.error}>{errors.typefault.message}</p>
+            )}
           </div>
         </div>
 
@@ -191,19 +236,32 @@ const ReportForm = () => {
           <h3 className={css.form_title}>{t('notesDescription')}</h3>
           <label>
             <textarea
-              name="name"
+              {...register('comment')}
               required
               className={css.textarea}
               placeholder={t('describeIssue')}
             />
           </label>
+          {errors.comment && (
+            <p className={css.error}>{errors.comment.message}</p>
+          )}
         </div>
-        {/* Immagini */}
 
+        {/* Immagini */}
         <div className={css.form_item}>
           <h3 className={css.form_title}>{t('images')}</h3>
           <label className={css.upload_label}>
-            <Input type="file" className={css.upload_input} accept="image/*" />
+            <Input
+              type="file"
+              className={css.upload_input}
+              accept="image/*"
+              {...register('img', {
+                onChange: e => {
+                  const file = e.target.files?.[0];
+                  if (file) setValue('img', file);
+                },
+              })}
+            />
             <div className={css.upload_text_container}>
               <svg width="32" height="32" className={css.upload_icon}>
                 <use href="/sprite.svg#load"></use>
@@ -211,8 +269,10 @@ const ReportForm = () => {
               <p className={css.upload_text}>{t('clickToUpload')}</p>
             </div>
           </label>
+          {errors.img && <p className={css.error}>{errors.img.message}</p>}
         </div>
       </div>
+
       <div className={css.btn_container}>
         <Button type="button" className="button button--white" width="100%">
           {t('cancel')}
