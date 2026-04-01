@@ -117,7 +117,8 @@
     "images": "Immagini",
     "clickToUpload": "Clicca per caricare immagini",
     "cancel": "Cancella",
-    "sendReport": "Invia Segnalazione"
+    "sendReport": "Invia Segnalazione",
+    "reportCreatedSuccessfully": "Segnalazione creato con successo"
 
 }
 

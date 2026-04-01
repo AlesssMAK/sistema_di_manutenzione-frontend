@@ -84,6 +84,7 @@ const LoginForm = () => {
               {...register('identifier')}
               type="text"
               placeholder={t('placeholderEmailOrFullName')}
+              style={{ height: '52px' }}
             />
             {errors.identifier && (
               <p className={css.error}>{errors.identifier.message}</p>
@@ -94,6 +95,7 @@ const LoginForm = () => {
               {...register('secret')}
               type="password"
               placeholder={t('placeholderPasswordOrPersonalCode')}
+              style={{ height: '52px' }}
             />
             {errors.secret && (
               <p className={css.error}>{errors.secret.message}</p>

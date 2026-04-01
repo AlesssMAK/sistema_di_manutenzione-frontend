@@ -118,7 +118,8 @@
     "images": "Imágenes",
     "clickToUpload": "Haz clic para cargar imágenes",
     "cancel": "Cancelar",
-    "sendReport": "Enviar Reporte"
+    "sendReport": "Enviar Reporte",
+    "reportCreatedSuccessfully": "Señalización creada con éxito"
 }
 
 
