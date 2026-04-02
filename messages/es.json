@@ -96,12 +96,14 @@
   },
 
   "Priority": {
-  "Low": "Baja",
-  "Medium": "Media",
-  "High": "Alta"
+    "Low": "Baja",
+    "Medium": "Media",
+    "High": "Alta"
 },
 
-"ReportForm": {
+  "ReportForm": {
+    "newReport": "Nuevo Señalización",
+    "fillForm": "Completa el formulario para reportar una avería o anomalía",
     "reportId": "ID de la señalación",
     "operator": "Operador",
     "date": "Fecha",
@@ -119,7 +121,8 @@
     "clickToUpload": "Haz clic para cargar imágenes",
     "cancel": "Cancelar",
     "sendReport": "Enviar Reporte",
-    "reportCreatedSuccessfully": "Señalización creada con éxito"
+    "reportCreatedSuccessfully": "Señalización creada con éxito",
+    "loading": "cargando..."
 }
 
 
