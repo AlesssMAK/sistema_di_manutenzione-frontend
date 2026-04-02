@@ -17,6 +17,7 @@ import { reportSchema } from '@/lib/validation/reportFormValidation';
 import { ReportFormValues } from '@/types/faultType';
 import { createFault } from '@/lib/api/faults';
 import toast from 'react-hot-toast';
+import { useFaultDraft } from '@/lib/store/reportStore';
 
 const ReportForm = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
@@ -32,8 +33,22 @@ const ReportForm = () => {
 
   const t = useTranslations('ReportForm');
   const { user } = useAuthStore();
+  const { draft, setDraft, clearDraft } = useFaultDraft();
   const now = new Date();
   const date = now.toISOString().split('T')[0];
+
+  const handleChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = event.target;
+
+    setDraft({
+      ...draft,
+      [name]: value,
+    });
+  };
 
   const {
     register,
@@ -105,11 +120,8 @@ const ReportForm = () => {
     p => `${p.namePlantPart} - ${p.codePlantPart}`
   );
 
-  const selectedPlantPartId = useWatch({ control, name: 'partId' });
   const onReportSubmit = async (data: ReportFormValues) => {
     try {
-      console.log(data);
-
       await createFault({
         faultId: data.faultId,
         dataCreated: data.dataCreated,
@@ -120,13 +132,47 @@ const ReportForm = () => {
         comment: data.comment,
         img: data.img,
       });
+      reset();
       toast.success(t('reportCreatedSuccessfully'));
-    } catch {}
+      clearDraft();
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    if (!isPlants.length) return;
+
+    if (draft.plantId) {
+      setValue('plantId', draft.plantId);
+
+      const plant = isPlants.find(p => p._id === draft.plantId);
+      if (plant) {
+        setSelectedPlantLabel(`${plant.namePlant} - ${plant.code}`);
+      }
+    }
+  }, [isPlants, draft.plantId, setValue]);
+
+  useEffect(() => {
+    if (!isPlantParts.length) return;
+
+    if (draft.partId) {
+      setValue('partId', draft.partId);
+
+      const part = isPlantParts.find(p => p._id === draft.partId);
+      if (part) {
+        setSelectedPlantPartLabel(
+          `${part.namePlantPart} - ${part.codePlantPart}`
+        );
+      }
+    }
+  }, [isPlantParts, draft.partId, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onReportSubmit)} className={css.form}>
       <div className={css.report_form_container}>
+        <h1 className={css.title}>{t('newReport')}</h1>
+        <p className={css.text}>{t('fillForm')}</p>
         <ul className={css.info_list}>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('reportId')}</h3>
@@ -169,9 +215,16 @@ const ReportForm = () => {
                 p => `${p.namePlant} - ${p.code}` === label
               );
 
-              setValue('plantId', plant?._id || '');
+              const id = plant?._id || '';
+
+              setValue('plantId', id);
               setSelectedPlantLabel(label);
               setSelectedPlantPartLabel('');
+              setDraft({
+                ...draft,
+                plantId: id,
+                partId: '',
+              });
             }}
             disabled={false}
           />
@@ -192,12 +245,24 @@ const ReportForm = () => {
                 p => `${p.namePlantPart} - ${p.codePlantPart}` === label
               );
 
-              setValue('partId', part?._id || '');
+              const id = part?._id || '';
+
+              setValue('partId', id);
               setSelectedPlantPartLabel(label);
+              setDraft({
+                ...draft,
+                partId: id,
+              });
             }}
-            disabled={!selectedPlantId}
+            disabled={!selectedPlantId || isPlantParts.length === 0}
           />
-          <Input type="hidden" {...register('partId')} />
+          <Input
+            id="partId"
+            type="hidden"
+            {...register('partId')}
+            value={draft.partId}
+            onChange={handleChange}
+          />
           {errors.partId && (
             <p className={css.error}>{errors.partId.message}</p>
           )}
@@ -236,10 +301,13 @@ const ReportForm = () => {
           <h3 className={css.form_title}>{t('notesDescription')}</h3>
           <label>
             <textarea
+              id="comment"
               {...register('comment')}
               required
               className={css.textarea}
               placeholder={t('describeIssue')}
+              value={draft.comment}
+              onChange={handleChange}
             />
           </label>
           {errors.comment && (
@@ -274,11 +342,16 @@ const ReportForm = () => {
       </div>
 
       <div className={css.btn_container}>
-        <Button type="button" className="button button--white" width="100%">
+        <Button
+          type="button"
+          className="button button--white"
+          width="100%"
+          onClick={() => clearDraft()}
+        >
           {t('cancel')}
         </Button>
         <Button type="submit" className="button button--blue" width="100%">
-          {t('sendReport')}
+          {isSubmitting ? t('loading') : t('sendReport')}
         </Button>
       </div>
     </form>

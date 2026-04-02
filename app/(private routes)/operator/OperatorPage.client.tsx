@@ -17,10 +17,6 @@ const OperatorPageClient = () => {
     <main>
       <section className="section">
         <div className="container">
-          <h1 className={css.title}>Nuova Report</h1>
-          <p className={css.text}>
-            Compila il modulo per segnalare un guasto o anomalia
-          </p>
           <ReportForm />
         </div>
       </section>

@@ -102,6 +102,8 @@
   },
 
   "ReportForm": {
+    "newReport": "New Report",
+    "fillForm": "Fill out the form to report a malfunction or anomaly",
     "reportId": "Report ID",
     "operator": "Operator",
     "date": "Date",
@@ -119,7 +121,8 @@
     "clickToUpload": "Click to upload images",
     "cancel": "Cancel",
     "sendReport": "Send Report",
-    "reportCreatedSuccessfully": "Report created successfully"
+    "reportCreatedSuccessfully": "Report created successfully",
+    "loading": "loading..."
   }
 
 }

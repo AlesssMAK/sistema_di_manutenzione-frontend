@@ -82,3 +82,9 @@ export interface ReportFormValues {
   comment: string;
   img: File | null;
 }
+
+export interface NewFaultContent {
+  plantId: string;
+  partId: string;
+  comment: string;
+}

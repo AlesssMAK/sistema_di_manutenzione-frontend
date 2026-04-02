@@ -101,6 +101,8 @@
   },
 
   "ReportForm": {
+    "newReport": "Nuova Segnalazione",
+    "fillForm": "Compila il modulo per segnalare un guasto o anomalia",
     "reportId": "ID Segnalazione",
     "operator": "Operatore",
     "date": "Data",
@@ -118,7 +120,8 @@
     "clickToUpload": "Clicca per caricare immagini",
     "cancel": "Cancella",
     "sendReport": "Invia Segnalazione",
-    "reportCreatedSuccessfully": "Segnalazione creato con successo"
+    "reportCreatedSuccessfully": "Segnalazione creato con successo",
+    "loading": "caricamento..."
 
 }
 
