@@ -24,6 +24,9 @@
   line-height: 1.42857;
   color: #0a0a0a;
   cursor: pointer;
+  transition:
+    border 0.2s ease,
+    background 0.2s ease;
 }
 
 .input:hover:not(.disabled),

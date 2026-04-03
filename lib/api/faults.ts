@@ -26,13 +26,13 @@ export const createFault = async (data: ReportFormValues) => {
   formData.append('timeCreated', data.timeCreated);
   formData.append('plantId', data.plantId);
   formData.append('partId', data.partId);
-  formData.append('typefault', data.typefault);
+  formData.append('typeFault', data.typeFault);
   formData.append('comment', data.comment);
 
-  if (data.img instanceof File) {
-    formData.append('img', data.img);
-  } else {
-    formData.append('img', '');
+  if (data.img && data.img.length > 0) {
+    data.img.forEach(file => {
+      formData.append('img', file);
+    });
   }
 
   const res = await nextServer.post('/faults', formData);

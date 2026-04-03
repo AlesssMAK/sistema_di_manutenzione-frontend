@@ -23,7 +23,7 @@ export interface FaultCard {
   nameOperator: string;
   userId: string;
 
-  statusfault: StatusFaultType;
+  statusFault: StatusFaultType;
   comment: string;
   priority: PriorityFaultType;
   deadline?: string;
@@ -48,8 +48,8 @@ export interface Fault {
   timeCreated: string;
   plantId: string;
   partId: string;
-  typefault: TypeFault;
-  statusfault: StatusFaultType;
+  typeFault: TypeFault;
+  statusFault: StatusFaultType;
   comment: string;
   img?: string;
   priority: PriorityFaultType;
@@ -78,9 +78,9 @@ export interface ReportFormValues {
   timeCreated: string;
   plantId: string;
   partId: string;
-  typefault: TypeFault;
+  typeFault: TypeFault;
   comment: string;
-  img: File | null;
+  img: File[];
 }
 
 export interface NewFaultContent {
