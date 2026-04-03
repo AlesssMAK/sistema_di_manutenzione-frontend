@@ -18,6 +18,7 @@ import { ReportFormValues } from '@/types/faultType';
 import { createFault } from '@/lib/api/faults';
 import toast from 'react-hot-toast';
 import { useFaultDraft } from '@/lib/store/reportStore';
+import { UploadImages } from '@/components/UI/UploadImages/UploadImages';
 
 const ReportForm = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
@@ -60,9 +61,11 @@ const ReportForm = () => {
   } = useForm<ReportFormValues>({
     resolver: yupResolver(reportSchema),
     defaultValues: {
-      img: null,
+      img: [],
     },
   });
+
+  console.log('FORM ERRORS:', errors);
 
   useEffect(() => {
     const getId = async () => {
@@ -121,6 +124,8 @@ const ReportForm = () => {
   );
 
   const onReportSubmit = async (data: ReportFormValues) => {
+    console.log('SUBMIT FIRED:', data);
+
     try {
       await createFault({
         faultId: data.faultId,
@@ -128,7 +133,7 @@ const ReportForm = () => {
         timeCreated: data.timeCreated,
         plantId: data.plantId,
         partId: data.partId,
-        typefault: data.typefault,
+        typeFault: data.typeFault,
         comment: data.comment,
         img: data.img,
       });
@@ -138,6 +143,11 @@ const ReportForm = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const wrappedSubmit = (data: ReportFormValues) => {
+    console.log('TRY SUBMIT'); // ← ТУТ
+    onReportSubmit(data);
   };
 
   useEffect(() => {
@@ -169,7 +179,7 @@ const ReportForm = () => {
   }, [isPlantParts, draft.partId, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(onReportSubmit)} className={css.form}>
+    <form onSubmit={handleSubmit(wrappedSubmit)} className={css.form}>
       <div className={css.report_form_container}>
         <h1 className={css.title}>{t('newReport')}</h1>
         <p className={css.text}>{t('fillForm')}</p>
@@ -277,7 +287,7 @@ const ReportForm = () => {
                 type="radio"
                 className={css.type_input}
                 value="Production"
-                {...register('typefault')}
+                {...register('typeFault')}
               />
               <p className={css.type_text}>{t('production')}</p>
             </label>
@@ -286,12 +296,12 @@ const ReportForm = () => {
                 type="radio"
                 className={css.type_input}
                 value="Safety"
-                {...register('typefault')}
+                {...register('typeFault')}
               />
               <p className={css.type_text}>{t('safety')}</p>
             </label>
-            {errors.typefault && (
-              <p className={css.error}>{errors.typefault.message}</p>
+            {errors.typeFault && (
+              <p className={css.error}>{errors.typeFault.message}</p>
             )}
           </div>
         </div>
@@ -318,25 +328,8 @@ const ReportForm = () => {
         {/* Immagini */}
         <div className={css.form_item}>
           <h3 className={css.form_title}>{t('images')}</h3>
-          <label className={css.upload_label}>
-            <Input
-              type="file"
-              className={css.upload_input}
-              accept="image/*"
-              {...register('img', {
-                onChange: e => {
-                  const file = e.target.files?.[0];
-                  if (file) setValue('img', file);
-                },
-              })}
-            />
-            <div className={css.upload_text_container}>
-              <svg width="32" height="32" className={css.upload_icon}>
-                <use href="/sprite.svg#load"></use>
-              </svg>
-              <p className={css.upload_text}>{t('clickToUpload')}</p>
-            </div>
-          </label>
+          <UploadImages setValue={setValue} />
+          <input type="hidden" {...register('img')} />
           {errors.img && <p className={css.error}>{errors.img.message}</p>}
         </div>
       </div>

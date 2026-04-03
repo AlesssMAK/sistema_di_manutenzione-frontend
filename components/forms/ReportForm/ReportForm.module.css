@@ -57,9 +57,6 @@
   margin-bottom: 24px;
 }
 
-/*-------------- Plant--------------*/
-
-/*-------------- Plant--------------*/
 /*-------------- Tipologia--------------*/
 
 .form_item_type {
@@ -117,68 +114,6 @@
   line-height: 20px;
   color: #717182;
 }
-
-/*-------------- Note e Descrizione /*--------------*/
-/*-------------- Immagini --------------*/
-
-.upload_input {
-  display: none;
-}
-
-.upload_label {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1.17px solid #cad5e2;
-  border-radius: 8px;
-  padding: 17px;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    transform 0.1s ease;
-}
-
-.upload_label:hover,
-.upload_label:focus {
-  background: #e9ebef;
-}
-
-.upload_label:active {
-  background: #2563eb;
-  transform: scale(0.97);
-}
-
-.upload_text_container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  justify-content: center;
-  align-items: center;
-}
-
-.upload_icon {
-  fill: transparent;
-  stroke: #90a1b9;
-  transition: stroke 0.2 ease;
-}
-
-.upload_label:active .upload_icon {
-  stroke: #fff;
-}
-
-.upload_text {
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 20px;
-  color: #45556c;
-  transition: color 0.2 ease;
-}
-
-.upload_label:active .upload_text {
-  color: #fff;
-}
-
-/*-------------- Immagini --------------*/
 
 /*-------------- btn --------------*/
 

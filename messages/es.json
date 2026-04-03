@@ -122,7 +122,8 @@
     "cancel": "Cancelar",
     "sendReport": "Enviar Reporte",
     "reportCreatedSuccessfully": "Señalización creada con éxito",
-    "loading": "cargando..."
+    "loading": "cargando...",
+    "maxImages": "Máximo 5 imágenes"
 }
 
 

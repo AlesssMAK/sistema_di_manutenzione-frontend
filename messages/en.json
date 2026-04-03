@@ -122,7 +122,8 @@
     "cancel": "Cancel",
     "sendReport": "Send Report",
     "reportCreatedSuccessfully": "Report created successfully",
-    "loading": "loading..."
+    "loading": "loading...",
+    "maxImages": "Maximum 5 images"
   }
 
 }
