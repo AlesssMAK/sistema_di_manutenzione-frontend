@@ -25,7 +25,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 <div className={css.header}>
                   <span className={css.faultId}>{fault.faultId}</span>
                   <div className={css.headerButton}>
-                    <span className={css.status}>{fault.statusfault}</span>
+                    <span className={css.status}>{fault.statusFault}</span>
                     <button type="button" className={css.buttonInProgress}>
                       In progress
                     </button>
@@ -83,6 +83,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
           </li>
         ))}
       </ul>
+      
     </div>
   );
 };

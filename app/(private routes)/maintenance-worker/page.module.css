@@ -17,3 +17,10 @@
   padding-top: 32px;
   padding-bottom: 40px;
 }
+.loadMoreButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 32px;
+}
