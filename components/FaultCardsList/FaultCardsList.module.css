@@ -171,3 +171,7 @@
   font-weight: 400;
   word-wrap: break-word;
 }
+.shmorebtn {
+  margin: 0 auto;
+  margin-bottom: 40px;
+}
