@@ -1,4 +1,4 @@
-import { NewFaultContent } from '@/types/faultType';
+import { NewFaultContent, TypeFault } from '@/types/faultType';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -11,6 +11,7 @@ interface FaultDraft {
 const initialDraft: NewFaultContent = {
   plantId: '',
   partId: '',
+  typeFault: 'Production',
   comment: '',
 };
 

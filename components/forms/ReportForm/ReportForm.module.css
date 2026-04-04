@@ -57,7 +57,7 @@
   margin-bottom: 24px;
 }
 
-/*-------------- Tipologia--------------*/
+/*-------------- type--------------*/
 
 .form_item_type {
   display: flex;
@@ -72,19 +72,35 @@
 }
 
 .type_input {
-  cursor: pointer;
-}
-
-.type_input input[type='radio'] [name='status'] {
-  border: none;
-  border-radius: 50%;
-  width: 15px;
-  height: 15px;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   background: rgba(255, 255, 255, 0);
-  overflow: hidden;
-  border-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
   cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.type_input:hover,
+.type_input:focus-visible {
+  border: 1px solid #2563eb;
+}
+
+.type_input:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: #2563eb;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .type_text {
@@ -94,17 +110,25 @@
   color: #0a0a0a;
 }
 
-/*-------------- Tipologia /*--------------*/
+/*-------------- type /*--------------*/
 /*-------------- Note e Descrizione /*--------------*/
 
 .textarea {
-  border: 1.17px solid rgba(0, 0, 0, 0);
+  border: 1.17px solid transparent;
   border-radius: 8px;
   background: #f3f3f5;
   padding: 8px 12px;
   min-height: 63px;
   width: 100%;
   resize: none;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.textarea:focus-visible {
+  box-shadow: 0 4px 12px rgba(16, 57, 49, 0.3);
 }
 
 .textarea::placeholder {

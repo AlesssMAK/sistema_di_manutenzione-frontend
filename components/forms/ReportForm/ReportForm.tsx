@@ -65,8 +65,6 @@ const ReportForm = () => {
     },
   });
 
-  console.log('FORM ERRORS:', errors);
-
   useEffect(() => {
     const getId = async () => {
       const reportId = await generateId();
@@ -288,6 +286,8 @@ const ReportForm = () => {
                 className={css.type_input}
                 value="Production"
                 {...register('typeFault')}
+                checked={draft.typeFault === 'Production'}
+                onChange={handleChange}
               />
               <p className={css.type_text}>{t('production')}</p>
             </label>
@@ -297,6 +297,8 @@ const ReportForm = () => {
                 className={css.type_input}
                 value="Safety"
                 {...register('typeFault')}
+                checked={draft.typeFault === 'Safety'}
+                onChange={handleChange}
               />
               <p className={css.type_text}>{t('safety')}</p>
             </label>

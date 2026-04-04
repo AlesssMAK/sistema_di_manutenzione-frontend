@@ -54,10 +54,12 @@
 
 .up {
   transform: rotate(90deg);
+  transition: transform 0.3s ease;
 }
 
 .down {
   transform: rotate(-90deg);
+  transition: transform 0.3s ease;
 }
 
 /* --------------------------- menu --------------------------- */
