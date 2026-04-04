@@ -85,7 +85,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
       </ul>
       <div className={css.shmorebtn}>
         <Button type="button" className="button--blue" width={200} height={40}>
-          Show more
+          Load more
         </Button>
       </div>
     </div>
