@@ -86,5 +86,6 @@ export interface ReportFormValues {
 export interface NewFaultContent {
   plantId: string;
   partId: string;
+  typeFault: TypeFault;
   comment: string;
 }
