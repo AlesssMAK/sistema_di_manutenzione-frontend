@@ -38,8 +38,16 @@
   "login": "Login"
 },
 
+"AdminSidebar": {
+  "users": "Users",
+  "plants": "Machines / Plants",
+  "notifications": "Notifications",
+  "logsAudit": "Logs & Audit",
+  "systemSettings": "System settings"
+},
+
 "AdminPage": {
-  "titlePageForStore": "Administrator"
+  "titlePageForStore": "Administrator: Control panel"
 },
 
 "maintenanceWorkerPage": {

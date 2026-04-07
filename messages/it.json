@@ -37,8 +37,16 @@
 "login": "Accede"
 },
 
+"AdminSidebar": {
+  "users": "Utenti",
+  "plants": "Macchine / Impianti",
+  "notifications": "Notifiche",
+  "logsAudit": "Log & Audit",
+  "systemSettings": "Impostazioni sistema"
+},
+
 "AdminPage": {
-  "titlePageForStore": "Amministratore"
+  "titlePageForStore": "Amministratore: Pannello di controllo"
 },
 
 "maintenanceWorkerPage": {

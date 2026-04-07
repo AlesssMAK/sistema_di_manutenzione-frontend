@@ -1,11 +1,7 @@
-import AdminPageClient from './Admin.client';
+import { redirect } from 'next/navigation';
 
 const AdminPage = () => {
-  return (
-    <div>
-      <AdminPageClient />
-    </div>
-  );
+  redirect('/admin/users');
 };
 
 export default AdminPage;

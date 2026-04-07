@@ -1,0 +1,53 @@
+.layout {
+  background-color: #fff;
+  position: relative;
+}
+
+.layout::before {
+  content: '';
+  position: absolute;
+  top: 56;
+  width: 100%;
+  border-bottom: 1px solid #e2e8f0;
+  z-index: 0;
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+}
+
+.layout::after {
+  content: '';
+  position: absolute;
+  top: 57;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background);
+  z-index: 0;
+
+  @media screen and (min-width: 768px) {
+    top: 0;
+    left: 400;
+  }
+  @media screen and (min-width: 1440px) {
+    left: 300;
+  }
+}
+
+.layout_container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.sidebar {
+  z-index: 1;
+}
+
+.admin_container {
+  background-color: var(--background);
+  z-index: 1;
+}
