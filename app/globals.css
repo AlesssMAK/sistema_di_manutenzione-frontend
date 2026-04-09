@@ -129,3 +129,22 @@ h6 {
   color: #fff;
   transform: scale(0.97);
 }
+
+/* -----------------button----------------- */
+
+/* -----------------style----------------- */
+
+.title {
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.2;
+  color: #0a0a0a;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #45556c;
+}

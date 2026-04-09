@@ -131,8 +131,23 @@
     "reportCreatedSuccessfully": "Segnalazione creato con successo",
     "loading": "caricamento...",
     "maxImages": "Massimo 5 immagini"
+  },
 
-}
+  "Roles": {
+    "all": "Tutti i ruoli",
+    "admin": "Amministratore",
+    "operator": "Operatore",
+    "manager": "Responsabile",
+    "maintenanceWorker": "Manutentore",
+    "safety": "Sicurezza"
+  },
+
+  "Statuses": {
+    "all": "Tutti",
+    "active": "Attivo",
+    "inactive": "Inattivo",
+    "deactivated": "Disattivato"
+  }
 
 
 

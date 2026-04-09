@@ -132,6 +132,22 @@
     "reportCreatedSuccessfully": "Report created successfully",
     "loading": "loading...",
     "maxImages": "Maximum 5 images"
+  },
+
+  "Roles": {
+    "all": "All roles",
+    "admin": "Administrator",
+    "operator": "Operator",
+    "manager": "Manager",
+    "maintenanceWorker": "Maintenance Worker",
+    "safety": "Safety"
+  },
+
+  "Statuses": {
+    "all": "All",
+    "active": "Active",
+    "inactive": "Inactive",
+    "deactivated": "Deactivated"
   }
 
 }

@@ -1,7 +1,7 @@
-import { userRoles } from './userTypes';
+import { UserRoles } from './userTypes';
 
 export interface RegisterRequest {
-  role: userRoles;
+  role: UserRoles;
   fullName: String;
   email: String;
   password: String;
