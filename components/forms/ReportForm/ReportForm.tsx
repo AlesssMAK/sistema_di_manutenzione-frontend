@@ -122,8 +122,6 @@ const ReportForm = () => {
   );
 
   const onReportSubmit = async (data: ReportFormValues) => {
-    console.log('SUBMIT FIRED:', data);
-
     try {
       await createFault({
         faultId: data.faultId,
@@ -141,11 +139,6 @@ const ReportForm = () => {
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const wrappedSubmit = (data: ReportFormValues) => {
-    console.log('TRY SUBMIT'); // ← ТУТ
-    onReportSubmit(data);
   };
 
   useEffect(() => {
@@ -177,10 +170,10 @@ const ReportForm = () => {
   }, [isPlantParts, draft.partId, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(wrappedSubmit)} className={css.form}>
+    <form onSubmit={handleSubmit(onReportSubmit)} className={css.form}>
       <div className={css.report_form_container}>
-        <h1 className={css.title}>{t('newReport')}</h1>
-        <p className={css.text}>{t('fillForm')}</p>
+        <h1 className="title">{t('newReport')}</h1>
+        <p className="subtitle">{t('fillForm')}</p>
         <ul className={css.info_list}>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('reportId')}</h3>

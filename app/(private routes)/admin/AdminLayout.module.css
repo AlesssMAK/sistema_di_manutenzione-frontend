@@ -45,9 +45,25 @@
 
 .sidebar {
   z-index: 1;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    max-width: 206px;
+  }
+  @media screen and (min-width: 1440px) {
+    max-width: 256px;
+  }
 }
 
 .admin_container {
   background-color: var(--background);
+  width: 100%;
   z-index: 1;
+  padding: 8px 0;
+  @media screen and (min-width: 768px) {
+    padding: 16px 0 16px 16px;
+  }
+  @media screen and (min-width: 1440px) {
+    padding: 32px 0 32px 32px;
+  }
 }

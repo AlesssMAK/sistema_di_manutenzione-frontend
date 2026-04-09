@@ -11,6 +11,10 @@
   background: #fbfbfb;
 }
 
+.input_icon {
+  padding: 16px 18px 16px 40px;
+}
+
 .input:focus {
   border-color: #2563eb;
   box-shadow: 0 4px 12px rgba(16, 57, 49, 0.3);
@@ -40,7 +44,19 @@
   display: block;
 }
 
-.icon {
+.eye_icon {
   stroke: #11101c;
   fill: none;
+}
+
+.icon {
+  fill: none;
+  stroke: #90a1b9;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 12;
 }

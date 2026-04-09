@@ -1,0 +1,19 @@
+.filters_container {
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+
+  @media screen and (min-width: 1440px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.filter_item {
+  width: 100%;
+}
