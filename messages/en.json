@@ -47,7 +47,14 @@
 },
 
 "AdminPage": {
-  "titlePageForStore": "Administrator: Control panel"
+  "titlePageForStore": "Administrator: Control panel",
+  "title": "Machine / Plant Management",
+  "subtitle": "Manage the catalog of machines and plants",
+  "newMachine": "New Machine",
+  "search": "Search",
+  "searchPlaceholder": "Search by name...",
+  "role": "Role",
+  "status": "Status" 
 },
 
 "maintenanceWorkerPage": {
@@ -148,6 +155,11 @@
     "active": "Active",
     "inactive": "Inactive",
     "deactivated": "Deactivated"
+  },
+
+  "Filters": {
+    "title": "Filters",
+    "clear": "Clear Filters"
   }
 
 }

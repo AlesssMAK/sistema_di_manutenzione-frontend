@@ -5,6 +5,36 @@
   padding: 16px;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+}
+
+.head_container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title_container {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.filter_icon {
+  fill: none;
+  stroke: #0a0a0a;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.55556;
+  color: #0a0a0a;
+}
+
+.select_container {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
   width: 100%;
 
@@ -16,4 +46,12 @@
 
 .filter_item {
   width: 100%;
+}
+
+.label {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: #0a0a0a;
+  margin-bottom: 8px;
 }

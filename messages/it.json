@@ -46,8 +46,15 @@
 },
 
 "AdminPage": {
-  "titlePageForStore": "Amministratore: Pannello di controllo"
-},
+  "titlePageForStore": "Amministratore: Pannello di controllo",
+  "title": "Gestione Macchine / Impianti",
+  "subtitle": "Gestisci il catalogo di macchine e impianti",
+  "newMachine": "Nuova Macchina",
+  "search": "Cerca",
+  "searchPlaceholder": "Cerca per nome...",
+  "role": "Ruolo",
+  "status": "Stato"
+  },
 
 "maintenanceWorkerPage": {
   "titlePageForStore": "Manutentore"
@@ -147,6 +154,11 @@
     "active": "Attivo",
     "inactive": "Inattivo",
     "deactivated": "Disattivato"
+  },
+
+  "Filters": {
+    "title": "Filtri",
+    "clear": "Cancella Filtri"
   }
 
 

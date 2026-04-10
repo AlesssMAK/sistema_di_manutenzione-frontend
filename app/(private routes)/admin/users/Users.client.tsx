@@ -30,16 +30,16 @@ const AdminUsersClientPage = () => {
     {
       id: 'search',
       type: 'input',
-      label: 'Cerca',
+      label: t('search'),
       value: search,
-      placeholder: 'Cerca per nome...',
+      placeholder: t('searchPlaceholder'),
       onChange: setSearch,
       icon: 'search',
     },
     {
       id: 'role',
       type: 'select',
-      label: 'Ruolo',
+      label: t('role'),
       value: roleMapper.getLabelByValue(role) ?? tRoles('all'),
       options: roleMapper.labelsArray,
       onSelect: label => {
@@ -50,7 +50,7 @@ const AdminUsersClientPage = () => {
     {
       id: 'status',
       type: 'select',
-      label: 'Stato',
+      label: t('status'),
       value: statusMapper.getLabelByValue(status) ?? tStatuses('all'),
       options: statusMapper.labelsArray,
       onSelect: label => {
@@ -69,16 +69,14 @@ const AdminUsersClientPage = () => {
     <section className={css.section}>
       <div className={css.head_container}>
         <div className={css.title_container}>
-          <h1 className="title">Gestione Macchine / Impianti</h1>
-          <p className="subtitle">
-            Gestisci il catalogo di macchine e impianti
-          </p>
+          <h1 className="title">{t('title')}</h1>
+          <p className="subtitle">{t('subtitle')}</p>
         </div>
         <Button type="button" className={`${css.btn} button button--blue`}>
           <svg width="16" height="16" className={css.btn_icon}>
             <use href="/sprite.svg#plus"></use>
           </svg>
-          Nuova Macchina
+          {t('newMachine')}
         </Button>
       </div>
       <Filters items={filters} />
