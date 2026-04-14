@@ -1,0 +1,46 @@
+.users_container {
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.title_list {
+  display: none;
+  @media screen and (min-width: 1440px) {
+    display: flex;
+    /* justify-content: space-between; */
+    padding: 12px;
+    border-bottom: 1.17px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+.title {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #0a0a0a;
+}
+
+.name {
+  @media screen and (min-width: 1440px) {
+    width: 244px;
+  }
+}
+
+.role {
+  @media screen and (min-width: 1440px) {
+    width: 180px;
+  }
+}
+
+.email {
+  @media screen and (min-width: 1440px) {
+    width: 340px;
+  }
+}
+
+.status {
+  @media screen and (min-width: 1440px) {
+    width: 142px;
+  }
+}

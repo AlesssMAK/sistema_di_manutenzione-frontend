@@ -47,13 +47,27 @@
 
 "AdminPage": {
   "titlePageForStore": "Amministratore: Pannello di controllo",
-  "title": "Gestione Macchine / Impianti",
-  "subtitle": "Gestisci il catalogo di macchine e impianti",
-  "newMachine": "Nuova Macchina",
-  "search": "Cerca",
-  "searchPlaceholder": "Cerca per nome...",
-  "role": "Ruolo",
-  "status": "Stato"
+    "Users": {
+      "title": "Gestione Utenti",
+      "subtitle": "Gestisci account utente, ruoli e permessi",
+      "newUser": "Nuovo Utente",
+      "searchPlaceholder": "Cerca per nome...",
+      "role": "Ruolo",
+      "status": "Stato",
+      "search": "Cerca"
+  },
+    "Plants": {
+      "title": "Gestione Macchine / Impianti",
+      "subtitle": "Gestisci il catalogo di macchine e impianti",
+      "newMachine": "Nuova Macchina"
+  },
+  "UsersList": {
+        "name": "Nome Utente",
+        "role": "Ruolo",
+        "email": "Email Associate",
+        "status": "Stato",
+        "actions": "Azioni"
+      }
   },
 
 "maintenanceWorkerPage": {
@@ -152,7 +166,6 @@
   "Statuses": {
     "all": "Tutti",
     "active": "Attivo",
-    "inactive": "Inattivo",
     "deactivated": "Disattivato"
   },
 

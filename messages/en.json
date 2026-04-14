@@ -47,15 +47,29 @@
 },
 
 "AdminPage": {
-  "titlePageForStore": "Administrator: Control panel",
-  "title": "Machine / Plant Management",
-  "subtitle": "Manage the catalog of machines and plants",
-  "newMachine": "New Machine",
-  "search": "Search",
-  "searchPlaceholder": "Search by name...",
-  "role": "Role",
-  "status": "Status" 
-},
+    "titlePageForStore": "Administrator: Control panel",
+    "Users": {
+      "title": "User Management",
+      "subtitle": "Manage user accounts, roles and permissions",
+      "newUser": "New User",
+      "searchPlaceholder": "Search by name...",
+      "role": "Role",
+      "status": "Status",
+      "search": "Search"
+    },
+    "Plants": {
+      "title": "Machine / Plant Management",
+      "subtitle": "Manage the catalog of machines and plants",
+      "newMachine": "New Machine"
+    },
+    "UsersList": {
+        "name": "User Name",
+        "role": "Role",
+        "email": "Associated Email",
+        "status": "Status",
+        "actions": "Actions"
+      }
+  },
 
 "maintenanceWorkerPage": {
   "titlePageForStore": "Maintenance Worker"
@@ -153,7 +167,6 @@
   "Statuses": {
     "all": "All",
     "active": "Active",
-    "inactive": "Inactive",
     "deactivated": "Deactivated"
   },
 

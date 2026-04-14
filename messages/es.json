@@ -47,14 +47,28 @@
 },
 
 "AdminPage": {
-  "titlePageForStore": "Administrador: Panel de control",
-  "title": "Gestión de Máquinas / Instalaciones",
-  "subtitle": "Gestiona el catálogo de máquinas e instalaciones",
-  "newMachine": "Nueva Máquina",
-  "search": "Buscar",
-  "searchPlaceholder": "Buscar por nombre...",
-  "role": "Rol",
-  "status": "Estado"
+    "titlePageForStore": "Administrador: Panel de control",
+    "Users": {
+      "title": "Gestión de Usuarios",
+      "subtitle": "Gestiona cuentas de usuario, roles y permisos",
+      "newUser": "Nuevo Usuario",
+      "searchPlaceholder": "Buscar por nombre...",
+      "role": "Rol",
+      "status": "Estado",
+      "search": "Buscar"
+    },
+    "Plants": {
+      "title": "Gestión de Máquinas / Instalaciones",
+      "subtitle": "Gestiona el catálogo de máquinas e instalaciones",
+      "newMachine": "Nueva Máquina"
+    },
+    "UsersList": {
+        "name": "Nombre de Usuario",
+        "role": "Rol",
+        "email": "Correo Asociado",
+        "status": "Estado",
+        "actions": "Acciones"
+      }
   },
 
 "maintenanceWorkerPage": {
@@ -153,7 +167,6 @@
   "Statuses": {
     "all": "Todos",
     "active": "Activo",
-    "inactive": "Inactivo",
     "deactivated": "Desactivado"
   },
 

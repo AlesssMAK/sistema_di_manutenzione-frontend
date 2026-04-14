@@ -1,0 +1,139 @@
+.user_card_container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-bottom: 1.17px solid rgba(0, 0, 0, 0.1);
+  padding: 16px;
+
+  @media screen and (min-width: 1440px) {
+    gap: 0;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px;
+  }
+}
+
+.head_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.botton_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user_card_item_name {
+  @media screen and (min-width: 1440px) {
+    width: 244px;
+  }
+}
+
+.name {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #0a0a0a;
+}
+
+.user_card_item_role {
+  @media screen and (min-width: 1440px) {
+    width: 180px;
+  }
+}
+
+.role {
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 4px 10px;
+  width: fit-content;
+}
+
+.user_card_item_email {
+  @media screen and (min-width: 1440px) {
+    width: 340px;
+  }
+}
+
+.email {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #45556c;
+}
+
+.user_card_item_status {
+  @media screen and (min-width: 1440px) {
+    width: 120px;
+  }
+}
+
+.status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  border: 1.17px solid rgba(0, 0, 0, 0);
+  border-radius: 6px;
+  background: #2563eb;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.33333;
+  color: #fff;
+  padding: 5px 10px;
+  width: fit-content;
+}
+
+.deactivated_status {
+  background: #f1f5f9;
+  color: #0a0a0a;
+}
+
+.check_circle_icon {
+  fill: none;
+  stroke: #fff;
+  transition: stroke 0.2s ease;
+}
+
+.btn:hover .btn_icon_check,
+.btn:focus-visible .btn_icon_check {
+  stroke: #0a0a0a;
+}
+
+.delete_icon {
+  fill: none;
+  stroke: #0a0a0a;
+}
+
+.title {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #0a0a0a;
+  opacity: 0.7;
+
+  @media screen and (min-width: 1440px) {
+    display: none;
+  }
+}
+
+.btn_container {
+  display: flex;
+  gap: 8px;
+}
+
+.btn_icon {
+  fill: none;
+  stroke: #0a0a0a;
+}
+
+.btn_icon_check {
+  fill: none;
+  stroke: #fff;
+}
+
+.btn {
+  padding: 0;
+}

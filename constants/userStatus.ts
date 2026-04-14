@@ -1,7 +1,7 @@
 import { UserStatus } from '@/types/userTypes';
 import { useTranslations } from 'next-intl';
 
-export const USER_STATUS: UserStatus[] = ['active', 'inactive', 'deactivated'];
+export const USER_STATUS: UserStatus[] = ['active', 'deactivated'];
 
 export const getStatusOptions = () => {
   const t = useTranslations('Statuses');

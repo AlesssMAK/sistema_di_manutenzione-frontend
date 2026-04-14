@@ -10,7 +10,6 @@ interface inputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const Input = forwardRef<HTMLInputElement, inputProps>(
   ({ error, type, icon, className, ...rest }, ref) => {
     const [show, setShow] = useState(false);
-    console.log(icon);
 
     const isPassword = type === 'password';
     const inputType = isPassword ? (show ? 'text' : 'password') : type;
