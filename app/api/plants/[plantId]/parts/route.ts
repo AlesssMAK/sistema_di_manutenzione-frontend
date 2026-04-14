@@ -3,14 +3,11 @@ import { isAxiosError } from 'axios';
 import { logErrorResponse } from '@/app/api/_utils/utils';
 import { api } from '@/app/api/api';
 
-export async function GET(
-  req: NextRequest,
-  {
-    params,
-  }: {
-    params: Promise<{ plantId: string }>;
-  }
-) {
+interface Props {
+  params: Promise<{ plantId: string }>;
+}
+
+export async function GET(req: NextRequest, { params }: Props) {
   try {
     const { plantId } = await params;
     const res = await api.get(`/plants/${plantId}/parts`);

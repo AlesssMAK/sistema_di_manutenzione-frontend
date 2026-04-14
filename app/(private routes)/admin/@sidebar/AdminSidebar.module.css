@@ -3,7 +3,8 @@
   background: #fff;
   @media screen and (min-width: 768px) {
     border-right: 1px solid #e2e8f0;
-    height: 100vh;
+    border-bottom: none;
+    height: 100%;
   }
 }
 

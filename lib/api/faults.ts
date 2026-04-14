@@ -1,4 +1,4 @@
-import { Fault, FaultCard, ReportFormValues } from '@/types/faultType';
+import { FaultCard, ReportFormValues } from '@/types/faultType';
 import nextServer from './api';
 
 export interface FetchFaultCardsParams {

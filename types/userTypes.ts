@@ -1,9 +1,9 @@
 export interface User {
-  _id: String;
+  _id: string;
   role: UserRoles;
-  fullName: String;
-  email: String;
-  avatar: String;
+  fullName: string;
+  email: string;
+  avatar: string;
   status: UserStatus;
   isFirstLogin: boolean;
   createdAt: Date;
@@ -22,4 +22,24 @@ export interface GetMeRespons {
   user: User;
 }
 
-export type UserStatus = 'active' | 'inactive' | 'deactivated';
+export type UserStatus = 'active' | 'deactivated';
+
+export interface UpdateUser {
+  role?: string;
+  fullName?: string;
+  email?: string;
+  password?: string;
+  personalCode?: string;
+  avatar?: string;
+  status?: UserStatus;
+}
+
+export interface UpdateUserRequest {
+  userId: string;
+  data: UpdateUser;
+}
+
+export interface UpdateUserResponse {
+  success: boolean;
+  user: User;
+}
