@@ -16,41 +16,48 @@ const MaintenanceWorkerClient = () => {
 
   const [items, setItems] = useState<FaultCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [priority, setPriority] = useState<string>('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
 
-  const PER_PAGE = 1;
+  const PER_PAGE = 2;
 
-  const loadData = useCallback(async (pageNum: number) => {
-    try {
-      setIsLoading(true);
+  const loadData = useCallback(
+    async (pageNum: number, currentPriority: string) => {
+      try {
+        setIsLoading(true);
 
-      const data = await fetchFaultCards({ page: pageNum, perPage: PER_PAGE });
-      console.log('Data from server:', data);
-      if (pageNum === 1) {
-        setItems(data.fault || []);
-      } else {
-        setItems(prev => [...prev, ...(data.fault || [])]);
+        const data = await fetchFaultCards({
+          page: pageNum,
+          perPage: PER_PAGE,
+          priority: currentPriority,
+        });
+        console.log('Data from server:', data);
+        if (pageNum === 1) {
+          setItems(data.fault || []);
+        } else {
+          setItems(prev => [...prev, ...(data.fault || [])]);
+        }
+
+        setTotalPage(data.totalPage || 0);
+      } catch (error) {
+        console.error('Errore во время загрузки данных:', error);
+      } finally {
+        setIsLoading(false);
       }
-
-      setTotalPage(data.totalPage || 0);
-    } catch (error) {
-      console.error('Errore во время загрузки данных:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    },
+    []
+  );
+  const handlePriorityChange = (newPriority: string) => {
+    const newValue = priority === newPriority ? '' : newPriority;
+    setPriority(newValue);
+    setPage(1);
+  };
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
-    loadData(1);
-  }, [setPageTitle, t, loadData]);
-
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    loadData(nextPage);
-  };
+    loadData(1, priority);
+  }, [setPageTitle, t, loadData, priority]);
 
   return (
     <div className={css.pageWrapper}>
@@ -60,7 +67,10 @@ const MaintenanceWorkerClient = () => {
       </p>
 
       <div className={css.workerContainer}>
-        <CalendarBlock />
+        <CalendarBlock
+          activePriority={priority}
+          onPriorityChange={handlePriorityChange}
+        />
 
         <div className={css.contentSection}>
           {isLoading && page === 1 ? (
@@ -74,7 +84,11 @@ const MaintenanceWorkerClient = () => {
                   page={page}
                   totalPage={totalPage}
                   isLoading={isLoading}
-                  onLoadMore={handleLoadMore}
+                  onLoadMore={() => {
+                    const nextPage = page + 1;
+                    setPage(nextPage);
+                    loadData(nextPage, priority);
+                  }}
                 />
               </div>
             </>

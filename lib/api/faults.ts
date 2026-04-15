@@ -1,6 +1,10 @@
 import { Fault, FaultCard, ReportFormValues } from '@/types/faultType';
 import nextServer from './api';
-
+interface FetchParams {
+  page?: number;
+  perPage?: number;
+  priority?: string;
+}
 export interface FetchFaultCardsParams {
   fault: FaultCard[];
   totalFault: number;
@@ -10,13 +14,15 @@ export interface FetchFaultCardsParams {
 }
 
 export const fetchFaultCards = async ({
-  page = 1,
-  perPage = 2,
-}): Promise<FetchFaultCardsParams> => {
+  page,
+  perPage,
+  priority = '',
+}: FetchParams): Promise<FetchFaultCardsParams> => {
   const res = await nextServer.get('/faults', {
     params: {
       page,
       perPage,
+      ...(priority ? { priority } : {}),
     },
   });
 

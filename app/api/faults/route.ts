@@ -6,9 +6,11 @@ import { cookies } from 'next/headers';
 
 export async function GET(req: NextRequest) {
   const cookie = await cookies();
-
+  const { searchParams } = new URL(req.url);
+  console.log('Next.js Proxy Params:', searchParams.toString());
   try {
     const res = await api.get('/faults', {
+      params: searchParams,
       headers: {
         Cookie: cookie.toString(),
       },
