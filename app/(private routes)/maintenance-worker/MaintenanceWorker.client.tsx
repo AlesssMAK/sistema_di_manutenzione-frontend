@@ -17,13 +17,14 @@ const MaintenanceWorkerClient = () => {
   const [items, setItems] = useState<FaultCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [priority, setPriority] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
 
   const PER_PAGE = 2;
 
   const loadData = useCallback(
-    async (pageNum: number, currentPriority: string) => {
+    async (pageNum: number, currentPriority: string, currentDate: string) => {
       try {
         setIsLoading(true);
 
@@ -31,6 +32,7 @@ const MaintenanceWorkerClient = () => {
           page: pageNum,
           perPage: PER_PAGE,
           priority: currentPriority,
+          dataCreated: currentDate,
         });
         console.log('Data from server:', data);
         if (pageNum === 1) {
@@ -53,11 +55,16 @@ const MaintenanceWorkerClient = () => {
     setPriority(newValue);
     setPage(1);
   };
+  const handleDateChange = (date: string) => {
+    const value = selectedDate === date ? '' : date;
+    setSelectedDate(value);
+    setPage(1);
+  };
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
-    loadData(1, priority);
-  }, [setPageTitle, t, loadData, priority]);
+    loadData(1, priority, selectedDate);
+  }, [setPageTitle, t, loadData, priority, selectedDate]);
 
   return (
     <div className={css.pageWrapper}>
@@ -70,6 +77,8 @@ const MaintenanceWorkerClient = () => {
         <CalendarBlock
           activePriority={priority}
           onPriorityChange={handlePriorityChange}
+          activeDate={selectedDate}
+          onDateChange={handleDateChange}
         />
 
         <div className={css.contentSection}>
@@ -87,7 +96,7 @@ const MaintenanceWorkerClient = () => {
                   onLoadMore={() => {
                     const nextPage = page + 1;
                     setPage(nextPage);
-                    loadData(nextPage, priority);
+                    loadData(nextPage, priority, selectedDate);
                   }}
                 />
               </div>

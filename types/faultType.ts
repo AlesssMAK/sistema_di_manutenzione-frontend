@@ -1,3 +1,5 @@
+import { PathString } from 'react-hook-form';
+
 export type StatusFaultType =
   | 'Created'
   | 'In progress'
@@ -29,6 +31,7 @@ export interface FaultCard {
   deadline?: string;
   plannedDate?: string;
   plannedTime?: string;
+  dataCreated?: string;
   estimatedDuration?: number;
   img?: string;
   managerComment?: string;

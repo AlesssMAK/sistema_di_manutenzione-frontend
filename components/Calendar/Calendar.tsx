@@ -12,11 +12,19 @@ import {
   isSameDay,
   addMonths,
   subMonths,
+  parseISO,
 } from 'date-fns';
 import { it } from 'date-fns/locale';
 import styles from './Calendar.module.css';
 
-const Calendar = () => {
+interface FilterDataCreatedBarProps {
+  activeDataCreated: string;
+  onDataCreatedChange: (dataCreated: string) => void;
+}
+const Calendar = ({
+  activeDataCreated,
+  onDataCreatedChange,
+}: FilterDataCreatedBarProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const monthStart = startOfMonth(currentDate);
@@ -26,6 +34,12 @@ const Calendar = () => {
 
   const calendarDays = eachDayOfInterval({ start: startDate, end: endDate });
   const daysOfWeek = ['LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB', 'DOM'];
+  const handleDayClick = (day: Date) => {
+    const formattedDate = format(day, 'yyyy-MM-dd');
+
+    const newValue = activeDataCreated === formattedDate ? '' : formattedDate;
+    onDataCreatedChange(newValue);
+  };
 
   return (
     <div className={styles.calendarWrapper}>
@@ -59,19 +73,26 @@ const Calendar = () => {
         {calendarDays.map((day, idx) => {
           const isToday = isSameDay(day, new Date());
           const isCurrentMonth = isSameMonth(day, monthStart);
-
+          const isSelected =
+            activeDataCreated && isSameDay(day, parseISO(activeDataCreated));
           const cellClasses = `
             ${styles.cell} 
             ${!isCurrentMonth ? styles.otherMonth : ''}
+            ${isSelected ? styles.selected : ''}
           `;
 
           const dayClasses = `
             ${styles.dayNumber} 
             ${isToday ? styles.today : ''}
+            ${isSelected ? styles.selectedText : ''}
           `;
 
           return (
-            <div key={idx} className={cellClasses}>
+            <div
+              key={idx}
+              className={cellClasses}
+              onClick={() => handleDayClick(day)}
+            >
               <span className={dayClasses}>{format(day, 'd')}</span>
             </div>
           );

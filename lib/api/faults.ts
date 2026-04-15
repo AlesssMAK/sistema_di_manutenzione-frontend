@@ -4,6 +4,8 @@ interface FetchParams {
   page?: number;
   perPage?: number;
   priority?: string;
+  deadline?: string;
+  dataCreated?: string;
 }
 export interface FetchFaultCardsParams {
   fault: FaultCard[];
@@ -17,12 +19,16 @@ export const fetchFaultCards = async ({
   page,
   perPage,
   priority = '',
+  deadline,
+  dataCreated,
 }: FetchParams): Promise<FetchFaultCardsParams> => {
   const res = await nextServer.get('/faults', {
     params: {
       page,
       perPage,
       ...(priority ? { priority } : {}),
+      deadline,
+      dataCreated,
     },
   });
 
