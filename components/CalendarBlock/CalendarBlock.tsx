@@ -6,12 +6,16 @@ interface CalendarBlockProps {
   onPriorityChange: (priority: string) => void;
   activeDate: string;
   onDateChange: (d: string) => void;
+  deadlineDates?: string[];
+  isDeadlineMode?: boolean;
 }
 const CalendarBlock = ({
   activePriority,
   onPriorityChange,
   activeDate,
   onDateChange,
+  deadlineDates = [],
+  isDeadlineMode = false,
 }: CalendarBlockProps) => {
   return (
     <div className={css.calendarBlockContainer}>
@@ -19,6 +23,8 @@ const CalendarBlock = ({
       <Calendar
         activeDataCreated={activeDate}
         onDataCreatedChange={onDateChange}
+        deadlineDates={deadlineDates}
+        isDeadlineMode={isDeadlineMode}
       />
       <FilterPriorityBar
         activePriority={activePriority}

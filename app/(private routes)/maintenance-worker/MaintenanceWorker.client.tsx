@@ -20,7 +20,8 @@ const MaintenanceWorkerClient = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-
+  const [showDeadlines, setShowDeadlines] = useState(false);
+  const [allDeadlineDates, setAllDeadlineDates] = useState<string[]>([]);
   const PER_PAGE = 2;
 
   const loadData = useCallback(
@@ -50,15 +51,48 @@ const MaintenanceWorkerClient = () => {
     },
     []
   );
+  const fetchAllDeadlines = useCallback(async (currentPriority: string) => {
+    try {
+      const data = await fetchFaultCards({
+        page: 1,
+        perPage: 45,
+        priority: currentPriority,
+      });
+
+      const dates = data.fault
+        .filter(
+          (item): item is FaultCard & { deadline: string } => !!item.deadline
+        )
+        .map(item => {
+          const datePart = item.deadline.includes('T')
+            ? item.deadline.split('T')[0]
+            : item.deadline;
+          return datePart;
+        });
+
+      setAllDeadlineDates(dates);
+    } catch (error) {
+      console.error('Errore loading all deadlines:', error);
+    }
+  }, []);
+
   const handlePriorityChange = (newPriority: string) => {
     const newValue = priority === newPriority ? '' : newPriority;
     setPriority(newValue);
     setPage(1);
+    if (showDeadlines) fetchAllDeadlines(newValue);
   };
   const handleDateChange = (date: string) => {
     const value = selectedDate === date ? '' : date;
     setSelectedDate(value);
     setPage(1);
+  };
+  const toggleDeadlineMode = () => {
+    const nextMode = !showDeadlines;
+    setShowDeadlines(nextMode);
+    if (nextMode) {
+      fetchAllDeadlines(priority);
+    }
   };
 
   useEffect(() => {
@@ -73,12 +107,23 @@ const MaintenanceWorkerClient = () => {
         Visualizza e gestisci gli interventi pianificati
       </p>
 
+      <div className={css.controls}>
+        <button
+          onClick={toggleDeadlineMode}
+          className={`${css.deadlineButton} ${showDeadlines ? css.active : ''}`}
+        >
+          {showDeadlines ? 'Скрыть дедлайны' : 'Показать дедлайны'}
+        </button>
+      </div>
+
       <div className={css.workerContainer}>
         <CalendarBlock
           activePriority={priority}
           onPriorityChange={handlePriorityChange}
           activeDate={selectedDate}
           onDateChange={handleDateChange}
+          deadlineDates={showDeadlines ? allDeadlineDates : []}
+          isDeadlineMode={showDeadlines}
         />
 
         <div className={css.contentSection}>

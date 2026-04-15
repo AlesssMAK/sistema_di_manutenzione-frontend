@@ -20,10 +20,14 @@ import styles from './Calendar.module.css';
 interface FilterDataCreatedBarProps {
   activeDataCreated: string;
   onDataCreatedChange: (dataCreated: string) => void;
+  deadlineDates?: string[];
+  isDeadlineMode?: boolean;
 }
 const Calendar = ({
   activeDataCreated,
   onDataCreatedChange,
+  deadlineDates = [],
+  isDeadlineMode = false,
 }: FilterDataCreatedBarProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -71,14 +75,18 @@ const Calendar = ({
 
       <div className={styles.grid}>
         {calendarDays.map((day, idx) => {
+          const formattedDay = format(day, 'yyyy-MM-dd');
+          const hasDeadline = deadlineDates.includes(formattedDay);
           const isToday = isSameDay(day, new Date());
           const isCurrentMonth = isSameMonth(day, monthStart);
-          const isSelected =
-            activeDataCreated && isSameDay(day, parseISO(activeDataCreated));
+          const isSelected = activeDataCreated === formattedDay;
+          // const isSelected =
+          //   activeDataCreated && isSameDay(day, parseISO(activeDataCreated));
           const cellClasses = `
             ${styles.cell} 
             ${!isCurrentMonth ? styles.otherMonth : ''}
             ${isSelected ? styles.selected : ''}
+            ${isDeadlineMode && hasDeadline ? styles.deadlineCell : ''}
           `;
 
           const dayClasses = `
@@ -93,7 +101,15 @@ const Calendar = ({
               className={cellClasses}
               onClick={() => handleDayClick(day)}
             >
-              <span className={dayClasses}>{format(day, 'd')}</span>
+              <span
+                className={`${styles.dayNumber} ${isSameDay(day, new Date()) ? styles.today : ''}`}
+              >
+                {format(day, 'd')}
+              </span>
+              {/* Точку оставляем по желанию или убираем, если заливка важнее */}
+              {hasDeadline && !isDeadlineMode && (
+                <div className={styles.deadlineDot} />
+              )}
             </div>
           );
         })}
