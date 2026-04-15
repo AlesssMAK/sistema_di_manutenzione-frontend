@@ -16,41 +16,89 @@ const MaintenanceWorkerClient = () => {
 
   const [items, setItems] = useState<FaultCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [priority, setPriority] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<string>('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
+  const [showDeadlines, setShowDeadlines] = useState(false);
+  const [allDeadlineDates, setAllDeadlineDates] = useState<string[]>([]);
+  const PER_PAGE = 2;
 
-  const PER_PAGE = 1;
+  const loadData = useCallback(
+    async (pageNum: number, currentPriority: string, currentDate: string) => {
+      try {
+        setIsLoading(true);
 
-  const loadData = useCallback(async (pageNum: number) => {
-    try {
-      setIsLoading(true);
+        const data = await fetchFaultCards({
+          page: pageNum,
+          perPage: PER_PAGE,
+          priority: currentPriority,
+          dataCreated: currentDate,
+        });
+        console.log('Data from server:', data);
+        if (pageNum === 1) {
+          setItems(data.fault || []);
+        } else {
+          setItems(prev => [...prev, ...(data.fault || [])]);
+        }
 
-      const data = await fetchFaultCards({ page: pageNum, perPage: PER_PAGE });
-      console.log('Data from server:', data);
-      if (pageNum === 1) {
-        setItems(data.fault || []);
-      } else {
-        setItems(prev => [...prev, ...(data.fault || [])]);
+        setTotalPage(data.totalPage || 0);
+      } catch (error) {
+        console.error('Errore во время загрузки данных:', error);
+      } finally {
+        setIsLoading(false);
       }
+    },
+    []
+  );
+  const fetchAllDeadlines = useCallback(async (currentPriority: string) => {
+    try {
+      const data = await fetchFaultCards({
+        page: 1,
+        perPage: 45,
+        priority: currentPriority,
+      });
 
-      setTotalPage(data.totalPage || 0);
+      const dates = data.fault
+        .filter(
+          (item): item is FaultCard & { deadline: string } => !!item.deadline
+        )
+        .map(item => {
+          const datePart = item.deadline.includes('T')
+            ? item.deadline.split('T')[0]
+            : item.deadline;
+          return datePart;
+        });
+
+      setAllDeadlineDates(dates);
     } catch (error) {
-      console.error('Errore во время загрузки данных:', error);
-    } finally {
-      setIsLoading(false);
+      console.error('Errore loading all deadlines:', error);
     }
   }, []);
 
+  const handlePriorityChange = (newPriority: string) => {
+    const newValue = priority === newPriority ? '' : newPriority;
+    setPriority(newValue);
+    setPage(1);
+    if (showDeadlines) fetchAllDeadlines(newValue);
+  };
+  const handleDateChange = (date: string) => {
+    const value = selectedDate === date ? '' : date;
+    setSelectedDate(value);
+    setPage(1);
+  };
+  const toggleDeadlineMode = () => {
+    const nextMode = !showDeadlines;
+    setShowDeadlines(nextMode);
+    if (nextMode) {
+      fetchAllDeadlines(priority);
+    }
+  };
+
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
-    loadData(1);
-  }, [setPageTitle, t, loadData]);
-
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    loadData(nextPage);
-  };
+    loadData(1, priority, selectedDate);
+  }, [setPageTitle, t, loadData, priority, selectedDate]);
 
   return (
     <div className={css.pageWrapper}>
@@ -59,8 +107,24 @@ const MaintenanceWorkerClient = () => {
         Visualizza e gestisci gli interventi pianificati
       </p>
 
+      <div className={css.controls}>
+        <button
+          onClick={toggleDeadlineMode}
+          className={`${css.deadlineButton} ${showDeadlines ? css.active : ''}`}
+        >
+          {showDeadlines ? 'Скрыть дедлайны' : 'Показать дедлайны'}
+        </button>
+      </div>
+
       <div className={css.workerContainer}>
-        <CalendarBlock />
+        <CalendarBlock
+          activePriority={priority}
+          onPriorityChange={handlePriorityChange}
+          activeDate={selectedDate}
+          onDateChange={handleDateChange}
+          deadlineDates={showDeadlines ? allDeadlineDates : []}
+          isDeadlineMode={showDeadlines}
+        />
 
         <div className={css.contentSection}>
           {isLoading && page === 1 ? (
@@ -74,7 +138,11 @@ const MaintenanceWorkerClient = () => {
                   page={page}
                   totalPage={totalPage}
                   isLoading={isLoading}
-                  onLoadMore={handleLoadMore}
+                  onLoadMore={() => {
+                    const nextPage = page + 1;
+                    setPage(nextPage);
+                    loadData(nextPage, priority, selectedDate);
+                  }}
                 />
               </div>
             </>

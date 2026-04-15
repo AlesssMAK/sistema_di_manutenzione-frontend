@@ -110,3 +110,63 @@
   border-radius: 50%;
   font-weight: 700;
 }
+/* .cell {
+  cursor: pointer;
+  transition: background-color 0.2s;
+} */
+
+.cell:hover {
+  background-color: #f0f0f0;
+}
+
+.selected {
+  background-color: #0070f3 !important;
+  border-radius: 4px;
+}
+
+.selectedText {
+  color: white !important;
+}
+.cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  cursor: pointer;
+}
+.deadlineCell {
+  background-color: #ffeeee !important;
+  border: 1px solid #ff4d4f !important;
+}
+.deadlineDot {
+  width: 6px;
+  height: 6px;
+  background-color: #ff4d4f;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.deadlineCell .dayNumber {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+.deadlineToggle {
+  margin-bottom: 15px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #ff4d4f;
+  background: white;
+  color: #ff4d4f;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.deadlineToggle.active {
+  background: #ff4d4f;
+  color: white;
+}

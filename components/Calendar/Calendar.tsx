@@ -12,11 +12,23 @@ import {
   isSameDay,
   addMonths,
   subMonths,
+  parseISO,
 } from 'date-fns';
 import { it } from 'date-fns/locale';
 import styles from './Calendar.module.css';
 
-const Calendar = () => {
+interface FilterDataCreatedBarProps {
+  activeDataCreated: string;
+  onDataCreatedChange: (dataCreated: string) => void;
+  deadlineDates?: string[];
+  isDeadlineMode?: boolean;
+}
+const Calendar = ({
+  activeDataCreated,
+  onDataCreatedChange,
+  deadlineDates = [],
+  isDeadlineMode = false,
+}: FilterDataCreatedBarProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const monthStart = startOfMonth(currentDate);
@@ -26,6 +38,12 @@ const Calendar = () => {
 
   const calendarDays = eachDayOfInterval({ start: startDate, end: endDate });
   const daysOfWeek = ['LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB', 'DOM'];
+  const handleDayClick = (day: Date) => {
+    const formattedDate = format(day, 'yyyy-MM-dd');
+
+    const newValue = activeDataCreated === formattedDate ? '' : formattedDate;
+    onDataCreatedChange(newValue);
+  };
 
   return (
     <div className={styles.calendarWrapper}>
@@ -57,22 +75,41 @@ const Calendar = () => {
 
       <div className={styles.grid}>
         {calendarDays.map((day, idx) => {
+          const formattedDay = format(day, 'yyyy-MM-dd');
+          const hasDeadline = deadlineDates.includes(formattedDay);
           const isToday = isSameDay(day, new Date());
           const isCurrentMonth = isSameMonth(day, monthStart);
-
+          const isSelected = activeDataCreated === formattedDay;
+          // const isSelected =
+          //   activeDataCreated && isSameDay(day, parseISO(activeDataCreated));
           const cellClasses = `
             ${styles.cell} 
             ${!isCurrentMonth ? styles.otherMonth : ''}
+            ${isSelected ? styles.selected : ''}
+            ${isDeadlineMode && hasDeadline ? styles.deadlineCell : ''}
           `;
 
           const dayClasses = `
             ${styles.dayNumber} 
             ${isToday ? styles.today : ''}
+            ${isSelected ? styles.selectedText : ''}
           `;
 
           return (
-            <div key={idx} className={cellClasses}>
-              <span className={dayClasses}>{format(day, 'd')}</span>
+            <div
+              key={idx}
+              className={cellClasses}
+              onClick={() => handleDayClick(day)}
+            >
+              <span
+                className={`${styles.dayNumber} ${isSameDay(day, new Date()) ? styles.today : ''}`}
+              >
+                {format(day, 'd')}
+              </span>
+              {/* Точку оставляем по желанию или убираем, если заливка важнее */}
+              {hasDeadline && !isDeadlineMode && (
+                <div className={styles.deadlineDot} />
+              )}
             </div>
           );
         })}

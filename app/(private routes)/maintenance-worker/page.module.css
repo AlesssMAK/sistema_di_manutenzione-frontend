@@ -24,3 +24,26 @@
   width: 100%;
   margin-top: 32px;
 }
+.controls {
+  margin-bottom: 20px;
+}
+
+.deadlineButton {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 2px solid #ff4d4f;
+  background: transparent;
+  color: #ff4d4f;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.deadlineButton.active {
+  background: #ff4d4f;
+  color: #fff;
+}
+
+.deadlineButton:hover {
+  opacity: 0.8;
+}
