@@ -28,7 +28,7 @@ export const fetchFaultCards = async ({
       perPage,
       ...(priority ? { priority } : {}),
       deadline,
-      dataCreated,
+      ...(dataCreated ? { dataCreated } : {}),
     },
   });
 
