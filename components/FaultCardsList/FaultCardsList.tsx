@@ -3,12 +3,18 @@ import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
 import { useAuthStore } from '@/lib/store/authStore';
 import DateNow from '../DateNow/DateNow';
+import ShowMoreButton from '../ShowmoreButton/ShowmoreButton';
+import { useRouter } from 'next/navigation';
 
 interface FaultCardsListProps {
   faults: FaultCard[];
 }
 
 const FaultCardsList = ({ faults }: FaultCardsListProps) => {
+  const router = useRouter();
+  const handleDetailClick = (id: string) => {
+    router.push(`/maintenance-worker/${id}`);
+  };
   if (!faults || faults.length === 0) {
     return <div className={css.container}>Задач пока нет</div>;
   }
@@ -80,10 +86,14 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 </div>
               )}
             </div>
+
+            <ShowMoreButton
+              isLoading={false}
+              onShowMore={() => handleDetailClick(fault.id)}
+            />
           </li>
         ))}
       </ul>
-      
     </div>
   );
 };
