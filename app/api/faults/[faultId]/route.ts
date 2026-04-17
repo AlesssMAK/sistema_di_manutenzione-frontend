@@ -6,13 +6,14 @@ import { api } from '../../api';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ userId: string }> }
+  { params }: { params: Promise<{ faultId: string }> }
 ) {
   const cookie = await cookies();
-  const faultId = await params;
+  const resolvedParams = await params;
+  const idForRequest = resolvedParams.faultId;
 
   try {
-    const res = await api.get(`/faults/${faultId}`, {
+    const res = await api.get(`/faults/${idForRequest}`, {
       headers: { Cookie: cookie.toString() },
     });
 
