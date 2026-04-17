@@ -10,7 +10,7 @@ export type TypeFault = 'Production' | 'Safety';
 export type FaultAction = 'created' | 'updated';
 
 export interface FaultCard {
-  id: string;
+  _id: string;
   faultId: string;
 
   plantId: {
@@ -32,9 +32,13 @@ export interface FaultCard {
   plannedDate?: string;
   plannedTime?: string;
   dataCreated?: string;
+  timeCreated?: string;
   estimatedDuration?: number;
-  img?: string;
+  typeFault: TypeFault;
+  img?: [];
   managerComment?: string;
+  commentMaintenanceWorker?: string;
+  updatedAt: string;
 }
 
 export interface FaultCardsQueryParams {

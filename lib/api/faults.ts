@@ -56,3 +56,13 @@ export const createFault = async (data: ReportFormValues) => {
 
   return res.data;
 };
+
+export const fetchFaultById = async (id: string): Promise<FaultCard> => {
+  if (!id) {
+    throw new Error('Fault ID is required');
+  }
+
+  const res = await nextServer.get<FaultCard>(`/faults/${id}`);
+
+  return res.data;
+};

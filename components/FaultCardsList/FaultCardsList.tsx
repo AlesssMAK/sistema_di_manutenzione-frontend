@@ -25,7 +25,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
       <DateNow />
       <ul className={css.faultList}>
         {faults.map(fault => (
-          <li key={fault.id} className={css.faultCard}>
+          <li key={fault._id} className={css.faultCard}>
             <div className={css.content}>
               <div>
                 <div className={css.header}>
@@ -89,7 +89,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
 
             <ShowMoreButton
               isLoading={false}
-              onShowMore={() => handleDetailClick(fault.id)}
+              onShowMore={() => handleDetailClick(fault._id)}
             />
           </li>
         ))}
