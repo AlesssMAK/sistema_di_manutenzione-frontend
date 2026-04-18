@@ -182,6 +182,16 @@ export default function FaultDetailPage({
             </div>
           </div>
         )}
+        <div className={css.actions}>
+          <button
+            className={css.submitButton}
+            onClick={() => {
+              toast.success('Funzione in fase di sviluppo');
+            }}
+          >
+            Aggiungi commento e cambia stato
+          </button>
+        </div>
       </div>
     </div>
   );
