@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import Image from 'next/image';
 import css from './page.module.css';
 import { useRouter } from 'next/navigation';
+import ImageModal from '@/components/ImageModal/ImageModal';
 
 export default function FaultDetailPage({
   params,
@@ -18,6 +19,7 @@ export default function FaultDetailPage({
   const id = resolvedParams.id;
   const [fault, setFault] = useState<FaultCard | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const getFaultData = async () => {
@@ -171,10 +173,14 @@ export default function FaultDetailPage({
             <label>Foto allegate</label>
             <div className={css.imageGrid}>
               {fault.img.map((url, index) => (
-                <div key={index} className={css.imageWrapper}>
+                <div
+                  key={index}
+                  className={css.imageWrapper}
+                  onClick={() => setSelectedImage(url)}
+                >
                   <img
                     src={url}
-                    alt={`Fault detail ${index}`}
+                    alt={`Detail ${index}`}
                     className={css.image}
                   />
                 </div>
@@ -193,6 +199,12 @@ export default function FaultDetailPage({
           </button>
         </div>
       </div>
+      {selectedImage && (
+        <ImageModal
+          imageUrl={selectedImage}
+          onClose={() => setSelectedImage(null)}
+        />
+      )}
     </div>
   );
 }
