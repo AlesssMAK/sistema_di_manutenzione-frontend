@@ -6,12 +6,14 @@ import { FaultCard } from '@/types/faultType';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import css from './page.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function FaultDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const router = useRouter();
   const resolvedParams = use(params);
   const id = resolvedParams.id;
   const [fault, setFault] = useState<FaultCard | null>(null);
@@ -33,6 +35,9 @@ export default function FaultDetailPage({
 
     if (id) getFaultData();
   }, [id]);
+  const handleBack = () => {
+    router.push('/maintenance-worker');
+  };
 
   if (isLoading) return <div className={css.loading}>Caricamento...</div>;
   if (!fault) return <div className={css.error}>Intervento non trovato</div>;
@@ -41,7 +46,30 @@ export default function FaultDetailPage({
     <div className={css.container}>
       <div className={css.card}>
         <header className={css.header}>
-          <h2 className={css.title}>Dettaglio Intervento</h2>
+          <div className={css.headerLeft}>
+            {/* Кнопка-стрелка назад */}
+            <button
+              type="button"
+              className={css.backButton}
+              onClick={handleBack}
+              title="Torna indietro"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <h2 className={css.title}>Dettaglio Intervento</h2>
+          </div>
           <span className={css.idBadge}>{fault.faultId}</span>
         </header>
 

@@ -133,3 +133,31 @@
   height: 100%;
   object-fit: cover;
 }
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: #2563eb; 
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, color 0.2s ease;
+  border-radius: 50%;
+}
+
+.backButton:hover {
+  background-color: #eff6ff; 
+  transform: translateX(-3px); 
+  color: #1d4ed8; 
+}
+
+.backButton svg {
+  display: block;
+}
