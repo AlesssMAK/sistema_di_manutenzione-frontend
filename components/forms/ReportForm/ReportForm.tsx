@@ -133,8 +133,9 @@ const ReportForm = () => {
         comment: data.comment,
         img: data.img,
       });
-      reset();
+
       toast.success(t('reportCreatedSuccessfully'));
+      reset();
       clearDraft();
     } catch (error) {
       console.log(error);
@@ -168,6 +169,8 @@ const ReportForm = () => {
       }
     }
   }, [isPlantParts, draft.partId, setValue]);
+
+  console.log(isPlants);
 
   return (
     <form onSubmit={handleSubmit(onReportSubmit)} className={css.form}>

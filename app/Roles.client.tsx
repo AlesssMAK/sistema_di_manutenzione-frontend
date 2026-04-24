@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 
 export default function RolesClient() {
   const t = useTranslations('RolesPage');
+  const { user } = useAuthStore();
   const setPageTitle = usePageStore(state => state.setPageTitle);
 
   useEffect(() => {
@@ -79,6 +80,23 @@ export default function RolesClient() {
               </p>
             </div>
           </Link>
+          {user?.role === 'admin' && (
+            <Link href="/admin" className={css.card}>
+              <div className={css.list_item}>
+                <div
+                  className={`${css.icon_container} ${css.icon_color_admin}`}
+                >
+                  <svg width="40" height="40" className={css.icon}>
+                    <use href="/sprite.svg#tooth">df</use>
+                  </svg>
+                </div>
+                <h3 className={css.list_title}>Admin</h3>
+                <p className={css.list_text}>
+                  Gestione sistema e configurazioni
+                </p>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
     </main>

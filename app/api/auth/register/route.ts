@@ -6,11 +6,15 @@ import { cookies } from 'next/headers';
 import { parse } from 'cookie';
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
   try {
-    const apiRes = await api.post('/auth/register', body);
-
+    const body = await req.json();
     const cookieStore = await cookies();
+
+    const apiRes = await api.post('/auth/register', body, {
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+    });
 
     const setCookie = apiRes.headers['set-cookie'];
 

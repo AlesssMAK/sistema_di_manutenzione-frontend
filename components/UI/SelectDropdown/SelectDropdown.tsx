@@ -7,8 +7,8 @@ interface SelectDropdownProps {
   options: string[];
   selectedValue: string | null;
   onSelect: (value: string) => void;
-  placeholder: string;
-  disabled: boolean;
+  placeholder?: string;
+  disabled?: boolean;
 }
 
 const SelectDropdown = ({

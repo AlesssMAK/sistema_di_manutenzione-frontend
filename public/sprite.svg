@@ -135,5 +135,11 @@
 <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="2.6637" d="M15.983 29.301c7.356 0 13.319-5.963 13.319-13.319s-5.963-13.319-13.319-13.319c-7.356 0-13.319 5.963-13.319 13.319s5.963 13.319 13.319 13.319z"></path>
 <path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="2.6637" d="M11.987 15.982l2.664 2.664 5.327-5.327"></path>
 </symbol>
+<symbol id="reload" viewBox="0 0 32 32">
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="2.6637" d="M3.996 15.982c0-3.179 1.263-6.228 3.511-8.476s5.297-3.511 8.476-3.511c3.351 0.013 6.567 1.32 8.977 3.649l3.010 3.010"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="2.6637" d="M27.97 3.996v6.659h-6.659"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="2.6637" d="M27.969 15.982c0 3.179-1.263 6.228-3.511 8.476s-5.297 3.511-8.476 3.511c-3.351-0.013-6.567-1.32-8.977-3.649l-3.010-3.010"></path>
+<path stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="4" stroke-width="2.6637" d="M10.655 21.31h-6.659v6.659"></path>
+</symbol>
 </defs>
 </svg>

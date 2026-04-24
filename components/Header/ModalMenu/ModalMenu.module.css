@@ -39,6 +39,12 @@
   align-items: center;
 }
 
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
 .nav_list {
   display: flex;
   flex-direction: column;

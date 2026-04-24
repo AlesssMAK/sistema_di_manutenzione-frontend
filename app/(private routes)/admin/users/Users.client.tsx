@@ -14,13 +14,14 @@ import { User } from '@/types/userTypes';
 import UsersList from '@/components/Admin/UsersList/UsersList';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useDebounce } from 'use-debounce';
+import CreateUserForm from '@/components/forms/CreateUserForm/CreateUserForm';
 
 const AdminUsersClientPage = () => {
   const [search, setSearch] = useState<string>('');
   const [role, setRole] = useState<string>('');
   const [status, setStatus] = useState<string>('');
   const [page, setPage] = useState(1);
-  // const [users, setUsers] = useState<User[]>([]);
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
 
   const tPage = useTranslations('AdminPage');
@@ -72,6 +73,7 @@ const AdminUsersClientPage = () => {
       },
     },
   ];
+
   const {
     data: users,
     isSuccess,
@@ -83,6 +85,10 @@ const AdminUsersClientPage = () => {
     placeholderData: keepPreviousData,
   });
 
+  const handleCreateUser = () => {
+    setIsOpenModal(true);
+  };
+
   return (
     <section className={css.section}>
       <div className={css.head_container}>
@@ -90,7 +96,11 @@ const AdminUsersClientPage = () => {
           <h1 className="title">{t('title')}</h1>
           <p className="subtitle">{t('subtitle')}</p>
         </div>
-        <Button type="button" className={`${css.btn} button button--blue`}>
+        <Button
+          type="button"
+          className={`${css.btn} button button--blue`}
+          onClick={handleCreateUser}
+        >
           <svg width="16" height="16" className={css.btn_icon}>
             <use href="/sprite.svg#plus"></use>
           </svg>
@@ -99,6 +109,13 @@ const AdminUsersClientPage = () => {
       </div>
       <Filters items={filters} />
       <UsersList users={users ?? []} />
+      {isOpenModal && (
+        <CreateUserForm
+          onClose={() => {
+            setIsOpenModal(false);
+          }}
+        />
+      )}
     </section>
   );
 };

@@ -2,7 +2,7 @@ import { LoginFormData } from '@/lib/validation/loginValidation';
 import { CheckSessionRequest, RegisterRequest } from '@/types/authType';
 import nextServer from './api';
 
-export const register = async (data: RegisterRequest) => {
+export const registerUser = async (data: RegisterRequest) => {
   const res = await nextServer.post('/auth/register', data);
   return res.data;
 };
