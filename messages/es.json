@@ -173,6 +173,22 @@
 "Filters": {
     "title": "Filtros",
     "clear": "Limpiar filtros"
+  },
+
+  "CreateUserForm": {
+    "title": "Nuevo Usuario",
+    "subtitle": "Completa todos los campos y genera un código de acceso para el nuevo usuario",
+    "role": "Rol",
+    "fullName": "Nombre Completo",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "accessCode": "Código de Acceso",
+    "generateAutomatically": "Generar Automáticamente",
+    "setManually": "Configurar Manualmente",
+    "cancel": "Cancelar",
+    "createUser": "Crear Usuario",
+    "userCreatedSuccess": "Usuario creado con éxito"
   }
+
 
 }

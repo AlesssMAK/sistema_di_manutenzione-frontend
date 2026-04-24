@@ -58,7 +58,10 @@
   display: none;
 
   @media screen and (min-width: 1440px) {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
   }
 }
 
@@ -92,7 +95,7 @@
   stroke: #2563eb;
 }
 
-.close_btn:hover .close_icon,
+.close_btn:active .close_icon,
 .menu_btn:active .menu_icon {
   transform: scale(0.95);
 }

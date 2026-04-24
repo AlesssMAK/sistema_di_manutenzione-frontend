@@ -2,20 +2,21 @@ import { UserRoles } from './userTypes';
 
 export interface RegisterRequest {
   role: UserRoles;
-  fullName: String;
-  email: String;
-  password: String;
-  personalCode: String;
+  fullName: string;
+  email: string;
+  password: string | undefined;
+  personalCode: string | undefined;
+  avatar: string | null;
 }
 
 export interface LoginOperatorRequest {
-  fullName: String;
-  personalCode: String;
+  fullName: string;
+  personalCode: string;
 }
 
 export interface LoginRequest {
-  email: String;
-  password: String;
+  email: string;
+  password: string;
 }
 
 export interface CheckSessionRequest {

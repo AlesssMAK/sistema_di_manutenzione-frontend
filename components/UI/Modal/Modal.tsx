@@ -43,7 +43,14 @@ const Modal = ({ onClose, children }: ModalProps) => {
       role="dialog"
       aria-modal="true"
     >
-      <div className={css.modal}>{children}</div>
+      <div className={css.modal}>
+        <button type="button" className={css.close_btn} onClick={onClose}>
+          <svg width="30" height="30" className={css.btn_icon}>
+            <use href="/sprite.svg#close"></use>
+          </svg>
+        </button>
+        {children}
+      </div>
     </div>,
     document.body
   );

@@ -173,6 +173,23 @@
   "Filters": {
     "title": "Filters",
     "clear": "Clear Filters"
+  },
+
+  "CreateUserForm": {
+    "title": "New User",
+    "subtitle": "Fill in all fields and generate an access code for the new user",
+    "role": "Role",
+    "fullName": "Full Name",
+    "email": "Email",
+    "password": "Password",
+    "accessCode": "Access Code",
+    "generateAutomatically": "Generate Automatically",
+    "setManually": "Set Manually",
+    "cancel": "Cancel",
+    "createUser": "Create User",
+    "userCreatedSuccess": "User successfully created"
   }
+
+
 
 }

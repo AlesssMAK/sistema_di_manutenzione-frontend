@@ -22,6 +22,10 @@
   overflow: hidden;
   overflow-y: auto;
   z-index: 100;
+  padding: 38px 20px 20px 20px;
+  @media screen and (min-width: 768px) {
+    padding: 44px 26px 26px 26px;
+  }
 }
 
 .modal::-webkit-scrollbar {
@@ -31,4 +35,36 @@
 .modal::-webkit-scrollbar-thumb {
   background-color: rgba(25, 26, 21, 0.2);
   border-radius: 4px;
+}
+
+.close_btn {
+  position: absolute;
+  right: 14;
+  top: 14;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+
+  @media screen and (min-width: 768px) {
+    right: 20;
+    top: 20;
+  }
+}
+
+.btn_icon {
+  stroke: #0a0a0a;
+  opacity: 1;
+  transition:
+    stroke 0.2s ease,
+    transform 0.1s ease;
+}
+
+.close_btn:hover .btn_icon,
+.close_btn:focus-visible .btn_icon {
+  stroke: #2563eb;
+}
+
+.close_btn:active .btn_icon {
+  transform: scale(0.95);
 }

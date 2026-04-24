@@ -1,5 +1,6 @@
 import { FaultCard, ReportFormValues } from '@/types/faultType';
 import nextServer from './api';
+
 interface FetchParams {
   page?: number;
   perPage?: number;

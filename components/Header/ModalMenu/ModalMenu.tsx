@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useTranslations } from 'use-intl';
 import { useAuthStore } from '@/lib/store/authStore';
 import Button from '@/components/UI/Button/Button';
+import LanguageButton from '@/components/LanguageSwitcher/LanguageSwitcher';
 
 export interface ModalMenuProps {
   onClose: () => void;
@@ -53,7 +54,8 @@ const ModalMenu = ({
       <div className={css.modal}>
         <div className="container">
           <div className={css.header_modal_menu_container}>
-            <nav>
+            <nav className={css.nav}>
+              <LanguageButton />
               <ul className={css.nav_list}>
                 <li className={css.nav_list_item}>
                   <Link href="/" onClick={onClose}>

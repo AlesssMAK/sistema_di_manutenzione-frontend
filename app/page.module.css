@@ -116,3 +116,7 @@
 .icon_color_safety {
   background: linear-gradient(135deg, #fb2c36 0%, #e7000b 100%);
 }
+
+.icon_color_admin {
+  background: linear-gradient(135deg, #3a3f52 0%, #444650 100%);
+}

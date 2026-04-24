@@ -43,3 +43,12 @@ export interface UpdateUserResponse {
   success: boolean;
   user: User;
 }
+
+export interface CreateUserValues {
+  role: UserRoles;
+  fullName: string;
+  email: string;
+  password: string | undefined;
+  avatar: string | null;
+  personalCode: string | undefined;
+}
