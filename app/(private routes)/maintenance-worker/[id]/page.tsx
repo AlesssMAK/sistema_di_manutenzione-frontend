@@ -8,6 +8,7 @@ import Image from 'next/image';
 import css from './page.module.css';
 import { useRouter } from 'next/navigation';
 import ImageModal from '@/components/ImageModal/ImageModal';
+import MaintenanceUpdateModal from '@/components/MaintenanceUpdateModal/MaintenanceUpdateModal';
 
 export default function FaultDetailPage({
   params,
@@ -20,6 +21,7 @@ export default function FaultDetailPage({
   const [fault, setFault] = useState<FaultCard | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   useEffect(() => {
     const getFaultData = async () => {
@@ -41,6 +43,16 @@ export default function FaultDetailPage({
     router.push('/maintenance-worker');
   };
 
+  const handleUpdateSuccess = (updatedData: FaultCard) => {
+    setFault(prev => {
+      if (!prev) return updatedData;
+      return {
+        ...updatedData,
+        faultId: prev.faultId,
+      };
+    });
+    setIsUpdateModalOpen(false);
+  }; // <--- ЗДЕСЬ БЫЛА ОШИБКА (пропущена скобка)
   if (isLoading) return <div className={css.loading}>Caricamento...</div>;
   if (!fault) return <div className={css.error}>Intervento non trovato</div>;
 
@@ -142,7 +154,6 @@ export default function FaultDetailPage({
 
         {/* Комментарии */}
         <div className={css.detailsBlock}>
-          {/* Комментарий оператора — обычно он обязателен, но добавим проверку для надежности */}
           <div className={css.commentBox}>
             <label>Commento Operatore</label>
             <p>{fault.comment ? fault.comment : 'Commento assente'}</p>
@@ -190,15 +201,24 @@ export default function FaultDetailPage({
         )}
         <div className={css.actions}>
           <button
+            type="button"
             className={css.submitButton}
-            onClick={() => {
-              toast.success('Funzione in fase di sviluppo');
-            }}
+            onClick={() => setIsUpdateModalOpen(true)}
           >
             Aggiungi commento e cambia stato
           </button>
         </div>
       </div>
+      {/* Модалка обновления */}
+      {isUpdateModalOpen && fault && (
+        <MaintenanceUpdateModal
+          faultId={fault._id}
+          displayId={fault.faultId}
+          onClose={() => setIsUpdateModalOpen(false)}
+          onSuccess={handleUpdateSuccess}
+        />
+      )}
+
       {selectedImage && (
         <ImageModal
           imageUrl={selectedImage}
