@@ -5,6 +5,9 @@ import css from './MaintenanceUpdateModal.module.css';
 import { updateFaultByWorker } from '@/lib/api/faults';
 import toast from 'react-hot-toast';
 
+import Button from '../UI/Button/Button';
+import SelectDropdown from '../UI/SelectDropdown/SelectDropdown';
+
 interface MaintenanceUpdateModalProps {
   faultId: string;
   displayId: string;
@@ -27,6 +30,11 @@ const MaintenanceUpdateModal: React.FC<MaintenanceUpdateModalProps> = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!comment.trim()) {
+      toast.error('Il commento è obbligatorio');
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -36,11 +44,22 @@ const MaintenanceUpdateModal: React.FC<MaintenanceUpdateModalProps> = ({
         commentMaintenanceWorker: comment,
       });
 
+      toast.success('Intervento aggiornato con successo!');
+
       onSuccess({
         statusFault: status,
         commentMaintenanceWorker: comment,
       });
-    } catch (error) {}
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
+    } catch (error: any) {
+      console.error(error);
+      toast.error('Errore во время обновления данных');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -56,22 +75,18 @@ const MaintenanceUpdateModal: React.FC<MaintenanceUpdateModalProps> = ({
 
         <form onSubmit={handleSubmit} className={css.form}>
           <div className={css.field}>
-            <label>Stato Intervento</label>
-            <select
-              value={status}
-              onChange={e => setStatus(e.target.value)}
-              className={css.select}
-            >
-              {STATUS_OPTIONS.map(opt => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
+            <label className={css.label}>Stato Intervento</label>
+            <SelectDropdown
+              options={STATUS_OPTIONS}
+              selectedValue={status}
+              onSelect={value => setStatus(value)}
+              placeholder="Seleziona stato"
+            />
           </div>
 
           <div className={css.field}>
-            <label>Commento Manutentore</label>
+            <label className={css.label}>Commento Manutentore</label>
+
             <textarea
               value={comment}
               onChange={e => setComment(e.target.value)}
@@ -82,21 +97,21 @@ const MaintenanceUpdateModal: React.FC<MaintenanceUpdateModalProps> = ({
           </div>
 
           <div className={css.actions}>
-            <button
-              type="button"
+            <Button
               className={css.cancelBtn}
               onClick={onClose}
               disabled={isSubmitting}
             >
               Annulla
-            </button>
-            <button
+            </Button>
+
+            <Button
               type="submit"
               className={css.submitBtn}
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Inviando...' : 'Conferma e Salva'}
-            </button>
+            </Button>
           </div>
         </form>
       </div>
