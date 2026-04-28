@@ -67,3 +67,25 @@ export const fetchFaultById = async (id: string): Promise<FaultCard> => {
 
   return res.data;
 };
+
+export interface UpdateFaultPayload {
+  faultId: string;
+  statusFault: string;
+  commentMaintenanceWorker: string;
+}
+
+
+export const updateFaultByWorker = async (
+  payload: UpdateFaultPayload
+): Promise<FaultCard> => {
+  if (!payload.faultId) {
+    throw new Error('Fault ID is required');
+  }
+
+    const res = await nextServer.patch<FaultCard>(
+    `/faults/${payload.faultId}`,
+    payload
+  );
+
+  return res.data;
+};
