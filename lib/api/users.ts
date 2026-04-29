@@ -16,8 +16,16 @@ export const getMe = async () => {
   return me.data.user;
 };
 
+// export const updateUser = async ({ userId, data }: UpdateUserRequest) => {
+//   const res = await nextServer.patch<UpdateUserResponse>(
+//     `/users/${userId}`,
+//     data
+//   );
+//   return res.data.user;
+// };
+
 export const updateUser = async ({ userId, data }: UpdateUserRequest) => {
-  const res = await nextServer.patch<UpdateUserResponse>(
+  const res = await nextServer.put<UpdateUserResponse>(
     `/users/${userId}`,
     data
   );

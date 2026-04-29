@@ -68,6 +68,28 @@
         "email": "Correo Asociado",
         "status": "Estado",
         "actions": "Acciones"
+      },
+    "CreateAndEditUserForm": {
+        "user": "Usuario",
+        "title": "Nuevo Usuario",
+        "subtitle": "Completa todos los campos y genera un código de acceso para el nuevo usuario",
+        "role": "Rol",
+        "fullName": "Nombre Completo",
+        "email": "Correo Electrónico",
+        "password": "Contraseña",
+        "accessCode": "Código de Acceso",
+        "generateAutomatically": "Generar Automáticamente",
+        "setManually": "Configurar Manualmente",
+        "cancel": "Cancelar",
+        "createUser": "Crear Usuario",
+        "userCreatedSuccess": "Usuario creado con éxito",
+        "userUpdatedSuccess": "Usuario actualizado con éxito",
+        "status": "Estado",
+        "editTitle": "Editar Usuario",
+        "editSubtitle": "Gestiona la información de la cuenta del usuario y el código de acceso",
+        "roleChangeDescription": "Para completar el cambio de rol, debes introducir el dato requerido: la contraseña al dejar el rol de operador o el código de acceso al asumirlo.",
+        "saveChanges": "Guardar Cambios"
+
       }
   },
 
@@ -175,13 +197,13 @@
     "clear": "Limpiar filtros"
   },
 
-  "CreateUserForm": {
+  "CreateAndEditUserForm": {
     "title": "Nuevo Usuario",
     "subtitle": "Completa todos los campos y genera un código de acceso para el nuevo usuario",
-    "role": "Rol",
-    "fullName": "Nombre Completo",
-    "email": "Correo Electrónico",
-    "password": "Contraseña",
+    "role": "Rol *",
+    "fullName": "Nombre Completo *",
+    "email": "Correo Electrónico *",
+    "password": "Contraseña *",
     "accessCode": "Código de Acceso",
     "generateAutomatically": "Generar Automáticamente",
     "setManually": "Configurar Manualmente",

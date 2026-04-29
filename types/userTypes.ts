@@ -24,19 +24,9 @@ export interface GetMeRespons {
 
 export type UserStatus = 'active' | 'deactivated';
 
-export interface UpdateUser {
-  role?: string;
-  fullName?: string;
-  email?: string;
-  password?: string;
-  personalCode?: string;
-  avatar?: string;
-  status?: UserStatus;
-}
-
 export interface UpdateUserRequest {
   userId: string;
-  data: UpdateUser;
+  data: UpdateUserValues;
 }
 
 export interface UpdateUserResponse {
@@ -51,4 +41,14 @@ export interface CreateUserValues {
   password: string | undefined;
   avatar: string | null;
   personalCode: string | undefined;
+}
+
+export interface UpdateUserValues {
+  role?: UserRoles;
+  fullName?: string;
+  email?: string;
+  status?: UserStatus;
+  password?: string | undefined;
+  avatar?: string | null;
+  personalCode?: string | undefined;
 }

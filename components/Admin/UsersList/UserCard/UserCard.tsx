@@ -1,13 +1,15 @@
 'use client';
 
-import { UpdateUserRequest, User, UserStatus } from '@/types/userTypes';
-import css from './UserCard.module.css';
-import { useTranslations } from 'next-intl';
+import CreateAndEditUserForm from '@/components/forms/CreateAndUpdateUserForm/CreateAndEditUserForm';
 import Button from '@/components/UI/Button/Button';
-import { getRoleOptions, USER_ROLES } from '@/constants/roleType';
+import { getRoleOptions } from '@/constants/roleType';
 import { getStatusOptions } from '@/constants/userStatus';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateUser } from '@/lib/api/users';
+import { UpdateUserRequest, User, UserStatus } from '@/types/userTypes';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import css from './UserCard.module.css';
 
 interface UserCardProps {
   user: User;
@@ -19,6 +21,7 @@ interface UpdateStatus {
 }
 
 const UserCard = ({ user }: UserCardProps) => {
+  const [open, setOpen] = useState(false);
   const queryClient = useQueryClient();
   const t = useTranslations('AdminPage.UsersList');
 
@@ -30,6 +33,14 @@ const UserCard = ({ user }: UserCardProps) => {
     },
   });
 
+  const initialData = {
+    id: user._id,
+    role: user.role || '',
+    fullName: user.fullName || '',
+    email: user.email || '',
+    status: user.status || '',
+  };
+
   const roles = getRoleOptions();
   const role = roles.find(role => role.value === user.role);
 
@@ -38,10 +49,6 @@ const UserCard = ({ user }: UserCardProps) => {
 
   const handleStatusUpdate = async ({ userId, status }: UpdateStatus) => {
     mutation.mutate({ userId, data: { status } });
-  };
-
-  const handleUserUpdate = async () => {
-    console.log('ok');
   };
 
   return (
@@ -86,6 +93,9 @@ const UserCard = ({ user }: UserCardProps) => {
               className={`${css.btn} button button--white`}
               width={38}
               height={32}
+              onClick={() => {
+                setOpen(true);
+              }}
             >
               <svg width="16" height="16" className={css.btn_icon}>
                 <use href="/sprite.svg#edit"></use>
@@ -126,6 +136,13 @@ const UserCard = ({ user }: UserCardProps) => {
           </div>
         </div>
       </div>
+      {open && (
+        <CreateAndEditUserForm
+          onClose={() => setOpen(false)}
+          initialData={initialData}
+          isEditMode={true}
+        />
+      )}
     </div>
   );
 };
