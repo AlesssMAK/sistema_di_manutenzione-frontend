@@ -1,20 +1,19 @@
 'use client';
 
-import { usePageStore } from '@/lib/store/pageStore';
-import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import css from './Users.module.css';
+import UsersList from '@/components/Admin/UsersList/UsersList';
+import CreateAndEditUserForm from '@/components/forms/CreateAndUpdateUserForm/CreateAndEditUserForm';
 import Button from '@/components/UI/Button/Button';
 import Filters, { FiltersItem } from '@/components/UI/Filters/Filters';
 import { getRoleOptions } from '@/constants/roleType';
-import { createOptionMapper } from '@/lib/utils/translationMapper';
 import { getStatusOptions } from '@/constants/userStatus';
 import { getAllUsers } from '@/lib/api/users';
-import { User } from '@/types/userTypes';
-import UsersList from '@/components/Admin/UsersList/UsersList';
+import { usePageStore } from '@/lib/store/pageStore';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import CreateUserForm from '@/components/forms/CreateUserForm/CreateUserForm';
+import css from './Users.module.css';
 
 const AdminUsersClientPage = () => {
   const [search, setSearch] = useState<string>('');
@@ -110,7 +109,7 @@ const AdminUsersClientPage = () => {
       <Filters items={filters} />
       <UsersList users={users ?? []} />
       {isOpenModal && (
-        <CreateUserForm
+        <CreateAndEditUserForm
           onClose={() => {
             setIsOpenModal(false);
           }}

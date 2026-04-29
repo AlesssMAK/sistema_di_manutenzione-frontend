@@ -67,6 +67,27 @@
         "email": "Email Associate",
         "status": "Stato",
         "actions": "Azioni"
+      },
+  "CreateAndEditUserForm": {
+        "user": "Utente",
+        "title": "Nuovo Utente",
+        "subtitle": "Compila tutti i campi e genera un codice di accesso per il nuovo utente",
+        "role": "Ruolo",
+        "fullName": "Nome Completo",
+        "email": "Email",
+        "password": "Password",
+        "accessCode": "Codice di Accesso",
+        "generateAutomatically": "Genera Automaticamente",
+        "setManually": "Imposta Manualmente",
+        "cancel": "Annulla",
+        "createUser": "Crea Utente",
+        "userCreatedSuccess": "Utente creato con successo",
+        "userUpdatedSuccess": "Utente aggiornato con successo",
+        "status": "Stato",
+        "editTitle": "Modifica Utente",
+        "editSubtitle": "Gestisci le informazioni dell'account utente e del codice di accesso",
+        "roleChangeDescription": "Per completare la modifica del ruolo, è necessario inserire il dato richiesto: la password quando si lascia il ruolo di operatore oppure il codice di accesso quando lo si assume.",
+        "saveChanges": "Salva Modifiche"
       }
   },
 
@@ -172,21 +193,6 @@
   "Filters": {
     "title": "Filtri",
     "clear": "Cancella Filtri"
-  },
-
-  "CreateUserForm": {
-    "title": "Nuovo Utente",
-    "subtitle": "Compila tutti i campi e genera un codice di accesso per il nuovo utente",
-    "role": "Ruolo",
-    "fullName": "Nome Completo",
-    "email": "Email",
-    "password": "Password",
-    "accessCode": "Codice di Accesso",
-    "generateAutomatically": "Genera Automaticamente",
-    "setManually": "Imposta Manualmente",
-    "cancel": "Annulla",
-    "createUser": "Crea Utente",
-    "userCreatedSuccess": "Utente creato con successo"
   }
 
 

@@ -73,9 +73,9 @@ const Header = () => {
                 </Link>
               </li>
             </ul>
-            <LanguageButton />
           </nav>
           <div className={css.user_container}>
+            <LanguageButton />
             {isAuthenticated ? (
               <>
                 <div className={css.user}>

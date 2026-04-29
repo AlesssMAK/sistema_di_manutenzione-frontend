@@ -68,6 +68,27 @@
         "email": "Associated Email",
         "status": "Status",
         "actions": "Actions"
+      },
+    "CreateAndEditUserForm": {
+        "user": "User",
+        "title": "New User",
+        "subtitle": "Fill in all fields and generate an access code for the new user",
+        "role": "Role",
+        "fullName": "Full Name",
+        "email": "Email",
+        "password": "Password",
+        "accessCode": "Access Code",
+        "generateAutomatically": "Generate Automatically",
+        "setManually": "Set Manually",
+        "cancel": "Cancel",
+        "createUser": "Create User",
+        "userCreatedSuccess": "User successfully created",
+        "userUpdatedSuccess": "User updated successfully",
+        "status": "Status",
+        "editTitle": "Edit User",
+        "editSubtitle": "Manage the user's account information and access code",
+        "roleChangeDescription": "To complete the role change, you must enter the required data: the password when leaving the operator role or the access code when assuming it.",
+        "saveChanges": "Save Changes"
       }
   },
 
@@ -173,22 +194,9 @@
   "Filters": {
     "title": "Filters",
     "clear": "Clear Filters"
-  },
-
-  "CreateUserForm": {
-    "title": "New User",
-    "subtitle": "Fill in all fields and generate an access code for the new user",
-    "role": "Role",
-    "fullName": "Full Name",
-    "email": "Email",
-    "password": "Password",
-    "accessCode": "Access Code",
-    "generateAutomatically": "Generate Automatically",
-    "setManually": "Set Manually",
-    "cancel": "Cancel",
-    "createUser": "Create User",
-    "userCreatedSuccess": "User successfully created"
   }
+
+
 
 
 

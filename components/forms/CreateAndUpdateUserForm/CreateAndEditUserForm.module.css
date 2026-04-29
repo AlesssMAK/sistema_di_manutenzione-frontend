@@ -1,0 +1,160 @@
+.form_container {
+  @media screen and (min-width: 768px) {
+    width: 520px;
+  }
+}
+
+.title_container {
+  margin-bottom: 40px;
+}
+
+.form_label {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: #0a0a0a;
+  margin-bottom: 8px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.code_container {
+  border: 1.17px solid #bedbff;
+  border-radius: 12px;
+  background: #eff6ff;
+  padding: 12px;
+  @media screen and (min-width: 768px) {
+    padding: 24px;
+  }
+}
+
+.description_container {
+  border: 1.17px solid #fee685;
+  border-radius: 8px;
+  background: #fffbeb;
+  padding: 18px;
+  margin-bottom: 20px;
+}
+
+.code_description {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.42857;
+  color: #973c00;
+}
+
+.code_input_container {
+  margin-bottom: 20px;
+}
+
+.code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  width: 100%;
+  height: 36px;
+}
+
+.btn_code_container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.btn_icon_reload {
+  fill: none;
+  stroke: #fff;
+  margin-right: 10px;
+  transition: stroke 0.2s ease;
+}
+
+.btn:hover .btn_icon_reload,
+.btn:hover .btn_icon_reload {
+  stroke: #0a0a0a;
+}
+
+.btn_icon_key {
+  fill: none;
+  stroke: #0a0a0a;
+  margin-right: 10px;
+}
+
+.btn_form_container {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.form_item_container {
+  position: relative;
+}
+
+.error {
+  position: absolute;
+  color: red;
+  font-size: 12px;
+  bottom: -16px;
+  left: 8px;
+}
+
+.status_input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.status_label {
+  position: relative;
+  display: inline-block;
+  width: 31px;
+  height: 18px;
+  background: #d1d5db;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.status_label::before {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.status_input:checked + .status_label {
+  background: #2563eb;
+}
+
+.status_input:checked + .status_label::before {
+  transform: translateX(13px);
+}
+
+.status_input:focus-visible + .status_label {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.label_container {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
