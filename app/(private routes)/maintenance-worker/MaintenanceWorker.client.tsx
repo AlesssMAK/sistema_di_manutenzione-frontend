@@ -9,6 +9,7 @@ import FaultCardsList from '@/components/FaultCardsList/FaultCardsList';
 import LoadMoreButton from '@/components/LoadMoreButton/LoadMoreButton';
 import { FaultCard } from '@/types/faultType';
 import { fetchFaultCards } from '@/lib/api/faults';
+import FaultDeadlineOverview from '@/components/FaultDeadlineOverview/FaultDeadlineOverview';
 
 const MaintenanceWorkerClient = () => {
   const t = useTranslations('maintenanceWorkerPage');
@@ -112,7 +113,7 @@ const MaintenanceWorkerClient = () => {
           onClick={toggleDeadlineMode}
           className={`${css.deadlineButton} ${showDeadlines ? css.active : ''}`}
         >
-          {showDeadlines ? 'Скрыть дедлайны' : 'Показать дедлайны'}
+          {showDeadlines ? 'Показать список' : 'Показать дедлайны'}
         </button>
       </div>
 
@@ -131,7 +132,14 @@ const MaintenanceWorkerClient = () => {
             <p className={css.loadingText}>Загрузка данных...</p>
           ) : items.length > 0 ? (
             <>
-              <FaultCardsList faults={items} />
+              {showDeadlines ? (
+                <FaultDeadlineOverview
+                  faults={items}
+                  selectedDate={selectedDate}
+                />
+              ) : (
+                <FaultCardsList faults={items} />
+              )}
 
               <div className={css.loadMoreButton}>
                 <LoadMoreButton
@@ -149,9 +157,6 @@ const MaintenanceWorkerClient = () => {
           ) : (
             <div className={css.noResults}>
               <p className={css.noResultsText}>No faults in this day</p>
-              <p className={css.noResultsSubtext}>
-                Try adjusting your search criteria.
-              </p>
             </div>
           )}
         </div>

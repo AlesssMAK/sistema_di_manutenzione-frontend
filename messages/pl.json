@@ -1,0 +1,192 @@
+{
+  "login": {
+    "title": "Logowanie",
+    "titleForLoginHomePage": "Zaloguj się jako",
+    "roleOperatore": "Operator",
+    "roleResponsabile": "Kierownik",
+    "roleManuntentore": "Konserwator",
+    "roleSicurezza": "Bezpieczeństwo (BHP)",
+    "subtitle": "Aby kontynuować, wprowadź swój adres e-mail lub pełne imię i nazwisko oraz hasło lub kod osobisty",
+    "subtitleOperator": "Wprowadź swoje pełne imię i nazwisko oraz kod osobisty, aby kontynuować",
+    "subtitleOther": "Wprowadź swój adres e-mail i hasło, aby kontynuować",
+    "inputIdentifier": "E-mail lub pełne imię i nazwisko",
+    "inputSecret": "Hasło lub kod",
+    "fullName": "Pełne imię i nazwisko",
+    "personalCode": "Kod dostępu",
+    "email": "E-mail",
+    "password": "Hasło",
+    "placeholderEmailOrFullName": "Wprowadź e-mail lub pełne imię i nazwisko",
+    "placeholderPasswordOrPersonalCode": "Wprowadź hasło lub kod",
+    "placeholderFullNameOperatore": "Wprowadź pełne imię i nazwisko",
+    "placeholderPersonalCodeOperatore": "Wprowadź kod",
+    "placeholderEmail": "Wprowadź e-mail",
+    "placeholderPassword": "Wprowadź hasło",
+    "submit": "Zaloguj",
+    "cancel": "Anuluj",
+    "formError": "Sprawdź wprowadzone dane",
+    "errors": {
+      "required": "Pole jest wymagane",
+      "invalidIdentifier": "Nieprawidłowy format (e-mail lub pełne imię i nazwisko)",
+      "invalidSecret": "Nieprawidłowy format (hasło lub kod osobisty)"
+    }
+  },
+
+  "header": {
+    "navItem1": "Role",
+    "navItem2": "Raporty",
+    "exit": "Wyloguj",
+    "login": "Logowanie"
+  },
+
+  "AdminSidebar": {
+    "users": "Użytkownicy",
+    "plants": "Maszyny / Zakłady",
+    "notifications": "Powiadomienia",
+    "logsAudit": "Logi i Audyt",
+    "systemSettings": "Ustawienia systemu"
+  },
+
+  "AdminPage": {
+    "titlePageForStore": "Administrator: Panel sterowania",
+    "Users": {
+      "title": "Zarządzanie użytkownikami",
+      "subtitle": "Zarządzaj kontami użytkowników, rolami i uprawnieniami",
+      "newUser": "Nowy użytkownik",
+      "searchPlaceholder": "Szukaj według imienia...",
+      "role": "Rola",
+      "status": "Status",
+      "search": "Szukaj"
+    },
+    "Plants": {
+      "title": "Zarządzanie maszynami / zakładami",
+      "subtitle": "Zarządzaj katalogiem maszyn i zakładów",
+      "newMachine": "Nowa maszyna"
+    },
+    "UsersList": {
+      "name": "Imię i nazwisko użytkownika",
+      "role": "Rola",
+      "email": "Powiązany e-mail",
+      "status": "Status",
+      "actions": "Akcje"
+    }
+  },
+
+  "maintenanceWorkerPage": {
+    "titlePageForStore": "Konserwator"
+  },
+
+  "ManagerPage": {
+    "titlePageForStore": "Kierownik"
+  },
+
+  "OperatorPage": {
+    "titlePageForStore": "Operator"
+  },
+
+  "SafetyPage": {
+    "titlePageForStore": "Bezpieczeństwo (BHP)"
+  },
+
+  "reportsAndCommunicationsPage": {
+    "titlePageForStore": "Raporty"
+  },
+
+  "RolesPage": {
+    "titlePageForStore": "Role"
+  },
+
+  "NotFound": {
+    "title": "Strona nie znaleziona",
+    "description": "Niestety, strona, której szukasz, nie istnieje lub została przeniesiona.",
+    "backHome": "Powrót do strony głównej"
+  },
+
+  "loader": {
+    "loading": "Ładowanie, proszę czekać..."
+  },
+
+  "Error": {
+    "errorTitle": "Coś poszło nie tak!",
+    "errorMessage": "Przepraszamy. Wystąpił błąd podczas przetwarzania Twojego żądania.",
+    "tryAgain": "Spróbuj ponownie",
+    "goHome": "Powrót do strony głównej"
+  },
+
+  "TypeFault": {
+    "PRODUCTION": "Produkcja",
+    "SAFETY": "Bezpieczeństwo"
+  },
+
+  "StatusFault": {
+    "CREATED": "Utworzono",
+    "IN_PROGRESS": "W toku",
+    "COMPLETED": "Zakończono",
+    "SUSPENDED": "Wstrzymano"
+  },
+
+  "Priority": {
+    "Low": "Niski",
+    "Medium": "Średni",
+    "High": "Wysoki"
+  },
+
+  "ReportForm": {
+    "newReport": "Nowy raport",
+    "fillForm": "Wypełnij formularz, aby zgłosić usterkę lub anomalię",
+    "reportId": "ID raportu",
+    "operator": "Operator",
+    "date": "Data",
+    "time": "Godzina",
+    "plantMachine": "Zakład / Maszyna *",
+    "plantPart": "Część zakładu *",
+    "selectPlant": "Wybierz zakład",
+    "selectPlantPart": "Wybierz część zakładu",
+    "type": "Typ *",
+    "production": "Produkcja",
+    "safety": "Bezpieczeństwo",
+    "notesDescription": "Notatki i opis *",
+    "describeIssue": "Opisz napotkany problem...",
+    "images": "Zdjęcia",
+    "clickToUpload": "Kliknij, aby przesłać zdjęcia",
+    "cancel": "Anuluj",
+    "sendReport": "Wyślij raport",
+    "reportCreatedSuccessfully": "Raport został pomyślnie utworzony",
+    "loading": "ładowanie...",
+    "maxImages": "Maksymalnie 5 zdjęć"
+  },
+
+  "Roles": {
+    "all": "Wszystkie role",
+    "admin": "Administrator",
+    "operator": "Operator",
+    "manager": "Kierownik",
+    "maintenanceWorker": "Konserwator",
+    "safety": "Bezpieczeństwo"
+  },
+
+  "Statuses": {
+    "all": "Wszystkie",
+    "active": "Aktywne",
+    "deactivated": "Dezaktywowane"
+  },
+
+  "Filters": {
+    "title": "Filtry",
+    "clear": "Wyczyść filtry"
+  },
+
+  "CreateUserForm": {
+    "title": "Nowy użytkownik",
+    "subtitle": "Wypełnij wszystkie pola i wygeneruj kod dostępu dla nowego użytkownika",
+    "role": "Rola",
+    "fullName": "Pełne imię i nazwisko",
+    "email": "E-mail",
+    "password": "Hasło",
+    "accessCode": "Kod dostępu",
+    "generateAutomatically": "Generuj automatycznie",
+    "setManually": "Ustaw ręcznie",
+    "cancel": "Anuluj",
+    "createUser": "Utwórz użytkownika",
+    "userCreatedSuccess": "Użytkownik został pomyślnie utworzony"
+  }
+}

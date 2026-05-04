@@ -14,7 +14,7 @@ const ShowMoreButton: React.FC<ShowMoreButtonProps> = ({
     <div className={css.container}>
       <Button
         type="button"
-        className="button--blue"
+        className="button button--blue"
         width={200}
         height={40}
         onClick={onShowMore}

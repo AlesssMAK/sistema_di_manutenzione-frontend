@@ -1,0 +1,36 @@
+.statusBadge {
+  padding: 6px 12px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  display: inline-block;
+  text-align: center;
+  min-width: 80px;
+}
+
+.statusCompleted {
+  background-color: #4caf50;
+}
+
+.statusInProgress {
+  background-color: #2196f3;
+}
+
+.statusSuspended {
+  background-color: #ff9800;
+  color: #fff;
+}
+
+.priorityBadge.low {
+  background: #e8f5e9;
+  color: #388e3c;
+}
+.priorityBadge.medium {
+  background: #fff8e1;
+  color: #fbc02d;
+}
+.priorityBadge.high {
+  background: #ffebee;
+  color: #d32f2f;
+}

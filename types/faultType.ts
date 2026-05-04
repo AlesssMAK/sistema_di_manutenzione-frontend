@@ -34,6 +34,7 @@ export interface FaultCard {
   dataCreated?: string;
   timeCreated?: string;
   estimatedDuration?: number;
+  assignedMaintainers: string[];
   typeFault: TypeFault;
   img?: [];
   managerComment?: string;
