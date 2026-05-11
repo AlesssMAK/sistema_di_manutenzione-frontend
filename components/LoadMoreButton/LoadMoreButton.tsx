@@ -23,7 +23,7 @@ const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({
     <div className={css.container}>
       <Button
         type="button"
-        className="button--blue"
+        className="button button--blue"
         width={200}
         height={40}
         onClick={onLoadMore}
