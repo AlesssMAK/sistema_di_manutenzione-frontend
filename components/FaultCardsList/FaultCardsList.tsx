@@ -86,11 +86,12 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 </div>
               )}
             </div>
-
-            <ShowMoreButton
-              isLoading={false}
-              onShowMore={() => handleDetailClick(fault._id)}
-            />
+            <div className={css.shmorebtn}>
+              <ShowMoreButton
+                isLoading={false}
+                onShowMore={() => handleDetailClick(fault._id)}
+              />
+            </div>
           </li>
         ))}
       </ul>

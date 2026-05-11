@@ -54,7 +54,7 @@
 }
 
 .faultCard:hover,
-.faultCard:focus-within {
+.faultCard:focus {
   border-color: #ff4d4f;
   border-left-color: #ff4d4f;
   box-shadow: 0 4px 12px rgba(255, 77, 79, 0.15);
