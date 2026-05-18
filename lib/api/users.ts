@@ -13,7 +13,6 @@ export const getAllUsers = async ({
   role,
   status,
   page,
-  perPage,
 }: UserRequest) => {
   const params = {
     search,
@@ -23,21 +22,13 @@ export const getAllUsers = async ({
     perPage: 10,
   };
   const { data } = await nextServer.get<UsersResponse>('/users', { params });
-  return data.users;
+  return data;
 };
 
 export const getMe = async () => {
   const me = await nextServer.get<GetMeRespons>('/users/me');
   return me.data.user;
 };
-
-// export const updateUser = async ({ userId, data }: UpdateUserRequest) => {
-//   const res = await nextServer.patch<UpdateUserResponse>(
-//     `/users/${userId}`,
-//     data
-//   );
-//   return res.data.user;
-// };
 
 export const updateUser = async ({ userId, data }: UpdateUserRequest) => {
   const res = await nextServer.put<UpdateUserResponse>(

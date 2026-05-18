@@ -1,13 +1,13 @@
+import { STATUS } from '@/constants/status';
+
 export interface User {
   _id: string;
   role: UserRoles;
   fullName: string;
   email: string;
   avatar: string;
-  status: UserStatus;
+  status: STATUS;
   isFirstLogin: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export type UserRoles =
@@ -17,8 +17,6 @@ export type UserRoles =
   | 'maintenanceWorker'
   | 'safety';
 
-export type UserStatus = 'active' | 'deactivated';
-
 export interface GetMeRespons {
   success: boolean;
   user: User;
@@ -27,7 +25,7 @@ export interface GetMeRespons {
 export interface UserRequest {
   search?: string;
   role?: UserRoles;
-  status?: UserStatus;
+  status?: STATUS;
   page?: number;
   perPage?: number;
 }
@@ -35,7 +33,7 @@ export interface UserRequest {
 export interface UsersResponse {
   page: number;
   perPage: number;
-  totalPage: number;
+  totalPages: number;
   totalUsers: number;
   users: User[];
 }
@@ -47,6 +45,7 @@ export interface UpdateUserRequest {
 
 export interface UpdateUserResponse {
   success: boolean;
+  message: string;
   user: User;
 }
 
@@ -63,7 +62,7 @@ export interface UpdateUserValues {
   role?: UserRoles;
   fullName?: string;
   email?: string;
-  status?: UserStatus;
+  status?: STATUS;
   password?: string | undefined;
   avatar?: string | null;
   personalCode?: string | undefined;

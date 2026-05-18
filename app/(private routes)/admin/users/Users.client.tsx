@@ -4,23 +4,25 @@ import UsersList from '@/components/Admin/UsersList/UsersList';
 import CreateAndEditUserForm from '@/components/forms/CreateAndUpdateUserForm/CreateAndEditUserForm';
 import Button from '@/components/UI/Button/Button';
 import Filters, { FiltersItem } from '@/components/UI/Filters/Filters';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
 import { getRoleOptions } from '@/constants/roleType';
-import { getStatusOptions } from '@/constants/userStatus';
+import { getStatusOptions, STATUS } from '@/constants/status';
 import { getAllUsers } from '@/lib/api/users';
 import { usePageStore } from '@/lib/store/pageStore';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
+import { User, UserRoles } from '@/types/userTypes';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import css from './Users.module.css';
-import { UserRoles, UserStatus } from '@/types/userTypes';
-import NoFound from '@/components/UI/NoFound/NoFound';
+import css from '../UsersAndPlants.module.css';
+import Pagination from '@/components/UI/Pagination/Pagination';
 
 const AdminUsersClientPage = () => {
   const [search, setSearch] = useState<string>('');
   const [role, setRole] = useState<UserRoles | string>('');
-  const [status, setStatus] = useState<UserStatus | string>('');
+  const [status, setStatus] = useState<STATUS | string>('');
   const [page, setPage] = useState(1);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
@@ -29,6 +31,7 @@ const AdminUsersClientPage = () => {
   const t = useTranslations('AdminPage.Users');
   const tRoles = useTranslations('Roles');
   const tStatuses = useTranslations('Statuses');
+  const tNoFound = useTranslations('NoFound');
   const setPageTitle = usePageStore(state => state.setPageTitle);
 
   useEffect(() => {
@@ -75,12 +78,7 @@ const AdminUsersClientPage = () => {
     },
   ];
 
-  const {
-    data: users,
-    isSuccess,
-    isLoading,
-    isFetching,
-  } = useQuery({
+  const { data, isSuccess, isLoading, isFetching, isError } = useQuery({
     queryKey: [
       'users',
       debouncedSearch || undefined,
@@ -92,20 +90,28 @@ const AdminUsersClientPage = () => {
       getAllUsers({
         search: debouncedSearch,
         role: role as UserRoles | undefined,
-        status: status as UserStatus | undefined,
+        status: status as STATUS | undefined,
         page,
       }),
     placeholderData: keepPreviousData,
   });
 
-  console.log(users);
+  const users = data?.users as User[];
 
   const handleCreateUser = () => {
     setIsOpenModal(true);
   };
 
+  const onClear = () => {
+    setRole('');
+    setStatus('');
+    setSearch('');
+  };
+
+  console.log(users);
+
   return (
-    <section className={css.section}>
+    <section className="admin_section">
       <div className={css.head_container}>
         <div className={css.title_container}>
           <h1 className="title">{t('title')}</h1>
@@ -122,11 +128,29 @@ const AdminUsersClientPage = () => {
           {t('newUser')}
         </Button>
       </div>
-      <Filters items={filters} />
+      <Filters items={filters} onClear={onClear} />
       {users?.length === 0 && (
         <NoFound
-          title="Nessun risultato trovato"
-          message="Prova a modificare o rimuovere i filtri per visualizzare più utenti"
+          title={tNoFound('noResultsTitle')}
+          message={tNoFound('noResultsMessage')}
+        />
+      )}
+      {isError && (
+        <NoFound
+          title={tNoFound('serverErrorTitle')}
+          message={tNoFound('serverErrorMessage')}
+        />
+      )}
+      {isLoading && isFetching && (
+        <div className={css.loader_container}>
+          <Loader />
+        </div>
+      )}
+      {isSuccess && data?.totalPages > 1 && (
+        <Pagination
+          totalPages={data?.totalPages ?? 0}
+          page={page}
+          onPageChange={newPage => setPage(newPage)}
         />
       )}
       {isSuccess && users.length > 0 && <UsersList users={users ?? []} />}

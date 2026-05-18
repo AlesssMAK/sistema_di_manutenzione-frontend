@@ -32,7 +32,7 @@ const UsersList = ({ users }: UsersListProps) => {
         </li>
       </ul>
       {users.map(user => (
-        <UserCard user={user} />
+        <UserCard user={user} key={user._id} />
       ))}
     </div>
   );

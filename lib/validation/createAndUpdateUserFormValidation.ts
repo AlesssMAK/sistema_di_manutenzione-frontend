@@ -1,6 +1,6 @@
 import { USER_ROLES } from '@/constants/roleType';
-import { USER_STATUS } from '@/constants/userStatus';
-import { UserRoles, UserStatus } from '@/types/userTypes';
+import { STATUS, USER_STATUS } from '@/constants/status';
+import { UserRoles } from '@/types/userTypes';
 import * as yup from 'yup';
 
 const fullNameRegex =
@@ -85,7 +85,7 @@ export const updateUserSchema = yup.object({
     }),
 
   avatar: yup.string().nullable().optional(),
-  status: yup.string().oneOf<UserStatus>(USER_STATUS).optional(),
+  status: yup.string().oneOf<STATUS>(USER_STATUS).optional(),
 
   personalCode: yup
     .string()

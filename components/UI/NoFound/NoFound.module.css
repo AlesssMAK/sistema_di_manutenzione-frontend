@@ -4,8 +4,9 @@
   gap: 28px;
   justify-content: center;
   align-items: center;
-  border-radius: 24px;
-  background: var(--background);
+  border-radius: 12px;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  background: #fff;
   padding: 24px;
 
   @media screen and (min-width: 768px) {

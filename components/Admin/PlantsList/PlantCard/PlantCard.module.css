@@ -1,4 +1,4 @@
-.user_card_container {
+.plant_card_container {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -13,7 +13,7 @@
   }
 }
 
-.user_card_container:last-child {
+.plant_card_container:last-child {
   border-bottom: none;
 }
 
@@ -29,7 +29,7 @@
   align-items: center;
 }
 
-.user_card_item_name {
+.plant_card_item_name {
   @media screen and (min-width: 1440px) {
     width: 244px;
   }
@@ -42,35 +42,35 @@
   color: #0a0a0a;
 }
 
-.user_card_item_role {
+.plant_card_item_code {
   @media screen and (min-width: 1440px) {
     width: 180px;
   }
 }
 
-.role {
-  border: 1.17px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  padding: 4px 10px;
-  width: fit-content;
+.code {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #0a0a0a;
 }
 
-.user_card_item_email {
+.plant_card_item_location {
   @media screen and (min-width: 1440px) {
-    width: 340px;
+    width: 180px;
   }
 }
 
-.email {
+.location {
   font-weight: 400;
   font-size: 14px;
   line-height: 1.42857;
   color: #45556c;
 }
 
-.user_card_item_status {
+.plant_card_item_status {
   @media screen and (min-width: 1440px) {
-    width: 120px;
+    width: 232px;
   }
 }
 

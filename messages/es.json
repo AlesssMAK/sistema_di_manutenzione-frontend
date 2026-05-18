@@ -22,6 +22,7 @@
     "placeholderEmail": "Introduce correo electrónico",
     "placeholderPassword": "Introduce contraseña",
     "formError": "Verifica los datos ingresados",
+    "accountDeactivated": "Tu cuenta está desactivada",
     "submit": "Entrar",
     "cancel": "Cancelar",
     "errors": {
@@ -57,40 +58,49 @@
       "status": "Estado",
       "search": "Buscar"
     },
+    "UsersList": {
+      "name": "Nombre de Usuario",
+      "role": "Rol",
+      "email": "Correo Asociado",
+      "status": "Estado",
+      "actions": "Acciones"
+      },
+    "CreateAndEditUserForm": {
+      "user": "Usuario",
+      "title": "Nuevo Usuario",
+      "subtitle": "Completa todos los campos y genera un código de acceso para el nuevo usuario",
+      "role": "Rol",
+      "fullName": "Nombre Completo",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "accessCode": "Código de Acceso",
+      "generateAutomatically": "Generar Automáticamente",
+      "setManually": "Configurar Manualmente",
+      "cancel": "Cancelar",
+      "createUser": "Crear Usuario",
+      "userCreatedSuccess": "Usuario creado con éxito",
+      "userUpdatedSuccess": "Usuario actualizado con éxito",
+      "status": "Estado",
+      "editTitle": "Editar Usuario",
+      "editSubtitle": "Gestiona la información de la cuenta del usuario y el código de acceso",
+      "roleChangeDescription": "Para completar el cambio de rol, debes introducir el dato requerido: la contraseña al dejar el rol de operador o el código de acceso al asumirlo.",
+      "saveChanges": "Guardar Cambios"
+      },
     "Plants": {
       "title": "Gestión de Máquinas / Instalaciones",
       "subtitle": "Gestiona el catálogo de máquinas e instalaciones",
-      "newMachine": "Nueva Máquina"
-    },
-    "UsersList": {
-        "name": "Nombre de Usuario",
-        "role": "Rol",
-        "email": "Correo Asociado",
-        "status": "Estado",
-        "actions": "Acciones"
+      "newMachine": "Nueva Máquina",
+      "searchPlaceholder": "Buscar por nombre...",
+      "status": "Estado",
+      "search": "Buscar"
       },
-    "CreateAndEditUserForm": {
-        "user": "Usuario",
-        "title": "Nuevo Usuario",
-        "subtitle": "Completa todos los campos y genera un código de acceso para el nuevo usuario",
-        "role": "Rol",
-        "fullName": "Nombre Completo",
-        "email": "Correo Electrónico",
-        "password": "Contraseña",
-        "accessCode": "Código de Acceso",
-        "generateAutomatically": "Generar Automáticamente",
-        "setManually": "Configurar Manualmente",
-        "cancel": "Cancelar",
-        "createUser": "Crear Usuario",
-        "userCreatedSuccess": "Usuario creado con éxito",
-        "userUpdatedSuccess": "Usuario actualizado con éxito",
-        "status": "Estado",
-        "editTitle": "Editar Usuario",
-        "editSubtitle": "Gestiona la información de la cuenta del usuario y el código de acceso",
-        "roleChangeDescription": "Para completar el cambio de rol, debes introducir el dato requerido: la contraseña al dejar el rol de operador o el código de acceso al asumirlo.",
-        "saveChanges": "Guardar Cambios"
-
-      }
+    "PlantsList": {
+      "name": "Nombre de Máquina",
+      "code": "Código",
+      "location": "Ubicación",
+      "status": "Estado",
+      "actions": "Acciones"
+  }
   },
 
 "maintenanceWorkerPage": {
@@ -173,7 +183,6 @@
     "cancel": "Cancelar",
     "sendReport": "Enviar Reporte",
     "reportCreatedSuccessfully": "Señalización creada con éxito",
-    "loading": "cargando...",
     "maxImages": "Máximo 5 imágenes"
 },
 
@@ -210,6 +219,17 @@
     "cancel": "Cancelar",
     "createUser": "Crear Usuario",
     "userCreatedSuccess": "Usuario creado con éxito"
+  },
+
+  "btn": {
+    "loading": "cargando..."
+  },
+
+  "NoFound": {
+    "noResultsTitle": "No se encontraron resultados",
+    "noResultsMessage": "Intenta modificar o quitar los filtros para ver otros resultados",
+    "serverErrorTitle": "Error del servidor",
+    "serverErrorMessage": "Ocurrió un problema al cargar los datos. Inténtalo de nuevo más tarde"
   }
 
 

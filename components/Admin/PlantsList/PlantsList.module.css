@@ -1,4 +1,4 @@
-.users_container {
+.plants_container {
   border: 1.17px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
   background: #fff;
@@ -26,20 +26,20 @@
   }
 }
 
-.role {
+.code {
   @media screen and (min-width: 1440px) {
     width: 180px;
   }
 }
 
-.email {
+.location {
   @media screen and (min-width: 1440px) {
-    width: 340px;
+    width: 180px;
   }
 }
 
 .status {
   @media screen and (min-width: 1440px) {
-    width: 142px;
+    width: 278px;
   }
 }

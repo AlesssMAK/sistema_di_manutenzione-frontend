@@ -7,7 +7,7 @@ import { useAuthStore } from '@/lib/store/authStore';
 import { useEffect, useRef, useState } from 'react';
 import { generateId } from '@/lib/api/generate';
 import Input from '@/components/UI/Input/Input';
-import { getAllPartsByPlantId, getAllPlants } from '@/lib/api/plants';
+import { getAllPlants } from '@/lib/api/plants';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, useWatch } from 'react-hook-form';
 import { Plant } from '@/types/plantType';
@@ -19,6 +19,7 @@ import { createFault } from '@/lib/api/faults';
 import toast from 'react-hot-toast';
 import { useFaultDraft } from '@/lib/store/reportStore';
 import { UploadImages } from '@/components/UI/UploadImages/UploadImages';
+import { getAllPartsByPlantId } from '@/lib/api/plantsParts';
 
 const ReportForm = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
@@ -33,6 +34,7 @@ const ReportForm = () => {
   >(null);
 
   const t = useTranslations('ReportForm');
+  const tBtn = useTranslations('btn');
   const { user } = useAuthStore();
   const { draft, setDraft, clearDraft } = useFaultDraft();
   const now = new Date();
@@ -337,12 +339,16 @@ const ReportForm = () => {
           type="button"
           className="button button--white"
           width="100%"
-          onClick={() => clearDraft()}
+          onClick={() => {
+            (clearDraft(),
+              setSelectedPlantLabel(''),
+              setSelectedPlantPartLabel(''));
+          }}
         >
           {t('cancel')}
         </Button>
         <Button type="submit" className="button button--blue" width="100%">
-          {isSubmitting ? t('loading') : t('sendReport')}
+          {isSubmitting ? tBtn('loading') : t('sendReport')}
         </Button>
       </div>
     </form>

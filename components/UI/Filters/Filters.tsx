@@ -32,9 +32,10 @@ export type FiltersItem = FiltersInput | FiltersSelect;
 
 export interface FiltersProps {
   items: FiltersItem[];
+  onClear: () => void;
 }
 
-const Filters = ({ items }: FiltersProps) => {
+const Filters = ({ items, onClear }: FiltersProps) => {
   const t = useTranslations('Filters');
 
   return (
@@ -46,7 +47,12 @@ const Filters = ({ items }: FiltersProps) => {
           </svg>
           <h1 className={css.title}>{t('title')}</h1>
         </div>
-        <Button type="button" className="button button--white" height={36}>
+        <Button
+          type="button"
+          className="button button--white"
+          height={36}
+          onClick={onClear}
+        >
           {t('clear')}
         </Button>
       </div>

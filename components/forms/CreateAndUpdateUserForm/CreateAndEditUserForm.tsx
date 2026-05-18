@@ -7,25 +7,25 @@ import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import { getRoleOptions } from '@/constants/roleType';
 import { registerUser } from '@/lib/api/auth';
 import { generatePassword, generatePersonalCode } from '@/lib/api/generate';
+import { updateUser } from '@/lib/api/users';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import {
+  createUserSchema,
+  updateUserSchema,
+} from '@/lib/validation/createAndUpdateUserFormValidation';
+import {
   CreateUserValues,
-  UserRoles,
-  UserStatus,
   UpdateUserValues,
+  UserRoles,
 } from '@/types/userTypes';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Resolver, useForm, UseFormRegister } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import css from './CreateAndEditUserForm.module.css';
-import {
-  createUserSchema,
-  updateUserSchema,
-} from '@/lib/validation/createUserFormValidation';
-import { updateUser } from '@/lib/api/users';
-import { useQueryClient } from '@tanstack/react-query';
+import { STATUS } from '@/constants/status';
 
 interface CreateAndEditUserFormProps {
   onClose: () => void;
@@ -52,6 +52,7 @@ const CreateAndEditUserForm = ({
   const [manual, setManual] = useState(false);
 
   const t = useTranslations('AdminPage.CreateAndEditUserForm');
+  const tBtn = useTranslations('btn');
   const tStatus = useTranslations('Statuses');
 
   const queryClient = useQueryClient();
@@ -76,7 +77,6 @@ const CreateAndEditUserForm = ({
 
   const status = updateUserForm.watch('status');
   const isActive = status === 'active';
-  console.log(status);
 
   useEffect(() => {
     if (isEditMode && initialData) {
@@ -84,7 +84,7 @@ const CreateAndEditUserForm = ({
         role: initialData.role as UserRoles,
         fullName: initialData.fullName,
         email: initialData.email,
-        status: initialData.status as UserStatus,
+        status: initialData.status as STATUS,
       });
 
       setRole(initialData.role);
@@ -284,7 +284,7 @@ const CreateAndEditUserForm = ({
             </p>
             <div className={css.code_container}>
               <div className={css.code_input_container}>
-                {isEditMode && (
+                {role !== initialData?.role && isEditMode && (
                   <div className={css.description_container}>
                     <p className={css.code_description}>
                       {t('roleChangeDescription')}
@@ -372,7 +372,11 @@ const CreateAndEditUserForm = ({
               {t('cancel')}
             </Button>
             <Button type="submit" className="button button--blue" width="100%">
-              {isEditMode ? t('saveChanges') : t('createUser')}
+              {activeForm.formState.isSubmitting
+                ? tBtn('loading')
+                : isEditMode
+                  ? t('saveChanges')
+                  : t('createUser')}
             </Button>
           </div>
         </form>

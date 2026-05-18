@@ -23,6 +23,7 @@
     "submit": "Accedi",
     "cancel": "Annulla",
     "formError": "Controlla i dati inseriti",
+    "accountDeactivated": "Il tuo account è disattivato",
     "errors": {
       "required": "Campo obbligatorio",
       "invalidIdentifier": "Formato non valido (email o nome completo)",
@@ -56,39 +57,49 @@
       "status": "Stato",
       "search": "Cerca"
   },
+    "UsersList": {
+      "name": "Nome Utente",
+      "role": "Ruolo",
+      "email": "Email Associate",
+      "status": "Stato",
+      "actions": "Azioni"
+      },
+    "CreateAndEditUserForm": {
+      "user": "Utente",
+      "title": "Nuovo Utente",
+      "subtitle": "Compila tutti i campi e genera un codice di accesso per il nuovo utente",
+      "role": "Ruolo",
+      "fullName": "Nome Completo",
+      "email": "Email",
+      "password": "Password",
+      "accessCode": "Codice di Accesso",
+      "generateAutomatically": "Genera Automaticamente",
+      "setManually": "Imposta Manualmente",
+      "cancel": "Annulla",
+      "createUser": "Crea Utente",
+      "userCreatedSuccess": "Utente creato con successo",
+      "userUpdatedSuccess": "Utente aggiornato con successo",
+      "status": "Stato",
+      "editTitle": "Modifica Utente",
+      "editSubtitle": "Gestisci le informazioni dell'account utente e del codice di accesso",
+      "roleChangeDescription": "Per completare la modifica del ruolo, è necessario inserire il dato richiesto: la password quando si lascia il ruolo di operatore oppure il codice di accesso quando lo si assume.",
+      "saveChanges": "Salva Modifiche"
+      },
     "Plants": {
       "title": "Gestione Macchine / Impianti",
       "subtitle": "Gestisci il catalogo di macchine e impianti",
-      "newMachine": "Nuova Macchina"
-  },
-  "UsersList": {
-        "name": "Nome Utente",
-        "role": "Ruolo",
-        "email": "Email Associate",
-        "status": "Stato",
-        "actions": "Azioni"
+      "newMachine": "Nuova Macchina",
+      "searchPlaceholder": "Cerca per nome...",
+      "status": "Stato",
+      "search": "Cerca"
       },
-  "CreateAndEditUserForm": {
-        "user": "Utente",
-        "title": "Nuovo Utente",
-        "subtitle": "Compila tutti i campi e genera un codice di accesso per il nuovo utente",
-        "role": "Ruolo",
-        "fullName": "Nome Completo",
-        "email": "Email",
-        "password": "Password",
-        "accessCode": "Codice di Accesso",
-        "generateAutomatically": "Genera Automaticamente",
-        "setManually": "Imposta Manualmente",
-        "cancel": "Annulla",
-        "createUser": "Crea Utente",
-        "userCreatedSuccess": "Utente creato con successo",
-        "userUpdatedSuccess": "Utente aggiornato con successo",
-        "status": "Stato",
-        "editTitle": "Modifica Utente",
-        "editSubtitle": "Gestisci le informazioni dell'account utente e del codice di accesso",
-        "roleChangeDescription": "Per completare la modifica del ruolo, è necessario inserire il dato richiesto: la password quando si lascia il ruolo di operatore oppure il codice di accesso quando lo si assume.",
-        "saveChanges": "Salva Modifiche"
-      }
+    "PlantsList": {
+      "name": "Nome Macchina",
+      "code": "Codice",
+      "location": "Ubicazione",
+      "status": "Stato",
+      "actions": "Azioni"
+     }
   },
 
 "maintenanceWorkerPage": {
@@ -171,7 +182,6 @@
     "cancel": "Cancella",
     "sendReport": "Invia Segnalazione",
     "reportCreatedSuccessfully": "Segnalazione creato con successo",
-    "loading": "caricamento...",
     "maxImages": "Massimo 5 immagini"
   },
 
@@ -193,8 +203,17 @@
   "Filters": {
     "title": "Filtri",
     "clear": "Cancella Filtri"
+  },
+
+  "btn": {
+    "loading": "caricamento..."
+  },
+
+  "NoFound": {
+    "noResultsTitle": "Nessun risultato trovato",
+    "noResultsMessage": "Prova a modificare o rimuovere i filtri per visualizzare altri risultati",
+    "serverErrorTitle": "Errore del server",
+    "serverErrorMessage": "Si è verificato un problema durante il caricamento dei dati. Riprova più tardi"
   }
-
-
 
 }

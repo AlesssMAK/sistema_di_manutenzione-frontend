@@ -63,8 +63,10 @@ const LoginForm = () => {
 
       if (apiError.response?.status === 400) {
         toast.error(t('formError'));
-      } else {
-        toast.error(t('formError'));
+      }
+
+      if (apiError.response?.status === 403) {
+        toast.error(t('accountDeactivated'));
       }
     }
   };

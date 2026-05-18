@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { logErrorResponse } from '../../_utils/utils';
 import { isAxiosError } from 'axios';
-import { api } from '../../api';
 import { cookies } from 'next/headers';
+import { api } from '@/app/api/api';
+import { logErrorResponse } from '@/app/api/_utils/utils';
 
 interface Props {
-  params: Promise<{ plantId: string }>;
+  params: Promise<{ plantId: string; plantPartId: string }>;
 }
 
 export async function PUT(req: NextRequest, { params }: Props) {
@@ -13,8 +13,8 @@ export async function PUT(req: NextRequest, { params }: Props) {
 
   const body = await req.json();
   try {
-    const { plantId } = await params;
-    const res = await api.put(`plants/${plantId}`, body, {
+    const { plantId, plantPartId } = await params;
+    const res = await api.put(`plants/${plantId}/parts/${plantPartId}`, body, {
       headers: {
         Cookie: cookie.toString(),
       },
