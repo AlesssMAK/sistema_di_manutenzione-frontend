@@ -1,3 +1,4 @@
+import Button from '../UI/Button/Button';
 import css from './FilterPriorityBar.module.css';
 import { TYPE_PRIORITY } from '@/constants/priorityFaults';
 
@@ -43,9 +44,12 @@ const FilterPriorityBar = ({
         ))}
       </ul>
       {activePriority && (
-        <button onClick={() => onPriorityChange('')} className={css.resetBtn}>
+        <Button
+          onClick={() => onPriorityChange('')}
+          className="button button--blue btn"
+        >
           Сбросить фильтр
-        </button>
+        </Button>
       )}
     </div>
   );
