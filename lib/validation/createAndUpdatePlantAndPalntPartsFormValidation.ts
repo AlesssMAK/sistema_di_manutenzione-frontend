@@ -1,7 +1,10 @@
 import * as yup from 'yup';
 
-export const createPlantPartsSchema = yup.object({
-  plantId: yup.string().trim().required(),
+export const createPlantAndPlantPartsSchema = yup.object({
+  namePlant: yup.string().trim().required('Name plant is required'),
+  code: yup.string().trim().required('Code is required'),
+  location: yup.string().trim().required('Location is required'),
+  description: yup.string().trim().optional().default(''),
   parts: yup
     .array()
     .of(
@@ -20,3 +23,7 @@ export const createPlantPartsSchema = yup.object({
     .min(1, 'Add at least one part')
     .required('The parts list is required'),
 });
+
+export type CreatePlantAndPlantPartsFormValues = yup.InferType<
+  typeof createPlantAndPlantPartsSchema
+>;

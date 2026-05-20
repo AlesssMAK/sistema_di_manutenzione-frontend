@@ -1,4 +1,5 @@
 import { STATUS } from '@/constants/status';
+import { PlantPart } from './partPlant';
 
 export interface Plant {
   _id: string;
@@ -35,6 +36,14 @@ export interface PlantsRespons {
   message: string;
   data: PlantsData;
 }
+
+// export interface CreatePlantAndPlantParts {
+//   namePlant: string;
+//   code: string;
+//   location: string;
+//   description?: string | null;
+//   parts: { namePlantPart: string; codePlantPart: string }[];
+// }
 
 export interface CreatePlant {
   namePlant: string;
