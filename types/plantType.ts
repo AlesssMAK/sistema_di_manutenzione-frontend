@@ -37,14 +37,6 @@ export interface PlantsRespons {
   data: PlantsData;
 }
 
-// export interface CreatePlantAndPlantParts {
-//   namePlant: string;
-//   code: string;
-//   location: string;
-//   description?: string | null;
-//   parts: { namePlantPart: string; codePlantPart: string }[];
-// }
-
 export interface CreatePlant {
   namePlant: string;
   code: string;

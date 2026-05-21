@@ -1,3 +1,4 @@
+import { STATUS, STATUS_OPTIONS } from '@/constants/status';
 import * as yup from 'yup';
 
 export const createPlantAndPlantPartsSchema = yup.object({
@@ -27,3 +28,17 @@ export const createPlantAndPlantPartsSchema = yup.object({
 export type CreatePlantAndPlantPartsFormValues = yup.InferType<
   typeof createPlantAndPlantPartsSchema
 >;
+
+export const updatePlantSchema = yup.object({
+  namePlant: yup.string().trim().optional(),
+  code: yup.string().trim().optional(),
+  location: yup.string().trim().optional(),
+  description: yup.string().trim().optional(),
+  status: yup.string().oneOf<STATUS>(STATUS_OPTIONS).optional(),
+});
+
+export const updatePlantPartSchema = yup.object({
+  namePlantPart: yup.string().trim().optional(),
+  codePlantPart: yup.string().trim().optional(),
+  status: yup.string().oneOf<STATUS>(STATUS_OPTIONS).optional(),
+});

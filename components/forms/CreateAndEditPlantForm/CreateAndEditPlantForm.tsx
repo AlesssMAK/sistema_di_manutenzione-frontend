@@ -4,51 +4,76 @@ import css_form from './CreateAndEditPlantForm.module.css';
 import Input from '@/components/UI/Input/Input';
 import Button from '@/components/UI/Button/Button';
 import { useTranslations } from 'next-intl';
-import { useFieldArray, useForm } from 'react-hook-form';
+import {
+  Resolver,
+  useFieldArray,
+  useForm,
+  UseFormRegister,
+} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   CreatePlantAndPlantPartsFormValues,
   createPlantAndPlantPartsSchema,
+  updatePlantPartSchema,
+  updatePlantSchema,
 } from '@/lib/validation/createAndUpdatePlantAndPalntPartsFormValidation';
 import { useState } from 'react';
+import { UpdatePlantPart } from '@/types/partPlant';
+import { UpdatePlant } from '@/types/plantType';
 
 interface CreateAndEditPlantFormProps {
   onClose: () => void;
   // initialData?: InitialData;
-  isEditMode?: boolean;
+  isPlantEditMode?: boolean;
+  isPlantPartsEditMode?: boolean;
 }
 
 const CreateAndEditPlantForm = ({
   onClose,
-  isEditMode = false,
+  isPlantEditMode = false,
+  isPlantPartsEditMode = false,
 }: CreateAndEditPlantFormProps) => {
   const [newPartName, setNewPartName] = useState('');
   const [newPartCode, setNewPartCode] = useState('');
   const [addError, setAddError] = useState<string | null>(null);
-  const tBtn = useTranslations('btn');
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
-  } = useForm<CreatePlantAndPlantPartsFormValues>({
-    resolver: yupResolver(createPlantAndPlantPartsSchema),
-    defaultValues: {
-      namePlant: '',
-      code: '',
-      location: '',
-      description: '',
-      parts: [],
-    },
+  const tBtn = useTranslations('btn');
+  const tStatus = useTranslations('Statuses');
+
+  const createPlantAndPlantPartsForm =
+    useForm<CreatePlantAndPlantPartsFormValues>({
+      resolver: yupResolver(createPlantAndPlantPartsSchema),
+      mode: 'onSubmit',
+      defaultValues: {
+        namePlant: '',
+        code: '',
+        location: '',
+        description: '',
+        parts: [],
+      },
+    });
+
+  const updatePlantForm = useForm<UpdatePlant>({
+    resolver: yupResolver(updatePlantSchema) as Resolver<UpdatePlant>,
+    mode: 'onSubmit',
   });
+
+  const statusPlant = updatePlantForm.watch('status');
+  const isActivePlant = statusPlant === 'active';
+
+  const updatePlantPartForm = useForm<UpdatePlantPart>({
+    resolver: yupResolver(updatePlantPartSchema) as Resolver<UpdatePlantPart>,
+    mode: 'onSubmit',
+  });
+
+  const statusPlantPart = updatePlantForm.watch('status');
+  const isActivePlantPart = statusPlantPart === 'active';
 
   const { fields, append, remove } = useFieldArray({
-    control,
+    control: createPlantAndPlantPartsForm.control,
     name: 'parts',
   });
-
-  console.log(fields.length);
+  console.log(createPlantAndPlantPartsForm.formState.errors);
 
   const handleAddPart = () => {
     const name = newPartName.trim();
@@ -71,84 +96,160 @@ const CreateAndEditPlantForm = ({
     setAddError(null);
   };
 
+  const onCreatePlantAndPlantPartsSubmit = (
+    data: CreatePlantAndPlantPartsFormValues
+  ) => {
+    console.log('CREATE', data);
+  };
+
+  const onUpdatePlantSubmit = (data: UpdatePlant) => {
+    console.log('UPDATE PLANT', data);
+  };
+
+  const onUpdatePlantPartSubmit = (data: UpdatePlantPart) => {
+    console.log('UPDATE PLANT PART', data);
+  };
+
+  const registerPlant = isPlantEditMode
+    ? (updatePlantForm.register as UseFormRegister<any>)
+    : (createPlantAndPlantPartsForm.register as UseFormRegister<any>);
+
+  const activeForm = isPlantEditMode
+    ? updatePlantForm
+    : createPlantAndPlantPartsForm;
+
+  const activePlantSubmit = isPlantEditMode
+    ? updatePlantForm.handleSubmit(onUpdatePlantSubmit)
+    : createPlantAndPlantPartsForm.handleSubmit(
+        onCreatePlantAndPlantPartsSubmit
+      );
+
+  const activePlantPartsSubmit = isPlantPartsEditMode
+    ? updatePlantPartForm.handleSubmit(onUpdatePlantPartSubmit)
+    : createPlantAndPlantPartsForm.handleSubmit(
+        onCreatePlantAndPlantPartsSubmit
+      );
+
   return (
     <Modal onClose={onClose}>
       <div className={css.form_container}>
         <div className={css.title_container}>
           <h1 className="title">
-            {isEditMode ? 'Nuova Macchina' : 'Modifica Macchina'}
+            {isPlantEditMode ? 'Nuova Macchina' : 'Modifica Macchina'}
           </h1>
           <p className="subtitle">
             Gestisci le informazioni della macchina o impianto
           </p>
         </div>
-        <form className={css.form}>
-          <div className={css_form.plant_container}>
-            <div className={css.form_item_container}>
-              <p className={css.form_label}>
-                Nome Macchina
-                {isEditMode ? '' : ' *'}
-              </p>
-              <Input
-                {...register('namePlant')}
-                type="text"
-                style={{
-                  height: '36px',
-                  borderRadius: '6px',
-                  background: '#f3f3f5',
-                  border: 'none',
-                }}
-              />
-              {/* {activeForm.formState.errors.namePlant && (
-                <p className={css.error}>
-                  {activeForm.formState.errors.namePlant.message}
+        <form
+          className={css.form}
+          onSubmit={
+            isPlantEditMode ? activePlantSubmit : activePlantPartsSubmit
+          }
+        >
+          {!isPlantPartsEditMode && (
+            <div className={css_form.plant_container}>
+              <div className={css.form_item_container}>
+                <p className={css.form_label}>
+                  Nome Macchina
+                  {isPlantEditMode ? '' : ' *'}
                 </p>
-              )} */}
-            </div>
-            <div className={css.form_item_container}>
-              <p className={css.form_label}>
-                Codice
-                {isEditMode ? '' : ' *'}
-              </p>
-              <Input
-                {...register('code')}
-                type="text"
-                style={{
-                  height: '36px',
-                  borderRadius: '6px',
-                  background: '#f3f3f5',
-                  border: 'none',
-                }}
-              />
-              {/* {activeForm.formState.errors.code && (
-                <p className={css.error}>
-                  {activeForm.formState.errors.code.message}
+                <Input
+                  {...registerPlant('namePlant')}
+                  type="text"
+                  style={{
+                    height: '36px',
+                    borderRadius: '6px',
+                    background: '#f3f3f5',
+                    border: 'none',
+                  }}
+                />
+                {activeForm.formState.errors.namePlant && (
+                  <p className={css.error}>
+                    {activeForm.formState.errors.namePlant.message}
+                  </p>
+                )}
+              </div>
+              <div className={css.form_item_container}>
+                <p className={css.form_label}>
+                  Codice
+                  {isPlantEditMode ? '' : ' *'}
                 </p>
-              )} */}
-            </div>
-            <div className={css.form_item_container}>
-              <p className={css.form_label}>
-                Ubicazione
-                {isEditMode ? '' : ' *'}
-              </p>
-              <Input
-                {...register('location')}
-                type="text"
-                style={{
-                  height: '36px',
-                  borderRadius: '6px',
-                  background: '#f3f3f5',
-                  border: 'none',
-                }}
-              />
-              {/* {activeForm.formState.errors.location && (
-                <p className={css.error}>
-                  {activeForm.formState.errors.location.message}
+                <Input
+                  {...registerPlant('code')}
+                  type="text"
+                  style={{
+                    height: '36px',
+                    borderRadius: '6px',
+                    background: '#f3f3f5',
+                    border: 'none',
+                  }}
+                />
+                {activeForm.formState.errors.code && (
+                  <p className={css.error}>
+                    {activeForm.formState.errors.code.message}
+                  </p>
+                )}
+              </div>
+              <div className={css.form_item_container}>
+                <p className={css.form_label}>
+                  Ubicazione
+                  {isPlantEditMode ? '' : ' *'}
                 </p>
-              )} */}
+                <Input
+                  {...registerPlant('location')}
+                  type="text"
+                  style={{
+                    height: '36px',
+                    borderRadius: '6px',
+                    background: '#f3f3f5',
+                    border: 'none',
+                  }}
+                />
+                {activeForm.formState.errors.location && (
+                  <p className={css.error}>
+                    {activeForm.formState.errors.location.message}
+                  </p>
+                )}
+              </div>
+              {isPlantEditMode && (
+                <div className={css.form_item_container}>
+                  <p className={css.form_label}>status</p>
+                  <div className={css.label_container}>
+                    <input
+                      onChange={e =>
+                        updatePlantForm.setValue(
+                          'status',
+                          e.target.checked ? 'active' : 'deactivated',
+                          {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                          }
+                        )
+                      }
+                      type="checkbox"
+                      className={css.status_input}
+                      checked={isActivePlant}
+                      id="user-stauts"
+                    />
+                    <label htmlFor="user-stauts" className={css.status_label} />
+                    <p className={css.status_label_text}>
+                      status
+                      {isActivePlant
+                        ? tStatus('active')
+                        : tStatus('deactivated')}
+                    </p>
+                  </div>
+                  {updatePlantForm.formState.errors.status && (
+                    <p className={css.error}>
+                      {updatePlantForm.formState.errors.status.message}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
-          </div>
-          {!isEditMode && (
+          )}
+          {!isPlantEditMode && (
             <div className={css_form.plant_part_container}>
               <div className={css.title_container}>
                 <h1 className={`${css_form.title} title`}>Parti di impianto</h1>
@@ -160,9 +261,10 @@ const CreateAndEditPlantForm = ({
                 <div className={css.form_item_container}>
                   <p className={css.form_label}>
                     Nome parte
-                    {isEditMode ? '' : ' *'}
+                    {isPlantEditMode ? '' : ' *'}
                   </p>
                   <Input
+                    {...updatePlantPartForm.register('namePlantPart')}
                     type="text"
                     value={newPartName}
                     onChange={e => setNewPartName(e.target.value)}
@@ -179,17 +281,21 @@ const CreateAndEditPlantForm = ({
                       border: 'none',
                     }}
                   />
-                  {/* {activeForm.formState.errors.namePlantPart && (
-                <p className={css.error}>
-                  {activeForm.formState.errors.namePlantPart.message}
-                </p>
-              )} */}
+                  {updatePlantPartForm.formState.errors.namePlantPart && (
+                    <p className={css.error}>
+                      {
+                        updatePlantPartForm.formState.errors.namePlantPart
+                          .message
+                      }
+                    </p>
+                  )}
                 </div>
                 <div className={css.form_item_container}>
                   <p className={css.form_label}>
-                    Codice parte {isEditMode ? '' : ' *'}
+                    Codice parte {isPlantEditMode ? '' : ' *'}
                   </p>
                   <Input
+                    {...updatePlantPartForm.register('codePlantPart')}
                     type="text"
                     value={newPartCode}
                     onChange={e => setNewPartCode(e.target.value)}
@@ -206,11 +312,14 @@ const CreateAndEditPlantForm = ({
                       border: 'none',
                     }}
                   />
-                  {/* {activeForm.formState.errors.codePlantPart && (
-                <p className={css.error}>
-                  {activeForm.formState.errors.codePlantPart.message}
-                </p>
-              )} */}
+                  {updatePlantPartForm.formState.errors.codePlantPart && (
+                    <p className={css.error}>
+                      {
+                        updatePlantPartForm.formState.errors.codePlantPart
+                          .message
+                      }
+                    </p>
+                  )}
                 </div>
               </div>
               <div className={css_form.add_btn_container}>
@@ -252,9 +361,17 @@ const CreateAndEditPlantForm = ({
                   ))}
                 </div>
               )}
-              {errors.parts && !Array.isArray(errors.parts) && (
-                <p className={css.error}>{errors.parts.message}</p>
-              )}
+              {createPlantAndPlantPartsForm.formState.errors.parts &&
+                !Array.isArray(
+                  createPlantAndPlantPartsForm.formState.errors.parts
+                ) && (
+                  <p className={css.error}>
+                    {
+                      createPlantAndPlantPartsForm.formState.errors.parts
+                        .message
+                    }
+                  </p>
+                )}
             </div>
           )}
           <div className={css.btn_form_container}>

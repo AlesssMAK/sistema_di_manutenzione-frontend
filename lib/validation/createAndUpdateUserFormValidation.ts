@@ -1,5 +1,5 @@
 import { USER_ROLES } from '@/constants/roleType';
-import { STATUS, USER_STATUS } from '@/constants/status';
+import { STATUS, STATUS_OPTIONS } from '@/constants/status';
 import { UserRoles } from '@/types/userTypes';
 import * as yup from 'yup';
 
@@ -85,7 +85,7 @@ export const updateUserSchema = yup.object({
     }),
 
   avatar: yup.string().nullable().optional(),
-  status: yup.string().oneOf<STATUS>(USER_STATUS).optional(),
+  status: yup.string().oneOf<STATUS>(STATUS_OPTIONS).optional(),
 
   personalCode: yup
     .string()
