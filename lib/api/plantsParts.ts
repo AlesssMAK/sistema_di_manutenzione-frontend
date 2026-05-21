@@ -1,4 +1,8 @@
-import { PlantPartRespons } from '@/types/partPlant';
+import {
+  CreatePlantPartsRequest,
+  PlantPart,
+  PlantPartRespons,
+} from '@/types/partPlant';
 import nextServer from './api';
 
 export const getAllPartsByPlantId = async (plantId: string) => {
@@ -8,4 +12,7 @@ export const getAllPartsByPlantId = async (plantId: string) => {
   return res.data.data;
 };
 
-export const createPlantPart = () => {};
+export const createPlantPart = async (data: CreatePlantPartsRequest) => {
+  const res = await nextServer.post<PlantPart[]>(`/plants/parts`, data);
+  return res.data;
+};
