@@ -37,16 +37,11 @@ export interface PlantsRespons {
   data: PlantsData;
 }
 
-export interface CreatePlant {
+export interface CreatePlantRequest {
   namePlant: string;
   code: string;
   location: string;
   description?: string;
-  status: STATUS;
-}
-
-export interface CreatePlantRequest {
-  data: CreatePlant;
 }
 
 export interface UpdatePlant {
@@ -65,5 +60,5 @@ export interface UpdatePlantRequest {
 export interface CreateAndUpdatePlantResponse {
   success: boolean;
   message: string;
-  plant: Plant;
+  data: Plant;
 }

@@ -14,7 +14,7 @@ import { useDebounce } from 'use-debounce';
 import css from '../UsersAndPlants.module.css';
 import { getStatusOptions, STATUS } from '@/constants/status';
 import PlantsList from '@/components/Admin/PlantsList/PalntsList';
-import CreateAndEditPlantForm from '@/components/forms/CreateAndEditPlantForm/CreateAndEditPlantForm';
+import CreateAndEditPlantForm from '@/components/forms/CreateAndEditPlantAndPlantPartsForm/CreateAndEditPlantAndPlantPartsForm';
 import Pagination from '@/components/UI/Pagination/Pagination';
 
 const AdminPlantsClientPage = () => {

@@ -27,6 +27,11 @@ export interface PlantPartRespons {
   data: PlantPartsData;
 }
 
+export interface CreatePlantPartsRequest {
+  plantId: string;
+  parts: { namePlantPart: string; codePlantPart: string }[];
+}
+
 export interface UpdatePlantPart {
   namePlantPart?: string;
   codePlantPart?: string;

@@ -21,12 +21,12 @@ export const getAllPlants = async ({
   return res.data.data;
 };
 
-export const createPlant = async ({ data }: CreatePlantRequest) => {
+export const createPlant = async (data: CreatePlantRequest) => {
   const res = await nextServer.post<CreateAndUpdatePlantResponse>(
     '/plants',
     data
   );
-  return res.data.plant;
+  return res.data.data;
 };
 
 export const updatePlant = () => {};

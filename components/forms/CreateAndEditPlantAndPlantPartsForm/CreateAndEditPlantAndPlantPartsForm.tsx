@@ -1,6 +1,6 @@
 import Modal from '@/components/UI/Modal/Modal';
 import css from '../CreateAndUpdateUserForm/CreateAndEditUserForm.module.css';
-import css_form from './CreateAndEditPlantForm.module.css';
+import css_form from './CreateAndEditPlantAndPlantPartsForm.module.css';
 import Input from '@/components/UI/Input/Input';
 import Button from '@/components/UI/Button/Button';
 import { useTranslations } from 'next-intl';
@@ -20,19 +20,23 @@ import {
 import { useState } from 'react';
 import { UpdatePlantPart } from '@/types/partPlant';
 import { UpdatePlant } from '@/types/plantType';
+import { createPlant } from '@/lib/api/plants';
+import { createPlantPart } from '@/lib/api/plantsParts';
+import { da } from 'date-fns/locale';
+import toast from 'react-hot-toast';
 
-interface CreateAndEditPlantFormProps {
+interface CreateAndEditPlantAndPlantPartsFormProps {
   onClose: () => void;
   // initialData?: InitialData;
   isPlantEditMode?: boolean;
   isPlantPartsEditMode?: boolean;
 }
 
-const CreateAndEditPlantForm = ({
+const CreateAndEditPlantAndPlantPartsForm = ({
   onClose,
   isPlantEditMode = false,
   isPlantPartsEditMode = false,
-}: CreateAndEditPlantFormProps) => {
+}: CreateAndEditPlantAndPlantPartsFormProps) => {
   const [newPartName, setNewPartName] = useState('');
   const [newPartCode, setNewPartCode] = useState('');
   const [addError, setAddError] = useState<string | null>(null);
@@ -96,10 +100,37 @@ const CreateAndEditPlantForm = ({
     setAddError(null);
   };
 
-  const onCreatePlantAndPlantPartsSubmit = (
+  const onCreatePlantAndPlantPartsSubmit = async (
     data: CreatePlantAndPlantPartsFormValues
   ) => {
     console.log('CREATE', data);
+    try {
+      const plant = await createPlant({
+        namePlant: data.namePlant,
+        code: data.code,
+        location: data.location,
+        description: data.description,
+      });
+
+      console.log('createPlant response:', plant);
+      console.log('typeof plant:', typeof plant);
+      console.log('plant keys:', Object.keys(plant || {}));
+
+      const plantId = plant._id;
+      console.log(plantId);
+
+      await createPlantPart({
+        plantId: plantId,
+        parts: data.parts,
+      });
+
+      toast.success('Plant and plant parts successfully created');
+      createPlantAndPlantPartsForm.reset();
+
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onUpdatePlantSubmit = (data: UpdatePlant) => {
@@ -395,4 +426,4 @@ const CreateAndEditPlantForm = ({
   );
 };
 
-export default CreateAndEditPlantForm;
+export default CreateAndEditPlantAndPlantPartsForm;
