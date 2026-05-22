@@ -103,7 +103,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   const onCreatePlantAndPlantPartsSubmit = async (
     data: CreatePlantAndPlantPartsFormValues
   ) => {
-    console.log('CREATE', data);
     try {
       const plant = await createPlant({
         namePlant: data.namePlant,
@@ -112,12 +111,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         description: data.description,
       });
 
-      console.log('createPlant response:', plant);
-      console.log('typeof plant:', typeof plant);
-      console.log('plant keys:', Object.keys(plant || {}));
-
       const plantId = plant._id;
-      console.log(plantId);
 
       await createPlantPart({
         plantId: plantId,
@@ -366,30 +360,36 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                 </Button>
               </div>
               {fields.length > 0 && (
-                <div className={css_form.parts_list}>
+                <div className={css_form.parts}>
                   <p className={css_form.parts_list_title}>Parti aggiunte:</p>
 
-                  {fields.map((field, index) => (
-                    <div key={field.id} className={css_form.part_item}>
-                      <span className={css_form.part_name}>
-                        {field.namePlantPart}{' '}
-                        <span className={css_form.part_code}>
-                          ({field.codePlantPart})
+                  <ul className={css_form.parts_list}>
+                    {fields.map((field, index) => (
+                      <li key={field.id} className={css_form.parts_list_item}>
+                        <span className={css_form.part_name}>
+                          {field.namePlantPart}
+                          <span className={css_form.part_code}>
+                            ({field.codePlantPart})
+                          </span>
                         </span>
-                      </span>
 
-                      <button
-                        type="button"
-                        onClick={() => remove(index)}
-                        className={css_form.remove_btn}
-                        aria-label="Rimuovi parte"
-                      >
-                        <svg width="14" height="14">
-                          <use href="/sprite.svg#close"></use>
-                        </svg>
-                      </button>
-                    </div>
-                  ))}
+                        <button
+                          type="button"
+                          onClick={() => remove(index)}
+                          className={css_form.remove_btn}
+                          aria-label="Rimuovi parte"
+                        >
+                          <svg
+                            width="18"
+                            height="18"
+                            className={css_form.btn_close_icon}
+                          >
+                            <use href="/sprite.svg#close"></use>
+                          </svg>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
               {createPlantAndPlantPartsForm.formState.errors.parts &&

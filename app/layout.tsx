@@ -10,7 +10,7 @@ import TanStackProvider from '@/providers/TanStackProvider/TanStackProvider';
 const arimoSans = Arimo({
   variable: '--font-arimo-sans',
   subsets: ['latin'],
-  weight: ['400', '700'],
+  weight: ['400', '500', '700'],
 });
 
 const cousineSans = Cousine({

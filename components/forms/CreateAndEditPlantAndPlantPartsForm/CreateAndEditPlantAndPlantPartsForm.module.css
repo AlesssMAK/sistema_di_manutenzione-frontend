@@ -4,7 +4,6 @@
 }
 
 .title {
-  font-weight: 400;
   font-size: 28px;
 }
 
@@ -32,6 +31,7 @@
 .add_btn_container {
   display: flex;
   justify-content: end;
+  margin-bottom: 12px;
 }
 
 .btn {
@@ -46,4 +46,67 @@
 .btn:hover .btn_icon,
 .btn:focus-visible .btn_icon {
   stroke: #0a0a0a;
+}
+
+.parts {
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.parts_list_title {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  color: #0a0a0a;
+  margin-bottom: 8px;
+}
+
+.parts_list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.part_name {
+  font-weight: 500;
+}
+
+.part_code {
+  color: #5a6173;
+  font-size: 14px;
+  line-height: 1.4286;
+  margin-left: 8px;
+}
+
+.parts_list_item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  background-color: #f8f9fb;
+}
+
+.remove_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.btn_close_icon {
+  stroke: #0a0a0a;
+  opacity: 1;
+  transition:
+    stroke 0.2s ease,
+    transform 0.1s ease;
+}
+
+.remove_btn:hover .btn_close_icon,
+.remove_btn:focus-visible .btn_close_icon {
+  stroke: #2563eb;
+}
+
+.remove_btn:active .btn_close_icon {
+  transform: scale(0.95);
 }
