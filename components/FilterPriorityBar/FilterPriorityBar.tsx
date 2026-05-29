@@ -13,19 +13,19 @@ const FilterPriorityBar = ({
   const priorities = [
     {
       id: TYPE_PRIORITY.LOW,
-      label: 'Priority Low',
+      label: 'Bassa',
       class: css.bassa,
       span: css.bassaSpan,
     },
     {
       id: TYPE_PRIORITY.MEDIUM,
-      label: 'Priority Medium',
+      label: 'Media',
       class: css.media,
       span: css.mediaSpan,
     },
     {
       id: TYPE_PRIORITY.HIGH,
-      label: 'Priority High',
+      label: 'Alta',
       class: css.alta,
       span: css.altaSpan,
     },
@@ -48,7 +48,7 @@ const FilterPriorityBar = ({
           onClick={() => onPriorityChange('')}
           className="button button--blue btn"
         >
-          Сбросить фильтр
+          Reimposta filtro
         </Button>
       )}
     </div>

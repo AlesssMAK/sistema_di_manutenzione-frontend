@@ -15,7 +15,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
     router.push(`/maintenance-worker/${id}`);
   };
   if (!faults || faults.length === 0) {
-    return <div className={css.container}>Задач пока нет</div>;
+    return <div className={css.container}>Nessuna segnalazione</div>;
   }
   const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
 
@@ -38,7 +38,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
 
                 <div className={css.details}>
                   <p className={css.namePlant}>
-                    <strong>Установка:</strong> {fault.plantId?.namePlant}
+                    <strong>Macchina:</strong> {fault.plantId?.namePlant}
                   </p>
                 </div>
                 <Button
@@ -55,23 +55,23 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                   </div>
                 </Button>
                 <div className={css.detailsGrid}>
-                  {/* Левая колонка */}
+                  {/* Colonna sinistra */}
                   <div className={css.detailItem}>
-                    <span className={css.label}>Часть установки</span>
+                    <span className={css.label}>Parte</span>
                     <p className={css.value}>{fault.partId?.namePlantPart}</p>
-                    <span className={css.label}>Плановое время</span>
+                    <span className={css.label}>Ora pianificata</span>
                     <p className={css.value}>{fault.plannedTime}</p>
-                    <span className={css.label}>Срок выполнения</span>
+                    <span className={css.label}>Scadenza</span>
                     <p className={css.value}>{fault.deadline}</p>
                   </div>
 
-                  {/* Правая колонка */}
+                  {/* Colonna destra */}
                   <div className={css.detailItem}>
-                    <span className={css.label}>Приоритет</span>
+                    <span className={css.label}>Priorità</span>
                     <p className={`${css.value} ${css.priorityValue}`}>
                       {fault.priority}
                     </p>
-                    <span className={css.label}>Общее время выполнения</span>
+                    <span className={css.label}>Durata stimata</span>
                     <p className={css.value}>{fault.estimatedDuration}</p>
                   </div>
                 </div>
@@ -79,7 +79,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
 
               {fault.comment && (
                 <div className={css.commentContainer}>
-                  <h4 className={css.commentLabel}>Комментарий:</h4>
+                  <h4 className={css.commentLabel}>Commento:</h4>
                   <p className={css.commentText}>{fault.comment}</p>
                 </div>
               )}
