@@ -30,7 +30,7 @@ export default function FaultDetailPage({
         const data = await fetchFaultById(id);
         setFault(data);
       } catch (error) {
-        toast.error('Errore во время загрузки данных');
+        toast.error('Errore durante il caricamento dei dati');
         console.error(error);
       } finally {
         setIsLoading(false);
@@ -209,11 +209,12 @@ export default function FaultDetailPage({
           </button>
         </div>
       </div>
-      {/* Модалка обновления */}
+      {/* Modal di aggiornamento */}
       {isUpdateModalOpen && fault && (
         <MaintenanceUpdateModal
           faultId={fault._id}
           displayId={fault.faultId}
+          currentStatus={fault.statusFault}
           onClose={() => setIsUpdateModalOpen(false)}
           onSuccess={handleUpdateSuccess}
         />

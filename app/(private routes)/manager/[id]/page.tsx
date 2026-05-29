@@ -1,0 +1,234 @@
+'use client';
+
+import { use, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { format, isValid, parseISO } from 'date-fns';
+import { it } from 'date-fns/locale';
+import { fetchFaultById } from '@/lib/api/faults';
+import { useSocket } from '@/providers/SocketProvider/SocketProvider';
+import ImageModal from '@/components/ImageModal/ImageModal';
+import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
+import css from './page.module.css';
+
+const formatDate = (value?: string) => {
+  if (!value) return '—';
+  const parsed = parseISO(value);
+  return isValid(parsed) ? format(parsed, 'dd MMMM yyyy', { locale: it }) : value;
+};
+
+const formatDateTime = (value?: string) => {
+  if (!value) return '—';
+  const parsed = parseISO(value);
+  return isValid(parsed)
+    ? format(parsed, 'dd MMMM yyyy HH:mm', { locale: it })
+    : value;
+};
+
+const ManagerFaultDetailPage = ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const router = useRouter();
+  const resolvedParams = use(params);
+  const id = resolvedParams.id;
+
+  const { subscribeToFault, unsubscribeFromFault } = useSocket();
+  const [isPlanOpen, setIsPlanOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const {
+    data: fault,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['fault', id],
+    queryFn: () => fetchFaultById(id),
+    enabled: Boolean(id),
+  });
+
+  useEffect(() => {
+    if (!id) return;
+    subscribeToFault(id);
+    return () => unsubscribeFromFault(id);
+  }, [id, subscribeToFault, unsubscribeFromFault]);
+
+  if (isLoading) return <div className={css.loading}>Caricamento...</div>;
+  if (isError || !fault)
+    return <div className={css.error}>Segnalazione non trovata</div>;
+
+  const isReadOnly = fault.statusFault === 'Completed';
+
+  return (
+    <div className={css.container}>
+      <div className={css.card}>
+        <header className={css.header}>
+          <div className={css.headerLeft}>
+            <button
+              type="button"
+              className={css.backButton}
+              onClick={() => router.push('/manager')}
+              title="Torna indietro"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <h2 className={css.title}>Dettaglio segnalazione</h2>
+          </div>
+          <span className={css.idBadge}>{fault.faultId}</span>
+        </header>
+
+        <div className={css.infoGrid}>
+          <div className={css.infoItem}>
+            <label>Operatore</label>
+            <p>{fault.nameOperator || '—'}</p>
+          </div>
+          <div className={css.infoItem}>
+            <label>Stato</label>
+            <span
+              className={`${css.status} ${css[`status${fault.statusFault.replace(' ', '')}`] || ''}`}
+            >
+              {fault.statusFault}
+            </span>
+          </div>
+
+          <div className={css.infoItem}>
+            <label>Data creazione</label>
+            <p>
+              {formatDate(fault.dataCreated)}
+              {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
+            </p>
+          </div>
+          <div className={css.infoItem}>
+            <label>Ultimo aggiornamento</label>
+            <p>{formatDateTime(fault.updatedAt)}</p>
+          </div>
+
+          <div className={css.infoItem}>
+            <label>Impianto</label>
+            <p>
+              {fault.plantId?.namePlant ?? '—'}
+              {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
+            </p>
+          </div>
+          <div className={css.infoItem}>
+            <label>Parte di impianto</label>
+            <p>
+              {fault.partId?.namePlantPart ?? '—'}
+              {fault.partId?.codePlantPart
+                ? ` (${fault.partId.codePlantPart})`
+                : ''}
+            </p>
+          </div>
+
+          <div className={css.infoItem}>
+            <label>Tipo guasto</label>
+            <p>{fault.typeFault}</p>
+          </div>
+          <div className={css.infoItem}>
+            <label>Priorità</label>
+            <p className={css.priority}>{fault.priority}</p>
+          </div>
+
+          <div className={css.infoItem}>
+            <label>Pianificato</label>
+            <p>
+              {fault.plannedDate ? formatDate(fault.plannedDate) : '—'}
+              {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
+            </p>
+          </div>
+          <div className={css.infoItem}>
+            <label>Durata stimata</label>
+            <p>
+              {fault.estimatedDuration ? `${fault.estimatedDuration} min` : '—'}
+            </p>
+          </div>
+
+          <div className={css.infoItem}>
+            <label>Scadenza</label>
+            <p className={css.deadline}>{formatDate(fault.deadline)}</p>
+          </div>
+          <div className={css.infoItem}>
+            <label>Manutentori assegnati</label>
+            <p>{fault.assignedMaintainers?.length ?? 0}</p>
+          </div>
+        </div>
+
+        <div className={css.detailsBlock}>
+          <div className={css.commentBox}>
+            <label>Descrizione (Operatore)</label>
+            <p>{fault.comment || 'Nessuna descrizione'}</p>
+          </div>
+          <div className={css.commentBox}>
+            <label>Note responsabile</label>
+            <p>{fault.managerComment || 'Nessuna nota'}</p>
+          </div>
+          <div className={css.commentBox}>
+            <label>Note manutentore</label>
+            <p>{fault.commentMaintenanceWorker || 'Nessuna nota'}</p>
+          </div>
+        </div>
+
+        {fault.img && fault.img.length > 0 && (
+          <div className={css.imageSection}>
+            <label>Foto allegate</label>
+            <div className={css.imageGrid}>
+              {fault.img.map((url, index) => (
+                <div
+                  key={index}
+                  className={css.imageWrapper}
+                  onClick={() => setSelectedImage(url as unknown as string)}
+                >
+                  <img
+                    src={url as unknown as string}
+                    alt={`Foto ${index + 1}`}
+                    className={css.image}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {!isReadOnly && (
+          <div className={css.actions}>
+            <button
+              type="button"
+              className={css.primaryButton}
+              onClick={() => setIsPlanOpen(true)}
+            >
+              {fault.plannedDate
+                ? 'Modifica pianificazione'
+                : 'Pianifica intervento'}
+            </button>
+          </div>
+        )}
+      </div>
+
+      {isPlanOpen && (
+        <PlanFaultForm fault={fault} onClose={() => setIsPlanOpen(false)} />
+      )}
+
+      {selectedImage && (
+        <ImageModal
+          imageUrl={selectedImage}
+          onClose={() => setSelectedImage(null)}
+        />
+      )}
+    </div>
+  );
+};
+
+export default ManagerFaultDetailPage;

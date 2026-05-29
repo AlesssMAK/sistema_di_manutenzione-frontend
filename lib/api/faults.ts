@@ -7,6 +7,9 @@ interface FetchParams {
   priority?: string;
   deadline?: string;
   dataCreated?: string;
+  plannedDate?: string;
+  statusFault?: string;
+  typeFault?: string;
 }
 export interface FetchFaultCardsParams {
   fault: FaultCard[];
@@ -22,6 +25,9 @@ export const fetchFaultCards = async ({
   priority = '',
   deadline,
   dataCreated,
+  plannedDate,
+  statusFault,
+  typeFault,
 }: FetchParams): Promise<FetchFaultCardsParams> => {
   const res = await nextServer.get('/faults', {
     params: {
@@ -30,6 +36,9 @@ export const fetchFaultCards = async ({
       ...(priority ? { priority } : {}),
       deadline,
       ...(dataCreated ? { dataCreated } : {}),
+      ...(plannedDate ? { plannedDate } : {}),
+      ...(statusFault ? { statusFault } : {}),
+      ...(typeFault ? { typeFault } : {}),
     },
   });
 
@@ -71,9 +80,11 @@ export const fetchFaultById = async (id: string): Promise<FaultCard> => {
 export interface UpdateFaultPayload {
   faultId: string;
   statusFault: string;
-  commentMaintenanceWorker: string;
+  commentMaintenanceWorker?: string;
+  actualDuration?: number;
+  suspensionReason?: string;
+  materialRequest?: string;
 }
-
 
 export const updateFaultByWorker = async (
   payload: UpdateFaultPayload
@@ -82,9 +93,21 @@ export const updateFaultByWorker = async (
     throw new Error('Fault ID is required');
   }
 
-    const res = await nextServer.patch<FaultCard>(
+  const res = await nextServer.patch<FaultCard>(
     `/faults/${payload.faultId}`,
     payload
+  );
+
+  return res.data;
+};
+
+export const claimFault = async (faultId: string): Promise<FaultCard> => {
+  if (!faultId) {
+    throw new Error('Fault ID is required');
+  }
+
+  const res = await nextServer.patch<FaultCard>(
+    `/maintenance-worker/fault/${faultId}/claim`
   );
 
   return res.data;

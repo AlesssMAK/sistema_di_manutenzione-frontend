@@ -7,9 +7,11 @@ import css from './page.module.css';
 import CalendarBlock from '@/components/CalendarBlock/CalendarBlock';
 import FaultCardsList from '@/components/FaultCardsList/FaultCardsList';
 import LoadMoreButton from '@/components/LoadMoreButton/LoadMoreButton';
+import DateNow from '@/components/DateNow/DateNow';
 import { FaultCard } from '@/types/faultType';
 import { fetchFaultCards } from '@/lib/api/faults';
-import FaultDeadlineOverview from '@/components/FaultDeadlineOverview/FaultDeadlineOverview';
+
+type ViewMode = 'default' | 'overdue';
 
 const MaintenanceWorkerClient = () => {
   const t = useTranslations('maintenanceWorkerPage');
@@ -21,12 +23,19 @@ const MaintenanceWorkerClient = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [showDeadlines, setShowDeadlines] = useState(false);
-  const [allDeadlineDates, setAllDeadlineDates] = useState<string[]>([]);
+  const [viewMode, setViewMode] = useState<ViewMode>('default');
+  const [overdueDeadlineDates, setOverdueDeadlineDates] = useState<string[]>(
+    []
+  );
   const PER_PAGE = 2;
 
   const loadData = useCallback(
-    async (pageNum: number, currentPriority: string, currentDate: string) => {
+    async (
+      pageNum: number,
+      currentPriority: string,
+      currentDate: string,
+      currentMode: ViewMode
+    ) => {
       try {
         setIsLoading(true);
 
@@ -34,9 +43,13 @@ const MaintenanceWorkerClient = () => {
           page: pageNum,
           perPage: PER_PAGE,
           priority: currentPriority,
-          dataCreated: currentDate,
+          ...(currentMode === 'overdue'
+            ? { statusFault: 'Overdue' }
+            : currentDate
+              ? { plannedDate: currentDate }
+              : {}),
         });
-        console.log('Data from server:', data);
+
         if (pageNum === 1) {
           setItems(data.fault || []);
         } else {
@@ -45,35 +58,37 @@ const MaintenanceWorkerClient = () => {
 
         setTotalPage(data.totalPage || 0);
       } catch (error) {
-        console.error('Errore во время загрузки данных:', error);
+        console.error('Errore durante il caricamento dei dati:', error);
       } finally {
         setIsLoading(false);
       }
     },
     []
   );
-  const fetchAllDeadlines = useCallback(async (currentPriority: string) => {
+
+  const fetchOverdueDeadlines = useCallback(async (currentPriority: string) => {
     try {
+      // TODO: replace with GET /faults/deadlines once backend endpoint lands
       const data = await fetchFaultCards({
         page: 1,
-        perPage: 45,
+        perPage: 200,
         priority: currentPriority,
+        statusFault: 'Overdue',
       });
 
-      const dates = data.fault
+      const dates = (data.fault || [])
         .filter(
           (item): item is FaultCard & { deadline: string } => !!item.deadline
         )
-        .map(item => {
-          const datePart = item.deadline.includes('T')
+        .map(item =>
+          item.deadline.includes('T')
             ? item.deadline.split('T')[0]
-            : item.deadline;
-          return datePart;
-        });
+            : item.deadline
+        );
 
-      setAllDeadlineDates(dates);
+      setOverdueDeadlineDates(dates);
     } catch (error) {
-      console.error('Errore loading all deadlines:', error);
+      console.error('Errore caricamento scadenze:', error);
     }
   }, []);
 
@@ -81,25 +96,33 @@ const MaintenanceWorkerClient = () => {
     const newValue = priority === newPriority ? '' : newPriority;
     setPriority(newValue);
     setPage(1);
-    if (showDeadlines) fetchAllDeadlines(newValue);
+    if (viewMode === 'overdue') fetchOverdueDeadlines(newValue);
   };
+
   const handleDateChange = (date: string) => {
     const value = selectedDate === date ? '' : date;
     setSelectedDate(value);
     setPage(1);
   };
-  const toggleDeadlineMode = () => {
-    const nextMode = !showDeadlines;
-    setShowDeadlines(nextMode);
-    if (nextMode) {
-      fetchAllDeadlines(priority);
+
+  const toggleOverdueMode = () => {
+    const nextMode: ViewMode = viewMode === 'overdue' ? 'default' : 'overdue';
+    setViewMode(nextMode);
+    setSelectedDate('');
+    setPage(1);
+    if (nextMode === 'overdue') {
+      fetchOverdueDeadlines(priority);
+    } else {
+      setOverdueDeadlineDates([]);
     }
   };
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
-    loadData(1, priority, selectedDate);
-  }, [setPageTitle, t, loadData, priority, selectedDate]);
+    loadData(1, priority, selectedDate, viewMode);
+  }, [setPageTitle, t, loadData, priority, selectedDate, viewMode]);
+
+  const isOverdueMode = viewMode === 'overdue';
 
   return (
     <div className={css.pageWrapper}>
@@ -110,10 +133,10 @@ const MaintenanceWorkerClient = () => {
 
       <div className={css.controls}>
         <button
-          onClick={toggleDeadlineMode}
-          className={`${css.deadlineButton} ${showDeadlines ? css.active : ''}`}
+          onClick={toggleOverdueMode}
+          className={`${css.deadlineButton} ${isOverdueMode ? css.active : ''}`}
         >
-          {showDeadlines ? 'Показать список' : 'Показать дедлайны'}
+          {isOverdueMode ? 'Mostra tutte' : 'Mostra scadute'}
         </button>
       </div>
 
@@ -123,23 +146,24 @@ const MaintenanceWorkerClient = () => {
           onPriorityChange={handlePriorityChange}
           activeDate={selectedDate}
           onDateChange={handleDateChange}
-          deadlineDates={showDeadlines ? allDeadlineDates : []}
-          isDeadlineMode={showDeadlines}
+          deadlineDates={isOverdueMode ? overdueDeadlineDates : []}
+          isDeadlineMode={isOverdueMode}
         />
 
         <div className={css.contentSection}>
+          <div className={css.contextLabel}>
+            <DateNow
+              selectedDate={selectedDate}
+              mode={isOverdueMode ? 'overdue' : 'default'}
+              priority={priority}
+            />
+          </div>
+
           {isLoading && page === 1 ? (
-            <p className={css.loadingText}>Загрузка данных...</p>
+            <p className={css.loadingText}>Caricamento...</p>
           ) : items.length > 0 ? (
             <>
-              {showDeadlines ? (
-                <FaultDeadlineOverview
-                  faults={items}
-                  selectedDate={selectedDate}
-                />
-              ) : (
-                <FaultCardsList faults={items} />
-              )}
+              <FaultCardsList faults={items} />
 
               <div className={css.loadMoreButton}>
                 <LoadMoreButton
@@ -149,14 +173,16 @@ const MaintenanceWorkerClient = () => {
                   onLoadMore={() => {
                     const nextPage = page + 1;
                     setPage(nextPage);
-                    loadData(nextPage, priority, selectedDate);
+                    loadData(nextPage, priority, selectedDate, viewMode);
                   }}
                 />
               </div>
             </>
           ) : (
             <div className={css.noResults}>
-              <p className={css.noResultsText}>No faults in this day</p>
+              <p className={css.noResultsText}>
+                Nessuna segnalazione in questa vista
+              </p>
             </div>
           )}
         </div>
