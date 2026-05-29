@@ -30,6 +30,26 @@
   margin-bottom: 10px;
 }
 
+.contextLabel {
+  margin-bottom: 12px;
+}
+
+.loadingText {
+  font-size: 16px;
+  color: #45556c;
+  margin-left: 24px;
+}
+
+.noResults {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.noResultsText {
+  font-size: 16px;
+  color: #45556c;
+}
+
 .deadlineButton {
   padding: 10px 20px;
   border-radius: 8px;

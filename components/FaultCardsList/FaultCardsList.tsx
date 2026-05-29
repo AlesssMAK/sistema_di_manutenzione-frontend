@@ -2,7 +2,6 @@ import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
 import { useAuthStore } from '@/lib/store/authStore';
-import DateNow from '../DateNow/DateNow';
 import ShowMoreButton from '../ShowmoreButton/ShowmoreButton';
 import { useRouter } from 'next/navigation';
 
@@ -22,7 +21,6 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
 
   return (
     <div className={css.containerFaultCardList}>
-      <DateNow />
       <ul className={css.faultList}>
         {faults.map(fault => (
           <li key={fault._id} className={css.faultCard}>
