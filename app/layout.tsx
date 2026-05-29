@@ -6,6 +6,7 @@ import AuthProvider from '@/providers/AuthProvider/AuthProvider';
 import { NextIntlClientProvider } from 'next-intl';
 import ScrollToTopButton from '@/components/UI/ScrollToTopBtn/ScrollToTopButton';
 import TanStackProvider from '@/providers/TanStackProvider/TanStackProvider';
+import SocketProvider from '@/providers/SocketProvider/SocketProvider';
 
 const arimoSans = Arimo({
   variable: '--font-arimo-sans',
@@ -45,10 +46,12 @@ export default function RootLayout({
         <NextIntlClientProvider>
           <TanStackProvider>
             <AuthProvider>
-              <Toaster position="bottom-right" />
-              {modal}
-              {children}
-              <ScrollToTopButton showAfter={700} />
+              <SocketProvider>
+                <Toaster position="bottom-right" />
+                {modal}
+                {children}
+                <ScrollToTopButton showAfter={700} />
+              </SocketProvider>
             </AuthProvider>
           </TanStackProvider>
         </NextIntlClientProvider>
