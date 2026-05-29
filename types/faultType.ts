@@ -4,7 +4,8 @@ export type StatusFaultType =
   | 'Created'
   | 'In progress'
   | 'Completed'
-  | 'Suspended';
+  | 'Suspended'
+  | 'Overdue';
 export type PriorityFaultType = 'Low' | 'Medium' | 'High';
 export type TypeFault = 'Production' | 'Safety';
 export type FaultAction = 'created' | 'updated';
