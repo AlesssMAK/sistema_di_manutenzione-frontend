@@ -9,6 +9,7 @@ interface FetchParams {
   dataCreated?: string;
   plannedDate?: string;
   statusFault?: string;
+  typeFault?: string;
 }
 export interface FetchFaultCardsParams {
   fault: FaultCard[];
@@ -26,6 +27,7 @@ export const fetchFaultCards = async ({
   dataCreated,
   plannedDate,
   statusFault,
+  typeFault,
 }: FetchParams): Promise<FetchFaultCardsParams> => {
   const res = await nextServer.get('/faults', {
     params: {
@@ -36,6 +38,7 @@ export const fetchFaultCards = async ({
       ...(dataCreated ? { dataCreated } : {}),
       ...(plannedDate ? { plannedDate } : {}),
       ...(statusFault ? { statusFault } : {}),
+      ...(typeFault ? { typeFault } : {}),
     },
   });
 

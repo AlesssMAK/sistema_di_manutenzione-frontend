@@ -10,6 +10,7 @@ import css from './FaultManagerCard.module.css';
 interface FaultManagerCardProps {
   fault: FaultCard;
   onPlan?: (fault: FaultCard) => void;
+  detailHref?: (fault: FaultCard) => string;
 }
 
 const formatDate = (value?: string) => {
@@ -32,7 +33,11 @@ const statusClass: Record<string, string> = {
   Completed: css.statusCompleted,
 };
 
-const FaultManagerCard = ({ fault, onPlan }: FaultManagerCardProps) => {
+const FaultManagerCard = ({
+  fault,
+  onPlan,
+  detailHref,
+}: FaultManagerCardProps) => {
   const router = useRouter();
 
   const isPlanned = Boolean(fault.plannedDate);
@@ -41,7 +46,7 @@ const FaultManagerCard = ({ fault, onPlan }: FaultManagerCardProps) => {
     isPlanned || (fault.assignedMaintainers?.length ?? 0) > 0;
 
   const handleDetail = () => {
-    router.push(`/manager/${fault._id}`);
+    router.push(detailHref ? detailHref(fault) : `/manager/${fault._id}`);
   };
 
   return (
@@ -159,11 +164,11 @@ const FaultManagerCard = ({ fault, onPlan }: FaultManagerCardProps) => {
         >
           Dettagli
         </Button>
-        {!isReadOnly && (
+        {!isReadOnly && onPlan && (
           <Button
             type="button"
             className="button button--blue"
-            onClick={() => onPlan?.(fault)}
+            onClick={() => onPlan(fault)}
           >
             {isPlanned ? 'Modifica pianificazione' : 'Pianifica'}
           </Button>

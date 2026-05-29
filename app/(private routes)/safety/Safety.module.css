@@ -1,0 +1,85 @@
+.pageWrapper {
+  padding: 32px 0;
+}
+
+.safetyHeaderPage {
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.2;
+  color: #0a0a0a;
+}
+
+.safetyTextPage {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #45556c;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 16px;
+  margin-top: 24px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fafbfd;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #45556c;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.contentSection {
+  margin-top: 24px;
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.loadingText,
+.emptyText {
+  margin: 32px 0;
+  text-align: center;
+  font-size: 16px;
+  color: #64748b;
+}
+
+.paginationWrapper {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.safetyBadge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin-left: 12px;
+  vertical-align: middle;
+}
