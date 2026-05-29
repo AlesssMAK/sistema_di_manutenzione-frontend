@@ -209,11 +209,12 @@ export default function FaultDetailPage({
           </button>
         </div>
       </div>
-      {/* Модалка обновления */}
+      {/* Modal di aggiornamento */}
       {isUpdateModalOpen && fault && (
         <MaintenanceUpdateModal
           faultId={fault._id}
           displayId={fault.faultId}
+          currentStatus={fault.statusFault}
           onClose={() => setIsUpdateModalOpen(false)}
           onSuccess={handleUpdateSuccess}
         />

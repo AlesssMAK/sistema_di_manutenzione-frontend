@@ -1,9 +1,14 @@
+'use client';
+
 import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
 import { useAuthStore } from '@/lib/store/authStore';
 import ShowMoreButton from '../ShowmoreButton/ShowmoreButton';
 import { useRouter } from 'next/navigation';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import { claimFault } from '@/lib/api/faults';
 
 interface FaultCardsListProps {
   faults: FaultCard[];
@@ -11,13 +16,41 @@ interface FaultCardsListProps {
 
 const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { user } = useAuthStore();
+  const userId = String(user?._id ?? '');
+
+  const claimMutation = useMutation({
+    mutationFn: (id: string) => claimFault(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['faults'] });
+      toast.success('Intervento preso in carico');
+    },
+    onError: (err: unknown) => {
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: unknown }).message)
+          : "Errore durante la presa in carico";
+      toast.error(message);
+    },
+  });
+
+  const canClaim = (fault: FaultCard) => {
+    const isClaimableStatus =
+      fault.statusFault === 'Created' || fault.statusFault === 'Overdue';
+    const assigned = fault.assignedMaintainers ?? [];
+    const isInPool = assigned.length === 0;
+    const isAssignedToMe = assigned.map(String).includes(userId);
+    return isClaimableStatus && (isInPool || isAssignedToMe);
+  };
+
   const handleDetailClick = (id: string) => {
     router.push(`/maintenance-worker/${id}`);
   };
+
   if (!faults || faults.length === 0) {
     return <div className={css.container}>Nessuna segnalazione</div>;
   }
-  const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
 
   return (
     <div className={css.containerFaultCardList}>
@@ -85,6 +118,18 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
               )}
             </div>
             <div className={css.shmorebtn}>
+              {canClaim(fault) && (
+                <Button
+                  type="button"
+                  className="button button--blue"
+                  onClick={() => claimMutation.mutate(fault._id)}
+                  disabled={claimMutation.isPending}
+                >
+                  {claimMutation.isPending
+                    ? 'Presa in carico...'
+                    : 'Prendi in carico'}
+                </Button>
+              )}
               <ShowMoreButton
                 isLoading={false}
                 onShowMore={() => handleDetailClick(fault._id)}
