@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import toast from 'react-hot-toast';
 import { usePageStore } from '@/lib/store/pageStore';
 import { fetchFaultCards } from '@/lib/api/faults';
 import { FaultCard } from '@/types/faultType';
 import FaultManagerCard from '@/components/Manager/FaultManagerCard/FaultManagerCard';
+import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import css from './Manager.module.css';
 
@@ -33,6 +33,7 @@ const ManagerClient = () => {
 
   const [activeTab, setActiveTab] = useState<ManagerTab>('received');
   const [page, setPage] = useState(1);
+  const [planningFault, setPlanningFault] = useState<FaultCard | null>(null);
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
@@ -56,13 +57,7 @@ const ManagerClient = () => {
   };
 
   const handlePlan = (fault: FaultCard) => {
-    // TODO: open PlanFaultModal (next step)
-    toast(
-      fault.plannedDate
-        ? `Modifica pianificazione: ${fault.faultId}`
-        : `Pianifica: ${fault.faultId}`,
-      { icon: '📝' }
-    );
+    setPlanningFault(fault);
   };
 
   const faults = data?.fault ?? [];
@@ -129,6 +124,13 @@ const ManagerClient = () => {
           </div>
         )}
       </div>
+
+      {planningFault && (
+        <PlanFaultForm
+          fault={planningFault}
+          onClose={() => setPlanningFault(null)}
+        />
+      )}
     </div>
   );
 };
