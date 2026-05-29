@@ -34,14 +34,26 @@ export async function GET(
   }
 }
 
-export async function PATCH(req: NextRequest) {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ faultId: string }> }
+) {
   const cookie = await cookies();
+  const resolvedParams = await params;
+  const idForRequest = resolvedParams.faultId;
   const body = await req.json();
 
+  // backend now takes :faultId in URL — strip it from body so Joi
+  // doesn't reject the request with "faultId is not allowed"
+  const { faultId: _strippedId, ...payload } = body as Record<string, unknown>;
+  void _strippedId;
+
   try {
-    const res = await api.patch('/maintenance-worker/fault', body, {
-      headers: { Cookie: cookie.toString() },
-    });
+    const res = await api.patch(
+      `/maintenance-worker/fault/${idForRequest}`,
+      payload,
+      { headers: { Cookie: cookie.toString() } }
+    );
 
     return NextResponse.json(res.data);
   } catch (error) {
