@@ -165,4 +165,36 @@
 .shmorebtn {
   margin-top: auto;
   padding-top: 15px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Scope color coding (docx §5.2): mine=green, pool=amber, other=gray */
+.faultCard_mine {
+  border-left: 4px solid #16a34a;
+}
+
+.faultCard_pool {
+  border-left: 4px solid #f59e0b;
+}
+
+.faultCard_other {
+  border-left: 4px solid #94a3b8;
+}
+
+/* Riprogrammata badge — set by ReplanJob on the backend */
+.riprogrammatBadge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  cursor: help;
 }
