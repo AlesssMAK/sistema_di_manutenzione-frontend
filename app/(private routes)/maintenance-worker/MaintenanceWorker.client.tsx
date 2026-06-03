@@ -73,15 +73,16 @@ const MaintenanceWorkerClient = () => {
               ? { assignedToEmpty: true }
               : {};
 
+        // Date filter intentionally NOT applied to the list query — clicking
+        // a day in the calendar narrows the DaySlotGrid (client-side filter
+        // on items) but the main list stays scoped only by Mie/Libere/Tutte
+        // + priority + overdue mode. This way unplanned faults don't
+        // disappear when the user is exploring the calendar.
         const data = await fetchFaultCards({
           page: pageNum,
           perPage: PER_PAGE,
           priority: currentPriority,
-          ...(currentMode === 'overdue'
-            ? { statusFault: 'Overdue' }
-            : currentDate
-              ? { plannedDate: currentDate }
-              : {}),
+          ...(currentMode === 'overdue' ? { statusFault: 'Overdue' } : {}),
           ...scopeParams,
         });
 
@@ -295,17 +296,11 @@ const MaintenanceWorkerClient = () => {
                 <p className={css.noResultsText}>
                   {isOverdueMode
                     ? 'Nessuna segnalazione in ritardo'
-                    : selectedDate
-                      ? scope === 'mine'
-                        ? 'Nessuna segnalazione assegnata a te in questa data'
-                        : scope === 'pool'
-                          ? 'Nessuna segnalazione libera in questa data'
-                          : 'Nessuna segnalazione in questa data'
-                      : scope === 'mine'
-                        ? 'Nessuna segnalazione assegnata a te'
-                        : scope === 'pool'
-                          ? 'Nessuna segnalazione libera (pool vuoto)'
-                          : 'Nessuna segnalazione'}
+                    : scope === 'mine'
+                      ? 'Nessuna segnalazione assegnata a te'
+                      : scope === 'pool'
+                        ? 'Nessuna segnalazione libera (pool vuoto)'
+                        : 'Nessuna segnalazione'}
                 </p>
                 {!isOverdueMode && scope !== 'all' && (
                   <button
