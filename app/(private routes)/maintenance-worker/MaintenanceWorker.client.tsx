@@ -37,6 +37,9 @@ const MaintenanceWorkerClient = () => {
   const [overdueDeadlineDates, setOverdueDeadlineDates] = useState<string[]>(
     []
   );
+  const [plannedCounts, setPlannedCounts] = useState<Record<string, number>>(
+    {}
+  );
 
   // race-guard: stale responses must not overwrite fresh state
   const requestIdRef = useRef(0);
@@ -98,6 +101,37 @@ const MaintenanceWorkerClient = () => {
         if (reqId === requestIdRef.current) {
           setIsLoading(false);
         }
+      }
+    },
+    []
+  );
+
+  const fetchPlannedCounts = useCallback(
+    async (currentScope: FaultScope, currentUserId: string) => {
+      try {
+        const scopeParams =
+          currentScope === 'mine' && currentUserId
+            ? { assignedTo: currentUserId }
+            : currentScope === 'pool'
+              ? { assignedToEmpty: true }
+              : {};
+
+        // TODO: replace with GET /faults/deadlines once backend endpoint lands
+        const data = await fetchFaultCards({
+          page: 1,
+          perPage: 200,
+          ...scopeParams,
+        });
+
+        const counts: Record<string, number> = {};
+        (data.fault || []).forEach(f => {
+          if (f.plannedDate) {
+            counts[f.plannedDate] = (counts[f.plannedDate] ?? 0) + 1;
+          }
+        });
+        setPlannedCounts(counts);
+      } catch (error) {
+        console.error('Errore caricamento conteggi calendario:', error);
       }
     },
     []
@@ -184,6 +218,15 @@ const MaintenanceWorkerClient = () => {
     userId,
   ]);
 
+  // Calendar day counters: refresh on scope/user change, clear in overdue mode
+  useEffect(() => {
+    if (isOverdueMode) {
+      setPlannedCounts({});
+      return;
+    }
+    fetchPlannedCounts(scope, userId);
+  }, [scope, userId, isOverdueMode, fetchPlannedCounts]);
+
   return (
     <div className="container">
       <div className={css.pageWrapper}>
@@ -227,6 +270,7 @@ const MaintenanceWorkerClient = () => {
             onDateChange={handleDateChange}
             deadlineDates={isOverdueMode ? overdueDeadlineDates : []}
             isDeadlineMode={isOverdueMode}
+            plannedCounts={plannedCounts}
           />
 
           <div className={css.contentSection}>

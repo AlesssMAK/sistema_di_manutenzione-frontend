@@ -22,12 +22,14 @@ interface FilterDataCreatedBarProps {
   onDataCreatedChange: (dataCreated: string) => void;
   deadlineDates?: string[];
   isDeadlineMode?: boolean;
+  plannedCounts?: Record<string, number>;
 }
 const Calendar = ({
   activeDataCreated,
   onDataCreatedChange,
   deadlineDates = [],
   isDeadlineMode = false,
+  plannedCounts = {},
 }: FilterDataCreatedBarProps) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -101,6 +103,8 @@ const Calendar = ({
             ${isSelected ? styles.selectedText : ''}
           `;
 
+          const plannedCount = plannedCounts[formattedDay] ?? 0;
+
           return (
             <div
               key={idx}
@@ -112,8 +116,16 @@ const Calendar = ({
               >
                 {format(day, 'd')}
               </span>
-              {/* Точку оставляем по желанию или убираем, если заливка важнее */}
-              {hasDeadline && !isDeadlineMode && (
+              {/* Counter of planned interventions for this day (current scope) */}
+              {plannedCount > 0 && !isDeadlineMode && (
+                <span
+                  className={styles.plannedBadge}
+                  title={`${plannedCount} intervento/i pianificato/i`}
+                >
+                  {plannedCount}
+                </span>
+              )}
+              {hasDeadline && !isDeadlineMode && plannedCount === 0 && (
                 <div className={styles.deadlineDot} />
               )}
             </div>
