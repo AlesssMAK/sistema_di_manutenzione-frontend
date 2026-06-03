@@ -35,34 +35,6 @@
   margin-bottom: 10px;
 }
 
-.controlsLeft {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.clearDateButton {
-  padding: 8px 14px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  background: #ffffff;
-  color: #45556c;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.clearDateButton:hover {
-  background: #1e40af;
-  color: #ffffff;
-  border-color: #1e40af;
-}
-
 .contextLabel {
   margin-bottom: 12px;
 }

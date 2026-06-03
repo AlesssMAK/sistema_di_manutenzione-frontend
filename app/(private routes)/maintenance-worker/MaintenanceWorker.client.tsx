@@ -172,17 +172,11 @@ const MaintenanceWorkerClient = () => {
 
   const handleDateChange = (date: string) => {
     // Ignore Calendar's internal toggle-off (empty string on second click of
-    // the same date) — clearing the date filter is done via the explicit
-    // "Tutte le date" button below, so users can't accidentally reset it
-    // and lose the date they wanted to see.
+    // the same date) and same-date clicks — date filter stays until the
+    // user picks a different day or changes scope.
     if (!date) return;
     if (date === selectedDate) return;
     setSelectedDate(date);
-    setPage(1);
-  };
-
-  const handleClearDate = () => {
-    setSelectedDate('');
     setPage(1);
   };
 
@@ -236,24 +230,12 @@ const MaintenanceWorkerClient = () => {
         </p>
 
         <div className={css.controls}>
-          <div className={css.controlsLeft}>
-            {!isOverdueMode && (
-              <ScopeFilterBar
-                activeScope={scope}
-                onScopeChange={handleScopeChange}
-              />
-            )}
-            {!isOverdueMode && selectedDate && (
-              <button
-                type="button"
-                onClick={handleClearDate}
-                className={css.clearDateButton}
-                title="Rimuovi il filtro data"
-              >
-                Tutte le date ✕
-              </button>
-            )}
-          </div>
+          {!isOverdueMode && (
+            <ScopeFilterBar
+              activeScope={scope}
+              onScopeChange={handleScopeChange}
+            />
+          )}
           <button
             onClick={toggleOverdueMode}
             className={`${css.deadlineButton} ${isOverdueMode ? css.active : ''}`}
