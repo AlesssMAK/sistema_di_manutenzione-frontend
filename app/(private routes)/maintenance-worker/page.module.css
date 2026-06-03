@@ -48,11 +48,33 @@
 .noResults {
   margin-top: 32px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
 .noResultsText {
   font-size: 16px;
   color: #45556c;
+  margin: 0;
+}
+
+.emptyHintButton {
+  padding: 8px 16px;
+  border: 1px solid #1e40af;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #1e40af;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.emptyHintButton:hover {
+  background: #1e40af;
+  color: #ffffff;
 }
 
 .deadlineButton {

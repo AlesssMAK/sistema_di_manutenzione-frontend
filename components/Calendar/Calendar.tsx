@@ -41,6 +41,12 @@ const Calendar = ({
   const handleDayClick = (day: Date) => {
     const formattedDate = format(day, 'yyyy-MM-dd');
 
+    // sync month view when clicking a day from the previous/next month row
+    // so the selected day stays visible in the calendar grid
+    if (!isSameMonth(day, monthStart)) {
+      setCurrentDate(day);
+    }
+
     const newValue = activeDataCreated === formattedDate ? '' : formattedDate;
     onDataCreatedChange(newValue);
   };

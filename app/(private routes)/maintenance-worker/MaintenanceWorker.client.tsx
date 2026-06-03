@@ -2,7 +2,7 @@
 
 import { usePageStore } from '@/lib/store/pageStore';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import css from './page.module.css';
 import CalendarBlock from '@/components/CalendarBlock/CalendarBlock';
 import FaultCardsList from '@/components/FaultCardsList/FaultCardsList';
@@ -38,6 +38,9 @@ const MaintenanceWorkerClient = () => {
     []
   );
 
+  // race-guard: stale responses must not overwrite fresh state
+  const requestIdRef = useRef(0);
+
   const isOverdueMode = viewMode === 'overdue';
 
   const loadData = useCallback(
@@ -49,9 +52,17 @@ const MaintenanceWorkerClient = () => {
       currentScope: FaultScope,
       currentUserId: string
     ) => {
-      try {
-        setIsLoading(true);
+      const reqId = ++requestIdRef.current;
 
+      // clear stale items immediately when starting a fresh (page 1) request
+      // so the UI doesn't show old data while the new one is loading
+      if (pageNum === 1) {
+        setItems([]);
+        setTotalPage(0);
+      }
+      setIsLoading(true);
+
+      try {
         const scopeParams =
           currentScope === 'mine' && currentUserId
             ? { assignedTo: currentUserId }
@@ -71,17 +82,22 @@ const MaintenanceWorkerClient = () => {
           ...scopeParams,
         });
 
+        // discard if a newer request has started in the meantime
+        if (reqId !== requestIdRef.current) return;
+
         if (pageNum === 1) {
           setItems(data.fault || []);
         } else {
           setItems(prev => [...prev, ...(data.fault || [])]);
         }
-
         setTotalPage(data.totalPage || 0);
       } catch (error) {
+        if (reqId !== requestIdRef.current) return;
         console.error('Errore durante il caricamento dei dati:', error);
       } finally {
-        setIsLoading(false);
+        if (reqId === requestIdRef.current) {
+          setIsLoading(false);
+        }
       }
     },
     []
@@ -229,8 +245,29 @@ const MaintenanceWorkerClient = () => {
             ) : (
               <div className={css.noResults}>
                 <p className={css.noResultsText}>
-                  Nessuna segnalazione in questa vista
+                  {isOverdueMode
+                    ? 'Nessuna segnalazione in ritardo'
+                    : selectedDate
+                      ? scope === 'mine'
+                        ? 'Nessuna segnalazione assegnata a te in questa data'
+                        : scope === 'pool'
+                          ? 'Nessuna segnalazione libera in questa data'
+                          : 'Nessuna segnalazione in questa data'
+                      : scope === 'mine'
+                        ? 'Nessuna segnalazione assegnata a te'
+                        : scope === 'pool'
+                          ? 'Nessuna segnalazione libera (pool vuoto)'
+                          : 'Nessuna segnalazione'}
                 </p>
+                {!isOverdueMode && scope !== 'all' && (
+                  <button
+                    type="button"
+                    className={css.emptyHintButton}
+                    onClick={() => handleScopeChange('all')}
+                  >
+                    Mostra tutte
+                  </button>
+                )}
               </div>
             )}
           </div>
