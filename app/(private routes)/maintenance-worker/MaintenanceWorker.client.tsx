@@ -73,16 +73,15 @@ const MaintenanceWorkerClient = () => {
               ? { assignedToEmpty: true }
               : {};
 
-        // Date filter intentionally NOT applied to the list query — clicking
-        // a day in the calendar narrows the DaySlotGrid (client-side filter
-        // on items) but the main list stays scoped only by Mie/Libere/Tutte
-        // + priority + overdue mode. This way unplanned faults don't
-        // disappear when the user is exploring the calendar.
         const data = await fetchFaultCards({
           page: pageNum,
           perPage: PER_PAGE,
           priority: currentPriority,
-          ...(currentMode === 'overdue' ? { statusFault: 'Overdue' } : {}),
+          ...(currentMode === 'overdue'
+            ? { statusFault: 'Overdue' }
+            : currentDate
+              ? { plannedDate: currentDate }
+              : {}),
           ...scopeParams,
         });
 
@@ -174,10 +173,18 @@ const MaintenanceWorkerClient = () => {
   const handleDateChange = (date: string) => {
     // Ignore Calendar's internal toggle-off (empty string on second click of
     // the same date) and same-date clicks — date filter stays until the
-    // user picks a different day or changes scope.
+    // user picks a different day or hits "Mostra tutte" in the empty state.
     if (!date) return;
     if (date === selectedDate) return;
     setSelectedDate(date);
+    setPage(1);
+  };
+
+  const handleResetFilters = () => {
+    // One-click reset used by the empty-state hint button. Clears both the
+    // date filter and narrows scope to "all" so the user sees everything.
+    setSelectedDate('');
+    setScope('all');
     setPage(1);
   };
 
@@ -296,17 +303,23 @@ const MaintenanceWorkerClient = () => {
                 <p className={css.noResultsText}>
                   {isOverdueMode
                     ? 'Nessuna segnalazione in ritardo'
-                    : scope === 'mine'
-                      ? 'Nessuna segnalazione assegnata a te'
-                      : scope === 'pool'
-                        ? 'Nessuna segnalazione libera (pool vuoto)'
-                        : 'Nessuna segnalazione'}
+                    : selectedDate
+                      ? scope === 'mine'
+                        ? 'Nessuna segnalazione assegnata a te in questa data'
+                        : scope === 'pool'
+                          ? 'Nessuna segnalazione libera in questa data'
+                          : 'Nessuna segnalazione in questa data'
+                      : scope === 'mine'
+                        ? 'Nessuna segnalazione assegnata a te'
+                        : scope === 'pool'
+                          ? 'Nessuna segnalazione libera (pool vuoto)'
+                          : 'Nessuna segnalazione'}
                 </p>
-                {!isOverdueMode && scope !== 'all' && (
+                {!isOverdueMode && (selectedDate || scope !== 'all') && (
                   <button
                     type="button"
                     className={css.emptyHintButton}
-                    onClick={() => handleScopeChange('all')}
+                    onClick={handleResetFilters}
                   >
                     Mostra tutte
                   </button>
