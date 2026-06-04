@@ -120,8 +120,9 @@ const MaintenanceWorkerClient = () => {
       currentUserId: string,
       currentMode: FaultViewMode
     ) => {
-      // Overdue mode uses the red deadlineCell highlighting, not the badge.
-      if (currentMode === 'overdue') {
+      // Badges are only meaningful for active work — overdue uses the red
+      // deadlineCell highlighting; completed is just historical browsing.
+      if (currentMode !== 'active') {
         setPlannedCounts({});
         return;
       }
@@ -137,8 +138,7 @@ const MaintenanceWorkerClient = () => {
         const data = await fetchFaultCards({
           page: 1,
           perPage: 200,
-          statusFault:
-            currentMode === 'completed' ? 'Completed' : ACTIVE_STATUSES,
+          statusFault: ACTIVE_STATUSES,
           ...scopeParams,
         });
 
