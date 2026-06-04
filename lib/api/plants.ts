@@ -10,12 +10,13 @@ export const getAllPlants = async ({
   search,
   status,
   page,
+  perPage,
 }: PlantsRequest = {}) => {
   const params = {
     search,
     status,
     page,
-    perPage: 10,
+    perPage,
   };
   const res = await nextServer.get<PlantsRespons>('/plants', { params });
   return res.data.data;
@@ -29,4 +30,9 @@ export const createPlant = async (data: CreatePlantRequest) => {
   return res.data.data;
 };
 
-export const updatePlant = () => {};
+export const updatePlant = async () => {};
+
+export const deletePlant = async (plantId: string) => {
+  const res = await nextServer.delete(`/plants/${plantId}`);
+  return res.data;
+};

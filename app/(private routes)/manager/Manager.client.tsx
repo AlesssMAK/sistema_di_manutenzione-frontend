@@ -64,73 +64,76 @@ const ManagerClient = () => {
   const totalPage = data?.totalPage ?? 0;
 
   return (
-    <div className={css.pageWrapper}>
-      <h2 className={css.managerHeaderPage}>Pannello Responsabile</h2>
-      <p className={css.managerTextPage}>
-        Gestisci le segnalazioni ricevute, le attività in corso e l&apos;archivio
-      </p>
+    <div className="container">
+      <div className={css.pageWrapper}>
+        <h2 className="title">Pannello Responsabile</h2>
+        <p className="subtitle">
+          Gestisci le segnalazioni ricevute, le attività in corso e
+          l&apos;archivio
+        </p>
 
-      <div className={css.tabsBar}>
-        {(Object.keys(TAB_LABELS) as ManagerTab[]).map(tab => (
-          <button
-            key={tab}
-            type="button"
-            onClick={() => handleTabChange(tab)}
-            className={`${css.tabButton} ${
-              activeTab === tab ? css.tabActive : ''
-            }`}
-          >
-            {TAB_LABELS[tab]}
-            {activeTab === tab && data?.totalFault !== undefined && (
-              <span className={css.tabCount}>{data.totalFault}</span>
-            )}
-          </button>
-        ))}
-      </div>
+        <div className={css.tabsBar}>
+          {(Object.keys(TAB_LABELS) as ManagerTab[]).map(tab => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => handleTabChange(tab)}
+              className={`${css.tabButton} ${
+                activeTab === tab ? css.tabActive : ''
+              }`}
+            >
+              {TAB_LABELS[tab]}
+              {activeTab === tab && data?.totalFault !== undefined && (
+                <span className={css.tabCount}>{data.totalFault}</span>
+              )}
+            </button>
+          ))}
+        </div>
 
-      <div className={css.contentSection}>
-        {isLoading ? (
-          <p className={css.loadingText}>Caricamento...</p>
-        ) : isError ? (
-          <p className={css.emptyText}>
-            Errore durante il caricamento delle segnalazioni
-          </p>
-        ) : faults.length === 0 ? (
-          <p className={css.emptyText}>
-            {activeTab === 'received' && 'Nessuna segnalazione in attesa'}
-            {activeTab === 'inProgress' &&
-              'Nessuna segnalazione in lavorazione'}
-            {activeTab === 'archive' && 'Nessuna segnalazione archiviata'}
-          </p>
-        ) : (
-          <ul className={css.cardList}>
-            {faults.map(fault => (
-              <FaultManagerCard
-                key={fault._id}
-                fault={fault}
-                onPlan={activeTab === 'archive' ? undefined : handlePlan}
+        <div className={css.contentSection}>
+          {isLoading ? (
+            <p className={css.loadingText}>Caricamento...</p>
+          ) : isError ? (
+            <p className={css.emptyText}>
+              Errore durante il caricamento delle segnalazioni
+            </p>
+          ) : faults.length === 0 ? (
+            <p className={css.emptyText}>
+              {activeTab === 'received' && 'Nessuna segnalazione in attesa'}
+              {activeTab === 'inProgress' &&
+                'Nessuna segnalazione in lavorazione'}
+              {activeTab === 'archive' && 'Nessuna segnalazione archiviata'}
+            </p>
+          ) : (
+            <ul className={css.cardList}>
+              {faults.map(fault => (
+                <FaultManagerCard
+                  key={fault._id}
+                  fault={fault}
+                  onPlan={activeTab === 'archive' ? undefined : handlePlan}
+                />
+              ))}
+            </ul>
+          )}
+
+          {totalPage > 1 && (
+            <div className={css.paginationWrapper}>
+              <Pagination
+                totalPages={totalPage}
+                page={page}
+                onPageChange={setPage}
               />
-            ))}
-          </ul>
-        )}
+            </div>
+          )}
+        </div>
 
-        {totalPage > 1 && (
-          <div className={css.paginationWrapper}>
-            <Pagination
-              totalPages={totalPage}
-              page={page}
-              onPageChange={setPage}
-            />
-          </div>
+        {planningFault && (
+          <PlanFaultForm
+            fault={planningFault}
+            onClose={() => setPlanningFault(null)}
+          />
         )}
       </div>
-
-      {planningFault && (
-        <PlanFaultForm
-          fault={planningFault}
-          onClose={() => setPlanningFault(null)}
-        />
-      )}
     </div>
   );
 };

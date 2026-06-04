@@ -20,10 +20,12 @@ import {
 import { useState } from 'react';
 import { UpdatePlantPart } from '@/types/partPlant';
 import { UpdatePlant } from '@/types/plantType';
-import { createPlant } from '@/lib/api/plants';
-import { createPlantPart } from '@/lib/api/plantsParts';
+import { createPlant, deletePlant } from '@/lib/api/plants';
+import { createPlantParts } from '@/lib/api/plantsParts';
 import { da } from 'date-fns/locale';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface CreateAndEditPlantAndPlantPartsFormProps {
   onClose: () => void;
@@ -40,9 +42,13 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   const [newPartName, setNewPartName] = useState('');
   const [newPartCode, setNewPartCode] = useState('');
   const [addError, setAddError] = useState<string | null>(null);
+  const [addErrorPlant, setAddErrorPlant] = useState<string | null>(null);
+  const [addErrorPart, setAddErrorPart] = useState<string | null>(null);
 
   const tBtn = useTranslations('btn');
   const tStatus = useTranslations('Statuses');
+
+  const queryClient = useQueryClient();
 
   const createPlantAndPlantPartsForm =
     useForm<CreatePlantAndPlantPartsFormValues>({
@@ -103,6 +109,9 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   const onCreatePlantAndPlantPartsSubmit = async (
     data: CreatePlantAndPlantPartsFormValues
   ) => {
+    let createdPlantId: string | null = null;
+
+    // ━━━━━━━━━━ 1. Create Plant ━━━━━━━━━━
     try {
       const plant = await createPlant({
         namePlant: data.namePlant,
@@ -111,28 +120,106 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         description: data.description,
       });
 
-      const plantId = plant._id;
+      createdPlantId = plant._id;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const message =
+          error.response?.data?.message ??
+          error.response?.data?.error?.message ??
+          'Errore sconosciuto';
 
-      await createPlantPart({
-        plantId: plantId,
+        if (status === 409) {
+          const lower = message.toLowerCase();
+
+          if (lower.includes('name')) {
+            createPlantAndPlantPartsForm.setError('namePlant', {
+              type: 'server',
+              message: `Una macchina con questo nome esiste già`,
+            });
+          } else if (lower.includes('code')) {
+            createPlantAndPlantPartsForm.setError('code', {
+              type: 'server',
+              message: `Una macchina con questo codice esiste già`,
+            });
+          } else {
+            toast.error(message);
+          }
+          return;
+        }
+
+        toast.error(message);
+        return;
+      }
+      toast.error(
+        error instanceof Error ? error.message : 'Errore sconosciuto'
+      );
+      return;
+    }
+    // ━━━━━━━━━━ 1. Create Plant Parts━━━━━━━━━━
+    try {
+      await createPlantParts({
+        plantId: createdPlantId,
         parts: data.parts,
       });
-
-      toast.success('Plant and plant parts successfully created');
-      createPlantAndPlantPartsForm.reset();
-
-      onClose();
     } catch (error) {
-      console.log(error);
+      if (createdPlantId) {
+        try {
+          await deletePlant(createdPlantId);
+        } catch (e) {
+          console.error('Rollback failed:', e);
+        }
+      }
+
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const message =
+          error.response?.data?.message ??
+          error.response?.data?.error?.message ??
+          'Errore sconosciuto';
+
+        if (status === 409) {
+          const lower = message.toLowerCase();
+
+          if (lower.includes('plant parts')) {
+            createPlantAndPlantPartsForm.setError('parts', {
+              type: 'server',
+              message: `Parte di macchina con questo codice esiste già`,
+            });
+            toast.error(
+              `Codici parti già esistente. La macchina non è stata creata.`
+            );
+          } else {
+            toast.error(message);
+          }
+          return;
+        }
+
+        toast.error(message);
+        return;
+      }
+
+      toast.error(
+        error instanceof Error ? error.message : 'Errore sconosciuto'
+      );
+      return;
     }
+
+    queryClient.invalidateQueries({ queryKey: ['plants'] });
+
+    toast.success('Macchina e parti create con successo');
+    createPlantAndPlantPartsForm.reset();
+    onClose();
   };
 
   const onUpdatePlantSubmit = (data: UpdatePlant) => {
     console.log('UPDATE PLANT', data);
+    queryClient.invalidateQueries({ queryKey: ['plants'] });
   };
 
   const onUpdatePlantPartSubmit = (data: UpdatePlantPart) => {
     console.log('UPDATE PLANT PART', data);
+    queryClient.invalidateQueries({ queryKey: ['plants'] });
   };
 
   const registerPlant = isPlantEditMode
@@ -314,6 +401,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                       }
                     </p>
                   )}
+                  {addError && <p className={css.error}>{addError}</p>}
                 </div>
                 <div className={css.form_item_container}>
                   <p className={css.form_label}>
@@ -345,6 +433,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                       }
                     </p>
                   )}
+                  {addError && <p className={css.error}>{addError}</p>}
                 </div>
               </div>
               <div className={css_form.add_btn_container}>
@@ -392,17 +481,11 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                   </ul>
                 </div>
               )}
-              {createPlantAndPlantPartsForm.formState.errors.parts &&
-                !Array.isArray(
-                  createPlantAndPlantPartsForm.formState.errors.parts
-                ) && (
-                  <p className={css.error}>
-                    {
-                      createPlantAndPlantPartsForm.formState.errors.parts
-                        .message
-                    }
-                  </p>
-                )}
+              {createPlantAndPlantPartsForm.formState.errors.parts && (
+                <p className={css.error}>
+                  {createPlantAndPlantPartsForm.formState.errors.parts.message}
+                </p>
+              )}
             </div>
           )}
           <div className={css.btn_form_container}>
