@@ -3,7 +3,7 @@ import { format, isToday, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
 import css from './DateNow.module.css';
 
-type DateNowMode = 'default' | 'overdue';
+type DateNowMode = 'default' | 'overdue' | 'completed';
 
 interface DateNowProps {
   selectedDate?: string;
@@ -34,13 +34,25 @@ const DateNow = ({
     );
   }
 
+  if (mode === 'completed' && !selectedDate) {
+    return (
+      <p className={css.dateDisplay}>
+        Storico segnalazioni completate{prioritySuffix}
+      </p>
+    );
+  }
+
   if (selectedDate) {
     const parsed = parseISO(selectedDate);
     if (isValid(parsed)) {
       const formatted = format(parsed, 'EEEE, d MMMM yyyy', { locale: it });
-      const label = isToday(parsed)
-        ? `Oggi, ${formatted}`
-        : `Attività del: ${formatted}`;
+      const prefix =
+        mode === 'completed'
+          ? 'Completate del:'
+          : isToday(parsed)
+            ? 'Oggi,'
+            : 'Attività del:';
+      const label = `${prefix} ${formatted}`;
       return (
         <p className={css.dateDisplay}>
           {label}

@@ -11,13 +11,15 @@ import DateNow from '@/components/DateNow/DateNow';
 import ScopeFilterBar, {
   type FaultScope,
 } from '@/components/ScopeFilterBar/ScopeFilterBar';
+import ViewModeBar, {
+  type FaultViewMode,
+} from '@/components/ViewModeBar/ViewModeBar';
 import DaySlotGrid from '@/components/DaySlotGrid/DaySlotGrid';
 import { FaultCard } from '@/types/faultType';
 import { fetchFaultCards } from '@/lib/api/faults';
 import { useAuthStore } from '@/lib/store/authStore';
 
-type ViewMode = 'default' | 'overdue';
-
+const ACTIVE_STATUSES = 'Created,In progress,Suspended,Overdue';
 const PER_PAGE = 6;
 
 const MaintenanceWorkerClient = () => {
@@ -32,7 +34,7 @@ const MaintenanceWorkerClient = () => {
   const [selectedDate, setSelectedDate] = useState<string>('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
-  const [viewMode, setViewMode] = useState<ViewMode>('default');
+  const [viewMode, setViewMode] = useState<FaultViewMode>('active');
   const [scope, setScope] = useState<FaultScope>('mine');
   const [overdueDeadlineDates, setOverdueDeadlineDates] = useState<string[]>(
     []
@@ -45,20 +47,19 @@ const MaintenanceWorkerClient = () => {
   const requestIdRef = useRef(0);
 
   const isOverdueMode = viewMode === 'overdue';
+  const isCompletedMode = viewMode === 'completed';
 
   const loadData = useCallback(
     async (
       pageNum: number,
       currentPriority: string,
       currentDate: string,
-      currentMode: ViewMode,
+      currentMode: FaultViewMode,
       currentScope: FaultScope,
       currentUserId: string
     ) => {
       const reqId = ++requestIdRef.current;
 
-      // clear stale items immediately when starting a fresh (page 1) request
-      // so the UI doesn't show old data while the new one is loading
       if (pageNum === 1) {
         setItems([]);
         setTotalPage(0);
@@ -73,24 +74,26 @@ const MaintenanceWorkerClient = () => {
               ? { assignedToEmpty: true }
               : {};
 
-        // In default mode we exclude Completed (closed work) — the
-        // maintenance-worker page is about active interventions.
-        const ACTIVE_STATUSES = 'Created,In progress,Suspended,Overdue';
+        const statusFault =
+          currentMode === 'overdue'
+            ? 'Overdue'
+            : currentMode === 'completed'
+              ? 'Completed'
+              : ACTIVE_STATUSES;
 
         const data = await fetchFaultCards({
           page: pageNum,
           perPage: PER_PAGE,
           priority: currentPriority,
-          ...(currentMode === 'overdue'
-            ? { statusFault: 'Overdue' }
-            : {
-                statusFault: ACTIVE_STATUSES,
-                ...(currentDate ? { plannedDate: currentDate } : {}),
-              }),
+          statusFault,
+          // Date filter applied in active/completed modes only — overdue
+          // shows everything in ritardo regardless of plannedDate.
+          ...(currentMode !== 'overdue' && currentDate
+            ? { plannedDate: currentDate }
+            : {}),
           ...scopeParams,
         });
 
-        // discard if a newer request has started in the meantime
         if (reqId !== requestIdRef.current) return;
 
         if (pageNum === 1) {
@@ -112,7 +115,16 @@ const MaintenanceWorkerClient = () => {
   );
 
   const fetchPlannedCounts = useCallback(
-    async (currentScope: FaultScope, currentUserId: string) => {
+    async (
+      currentScope: FaultScope,
+      currentUserId: string,
+      currentMode: FaultViewMode
+    ) => {
+      // Overdue mode uses the red deadlineCell highlighting, not the badge.
+      if (currentMode === 'overdue') {
+        setPlannedCounts({});
+        return;
+      }
       try {
         const scopeParams =
           currentScope === 'mine' && currentUserId
@@ -122,11 +134,11 @@ const MaintenanceWorkerClient = () => {
               : {};
 
         // TODO: replace with GET /faults/deadlines once backend endpoint lands
-        // Active statuses only — completed faults shouldn't count on the calendar.
         const data = await fetchFaultCards({
           page: 1,
           perPage: 200,
-          statusFault: 'Created,In progress,Suspended,Overdue',
+          statusFault:
+            currentMode === 'completed' ? 'Completed' : ACTIVE_STATUSES,
           ...scopeParams,
         });
 
@@ -146,7 +158,6 @@ const MaintenanceWorkerClient = () => {
 
   const fetchOverdueDeadlines = useCallback(async (currentPriority: string) => {
     try {
-      // TODO: replace with GET /faults/deadlines once backend endpoint lands
       const data = await fetchFaultCards({
         page: 1,
         perPage: 200,
@@ -178,9 +189,6 @@ const MaintenanceWorkerClient = () => {
   };
 
   const handleDateChange = (date: string) => {
-    // Ignore Calendar's internal toggle-off (empty string on second click of
-    // the same date) and same-date clicks — date filter stays until the
-    // user picks a different day or hits "Mostra tutte" in the empty state.
     if (!date) return;
     if (date === selectedDate) return;
     setSelectedDate(date);
@@ -188,8 +196,6 @@ const MaintenanceWorkerClient = () => {
   };
 
   const handleResetFilters = () => {
-    // One-click reset used by the empty-state hint button. Clears both the
-    // date filter and narrows scope to "all" so the user sees everything.
     setSelectedDate('');
     setScope('all');
     setPage(1);
@@ -201,12 +207,13 @@ const MaintenanceWorkerClient = () => {
     setPage(1);
   };
 
-  const toggleOverdueMode = () => {
-    const nextMode: ViewMode = isOverdueMode ? 'default' : 'overdue';
-    setViewMode(nextMode);
+  const handleModeChange = (newMode: FaultViewMode) => {
+    if (newMode === viewMode) return;
+    setViewMode(newMode);
     setSelectedDate('');
     setPage(1);
-    if (nextMode === 'overdue') {
+
+    if (newMode === 'overdue') {
       fetchOverdueDeadlines(priority);
     } else {
       setOverdueDeadlineDates([]);
@@ -227,14 +234,36 @@ const MaintenanceWorkerClient = () => {
     userId,
   ]);
 
-  // Calendar day counters: refresh on scope/user change, clear in overdue mode
   useEffect(() => {
-    if (isOverdueMode) {
-      setPlannedCounts({});
-      return;
-    }
-    fetchPlannedCounts(scope, userId);
-  }, [scope, userId, isOverdueMode, fetchPlannedCounts]);
+    fetchPlannedCounts(scope, userId, viewMode);
+  }, [scope, userId, viewMode, fetchPlannedCounts]);
+
+  // ---------- empty-state copy -----------------------------------------
+  let emptyText = 'Nessuna segnalazione';
+  if (isOverdueMode) {
+    emptyText = 'Nessuna segnalazione in ritardo';
+  } else if (isCompletedMode) {
+    emptyText = selectedDate
+      ? 'Nessuna segnalazione completata in questa data'
+      : 'Nessuna segnalazione completata';
+  } else if (selectedDate) {
+    emptyText =
+      scope === 'mine'
+        ? 'Nessuna segnalazione assegnata a te in questa data'
+        : scope === 'pool'
+          ? 'Nessuna segnalazione libera in questa data'
+          : 'Nessuna segnalazione in questa data';
+  } else {
+    emptyText =
+      scope === 'mine'
+        ? 'Nessuna segnalazione assegnata a te'
+        : scope === 'pool'
+          ? 'Nessuna segnalazione libera (pool vuoto)'
+          : 'Nessuna segnalazione';
+  }
+
+  const showResetButton =
+    !isOverdueMode && (selectedDate || scope !== 'all');
 
   return (
     <div className="container">
@@ -251,12 +280,10 @@ const MaintenanceWorkerClient = () => {
               onScopeChange={handleScopeChange}
             />
           )}
-          <button
-            onClick={toggleOverdueMode}
-            className={`${css.deadlineButton} ${isOverdueMode ? css.active : ''}`}
-          >
-            {isOverdueMode ? 'Mostra tutte' : 'Mostra scadute'}
-          </button>
+          <ViewModeBar
+            activeMode={viewMode}
+            onModeChange={handleModeChange}
+          />
         </div>
 
         <div className={css.workerContainer}>
@@ -274,7 +301,13 @@ const MaintenanceWorkerClient = () => {
             <div className={css.contextLabel}>
               <DateNow
                 selectedDate={selectedDate}
-                mode={isOverdueMode ? 'overdue' : 'default'}
+                mode={
+                  isOverdueMode
+                    ? 'overdue'
+                    : isCompletedMode
+                      ? 'completed'
+                      : 'default'
+                }
                 priority={priority}
               />
             </div>
@@ -307,22 +340,8 @@ const MaintenanceWorkerClient = () => {
               </>
             ) : (
               <div className={css.noResults}>
-                <p className={css.noResultsText}>
-                  {isOverdueMode
-                    ? 'Nessuna segnalazione in ritardo'
-                    : selectedDate
-                      ? scope === 'mine'
-                        ? 'Nessuna segnalazione assegnata a te in questa data'
-                        : scope === 'pool'
-                          ? 'Nessuna segnalazione libera in questa data'
-                          : 'Nessuna segnalazione in questa data'
-                      : scope === 'mine'
-                        ? 'Nessuna segnalazione assegnata a te'
-                        : scope === 'pool'
-                          ? 'Nessuna segnalazione libera (pool vuoto)'
-                          : 'Nessuna segnalazione'}
-                </p>
-                {!isOverdueMode && (selectedDate || scope !== 'all') && (
+                <p className={css.noResultsText}>{emptyText}</p>
+                {showResetButton && (
                   <button
                     type="button"
                     className={css.emptyHintButton}
