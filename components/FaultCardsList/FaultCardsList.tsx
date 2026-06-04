@@ -90,10 +90,15 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                     </span>
                   )}
                   <div className={css.headerButton}>
-                    <span className={css.status}>{fault.statusFault}</span>
-                    <button type="button" className={css.buttonInProgress}>
-                      In progress
-                    </button>
+                    <span
+                      className={`${css.statusBadge} ${
+                        css[
+                          `statusBadge_${fault.statusFault.replace(' ', '')}`
+                        ] ?? ''
+                      }`}
+                    >
+                      {fault.statusFault}
+                    </span>
                   </div>
                 </div>
 
