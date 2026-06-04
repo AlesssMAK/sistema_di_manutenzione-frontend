@@ -73,15 +73,20 @@ const MaintenanceWorkerClient = () => {
               ? { assignedToEmpty: true }
               : {};
 
+        // In default mode we exclude Completed (closed work) — the
+        // maintenance-worker page is about active interventions.
+        const ACTIVE_STATUSES = 'Created,In progress,Suspended,Overdue';
+
         const data = await fetchFaultCards({
           page: pageNum,
           perPage: PER_PAGE,
           priority: currentPriority,
           ...(currentMode === 'overdue'
             ? { statusFault: 'Overdue' }
-            : currentDate
-              ? { plannedDate: currentDate }
-              : {}),
+            : {
+                statusFault: ACTIVE_STATUSES,
+                ...(currentDate ? { plannedDate: currentDate } : {}),
+              }),
           ...scopeParams,
         });
 
@@ -117,9 +122,11 @@ const MaintenanceWorkerClient = () => {
               : {};
 
         // TODO: replace with GET /faults/deadlines once backend endpoint lands
+        // Active statuses only — completed faults shouldn't count on the calendar.
         const data = await fetchFaultCards({
           page: 1,
           perPage: 200,
+          statusFault: 'Created,In progress,Suspended,Overdue',
           ...scopeParams,
         });
 
