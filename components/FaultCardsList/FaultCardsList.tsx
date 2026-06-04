@@ -44,6 +44,19 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
     return isClaimableStatus && (isInPool || isAssignedToMe);
   };
 
+  const cardScope = (fault: FaultCard): 'mine' | 'pool' | 'other' => {
+    const assigned = fault.assignedMaintainers ?? [];
+    if (assigned.length === 0) return 'pool';
+    if (assigned.map(String).includes(userId)) return 'mine';
+    return 'other';
+  };
+
+  const scopeClassName: Record<'mine' | 'pool' | 'other', string> = {
+    mine: css.faultCard_mine,
+    pool: css.faultCard_pool,
+    other: css.faultCard_other,
+  };
+
   const handleDetailClick = (id: string) => {
     router.push(`/maintenance-worker/${id}`);
   };
@@ -56,16 +69,36 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
     <div className={css.containerFaultCardList}>
       <ul className={css.faultList}>
         {faults.map(fault => (
-          <li key={fault._id} className={css.faultCard}>
+          <li
+            key={fault._id}
+            className={`${css.faultCard} ${scopeClassName[cardScope(fault)]}`}
+          >
             <div className={css.content}>
               <div>
                 <div className={css.header}>
                   <span className={css.faultId}>{fault.faultId}</span>
+                  {fault.autoRescheduledFrom?.plannedDate && (
+                    <span
+                      className={css.riprogrammatBadge}
+                      title={`Originale: ${fault.autoRescheduledFrom.plannedDate}${
+                        fault.autoRescheduledFrom.plannedTime
+                          ? ' ' + fault.autoRescheduledFrom.plannedTime
+                          : ''
+                      }`}
+                    >
+                      Riprogrammata
+                    </span>
+                  )}
                   <div className={css.headerButton}>
-                    <span className={css.status}>{fault.statusFault}</span>
-                    <button type="button" className={css.buttonInProgress}>
-                      In progress
-                    </button>
+                    <span
+                      className={`${css.statusBadge} ${
+                        css[
+                          `statusBadge_${fault.statusFault.replace(' ', '')}`
+                        ] ?? ''
+                      }`}
+                    >
+                      {fault.statusFault}
+                    </span>
                   </div>
                 </div>
 

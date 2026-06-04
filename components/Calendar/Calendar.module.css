@@ -170,3 +170,27 @@
   background: #ff4d4f;
   color: white;
 }
+
+.plannedBadge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.selected .plannedBadge {
+  background: #ffffff;
+  color: #0070f3;
+}

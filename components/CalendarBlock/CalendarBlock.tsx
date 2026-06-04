@@ -8,6 +8,7 @@ interface CalendarBlockProps {
   onDateChange: (d: string) => void;
   deadlineDates?: string[];
   isDeadlineMode?: boolean;
+  plannedCounts?: Record<string, number>;
 }
 const CalendarBlock = ({
   activePriority,
@@ -16,6 +17,7 @@ const CalendarBlock = ({
   onDateChange,
   deadlineDates = [],
   isDeadlineMode = false,
+  plannedCounts = {},
 }: CalendarBlockProps) => {
   return (
     <div className={css.calendarBlockContainer}>
@@ -25,6 +27,7 @@ const CalendarBlock = ({
         onDataCreatedChange={onDateChange}
         deadlineDates={deadlineDates}
         isDeadlineMode={isDeadlineMode}
+        plannedCounts={plannedCounts}
       />
       <FilterPriorityBar
         activePriority={activePriority}

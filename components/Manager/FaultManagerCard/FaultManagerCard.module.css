@@ -74,6 +74,20 @@
   color: #b91c1c;
 }
 
+.riprogrammatBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  cursor: help;
+}
+
 .section,
 .planningBlock {
   display: flex;

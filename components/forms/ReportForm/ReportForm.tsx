@@ -86,7 +86,7 @@ const ReportForm = () => {
 
   useEffect(() => {
     const allPlants = async () => {
-      const plants = await getAllPlants();
+      const plants = await getAllPlants({ perPage: 40 });
       setIsPlants(plants.plants);
     };
     allPlants();
@@ -111,7 +111,9 @@ const ReportForm = () => {
     if (!selectedPlantId) return;
 
     const allPlantParts = async () => {
-      const plantParts = await getAllPartsByPlantId(selectedPlantId);
+      const plantParts = await getAllPartsByPlantId(selectedPlantId, {
+        paginate: false,
+      });
 
       setIsPlantParts(plantParts.plantParts);
     };
@@ -172,7 +174,7 @@ const ReportForm = () => {
     }
   }, [isPlantParts, draft.partId, setValue]);
 
-  console.log(isPlants);
+  console.log(isPlantParts);
 
   return (
     <form onSubmit={handleSubmit(onReportSubmit)} className={css.form}>

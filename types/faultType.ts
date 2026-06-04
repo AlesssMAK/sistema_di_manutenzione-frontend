@@ -40,6 +40,17 @@ export interface FaultCard {
   img?: [];
   managerComment?: string;
   commentMaintenanceWorker?: string;
+  actualDuration?: number;
+  suspensionReason?: string;
+  materialRequest?: string;
+  completedAt?: string;
+  claimedBy?: string;
+  claimedAt?: string;
+  autoRescheduledFrom?: {
+    plannedDate?: string;
+    plannedTime?: string;
+    timestamp?: string;
+  };
   updatedAt: string;
 }
 

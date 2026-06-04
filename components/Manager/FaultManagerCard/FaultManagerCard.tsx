@@ -54,6 +54,18 @@ const FaultManagerCard = ({
       <div className={css.header}>
         <span className={css.faultId}>{fault.faultId}</span>
         <div className={css.badges}>
+          {fault.autoRescheduledFrom?.plannedDate && (
+            <span
+              className={css.riprogrammatBadge}
+              title={`Originale: ${fault.autoRescheduledFrom.plannedDate}${
+                fault.autoRescheduledFrom.plannedTime
+                  ? ' ' + fault.autoRescheduledFrom.plannedTime
+                  : ''
+              }`}
+            >
+              Riprogrammata
+            </span>
+          )}
           <span
             className={`${css.statusBadge} ${statusClass[fault.statusFault] ?? ''}`}
           >

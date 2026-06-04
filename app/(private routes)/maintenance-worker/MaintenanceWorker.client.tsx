@@ -2,20 +2,29 @@
 
 import { usePageStore } from '@/lib/store/pageStore';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import css from './page.module.css';
 import CalendarBlock from '@/components/CalendarBlock/CalendarBlock';
 import FaultCardsList from '@/components/FaultCardsList/FaultCardsList';
 import LoadMoreButton from '@/components/LoadMoreButton/LoadMoreButton';
 import DateNow from '@/components/DateNow/DateNow';
+import ScopeFilterBar, {
+  type FaultScope,
+} from '@/components/ScopeFilterBar/ScopeFilterBar';
+import DaySlotGrid from '@/components/DaySlotGrid/DaySlotGrid';
 import { FaultCard } from '@/types/faultType';
 import { fetchFaultCards } from '@/lib/api/faults';
+import { useAuthStore } from '@/lib/store/authStore';
 
 type ViewMode = 'default' | 'overdue';
+
+const PER_PAGE = 6;
 
 const MaintenanceWorkerClient = () => {
   const t = useTranslations('maintenanceWorkerPage');
   const setPageTitle = usePageStore(state => state.setPageTitle);
+  const { user } = useAuthStore();
+  const userId = String(user?._id ?? '');
 
   const [items, setItems] = useState<FaultCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,20 +33,45 @@ const MaintenanceWorkerClient = () => {
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [viewMode, setViewMode] = useState<ViewMode>('default');
+  const [scope, setScope] = useState<FaultScope>('mine');
   const [overdueDeadlineDates, setOverdueDeadlineDates] = useState<string[]>(
     []
   );
-  const PER_PAGE = 2;
+  const [plannedCounts, setPlannedCounts] = useState<Record<string, number>>(
+    {}
+  );
+
+  // race-guard: stale responses must not overwrite fresh state
+  const requestIdRef = useRef(0);
+
+  const isOverdueMode = viewMode === 'overdue';
 
   const loadData = useCallback(
     async (
       pageNum: number,
       currentPriority: string,
       currentDate: string,
-      currentMode: ViewMode
+      currentMode: ViewMode,
+      currentScope: FaultScope,
+      currentUserId: string
     ) => {
+      const reqId = ++requestIdRef.current;
+
+      // clear stale items immediately when starting a fresh (page 1) request
+      // so the UI doesn't show old data while the new one is loading
+      if (pageNum === 1) {
+        setItems([]);
+        setTotalPage(0);
+      }
+      setIsLoading(true);
+
       try {
-        setIsLoading(true);
+        const scopeParams =
+          currentScope === 'mine' && currentUserId
+            ? { assignedTo: currentUserId }
+            : currentScope === 'pool'
+              ? { assignedToEmpty: true }
+              : {};
 
         const data = await fetchFaultCards({
           page: pageNum,
@@ -48,19 +82,56 @@ const MaintenanceWorkerClient = () => {
             : currentDate
               ? { plannedDate: currentDate }
               : {}),
+          ...scopeParams,
         });
+
+        // discard if a newer request has started in the meantime
+        if (reqId !== requestIdRef.current) return;
 
         if (pageNum === 1) {
           setItems(data.fault || []);
         } else {
           setItems(prev => [...prev, ...(data.fault || [])]);
         }
-
         setTotalPage(data.totalPage || 0);
       } catch (error) {
+        if (reqId !== requestIdRef.current) return;
         console.error('Errore durante il caricamento dei dati:', error);
       } finally {
-        setIsLoading(false);
+        if (reqId === requestIdRef.current) {
+          setIsLoading(false);
+        }
+      }
+    },
+    []
+  );
+
+  const fetchPlannedCounts = useCallback(
+    async (currentScope: FaultScope, currentUserId: string) => {
+      try {
+        const scopeParams =
+          currentScope === 'mine' && currentUserId
+            ? { assignedTo: currentUserId }
+            : currentScope === 'pool'
+              ? { assignedToEmpty: true }
+              : {};
+
+        // TODO: replace with GET /faults/deadlines once backend endpoint lands
+        const data = await fetchFaultCards({
+          page: 1,
+          perPage: 200,
+          ...scopeParams,
+        });
+
+        const counts: Record<string, number> = {};
+        (data.fault || []).forEach(f => {
+          if (f.plannedDate) {
+            counts[f.plannedDate] = (counts[f.plannedDate] ?? 0) + 1;
+          }
+        });
+        setPlannedCounts(counts);
+      } catch (error) {
+        console.error('Errore caricamento conteggi calendario:', error);
       }
     },
     []
@@ -96,17 +167,35 @@ const MaintenanceWorkerClient = () => {
     const newValue = priority === newPriority ? '' : newPriority;
     setPriority(newValue);
     setPage(1);
-    if (viewMode === 'overdue') fetchOverdueDeadlines(newValue);
+    if (isOverdueMode) fetchOverdueDeadlines(newValue);
   };
 
   const handleDateChange = (date: string) => {
-    const value = selectedDate === date ? '' : date;
-    setSelectedDate(value);
+    // Ignore Calendar's internal toggle-off (empty string on second click of
+    // the same date) and same-date clicks — date filter stays until the
+    // user picks a different day or hits "Mostra tutte" in the empty state.
+    if (!date) return;
+    if (date === selectedDate) return;
+    setSelectedDate(date);
+    setPage(1);
+  };
+
+  const handleResetFilters = () => {
+    // One-click reset used by the empty-state hint button. Clears both the
+    // date filter and narrows scope to "all" so the user sees everything.
+    setSelectedDate('');
+    setScope('all');
+    setPage(1);
+  };
+
+  const handleScopeChange = (newScope: FaultScope) => {
+    if (newScope === scope) return;
+    setScope(newScope);
     setPage(1);
   };
 
   const toggleOverdueMode = () => {
-    const nextMode: ViewMode = viewMode === 'overdue' ? 'default' : 'overdue';
+    const nextMode: ViewMode = isOverdueMode ? 'default' : 'overdue';
     setViewMode(nextMode);
     setSelectedDate('');
     setPage(1);
@@ -119,73 +208,130 @@ const MaintenanceWorkerClient = () => {
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
-    loadData(1, priority, selectedDate, viewMode);
-  }, [setPageTitle, t, loadData, priority, selectedDate, viewMode]);
+    loadData(1, priority, selectedDate, viewMode, scope, userId);
+  }, [
+    setPageTitle,
+    t,
+    loadData,
+    priority,
+    selectedDate,
+    viewMode,
+    scope,
+    userId,
+  ]);
 
-  const isOverdueMode = viewMode === 'overdue';
+  // Calendar day counters: refresh on scope/user change, clear in overdue mode
+  useEffect(() => {
+    if (isOverdueMode) {
+      setPlannedCounts({});
+      return;
+    }
+    fetchPlannedCounts(scope, userId);
+  }, [scope, userId, isOverdueMode, fetchPlannedCounts]);
 
   return (
-    <div className={css.pageWrapper}>
-      <h2 className={css.workerHeaderPage}>Pianificazione Manutentore</h2>
-      <p className={css.workerTextPage}>
-        Visualizza e gestisci gli interventi pianificati
-      </p>
+    <div className="container">
+      <div className={css.pageWrapper}>
+        <h2 className="title">Pianificazione Manutentore</h2>
+        <p className="subtitle">
+          Visualizza e gestisci gli interventi pianificati
+        </p>
 
-      <div className={css.controls}>
-        <button
-          onClick={toggleOverdueMode}
-          className={`${css.deadlineButton} ${isOverdueMode ? css.active : ''}`}
-        >
-          {isOverdueMode ? 'Mostra tutte' : 'Mostra scadute'}
-        </button>
-      </div>
-
-      <div className={css.workerContainer}>
-        <CalendarBlock
-          activePriority={priority}
-          onPriorityChange={handlePriorityChange}
-          activeDate={selectedDate}
-          onDateChange={handleDateChange}
-          deadlineDates={isOverdueMode ? overdueDeadlineDates : []}
-          isDeadlineMode={isOverdueMode}
-        />
-
-        <div className={css.contentSection}>
-          <div className={css.contextLabel}>
-            <DateNow
-              selectedDate={selectedDate}
-              mode={isOverdueMode ? 'overdue' : 'default'}
-              priority={priority}
+        <div className={css.controls}>
+          {!isOverdueMode && (
+            <ScopeFilterBar
+              activeScope={scope}
+              onScopeChange={handleScopeChange}
             />
-          </div>
-
-          {isLoading && page === 1 ? (
-            <p className={css.loadingText}>Caricamento...</p>
-          ) : items.length > 0 ? (
-            <>
-              <FaultCardsList faults={items} />
-
-              <div className={css.loadMoreButton}>
-                <LoadMoreButton
-                  page={page}
-                  totalPage={totalPage}
-                  isLoading={isLoading}
-                  onLoadMore={() => {
-                    const nextPage = page + 1;
-                    setPage(nextPage);
-                    loadData(nextPage, priority, selectedDate, viewMode);
-                  }}
-                />
-              </div>
-            </>
-          ) : (
-            <div className={css.noResults}>
-              <p className={css.noResultsText}>
-                Nessuna segnalazione in questa vista
-              </p>
-            </div>
           )}
+          <button
+            onClick={toggleOverdueMode}
+            className={`${css.deadlineButton} ${isOverdueMode ? css.active : ''}`}
+          >
+            {isOverdueMode ? 'Mostra tutte' : 'Mostra scadute'}
+          </button>
         </div>
+
+        <div className={css.workerContainer}>
+          <CalendarBlock
+            activePriority={priority}
+            onPriorityChange={handlePriorityChange}
+            activeDate={selectedDate}
+            onDateChange={handleDateChange}
+            deadlineDates={isOverdueMode ? overdueDeadlineDates : []}
+            isDeadlineMode={isOverdueMode}
+            plannedCounts={plannedCounts}
+          />
+
+          <div className={css.contentSection}>
+            <div className={css.contextLabel}>
+              <DateNow
+                selectedDate={selectedDate}
+                mode={isOverdueMode ? 'overdue' : 'default'}
+                priority={priority}
+              />
+            </div>
+
+            {isLoading && page === 1 ? (
+              <p className={css.loadingText}>Caricamento...</p>
+            ) : items.length > 0 ? (
+              <>
+                <FaultCardsList faults={items} />
+
+                <div className={css.loadMoreButton}>
+                  <LoadMoreButton
+                    page={page}
+                    totalPage={totalPage}
+                    isLoading={isLoading}
+                    onLoadMore={() => {
+                      const nextPage = page + 1;
+                      setPage(nextPage);
+                      loadData(
+                        nextPage,
+                        priority,
+                        selectedDate,
+                        viewMode,
+                        scope,
+                        userId
+                      );
+                    }}
+                  />
+                </div>
+              </>
+            ) : (
+              <div className={css.noResults}>
+                <p className={css.noResultsText}>
+                  {isOverdueMode
+                    ? 'Nessuna segnalazione in ritardo'
+                    : selectedDate
+                      ? scope === 'mine'
+                        ? 'Nessuna segnalazione assegnata a te in questa data'
+                        : scope === 'pool'
+                          ? 'Nessuna segnalazione libera in questa data'
+                          : 'Nessuna segnalazione in questa data'
+                      : scope === 'mine'
+                        ? 'Nessuna segnalazione assegnata a te'
+                        : scope === 'pool'
+                          ? 'Nessuna segnalazione libera (pool vuoto)'
+                          : 'Nessuna segnalazione'}
+                </p>
+                {!isOverdueMode && (selectedDate || scope !== 'all') && (
+                  <button
+                    type="button"
+                    className={css.emptyHintButton}
+                    onClick={handleResetFilters}
+                  >
+                    Mostra tutte
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {!isOverdueMode && selectedDate && (
+          <DaySlotGrid selectedDate={selectedDate} faults={items} />
+        )}
       </div>
     </div>
   );
