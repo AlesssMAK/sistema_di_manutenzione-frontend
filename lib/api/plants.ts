@@ -3,6 +3,7 @@ import {
   CreatePlantRequest,
   PlantsRequest,
   PlantsRespons,
+  UpdatePlantRequest,
 } from '@/types/plantType';
 import nextServer from './api';
 
@@ -27,10 +28,16 @@ export const createPlant = async (data: CreatePlantRequest) => {
     '/plants',
     data
   );
-  return res.data.data;
+  return res.data.plant;
 };
 
-export const updatePlant = async () => {};
+export const updatePlant = async ({ plantId, data }: UpdatePlantRequest) => {
+  const res = await nextServer.put<CreateAndUpdatePlantResponse>(
+    `/plants/${plantId}`,
+    data
+  );
+  return res.data.plant;
+};
 
 export const deletePlant = async (plantId: string) => {
   const res = await nextServer.delete(`/plants/${plantId}`);

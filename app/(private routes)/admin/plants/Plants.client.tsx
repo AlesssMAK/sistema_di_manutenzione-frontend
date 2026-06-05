@@ -80,7 +80,6 @@ const AdminPlantsClientPage = () => {
     setStatus('');
     setSearch('');
   };
-  console.log(data);
 
   return (
     <section className="admin_section">

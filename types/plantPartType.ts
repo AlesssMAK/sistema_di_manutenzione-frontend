@@ -37,3 +37,14 @@ export interface UpdatePlantPart {
   codePlantPart?: string;
   status?: STATUS;
 }
+
+export interface UpdatePlantPartRequest {
+  plantId: string;
+  plantPartId: string;
+  data: UpdatePlantPart;
+}
+
+export interface UpdatePlantPartResponse {
+  success: boolean;
+  plantPart: PlantPart;
+}

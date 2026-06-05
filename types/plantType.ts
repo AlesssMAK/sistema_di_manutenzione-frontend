@@ -1,5 +1,4 @@
 import { STATUS } from '@/constants/status';
-import { PlantPart } from './partPlant';
 
 export interface Plant {
   _id: string;
@@ -60,5 +59,5 @@ export interface UpdatePlantRequest {
 export interface CreateAndUpdatePlantResponse {
   success: boolean;
   message: string;
-  data: Plant;
+  plant: Plant;
 }
