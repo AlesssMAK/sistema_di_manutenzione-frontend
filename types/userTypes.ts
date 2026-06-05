@@ -45,7 +45,6 @@ export interface UpdateUserRequest {
 
 export interface UpdateUserResponse {
   success: boolean;
-  message: string;
   user: User;
 }
 

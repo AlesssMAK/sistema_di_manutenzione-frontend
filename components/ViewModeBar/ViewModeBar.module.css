@@ -1,0 +1,42 @@
+.bar {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  background: #f1f5f9;
+}
+
+.button {
+  min-width: 100px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #45556c;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.button:hover {
+  color: #0a0a0a;
+}
+
+.active_active {
+  background: #ffffff;
+  color: #1e40af;
+  box-shadow: 0 1px 2px rgba(10, 10, 10, 0.08);
+}
+
+.active_overdue {
+  background: #ffffff;
+  color: #b91c1c;
+  box-shadow: 0 1px 2px rgba(10, 10, 10, 0.08);
+}
+
+.active_completed {
+  background: #ffffff;
+  color: #15803d;
+  box-shadow: 0 1px 2px rgba(10, 10, 10, 0.08);
+}

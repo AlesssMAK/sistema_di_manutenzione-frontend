@@ -1,49 +1,56 @@
-import Modal from '@/components/UI/Modal/Modal';
-import css from '../CreateAndUpdateUserForm/CreateAndEditUserForm.module.css';
-import css_form from './CreateAndEditPlantAndPlantPartsForm.module.css';
-import Input from '@/components/UI/Input/Input';
 import Button from '@/components/UI/Button/Button';
-import { useTranslations } from 'next-intl';
-import {
-  Resolver,
-  useFieldArray,
-  useForm,
-  UseFormRegister,
-} from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import Input from '@/components/UI/Input/Input';
+import Modal from '@/components/UI/Modal/Modal';
+import { createPlant, deletePlant, updatePlant } from '@/lib/api/plants';
+import { createPlantParts } from '@/lib/api/plantsParts';
 import {
   CreatePlantAndPlantPartsFormValues,
   createPlantAndPlantPartsSchema,
   updatePlantPartSchema,
   updatePlantSchema,
 } from '@/lib/validation/createAndUpdatePlantAndPalntPartsFormValidation';
-import { useState } from 'react';
-import { UpdatePlantPart } from '@/types/partPlant';
+import { UpdatePlantPart } from '@/types/plantPartType';
 import { UpdatePlant } from '@/types/plantType';
-import { createPlant, deletePlant } from '@/lib/api/plants';
-import { createPlantParts } from '@/lib/api/plantsParts';
-import { da } from 'date-fns/locale';
-import toast from 'react-hot-toast';
-import axios from 'axios';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import {
+  Resolver,
+  useFieldArray,
+  useForm,
+  UseFormRegister,
+} from 'react-hook-form';
+import toast from 'react-hot-toast';
+import css from '../CreateAndUpdateUserForm/CreateAndEditUserForm.module.css';
+import css_form from './CreateAndEditPlantAndPlantPartsForm.module.css';
+import { STATUS } from '@/constants/status';
 
 interface CreateAndEditPlantAndPlantPartsFormProps {
   onClose: () => void;
-  // initialData?: InitialData;
+  initialData?: InitialData;
   isPlantEditMode?: boolean;
   isPlantPartsEditMode?: boolean;
 }
 
+interface InitialData {
+  id: string;
+  namePlant: string;
+  code: string;
+  location: string;
+  status: string;
+}
+
 const CreateAndEditPlantAndPlantPartsForm = ({
   onClose,
+  initialData,
   isPlantEditMode = false,
   isPlantPartsEditMode = false,
 }: CreateAndEditPlantAndPlantPartsFormProps) => {
   const [newPartName, setNewPartName] = useState('');
   const [newPartCode, setNewPartCode] = useState('');
   const [addError, setAddError] = useState<string | null>(null);
-  const [addErrorPlant, setAddErrorPlant] = useState<string | null>(null);
-  const [addErrorPart, setAddErrorPart] = useState<string | null>(null);
 
   const tBtn = useTranslations('btn');
   const tStatus = useTranslations('Statuses');
@@ -71,6 +78,17 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   const statusPlant = updatePlantForm.watch('status');
   const isActivePlant = statusPlant === 'active';
 
+  useEffect(() => {
+    if (isPlantEditMode && initialData) {
+      updatePlantForm.reset({
+        namePlant: initialData.namePlant,
+        code: initialData.code,
+        location: initialData.location,
+        status: initialData.status as STATUS,
+      });
+    }
+  }, [initialData, isPlantEditMode, updatePlantForm.reset]);
+
   const updatePlantPartForm = useForm<UpdatePlantPart>({
     resolver: yupResolver(updatePlantPartSchema) as Resolver<UpdatePlantPart>,
     mode: 'onSubmit',
@@ -83,7 +101,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     control: createPlantAndPlantPartsForm.control,
     name: 'parts',
   });
-  console.log(createPlantAndPlantPartsForm.formState.errors);
+  console.log(updatePlantForm.formState.errors);
 
   const handleAddPart = () => {
     const name = newPartName.trim();
@@ -212,9 +230,25 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     onClose();
   };
 
-  const onUpdatePlantSubmit = (data: UpdatePlant) => {
-    console.log('UPDATE PLANT', data);
-    queryClient.invalidateQueries({ queryKey: ['plants'] });
+  const plantId = initialData?.id || '';
+
+  const onUpdatePlantSubmit = async (data: UpdatePlant) => {
+    try {
+      await updatePlant({
+        plantId,
+        data: {
+          namePlant: data.namePlant,
+          code: data.code,
+          location: data.location,
+          status: data.status,
+        },
+      });
+      toast.success('La macchina è stata aggiornata con successo');
+      updatePlantForm.reset();
+      onClose();
+
+      queryClient.invalidateQueries({ queryKey: ['plants'] });
+    } catch (error) {}
   };
 
   const onUpdatePlantPartSubmit = (data: UpdatePlantPart) => {

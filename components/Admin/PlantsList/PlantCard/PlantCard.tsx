@@ -1,40 +1,53 @@
 'use client';
 
 import Button from '@/components/UI/Button/Button';
-import css from './PlantCard.module.css';
-import { useState } from 'react';
-import { Plant } from '@/types/plantType';
 import { getStatusOptions, STATUS } from '@/constants/status';
-import { useTranslations } from 'next-intl';
+import { Plant, UpdatePlantRequest } from '@/types/plantType';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import css from './PlantCard.module.css';
+import { updatePlant } from '@/lib/api/plants';
+import CreateAndEditPlantAndPlantPartsForm from '@/components/forms/CreateAndEditPlantAndPlantPartsForm/CreateAndEditPlantAndPlantPartsForm';
 
 interface PlantCardProps {
   plant: Plant;
 }
 
 interface UpdateStatus {
-  userId: string;
+  plantId: string;
   status: STATUS;
 }
 
 const PlantCard = ({ plant }: PlantCardProps) => {
-  const [open, setOpen] = useState(false);
+  const [openUpdatePlantModal, setOpenUpdatePlantModal] = useState(false);
+  const [openPlantPartsListModal, setOpenPlantPartsListModal] = useState(false);
   const t = useTranslations('AdminPage.PlantsList');
   const queryClient = useQueryClient();
 
-  //   const mutation = useMutation({
-  //     mutationFn: ({ userId, data }: UpdateUserRequest) =>
-  //       updateUser({ userId, data }),
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries({ queryKey: ['users'] });
-  //     },
-  //   });
+  const mutation = useMutation({
+    mutationFn: ({ plantId, data }: UpdatePlantRequest) =>
+      updatePlant({ plantId, data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['plants'] });
+    },
+  });
 
   const statuses = getStatusOptions();
   const status = statuses.find(status => status.value === plant.status);
 
-  const handleStatusUpdate = async ({ userId, status }: UpdateStatus) => {
-    //   mutation.mutate({ userId, data: { status } });
+  const InitialData = {
+    id: plant._id,
+    namePlant: plant.namePlant || '',
+    code: plant.code || '',
+    location: plant.location || '',
+    status: plant.status || '',
+  };
+
+  const handleStatusUpdate = async ({ plantId, status }: UpdateStatus) => {
+    console.log(plantId);
+
+    mutation.mutate({ plantId, data: { status } });
   };
 
   return (
@@ -80,7 +93,7 @@ const PlantCard = ({ plant }: PlantCardProps) => {
               width={38}
               height={32}
               onClick={() => {
-                setOpen(true);
+                setOpenPlantPartsListModal(true);
               }}
             >
               <svg width="16" height="16" className={css.btn_icon}>
@@ -93,7 +106,7 @@ const PlantCard = ({ plant }: PlantCardProps) => {
               width={38}
               height={32}
               onClick={() => {
-                setOpen(true);
+                setOpenUpdatePlantModal(true);
               }}
             >
               <svg width="16" height="16" className={css.btn_icon}>
@@ -108,7 +121,7 @@ const PlantCard = ({ plant }: PlantCardProps) => {
                 height={32}
                 onClick={() =>
                   handleStatusUpdate({
-                    userId: plant._id,
+                    plantId: plant._id,
                     status: 'deactivated',
                   })
                 }
@@ -124,7 +137,10 @@ const PlantCard = ({ plant }: PlantCardProps) => {
                 width={38}
                 height={32}
                 onClick={() =>
-                  handleStatusUpdate({ userId: plant._id, status: 'active' })
+                  handleStatusUpdate({
+                    plantId: plant._id,
+                    status: 'active',
+                  })
                 }
               >
                 <svg width="16" height="16" className={css.btn_icon_check}>
@@ -135,6 +151,13 @@ const PlantCard = ({ plant }: PlantCardProps) => {
           </div>
         </div>
       </div>
+      {openUpdatePlantModal && (
+        <CreateAndEditPlantAndPlantPartsForm
+          onClose={() => setOpenUpdatePlantModal(false)}
+          isPlantEditMode={true}
+          initialData={InitialData}
+        />
+      )}
     </div>
   );
 };

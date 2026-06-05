@@ -1,25 +1,25 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
-import css from './ReportForm.module.css';
 import Button from '@/components/UI/Button/Button';
-import { useAuthStore } from '@/lib/store/authStore';
-import { useEffect, useRef, useState } from 'react';
-import { generateId } from '@/lib/api/generate';
 import Input from '@/components/UI/Input/Input';
-import { getAllPlants } from '@/lib/api/plants';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, useWatch } from 'react-hook-form';
-import { Plant } from '@/types/plantType';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
-import { PlantPart } from '@/types/partPlant';
+import { UploadImages } from '@/components/UI/UploadImages/UploadImages';
+import { createFault } from '@/lib/api/faults';
+import { generateId } from '@/lib/api/generate';
+import { getAllPlants } from '@/lib/api/plants';
+import { getAllPartsByPlantId } from '@/lib/api/plantsParts';
+import { useAuthStore } from '@/lib/store/authStore';
+import { useFaultDraft } from '@/lib/store/reportStore';
 import { reportSchema } from '@/lib/validation/reportFormValidation';
 import { ReportFormValues } from '@/types/faultType';
-import { createFault } from '@/lib/api/faults';
+import { PlantPart } from '@/types/plantPartType';
+import { Plant } from '@/types/plantType';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useFaultDraft } from '@/lib/store/reportStore';
-import { UploadImages } from '@/components/UI/UploadImages/UploadImages';
-import { getAllPartsByPlantId } from '@/lib/api/plantsParts';
+import css from './ReportForm.module.css';
 
 const ReportForm = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
