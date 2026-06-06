@@ -9,6 +9,8 @@ import { FaultCard } from '@/types/faultType';
 import FaultManagerCard from '@/components/Manager/FaultManagerCard/FaultManagerCard';
 import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
 import Pagination from '@/components/UI/Pagination/Pagination';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
 import css from './Manager.module.css';
 
 type ManagerTab = 'received' | 'inProgress' | 'archive';
@@ -29,6 +31,7 @@ const PER_PAGE = 8;
 
 const ManagerClient = () => {
   const t = useTranslations('ManagerPage');
+  const tNoFound = useTranslations('NoFound');
   const setPageTitle = usePageStore(state => state.setPageTitle);
 
   const [activeTab, setActiveTab] = useState<ManagerTab>('received');
@@ -92,18 +95,25 @@ const ManagerClient = () => {
 
         <div className={css.contentSection}>
           {isLoading ? (
-            <p className={css.loadingText}>Caricamento...</p>
+            <div className={css.loadingWrap}>
+              <Loader />
+            </div>
           ) : isError ? (
-            <p className={css.emptyText}>
-              Errore durante il caricamento delle segnalazioni
-            </p>
+            <NoFound
+              title={tNoFound('serverErrorTitle')}
+              message={tNoFound('serverErrorMessage')}
+            />
           ) : faults.length === 0 ? (
-            <p className={css.emptyText}>
-              {activeTab === 'received' && 'Nessuna segnalazione in attesa'}
-              {activeTab === 'inProgress' &&
-                'Nessuna segnalazione in lavorazione'}
-              {activeTab === 'archive' && 'Nessuna segnalazione archiviata'}
-            </p>
+            <NoFound
+              title={tNoFound('noResultsTitle')}
+              message={
+                activeTab === 'received'
+                  ? 'Nessuna segnalazione in attesa'
+                  : activeTab === 'inProgress'
+                    ? 'Nessuna segnalazione in lavorazione'
+                    : 'Nessuna segnalazione archiviata'
+              }
+            />
           ) : (
             <ul className={css.cardList}>
               {faults.map(fault => (

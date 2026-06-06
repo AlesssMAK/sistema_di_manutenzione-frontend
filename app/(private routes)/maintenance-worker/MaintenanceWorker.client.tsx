@@ -15,6 +15,9 @@ import ViewModeBar, {
   type FaultViewMode,
 } from '@/components/ViewModeBar/ViewModeBar';
 import DaySlotGrid from '@/components/DaySlotGrid/DaySlotGrid';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
+import Button from '@/components/UI/Button/Button';
 import { FaultCard } from '@/types/faultType';
 import { fetchFaultCards } from '@/lib/api/faults';
 import { useAuthStore } from '@/lib/store/authStore';
@@ -24,6 +27,7 @@ const PER_PAGE = 6;
 
 const MaintenanceWorkerClient = () => {
   const t = useTranslations('maintenanceWorkerPage');
+  const tNoFound = useTranslations('NoFound');
   const setPageTitle = usePageStore(state => state.setPageTitle);
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
@@ -313,7 +317,9 @@ const MaintenanceWorkerClient = () => {
             </div>
 
             {isLoading && page === 1 ? (
-              <p className={css.loadingText}>Caricamento...</p>
+              <div className={css.loadingWrap}>
+                <Loader />
+              </div>
             ) : items.length > 0 ? (
               <>
                 <FaultCardsList faults={items} />
@@ -340,15 +346,18 @@ const MaintenanceWorkerClient = () => {
               </>
             ) : (
               <div className={css.noResults}>
-                <p className={css.noResultsText}>{emptyText}</p>
+                <NoFound
+                  title={tNoFound('noResultsTitle')}
+                  message={emptyText}
+                />
                 {showResetButton && (
-                  <button
+                  <Button
                     type="button"
-                    className={css.emptyHintButton}
+                    className="button button--blue"
                     onClick={handleResetFilters}
                   >
                     Mostra tutte
-                  </button>
+                  </Button>
                 )}
               </div>
             )}

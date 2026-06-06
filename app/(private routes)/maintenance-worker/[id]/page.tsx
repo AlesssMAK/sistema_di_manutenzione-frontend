@@ -4,11 +4,14 @@ import { use, useEffect, useState } from 'react';
 import { fetchFaultById } from '@/lib/api/faults';
 import { FaultCard } from '@/types/faultType';
 import toast from 'react-hot-toast';
-import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import css from './page.module.css';
 import { useRouter } from 'next/navigation';
 import ImageModal from '@/components/ImageModal/ImageModal';
 import MaintenanceUpdateModal from '@/components/MaintenanceUpdateModal/MaintenanceUpdateModal';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
+import Button from '@/components/UI/Button/Button';
 
 export default function FaultDetailPage({
   params,
@@ -16,6 +19,7 @@ export default function FaultDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const router = useRouter();
+  const tNoFound = useTranslations('NoFound');
   const resolvedParams = use(params);
   const id = resolvedParams.id;
   const [fault, setFault] = useState<FaultCard | null>(null);
@@ -53,8 +57,21 @@ export default function FaultDetailPage({
     });
     setIsUpdateModalOpen(false);
   };
-  if (isLoading) return <div className={css.loading}>Caricamento...</div>;
-  if (!fault) return <div className={css.error}>Intervento non trovato</div>;
+  if (isLoading)
+    return (
+      <div className={css.container}>
+        <Loader />
+      </div>
+    );
+  if (!fault)
+    return (
+      <div className={css.container}>
+        <NoFound
+          title={tNoFound('noResultsTitle')}
+          message="Intervento non trovato"
+        />
+      </div>
+    );
 
   return (
     <div className={css.container}>
@@ -200,13 +217,13 @@ export default function FaultDetailPage({
           </div>
         )}
         <div className={css.actions}>
-          <button
+          <Button
             type="button"
-            className={css.submitButton}
+            className="button button--blue"
             onClick={() => setIsUpdateModalOpen(true)}
           >
             Aggiungi commento e cambia stato
-          </button>
+          </Button>
         </div>
       </div>
       {/* Modal di aggiornamento */}

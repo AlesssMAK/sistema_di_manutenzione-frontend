@@ -8,6 +8,8 @@ import { fetchFaultCards } from '@/lib/api/faults';
 import FaultManagerCard from '@/components/Manager/FaultManagerCard/FaultManagerCard';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Pagination from '@/components/UI/Pagination/Pagination';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
 import css from './Safety.module.css';
 
 const STATUS_OPTIONS = [
@@ -23,6 +25,7 @@ const PER_PAGE = 8;
 
 const SafetyClient = () => {
   const t = useTranslations('SafetyPage');
+  const tNoFound = useTranslations('NoFound');
   const setPageTitle = usePageStore(state => state.setPageTitle);
 
   const [statusFault, setStatusFault] = useState<string>('');
@@ -79,15 +82,19 @@ const SafetyClient = () => {
 
       <div className={css.contentSection}>
         {isLoading ? (
-          <p className={css.loadingText}>Caricamento...</p>
+          <div className={css.loadingWrap}>
+            <Loader />
+          </div>
         ) : isError ? (
-          <p className={css.emptyText}>
-            Errore durante il caricamento delle segnalazioni
-          </p>
+          <NoFound
+            title={tNoFound('serverErrorTitle')}
+            message={tNoFound('serverErrorMessage')}
+          />
         ) : faults.length === 0 ? (
-          <p className={css.emptyText}>
-            Nessuna segnalazione di sicurezza
-          </p>
+          <NoFound
+            title={tNoFound('noResultsTitle')}
+            message="Nessuna segnalazione di sicurezza"
+          />
         ) : (
           <ul className={css.cardList}>
             {faults.map(fault => (

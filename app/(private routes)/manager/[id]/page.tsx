@@ -5,10 +5,13 @@ import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { format, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
 import { fetchFaultById } from '@/lib/api/faults';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import ImageModal from '@/components/ImageModal/ImageModal';
 import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
 import css from './page.module.css';
 
 const formatDate = (value?: string) => {
@@ -31,6 +34,7 @@ const ManagerFaultDetailPage = ({
   params: Promise<{ id: string }>;
 }) => {
   const router = useRouter();
+  const tNoFound = useTranslations('NoFound');
   const resolvedParams = use(params);
   const id = resolvedParams.id;
 
@@ -54,9 +58,21 @@ const ManagerFaultDetailPage = ({
     return () => unsubscribeFromFault(id);
   }, [id, subscribeToFault, unsubscribeFromFault]);
 
-  if (isLoading) return <div className={css.loading}>Caricamento...</div>;
+  if (isLoading)
+    return (
+      <div className={css.container}>
+        <Loader />
+      </div>
+    );
   if (isError || !fault)
-    return <div className={css.error}>Segnalazione non trovata</div>;
+    return (
+      <div className={css.container}>
+        <NoFound
+          title={tNoFound('noResultsTitle')}
+          message="Segnalazione non trovata"
+        />
+      </div>
+    );
 
   const isReadOnly = fault.statusFault === 'Completed';
 
