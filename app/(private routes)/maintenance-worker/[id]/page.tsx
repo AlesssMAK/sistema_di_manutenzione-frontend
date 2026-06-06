@@ -184,7 +184,7 @@ export default function FaultDetailPage({
             </p>
           </div>
 
-          {/* Комментарий рабочего (manutentore) */}
+          {/* Commento Maintenance Worker */}
           <div className={css.commentBox}>
             <label>Commento Maintenance Worker</label>
             <p>
@@ -193,6 +193,14 @@ export default function FaultDetailPage({
                 : 'Commento assente'}
             </p>
           </div>
+
+          {/* Nota HSE — visibile solo per i fault Safety */}
+          {fault.typeFault === 'Safety' && (
+            <div className={css.commentBox}>
+              <label>Nota HSE (Sicurezza)</label>
+              <p>{fault.commentSafety || 'Commento assente'}</p>
+            </div>
+          )}
         </div>
 
         {/* Фотографии */}

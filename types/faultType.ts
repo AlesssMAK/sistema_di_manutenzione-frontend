@@ -40,6 +40,7 @@ export interface FaultCard {
   img?: [];
   managerComment?: string;
   commentMaintenanceWorker?: string;
+  commentSafety?: string;
   actualDuration?: number;
   suspensionReason?: string;
   materialRequest?: string;

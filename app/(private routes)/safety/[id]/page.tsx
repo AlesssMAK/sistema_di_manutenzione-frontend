@@ -2,22 +2,27 @@
 
 import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { format, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
 import { fetchFaultById } from '@/lib/api/faults';
+import { updateSafetyComment } from '@/lib/api/safety';
+import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import ImageModal from '@/components/ImageModal/ImageModal';
-import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
+import Button from '@/components/UI/Button/Button';
 import css from './page.module.css';
 
 const formatDate = (value?: string) => {
   if (!value) return '—';
   const parsed = parseISO(value);
-  return isValid(parsed) ? format(parsed, 'dd MMMM yyyy', { locale: it }) : value;
+  return isValid(parsed)
+    ? format(parsed, 'dd MMMM yyyy', { locale: it })
+    : value;
 };
 
 const formatDateTime = (value?: string) => {
@@ -28,19 +33,21 @@ const formatDateTime = (value?: string) => {
     : value;
 };
 
-const ManagerFaultDetailPage = ({
+const SafetyFaultDetailPage = ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
   const router = useRouter();
   const tNoFound = useTranslations('NoFound');
+  const queryClient = useQueryClient();
+  const { user } = useAuthStore();
   const resolvedParams = use(params);
   const id = resolvedParams.id;
 
   const { subscribeToFault, unsubscribeFromFault } = useSocket();
-  const [isPlanOpen, setIsPlanOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [commentDraft, setCommentDraft] = useState('');
 
   const {
     data: fault,
@@ -58,12 +65,36 @@ const ManagerFaultDetailPage = ({
     return () => unsubscribeFromFault(id);
   }, [id, subscribeToFault, unsubscribeFromFault]);
 
+  // Sync draft with server value when fault loads / updates via socket
+  useEffect(() => {
+    if (fault?.commentSafety !== undefined) {
+      setCommentDraft(fault.commentSafety ?? '');
+    }
+  }, [fault?._id, fault?.commentSafety]);
+
+  const mutation = useMutation({
+    mutationFn: (text: string) => updateSafetyComment(id, text),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['fault', id] });
+      queryClient.invalidateQueries({ queryKey: ['faults'] });
+      toast.success('Nota HSE salvata');
+    },
+    onError: (err: unknown) => {
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: unknown }).message)
+          : 'Errore durante il salvataggio della nota';
+      toast.error(message);
+    },
+  });
+
   if (isLoading)
     return (
       <div className={css.container}>
         <Loader />
       </div>
     );
+
   if (isError || !fault)
     return (
       <div className={css.container}>
@@ -74,7 +105,8 @@ const ManagerFaultDetailPage = ({
       </div>
     );
 
-  const isReadOnly = fault.statusFault === 'Completed';
+  const canEditComment = user?.role === 'safety' || user?.role === 'admin';
+  const draftChanged = commentDraft.trim() !== (fault.commentSafety ?? '').trim();
 
   return (
     <div className={css.container}>
@@ -84,7 +116,7 @@ const ManagerFaultDetailPage = ({
             <button
               type="button"
               className={css.backButton}
-              onClick={() => router.push('/manager')}
+              onClick={() => router.push('/safety')}
               title="Torna indietro"
             >
               <svg
@@ -101,7 +133,10 @@ const ManagerFaultDetailPage = ({
                 <polyline points="12 19 5 12 12 5"></polyline>
               </svg>
             </button>
-            <h2 className={css.title}>Dettaglio segnalazione</h2>
+            <h2 className={css.title}>
+              Dettaglio segnalazione
+              <span className={css.hseBadge}>HSE</span>
+            </h2>
           </div>
           <span className={css.idBadge}>{fault.faultId}</span>
         </header>
@@ -114,7 +149,9 @@ const ManagerFaultDetailPage = ({
           <div className={css.infoItem}>
             <label>Stato</label>
             <span
-              className={`${css.status} ${css[`status${fault.statusFault.replace(' ', '')}`] || ''}`}
+              className={`${css.status} ${
+                css[`status${fault.statusFault.replace(' ', '')}`] || ''
+              }`}
             >
               {fault.statusFault}
             </span>
@@ -166,19 +203,8 @@ const ManagerFaultDetailPage = ({
             </p>
           </div>
           <div className={css.infoItem}>
-            <label>Durata stimata</label>
-            <p>
-              {fault.estimatedDuration ? `${fault.estimatedDuration} min` : '—'}
-            </p>
-          </div>
-
-          <div className={css.infoItem}>
             <label>Scadenza</label>
             <p className={css.deadline}>{formatDate(fault.deadline)}</p>
-          </div>
-          <div className={css.infoItem}>
-            <label>Manutentori assegnati</label>
-            <p>{fault.assignedMaintainers?.length ?? 0}</p>
           </div>
         </div>
 
@@ -195,12 +221,6 @@ const ManagerFaultDetailPage = ({
             <label>Note manutentore</label>
             <p>{fault.commentMaintenanceWorker || 'Nessuna nota'}</p>
           </div>
-          {fault.typeFault === 'Safety' && (
-            <div className={css.commentBox}>
-              <label>Nota HSE (Sicurezza)</label>
-              <p>{fault.commentSafety || 'Nessuna nota'}</p>
-            </div>
-          )}
         </div>
 
         {fault.img && fault.img.length > 0 && (
@@ -224,24 +244,40 @@ const ManagerFaultDetailPage = ({
           </div>
         )}
 
-        {!isReadOnly && (
-          <div className={css.actions}>
-            <button
-              type="button"
-              className={css.primaryButton}
-              onClick={() => setIsPlanOpen(true)}
-            >
-              {fault.plannedDate
-                ? 'Modifica pianificazione'
-                : 'Pianifica intervento'}
-            </button>
-          </div>
-        )}
+        <div className={css.hseSection}>
+          <label className={css.hseLabel}>Nota HSE (Sicurezza)</label>
+          {canEditComment ? (
+            <>
+              <textarea
+                className={css.hseTextarea}
+                rows={4}
+                maxLength={2000}
+                value={commentDraft}
+                onChange={e => setCommentDraft(e.target.value)}
+                placeholder="Scrivi qui la tua valutazione di sicurezza..."
+                disabled={mutation.isPending}
+              />
+              <div className={css.hseActions}>
+                <span className={css.hseCounter}>
+                  {commentDraft.length} / 2000
+                </span>
+                <Button
+                  type="button"
+                  className="button button--blue"
+                  onClick={() => mutation.mutate(commentDraft.trim())}
+                  disabled={mutation.isPending || !draftChanged}
+                >
+                  {mutation.isPending ? 'Salvataggio...' : 'Salva nota'}
+                </Button>
+              </div>
+            </>
+          ) : (
+            <p className={css.hseReadonly}>
+              {fault.commentSafety || 'Nessuna nota HSE'}
+            </p>
+          )}
+        </div>
       </div>
-
-      {isPlanOpen && (
-        <PlanFaultForm fault={fault} onClose={() => setIsPlanOpen(false)} />
-      )}
 
       {selectedImage && (
         <ImageModal
@@ -253,4 +289,4 @@ const ManagerFaultDetailPage = ({
   );
 };
 
-export default ManagerFaultDetailPage;
+export default SafetyFaultDetailPage;
