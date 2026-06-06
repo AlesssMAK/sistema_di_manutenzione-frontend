@@ -12,6 +12,7 @@ import ImageModal from '@/components/ImageModal/ImageModal';
 import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
+import Button from '@/components/UI/Button/Button';
 import css from './page.module.css';
 
 const formatDate = (value?: string) => {
@@ -60,25 +61,30 @@ const ManagerFaultDetailPage = ({
 
   if (isLoading)
     return (
-      <div className={css.container}>
-        <Loader />
+      <div className="container">
+        <div className={css.pageWrapper}>
+          <Loader />
+        </div>
       </div>
     );
   if (isError || !fault)
     return (
-      <div className={css.container}>
-        <NoFound
-          title={tNoFound('noResultsTitle')}
-          message="Segnalazione non trovata"
-        />
+      <div className="container">
+        <div className={css.pageWrapper}>
+          <NoFound
+            title={tNoFound('noResultsTitle')}
+            message="Segnalazione non trovata"
+          />
+        </div>
       </div>
     );
 
   const isReadOnly = fault.statusFault === 'Completed';
 
   return (
-    <div className={css.container}>
-      <div className={css.card}>
+    <div className="container">
+      <div className={css.pageWrapper}>
+        <div className={css.card}>
         <header className={css.header}>
           <div className={css.headerLeft}>
             <button
@@ -224,19 +230,20 @@ const ManagerFaultDetailPage = ({
           </div>
         )}
 
-        {!isReadOnly && (
-          <div className={css.actions}>
-            <button
-              type="button"
-              className={css.primaryButton}
-              onClick={() => setIsPlanOpen(true)}
-            >
-              {fault.plannedDate
-                ? 'Modifica pianificazione'
-                : 'Pianifica intervento'}
-            </button>
-          </div>
-        )}
+          {!isReadOnly && (
+            <div className={css.actions}>
+              <Button
+                type="button"
+                className="button button--blue"
+                onClick={() => setIsPlanOpen(true)}
+              >
+                {fault.plannedDate
+                  ? 'Modifica pianificazione'
+                  : 'Pianifica intervento'}
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       {isPlanOpen && (

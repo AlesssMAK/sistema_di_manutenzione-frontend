@@ -12,6 +12,7 @@ import {
 } from '@/lib/validation/maintenanceWorkerUpdateValidation';
 import type { FaultCard } from '@/types/faultType';
 import Button from '../UI/Button/Button';
+import Modal from '../UI/Modal/Modal';
 import SelectDropdown from '../UI/SelectDropdown/SelectDropdown';
 import css from './MaintenanceUpdateModal.module.css';
 
@@ -97,14 +98,11 @@ const MaintenanceUpdateModal = ({
 
   if (availableStatuses.length === 0) {
     return (
-      <div className={css.overlay} onClick={onClose}>
-        <div className={css.modal} onClick={e => e.stopPropagation()}>
-          <div className={css.header}>
-            <h3>Aggiorna Intervento</h3>
-            <span className={css.idBadge}>{displayId}</span>
-            <button className={css.closeBtn} onClick={onClose} type="button">
-              &times;
-            </button>
+      <Modal onClose={onClose}>
+        <div className={css.formContainer}>
+          <div className={css.titleContainer}>
+            <h1 className={css.title}>Aggiorna intervento</h1>
+            <p className={css.subtitle}>{displayId}</p>
           </div>
           <p className={css.emptyMessage}>
             Nessun aggiornamento possibile da stato &quot;{currentStatus}&quot;.
@@ -112,29 +110,30 @@ const MaintenanceUpdateModal = ({
               ' Usa "Prendi in carico" per iniziare.'}
           </p>
           <div className={css.actions}>
-            <Button className={css.cancelBtn} onClick={onClose}>
+            <Button
+              type="button"
+              className="button button--white"
+              onClick={onClose}
+            >
               Chiudi
             </Button>
           </div>
         </div>
-      </div>
+      </Modal>
     );
   }
 
   return (
-    <div className={css.overlay} onClick={onClose}>
-      <div className={css.modal} onClick={e => e.stopPropagation()}>
-        <div className={css.header}>
-          <h3>Aggiorna Intervento</h3>
-          <span className={css.idBadge}>{displayId}</span>
-          <button className={css.closeBtn} onClick={onClose} type="button">
-            &times;
-          </button>
+    <Modal onClose={onClose}>
+      <div className={css.formContainer}>
+        <div className={css.titleContainer}>
+          <h1 className={css.title}>Aggiorna intervento</h1>
+          <p className={css.subtitle}>{displayId}</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
           <div className={css.field}>
-            <label className={css.label}>Nuovo stato</label>
+            <p className={css.label}>Nuovo stato *</p>
             <SelectDropdown
               options={availableStatuses.map(s => STATUS_LABELS[s] ?? s)}
               selectedValue={
@@ -155,7 +154,7 @@ const MaintenanceUpdateModal = ({
           </div>
 
           <div className={css.field}>
-            <label className={css.label}>Commento manutentore</label>
+            <p className={css.label}>Commento manutentore</p>
             <textarea
               {...register('commentMaintenanceWorker')}
               placeholder="Dettagli del lavoro svolto..."
@@ -166,9 +165,7 @@ const MaintenanceUpdateModal = ({
 
           {selectedStatus === 'Completed' && (
             <div className={css.field}>
-              <label className={css.label}>
-                Durata effettiva (minuti) *
-              </label>
+              <p className={css.label}>Durata effettiva (minuti) *</p>
               <input
                 type="number"
                 min={1}
@@ -184,9 +181,7 @@ const MaintenanceUpdateModal = ({
           {selectedStatus === 'Suspended' && (
             <>
               <div className={css.field}>
-                <label className={css.label}>
-                  Motivo della sospensione *
-                </label>
+                <p className={css.label}>Motivo della sospensione *</p>
                 <textarea
                   {...register('suspensionReason')}
                   placeholder="Perché stai sospendendo? (es. attesa di un pezzo, problema di sicurezza...)"
@@ -200,9 +195,7 @@ const MaintenanceUpdateModal = ({
                 )}
               </div>
               <div className={css.field}>
-                <label className={css.label}>
-                  Materiale o supporto richiesto
-                </label>
+                <p className={css.label}>Materiale o supporto richiesto</p>
                 <textarea
                   {...register('materialRequest')}
                   placeholder="Cosa serve per riprendere? (opzionale)"
@@ -216,7 +209,7 @@ const MaintenanceUpdateModal = ({
           <div className={css.actions}>
             <Button
               type="button"
-              className={css.cancelBtn}
+              className="button button--white"
               onClick={onClose}
               disabled={mutation.isPending}
             >
@@ -224,7 +217,7 @@ const MaintenanceUpdateModal = ({
             </Button>
             <Button
               type="submit"
-              className={css.submitBtn}
+              className="button button--blue"
               disabled={mutation.isPending}
             >
               {mutation.isPending ? 'Salvataggio...' : 'Conferma e salva'}
@@ -232,7 +225,7 @@ const MaintenanceUpdateModal = ({
           </div>
         </form>
       </div>
-    </div>
+    </Modal>
   );
 };
 

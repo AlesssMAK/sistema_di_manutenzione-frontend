@@ -60,62 +60,64 @@ const SafetyClient = () => {
     STATUS_OPTIONS.find(o => o.value === statusFault)?.label ?? STATUS_OPTIONS[0].label;
 
   return (
-    <div className={css.pageWrapper}>
-      <h2 className={css.safetyHeaderPage}>
-        Monitoraggio Sicurezza
-        <span className={css.safetyBadge}>HSE</span>
-      </h2>
-      <p className={css.safetyTextPage}>
-        Visualizza in tempo reale le segnalazioni di sicurezza. Sola lettura.
-      </p>
+    <div className="container">
+      <div className={css.pageWrapper}>
+        <h2 className="title">
+          Monitoraggio Sicurezza
+          <span className={css.safetyBadge}>HSE</span>
+        </h2>
+        <p className="subtitle">
+          Visualizza in tempo reale le segnalazioni di sicurezza. Sola lettura.
+        </p>
 
-      <div className={css.toolbar}>
-        <div className={css.field}>
-          <label className={css.fieldLabel}>Stato</label>
-          <SelectDropdown
-            options={STATUS_OPTIONS.map(o => o.label)}
-            selectedValue={selectedStatusLabel}
-            onSelect={handleStatusChange}
-          />
-        </div>
-      </div>
-
-      <div className={css.contentSection}>
-        {isLoading ? (
-          <div className={css.loadingWrap}>
-            <Loader />
-          </div>
-        ) : isError ? (
-          <NoFound
-            title={tNoFound('serverErrorTitle')}
-            message={tNoFound('serverErrorMessage')}
-          />
-        ) : faults.length === 0 ? (
-          <NoFound
-            title={tNoFound('noResultsTitle')}
-            message="Nessuna segnalazione di sicurezza"
-          />
-        ) : (
-          <ul className={css.cardList}>
-            {faults.map(fault => (
-              <FaultManagerCard
-                key={fault._id}
-                fault={fault}
-                detailHref={f => `/safety/${f._id}`}
-              />
-            ))}
-          </ul>
-        )}
-
-        {totalPage > 1 && (
-          <div className={css.paginationWrapper}>
-            <Pagination
-              totalPages={totalPage}
-              page={page}
-              onPageChange={setPage}
+        <div className={css.toolbar}>
+          <div className={css.field}>
+            <label className={css.fieldLabel}>Stato</label>
+            <SelectDropdown
+              options={STATUS_OPTIONS.map(o => o.label)}
+              selectedValue={selectedStatusLabel}
+              onSelect={handleStatusChange}
             />
           </div>
-        )}
+        </div>
+
+        <div className={css.contentSection}>
+          {isLoading ? (
+            <div className={css.loadingWrap}>
+              <Loader />
+            </div>
+          ) : isError ? (
+            <NoFound
+              title={tNoFound('serverErrorTitle')}
+              message={tNoFound('serverErrorMessage')}
+            />
+          ) : faults.length === 0 ? (
+            <NoFound
+              title={tNoFound('noResultsTitle')}
+              message="Nessuna segnalazione di sicurezza"
+            />
+          ) : (
+            <ul className={css.cardList}>
+              {faults.map(fault => (
+                <FaultManagerCard
+                  key={fault._id}
+                  fault={fault}
+                  detailHref={f => `/safety/${f._id}`}
+                />
+              ))}
+            </ul>
+          )}
+
+          {totalPage > 1 && (
+            <div className={css.paginationWrapper}>
+              <Pagination
+                totalPages={totalPage}
+                page={page}
+                onPageChange={setPage}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

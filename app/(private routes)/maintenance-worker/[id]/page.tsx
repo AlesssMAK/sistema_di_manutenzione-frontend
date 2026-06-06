@@ -59,23 +59,28 @@ export default function FaultDetailPage({
   };
   if (isLoading)
     return (
-      <div className={css.container}>
-        <Loader />
+      <div className="container">
+        <div className={css.pageWrapper}>
+          <Loader />
+        </div>
       </div>
     );
   if (!fault)
     return (
-      <div className={css.container}>
-        <NoFound
-          title={tNoFound('noResultsTitle')}
-          message="Intervento non trovato"
-        />
+      <div className="container">
+        <div className={css.pageWrapper}>
+          <NoFound
+            title={tNoFound('noResultsTitle')}
+            message="Intervento non trovato"
+          />
+        </div>
       </div>
     );
 
   return (
-    <div className={css.container}>
-      <div className={css.card}>
+    <div className="container">
+      <div className={css.pageWrapper}>
+        <div className={css.card}>
         <header className={css.header}>
           <div className={css.headerLeft}>
             {/* Кнопка-стрелка назад */}
@@ -224,14 +229,15 @@ export default function FaultDetailPage({
             </div>
           </div>
         )}
-        <div className={css.actions}>
-          <Button
-            type="button"
-            className="button button--blue"
-            onClick={() => setIsUpdateModalOpen(true)}
-          >
-            Aggiungi commento e cambia stato
-          </Button>
+          <div className={css.actions}>
+            <Button
+              type="button"
+              className="button button--blue"
+              onClick={() => setIsUpdateModalOpen(true)}
+            >
+              Aggiungi commento e cambia stato
+            </Button>
+          </div>
         </div>
       </div>
       {/* Modal di aggiornamento */}

@@ -2,20 +2,6 @@
   padding: 32px 0;
 }
 
-.safetyHeaderPage {
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 1.2;
-  color: #0a0a0a;
-}
-
-.safetyTextPage {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #45556c;
-}
-
 .toolbar {
   display: flex;
   flex-wrap: wrap;
