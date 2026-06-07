@@ -8,7 +8,7 @@ import { it } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
 import { fetchFaultById } from '@/lib/api/faults';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
-import ImageModal from '@/components/ImageModal/ImageModal';
+import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';

@@ -11,7 +11,7 @@ import { fetchFaultById } from '@/lib/api/faults';
 import { updateSafetyComment } from '@/lib/api/safety';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
-import ImageModal from '@/components/ImageModal/ImageModal';
+import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Button from '@/components/UI/Button/Button';

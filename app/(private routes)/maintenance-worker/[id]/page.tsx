@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { useTranslations } from 'next-intl';
 import css from './page.module.css';
 import { useRouter } from 'next/navigation';
-import ImageModal from '@/components/ImageModal/ImageModal';
+import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Button from '@/components/UI/Button/Button';
