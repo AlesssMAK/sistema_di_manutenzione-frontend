@@ -4,17 +4,18 @@ import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
 import { useAuthStore } from '@/lib/store/authStore';
-import ShowMoreButton from '../ShowmoreButton/ShowmoreButton';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { claimFault } from '@/lib/api/faults';
+import { useState } from 'react';
 
 interface FaultCardsListProps {
   faults: FaultCard[];
 }
 
 const FaultCardsList = ({ faults }: FaultCardsListProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
@@ -30,7 +31,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
       const message =
         err && typeof err === 'object' && 'message' in err
           ? String((err as { message: unknown }).message)
-          : "Errore durante la presa in carico";
+          : 'Errore durante la presa in carico';
       toast.error(message);
     },
   });
@@ -58,6 +59,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   };
 
   const handleDetailClick = (id: string) => {
+    setIsLoading(true);
     router.push(`/maintenance-worker/${id}`);
   };
 
@@ -163,10 +165,16 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                     : 'Prendi in carico'}
                 </Button>
               )}
-              <ShowMoreButton
-                isLoading={false}
-                onShowMore={() => handleDetailClick(fault._id)}
-              />
+              <Button
+                type="button"
+                className="button button--blue"
+                width={200}
+                height={40}
+                onClick={() => handleDetailClick(fault._id)}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Caricamento...' : 'Visualizza dettagli'}
+              </Button>
             </div>
           </li>
         ))}

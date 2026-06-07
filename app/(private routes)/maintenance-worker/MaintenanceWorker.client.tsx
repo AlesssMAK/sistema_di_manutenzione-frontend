@@ -4,23 +4,23 @@ import { usePageStore } from '@/lib/store/pageStore';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import css from './page.module.css';
-import CalendarBlock from '@/components/CalendarBlock/CalendarBlock';
 import FaultCardsList from '@/components/FaultCardsList/FaultCardsList';
 import LoadMoreButton from '@/components/LoadMoreButton/LoadMoreButton';
-import DateNow from '@/components/DateNow/DateNow';
 import ScopeFilterBar, {
   type FaultScope,
-} from '@/components/ScopeFilterBar/ScopeFilterBar';
+} from '@/components/MaintenanceWorker/ScopeFilterBar/ScopeFilterBar';
 import ViewModeBar, {
   type FaultViewMode,
-} from '@/components/ViewModeBar/ViewModeBar';
-import DaySlotGrid from '@/components/DaySlotGrid/DaySlotGrid';
+} from '@/components/MaintenanceWorker/ViewModeBar/ViewModeBar';
+import DaySlotGrid from '@/components/MaintenanceWorker/DaySlotGrid/DaySlotGrid';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Button from '@/components/UI/Button/Button';
 import { FaultCard } from '@/types/faultType';
 import { fetchFaultCards } from '@/lib/api/faults';
 import { useAuthStore } from '@/lib/store/authStore';
+import CalendarBlock from '@/components/MaintenanceWorker/CalendarBlock/CalendarBlock';
+import DateNow from '@/components/MaintenanceWorker/DateNow/DateNow';
 
 const ACTIVE_STATUSES = 'Created,In progress,Suspended,Overdue';
 const PER_PAGE = 6;
@@ -266,8 +266,7 @@ const MaintenanceWorkerClient = () => {
           : 'Nessuna segnalazione';
   }
 
-  const showResetButton =
-    !isOverdueMode && (selectedDate || scope !== 'all');
+  const showResetButton = !isOverdueMode && (selectedDate || scope !== 'all');
 
   return (
     <div className="container">
@@ -284,10 +283,7 @@ const MaintenanceWorkerClient = () => {
               onScopeChange={handleScopeChange}
             />
           )}
-          <ViewModeBar
-            activeMode={viewMode}
-            onModeChange={handleModeChange}
-          />
+          <ViewModeBar activeMode={viewMode} onModeChange={handleModeChange} />
         </div>
 
         <div className={css.workerContainer}>

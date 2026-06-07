@@ -11,10 +11,10 @@ import {
   type MaintainerUpdateValues,
 } from '@/lib/validation/maintenanceWorkerUpdateValidation';
 import type { FaultCard } from '@/types/faultType';
-import Button from '../UI/Button/Button';
-import Modal from '../UI/Modal/Modal';
-import SelectDropdown from '../UI/SelectDropdown/SelectDropdown';
 import css from './MaintenanceUpdateModal.module.css';
+import Button from '@/components/UI/Button/Button';
+import Modal from '@/components/UI/Modal/Modal';
+import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 
 interface MaintenanceUpdateModalProps {
   faultId: string;
@@ -136,9 +136,7 @@ const MaintenanceUpdateModal = ({
             <p className={css.label}>Nuovo stato *</p>
             <SelectDropdown
               options={availableStatuses.map(s => STATUS_LABELS[s] ?? s)}
-              selectedValue={
-                STATUS_LABELS[selectedStatus] ?? selectedStatus
-              }
+              selectedValue={STATUS_LABELS[selectedStatus] ?? selectedStatus}
               onSelect={label => {
                 const value =
                   availableStatuses.find(s => STATUS_LABELS[s] === label) ??
@@ -189,9 +187,7 @@ const MaintenanceUpdateModal = ({
                   rows={3}
                 />
                 {errors.suspensionReason && (
-                  <p className={css.error}>
-                    {errors.suspensionReason.message}
-                  </p>
+                  <p className={css.error}>{errors.suspensionReason.message}</p>
                 )}
               </div>
               <div className={css.field}>

@@ -1,4 +1,4 @@
-import Button from '../UI/Button/Button';
+import Button from '@/components/UI/Button/Button';
 import css from './FilterPriorityBar.module.css';
 import { TYPE_PRIORITY } from '@/constants/priorityFaults';
 
