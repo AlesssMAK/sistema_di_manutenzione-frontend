@@ -11,6 +11,7 @@ import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
+import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import css from './Manager.module.css';
 
 type ManagerTab = 'received' | 'inProgress' | 'archive';
@@ -21,11 +22,11 @@ const TAB_TO_STATUS: Record<ManagerTab, string> = {
   archive: 'Completed',
 };
 
-const TAB_LABELS: Record<ManagerTab, string> = {
-  received: 'Ricevute',
-  inProgress: 'In lavorazione',
-  archive: 'Registro completate',
-};
+const TABS: TabItem<ManagerTab>[] = [
+  { value: 'received', label: 'Ricevute' },
+  { value: 'inProgress', label: 'In lavorazione' },
+  { value: 'archive', label: 'Registro completate' },
+];
 
 const PER_PAGE = 8;
 
@@ -75,22 +76,19 @@ const ManagerClient = () => {
           l&apos;archivio
         </p>
 
-        <div className={css.tabsBar}>
-          {(Object.keys(TAB_LABELS) as ManagerTab[]).map(tab => (
-            <button
-              key={tab}
-              type="button"
-              onClick={() => handleTabChange(tab)}
-              className={`${css.tabButton} ${
-                activeTab === tab ? css.tabActive : ''
-              }`}
-            >
-              {TAB_LABELS[tab]}
-              {activeTab === tab && data?.totalFault !== undefined && (
-                <span className={css.tabCount}>{data.totalFault}</span>
-              )}
-            </button>
-          ))}
+        <div className={css.tabsBarWrap}>
+          <Tabs<ManagerTab>
+            tabs={TABS}
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            counts={
+              data?.totalFault !== undefined
+                ? ({ [activeTab]: data.totalFault } as Partial<
+                    Record<ManagerTab, number>
+                  >)
+                : undefined
+            }
+          />
         </div>
 
         <div className={css.contentSection}>

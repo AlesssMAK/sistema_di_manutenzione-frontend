@@ -9,9 +9,15 @@ import LoadMoreButton from '@/components/LoadMoreButton/LoadMoreButton';
 import ScopeFilterBar, {
   type FaultScope,
 } from '@/components/MaintenanceWorker/ScopeFilterBar/ScopeFilterBar';
-import ViewModeBar, {
-  type FaultViewMode,
-} from '@/components/MaintenanceWorker/ViewModeBar/ViewModeBar';
+import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+
+export type FaultViewMode = 'active' | 'overdue' | 'completed';
+
+const VIEW_MODE_TABS: TabItem<FaultViewMode>[] = [
+  { value: 'active', label: 'Attive' },
+  { value: 'overdue', label: 'In ritardo' },
+  { value: 'completed', label: 'Completate' },
+];
 import DaySlotGrid from '@/components/MaintenanceWorker/DaySlotGrid/DaySlotGrid';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
@@ -276,6 +282,14 @@ const MaintenanceWorkerClient = () => {
           Visualizza e gestisci gli interventi pianificati
         </p>
 
+        <div className={css.tabsBarWrap}>
+          <Tabs<FaultViewMode>
+            tabs={VIEW_MODE_TABS}
+            activeTab={viewMode}
+            onTabChange={handleModeChange}
+          />
+        </div>
+
         <div className={css.controls}>
           {!isOverdueMode && (
             <ScopeFilterBar
@@ -283,7 +297,6 @@ const MaintenanceWorkerClient = () => {
               onScopeChange={handleScopeChange}
             />
           )}
-          <ViewModeBar activeMode={viewMode} onModeChange={handleModeChange} />
         </div>
 
         <div className={css.workerContainer}>
