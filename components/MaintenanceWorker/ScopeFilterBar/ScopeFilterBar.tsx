@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import css from './ScopeFilterBar.module.css';
 
 export type FaultScope = 'mine' | 'pool' | 'all';
@@ -10,16 +11,12 @@ interface ScopeFilterBarProps {
   disabled?: boolean;
 }
 
-const SCOPE_LABELS: Record<FaultScope, string> = {
-  mine: 'Mie',
-  pool: 'Libere',
-  all: 'Tutte',
-};
+const SCOPES: FaultScope[] = ['mine', 'pool', 'all'];
 
-const SCOPE_HINTS: Record<FaultScope, string> = {
-  mine: 'Solo interventi assegnati a me',
-  pool: 'Interventi non assegnati (pool)',
-  all: 'Tutti gli interventi',
+const SCOPE_HINT_KEY: Record<FaultScope, string> = {
+  mine: 'mineHint',
+  pool: 'poolHint',
+  all: 'allHint',
 };
 
 const ScopeFilterBar = ({
@@ -27,20 +24,22 @@ const ScopeFilterBar = ({
   onScopeChange,
   disabled = false,
 }: ScopeFilterBarProps) => {
+  const t = useTranslations('maintenanceWorkerPage.scope');
+
   return (
-    <div className={css.bar} role="tablist" aria-label="Ambito segnalazioni">
-      {(Object.keys(SCOPE_LABELS) as FaultScope[]).map(scope => (
+    <div className={css.bar} role="tablist" aria-label={t('ariaLabel')}>
+      {SCOPES.map(scope => (
         <button
           key={scope}
           type="button"
           role="tab"
           aria-selected={activeScope === scope}
-          title={SCOPE_HINTS[scope]}
+          title={t(SCOPE_HINT_KEY[scope])}
           onClick={() => onScopeChange(scope)}
           disabled={disabled}
           className={`${css.button} ${activeScope === scope ? css.active : ''}`}
         >
-          {SCOPE_LABELS[scope]}
+          {t(scope)}
         </button>
       ))}
     </div>

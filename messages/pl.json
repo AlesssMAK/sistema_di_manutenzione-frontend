@@ -64,6 +64,7 @@
     },
     "UsersList": {
       "name": "Imię i nazwisko użytkownika",
+      "namePlantPart": "Nazwa części",
       "role": "Rola",
       "email": "Powiązany e-mail",
       "status": "Status",
@@ -107,6 +108,7 @@
       "loadDeadlines": "Błąd podczas ładowania terminów"
     },
     "calendar": {
+      "header": "Kalendarz",
       "interventionsCount": "{count} zaplanowana(e) interwencja(e)"
     },
     "dayView": {
@@ -228,6 +230,8 @@
     "maintainerCount": "{count, plural, one {# konserwator} few {# konserwatorów} many {# konserwatorów} other {# konserwatorów}}",
     "buttons": {
       "details": "Szczegóły",
+      "viewDetails": "Zobacz szczegóły",
+      "loading": "Ładowanie...",
       "plan": "Zaplanuj",
       "modify": "Modyfikuj planowanie",
       "takeOver": "Przejmij",

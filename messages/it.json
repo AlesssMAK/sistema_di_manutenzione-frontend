@@ -95,6 +95,7 @@
       },
     "PlantsList": {
       "name": "Nome Macchina",
+      "namePlantPart": "Nome Parte",
       "code": "Codice",
       "location": "Ubicazione",
       "status": "Stato",
@@ -138,6 +139,7 @@
     "loadDeadlines": "Errore caricamento scadenze"
   },
   "calendar": {
+    "header": "Calendario",
     "interventionsCount": "{count} intervento/i pianificato/i"
   },
   "dayView": {
@@ -259,6 +261,8 @@
   "maintainerCount": "{count, plural, one {# manutentore} other {# manutentori}}",
   "buttons": {
     "details": "Dettagli",
+    "viewDetails": "Visualizza dettagli",
+    "loading": "Caricamento...",
     "plan": "Pianifica",
     "modify": "Modifica pianificazione",
     "takeOver": "Prendi in carico",

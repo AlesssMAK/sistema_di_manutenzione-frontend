@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { format, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
 import type { FaultCard } from '@/types/faultType';
 import css from './DaySlotGrid.module.css';
 
@@ -33,6 +34,7 @@ const DaySlotGrid = ({
   endHour = 17,
 }: DaySlotGridProps) => {
   const router = useRouter();
+  const t = useTranslations('maintenanceWorkerPage.dayView');
   const hours = Array.from(
     { length: endHour - startHour + 1 },
     (_, i) => i + startHour
@@ -43,7 +45,7 @@ const DaySlotGrid = ({
   return (
     <div className={css.container}>
       <h3 className={css.title}>
-        Vista giornaliera · {formatDayTitle(selectedDate)}
+        {t('title')} · {formatDayTitle(selectedDate)}
       </h3>
 
       <div className={css.grid}>

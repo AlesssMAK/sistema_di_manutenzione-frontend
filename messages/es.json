@@ -96,6 +96,7 @@
     },
     "PlantsList": {
       "name": "Nombre de Máquina",
+            "namePlantPart": "Nombre Pieza",
       "code": "Código",
       "location": "Ubicación",
       "status": "Estado",
@@ -139,6 +140,7 @@
       "loadDeadlines": "Error al cargar las fechas límite"
     },
     "calendar": {
+      "header": "Calendario",
       "interventionsCount": "{count} intervención(es) planificada(s)"
     },
     "dayView": {
@@ -260,6 +262,8 @@
     "maintainerCount": "{count, plural, one {# mantenedor} other {# mantenedores}}",
     "buttons": {
       "details": "Detalles",
+      "viewDetails": "Ver detalles",
+      "loading": "Cargando...",
       "plan": "Planificar",
       "modify": "Modificar planificación",
       "takeOver": "Tomar a cargo",

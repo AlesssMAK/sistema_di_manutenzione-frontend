@@ -96,6 +96,7 @@
     },
     "PlantsList": {
       "name": "Machine Name",
+      "namePlantPart": "Part Name",
       "code": "Code",
       "location": "Location",
       "status": "Status",
@@ -139,6 +140,7 @@
       "loadDeadlines": "Error loading deadlines"
     },
     "calendar": {
+      "header": "Calendar",
       "interventionsCount": "{count} planned intervention(s)"
     },
     "dayView": {
@@ -260,6 +262,8 @@
     "maintainerCount": "{count, plural, one {# maintainer} other {# maintainers}}",
     "buttons": {
       "details": "Details",
+      "viewDetails": "View details",
+      "loading": "Loading...",
       "plan": "Plan",
       "modify": "Modify planning",
       "takeOver": "Take over",

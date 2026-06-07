@@ -11,13 +11,6 @@ import ScopeFilterBar, {
 } from '@/components/MaintenanceWorker/ScopeFilterBar/ScopeFilterBar';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 
-export type FaultViewMode = 'active' | 'overdue' | 'completed';
-
-const VIEW_MODE_TABS: TabItem<FaultViewMode>[] = [
-  { value: 'active', label: 'Attive' },
-  { value: 'overdue', label: 'In ritardo' },
-  { value: 'completed', label: 'Completate' },
-];
 import DaySlotGrid from '@/components/MaintenanceWorker/DaySlotGrid/DaySlotGrid';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
@@ -28,6 +21,8 @@ import { useAuthStore } from '@/lib/store/authStore';
 import CalendarBlock from '@/components/MaintenanceWorker/CalendarBlock/CalendarBlock';
 import DateNow from '@/components/MaintenanceWorker/DateNow/DateNow';
 
+export type FaultViewMode = 'active' | 'overdue' | 'completed';
+
 const ACTIVE_STATUSES = 'Created,In progress,Suspended,Overdue';
 const PER_PAGE = 6;
 
@@ -37,6 +32,12 @@ const MaintenanceWorkerClient = () => {
   const setPageTitle = usePageStore(state => state.setPageTitle);
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
+
+  const VIEW_MODE_TABS: TabItem<FaultViewMode>[] = [
+    { value: 'active', label: t('tabs.active') },
+    { value: 'overdue', label: t('tabs.overdue') },
+    { value: 'completed', label: t('tabs.completed') },
+  ];
 
   const [items, setItems] = useState<FaultCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -114,7 +115,7 @@ const MaintenanceWorkerClient = () => {
         setTotalPage(data.totalPage || 0);
       } catch (error) {
         if (reqId !== requestIdRef.current) return;
-        console.error('Errore durante il caricamento dei dati:', error);
+        console.error(t('errors.loadData'), error);
       } finally {
         if (reqId === requestIdRef.current) {
           setIsLoading(false);
@@ -160,10 +161,10 @@ const MaintenanceWorkerClient = () => {
         });
         setPlannedCounts(counts);
       } catch (error) {
-        console.error('Errore caricamento conteggi calendario:', error);
+        console.error(t('errors.loadCounts'), error);
       }
     },
-    []
+    [t]
   );
 
   const fetchOverdueDeadlines = useCallback(async (currentPriority: string) => {
@@ -187,9 +188,9 @@ const MaintenanceWorkerClient = () => {
 
       setOverdueDeadlineDates(dates);
     } catch (error) {
-      console.error('Errore caricamento scadenze:', error);
+      console.error(t('errors.loadDeadlines'), error);
     }
-  }, []);
+  }, [t]);
 
   const handlePriorityChange = (newPriority: string) => {
     const newValue = priority === newPriority ? '' : newPriority;
@@ -249,27 +250,27 @@ const MaintenanceWorkerClient = () => {
   }, [scope, userId, viewMode, fetchPlannedCounts]);
 
   // ---------- empty-state copy -----------------------------------------
-  let emptyText = 'Nessuna segnalazione';
+  let emptyText = t('empty.default');
   if (isOverdueMode) {
-    emptyText = 'Nessuna segnalazione in ritardo';
+    emptyText = t('empty.overdue');
   } else if (isCompletedMode) {
     emptyText = selectedDate
-      ? 'Nessuna segnalazione completata in questa data'
-      : 'Nessuna segnalazione completata';
+      ? t('empty.completedDate')
+      : t('empty.completed');
   } else if (selectedDate) {
     emptyText =
       scope === 'mine'
-        ? 'Nessuna segnalazione assegnata a te in questa data'
+        ? t('empty.mineDate')
         : scope === 'pool'
-          ? 'Nessuna segnalazione libera in questa data'
-          : 'Nessuna segnalazione in questa data';
+          ? t('empty.poolDate')
+          : t('empty.dateOnly');
   } else {
     emptyText =
       scope === 'mine'
-        ? 'Nessuna segnalazione assegnata a te'
+        ? t('empty.mine')
         : scope === 'pool'
-          ? 'Nessuna segnalazione libera (pool vuoto)'
-          : 'Nessuna segnalazione';
+          ? t('empty.pool')
+          : t('empty.default');
   }
 
   const showResetButton = !isOverdueMode && (selectedDate || scope !== 'all');
@@ -277,10 +278,8 @@ const MaintenanceWorkerClient = () => {
   return (
     <div className="container">
       <div className={css.pageWrapper}>
-        <h2 className="title">Pianificazione Manutentore</h2>
-        <p className="subtitle">
-          Visualizza e gestisci gli interventi pianificati
-        </p>
+        <h2 className="title">{t('headerTitle')}</h2>
+        <p className="subtitle">{t('headerSubtitle')}</p>
 
         <div className={css.tabsBarWrap}>
           <Tabs<FaultViewMode>
@@ -360,7 +359,7 @@ const MaintenanceWorkerClient = () => {
                     className="button button--blue"
                     onClick={handleResetFilters}
                   >
-                    Mostra tutte
+                    {t('empty.resetButton')}
                   </Button>
                 )}
               </div>

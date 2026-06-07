@@ -22,18 +22,18 @@ const TAB_TO_STATUS: Record<ManagerTab, string> = {
   archive: 'Completed',
 };
 
-const TABS: TabItem<ManagerTab>[] = [
-  { value: 'received', label: 'Ricevute' },
-  { value: 'inProgress', label: 'In lavorazione' },
-  { value: 'archive', label: 'Registro completate' },
-];
-
 const PER_PAGE = 8;
 
 const ManagerClient = () => {
   const t = useTranslations('ManagerPage');
   const tNoFound = useTranslations('NoFound');
   const setPageTitle = usePageStore(state => state.setPageTitle);
+
+  const TABS: TabItem<ManagerTab>[] = [
+    { value: 'received', label: t('tabs.received') },
+    { value: 'inProgress', label: t('tabs.inProgress') },
+    { value: 'archive', label: t('tabs.archive') },
+  ];
 
   const [activeTab, setActiveTab] = useState<ManagerTab>('received');
   const [page, setPage] = useState(1);
@@ -70,11 +70,8 @@ const ManagerClient = () => {
   return (
     <div className="container">
       <div className={css.pageWrapper}>
-        <h2 className="title">Pannello Responsabile</h2>
-        <p className="subtitle">
-          Gestisci le segnalazioni ricevute, le attività in corso e
-          l&apos;archivio
-        </p>
+        <h2 className="title">{t('headerTitle')}</h2>
+        <p className="subtitle">{t('headerSubtitle')}</p>
 
         <div className={css.tabsBarWrap}>
           <Tabs<ManagerTab>
@@ -104,13 +101,7 @@ const ManagerClient = () => {
           ) : faults.length === 0 ? (
             <NoFound
               title={tNoFound('noResultsTitle')}
-              message={
-                activeTab === 'received'
-                  ? 'Nessuna segnalazione in attesa'
-                  : activeTab === 'inProgress'
-                    ? 'Nessuna segnalazione in lavorazione'
-                    : 'Nessuna segnalazione archiviata'
-              }
+              message={t(`empty.${activeTab}`)}
             />
           ) : (
             <ul className={css.cardList}>

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import Calendar from '../Calendar/Calendar';
 import FilterPriorityBar from '../FilterPriorityBar/FilterPriorityBar';
 import css from './CalendarBlock.module.css';
@@ -19,9 +20,10 @@ const CalendarBlock = ({
   isDeadlineMode = false,
   plannedCounts = {},
 }: CalendarBlockProps) => {
+  const t = useTranslations('maintenanceWorkerPage.calendar');
   return (
     <div className={css.calendarBlockContainer}>
-      <h3 className={css.calendarHeader}>Calendario</h3>
+      <h3 className={css.calendarHeader}>{t('header')}</h3>
       <Calendar
         activeDataCreated={activeDate}
         onDataCreatedChange={onDateChange}

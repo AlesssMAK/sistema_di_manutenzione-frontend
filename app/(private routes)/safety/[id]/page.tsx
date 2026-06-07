@@ -39,6 +39,8 @@ const SafetyFaultDetailPage = ({
   params: Promise<{ id: string }>;
 }) => {
   const router = useRouter();
+  const t = useTranslations('FaultDetail');
+  const tSafety = useTranslations('SafetyPage');
   const tNoFound = useTranslations('NoFound');
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
@@ -77,13 +79,13 @@ const SafetyFaultDetailPage = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['fault', id] });
       queryClient.invalidateQueries({ queryKey: ['faults'] });
-      toast.success('Nota HSE salvata');
+      toast.success(t('hseSection.saved'));
     },
     onError: (err: unknown) => {
       const message =
         err && typeof err === 'object' && 'message' in err
           ? String((err as { message: unknown }).message)
-          : 'Errore durante il salvataggio della nota';
+          : t('hseSection.saveError');
       toast.error(message);
     },
   });
@@ -103,7 +105,7 @@ const SafetyFaultDetailPage = ({
         <div className={css.pageWrapper}>
           <NoFound
             title={tNoFound('noResultsTitle')}
-            message="Segnalazione non trovata"
+            message={t('errors.faultNotFound')}
           />
         </div>
       </div>
@@ -122,7 +124,7 @@ const SafetyFaultDetailPage = ({
               type="button"
               className={css.backButton}
               onClick={() => router.push('/safety')}
-              title="Torna indietro"
+              title={t('backButton')}
             >
               <svg
                 width="24"
@@ -139,8 +141,8 @@ const SafetyFaultDetailPage = ({
               </svg>
             </button>
             <h2 className={css.title}>
-              Dettaglio segnalazione
-              <span className={css.hseBadge}>HSE</span>
+              {t('title')}
+              <span className={css.hseBadge}>{tSafety('badge')}</span>
             </h2>
           </div>
           <span className={css.idBadge}>{fault.faultId}</span>
@@ -148,11 +150,11 @@ const SafetyFaultDetailPage = ({
 
         <div className={css.infoGrid}>
           <div className={css.infoItem}>
-            <label>Operatore</label>
+            <label>{t('labels.operator')}</label>
             <p>{fault.nameOperator || '—'}</p>
           </div>
           <div className={css.infoItem}>
-            <label>Stato</label>
+            <label>{t('labels.status')}</label>
             <span
               className={`${css.status} ${
                 css[`status${fault.statusFault.replace(' ', '')}`] || ''
@@ -163,26 +165,26 @@ const SafetyFaultDetailPage = ({
           </div>
 
           <div className={css.infoItem}>
-            <label>Data creazione</label>
+            <label>{t('labels.dateCreated')}</label>
             <p>
               {formatDate(fault.dataCreated)}
               {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
             </p>
           </div>
           <div className={css.infoItem}>
-            <label>Ultimo aggiornamento</label>
+            <label>{t('labels.lastUpdated')}</label>
             <p>{formatDateTime(fault.updatedAt)}</p>
           </div>
 
           <div className={css.infoItem}>
-            <label>Impianto</label>
+            <label>{t('labels.plant')}</label>
             <p>
               {fault.plantId?.namePlant ?? '—'}
               {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
             </p>
           </div>
           <div className={css.infoItem}>
-            <label>Parte di impianto</label>
+            <label>{t('labels.plantPart')}</label>
             <p>
               {fault.partId?.namePlantPart ?? '—'}
               {fault.partId?.codePlantPart
@@ -192,45 +194,45 @@ const SafetyFaultDetailPage = ({
           </div>
 
           <div className={css.infoItem}>
-            <label>Tipo guasto</label>
+            <label>{t('labels.type')}</label>
             <p>{fault.typeFault}</p>
           </div>
           <div className={css.infoItem}>
-            <label>Priorità</label>
+            <label>{t('labels.priority')}</label>
             <p className={css.priority}>{fault.priority}</p>
           </div>
 
           <div className={css.infoItem}>
-            <label>Pianificato</label>
+            <label>{t('labels.planned')}</label>
             <p>
               {fault.plannedDate ? formatDate(fault.plannedDate) : '—'}
               {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
             </p>
           </div>
           <div className={css.infoItem}>
-            <label>Scadenza</label>
+            <label>{t('labels.deadline')}</label>
             <p className={css.deadline}>{formatDate(fault.deadline)}</p>
           </div>
         </div>
 
         <div className={css.detailsBlock}>
           <div className={css.commentBox}>
-            <label>Descrizione (Operatore)</label>
-            <p>{fault.comment || 'Nessuna descrizione'}</p>
+            <label>{t('comments.operatorDescription')}</label>
+            <p>{fault.comment || t('comments.noDescription')}</p>
           </div>
           <div className={css.commentBox}>
-            <label>Note responsabile</label>
-            <p>{fault.managerComment || 'Nessuna nota'}</p>
+            <label>{t('comments.managerNote')}</label>
+            <p>{fault.managerComment || t('comments.noNote')}</p>
           </div>
           <div className={css.commentBox}>
-            <label>Note manutentore</label>
-            <p>{fault.commentMaintenanceWorker || 'Nessuna nota'}</p>
+            <label>{t('comments.maintainerNote')}</label>
+            <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
           </div>
         </div>
 
         {fault.img && fault.img.length > 0 && (
           <div className={css.imageSection}>
-            <label>Foto allegate</label>
+            <label>{t('labels.attachedPhotos')}</label>
             <div className={css.imageGrid}>
               {fault.img.map((url, index) => (
                 <div
@@ -250,7 +252,7 @@ const SafetyFaultDetailPage = ({
         )}
 
         <div className={css.hseSection}>
-          <label className={css.hseLabel}>Nota HSE (Sicurezza)</label>
+          <label className={css.hseLabel}>{t('hseSection.label')}</label>
           {canEditComment ? (
             <>
               <textarea
@@ -259,7 +261,7 @@ const SafetyFaultDetailPage = ({
                 maxLength={2000}
                 value={commentDraft}
                 onChange={e => setCommentDraft(e.target.value)}
-                placeholder="Scrivi qui la tua valutazione di sicurezza..."
+                placeholder={t('hseSection.placeholder')}
                 disabled={mutation.isPending}
               />
               <div className={css.hseActions}>
@@ -272,13 +274,15 @@ const SafetyFaultDetailPage = ({
                   onClick={() => mutation.mutate(commentDraft.trim())}
                   disabled={mutation.isPending || !draftChanged}
                 >
-                  {mutation.isPending ? 'Salvataggio...' : 'Salva nota'}
+                  {mutation.isPending
+                    ? t('hseSection.saving')
+                    : t('hseSection.saveButton')}
                 </Button>
               </div>
             </>
           ) : (
             <p className={css.hseReadonly}>
-              {fault.commentSafety || 'Nessuna nota HSE'}
+              {fault.commentSafety || t('hseSection.emptyReadonly')}
             </p>
           )}
         </div>

@@ -15,6 +15,7 @@ import {
   parseISO,
 } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
 import styles from './Calendar.module.css';
 
 interface FilterDataCreatedBarProps {
@@ -31,6 +32,7 @@ const Calendar = ({
   isDeadlineMode = false,
   plannedCounts = {},
 }: FilterDataCreatedBarProps) => {
+  const t = useTranslations('maintenanceWorkerPage.calendar');
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const monthStart = startOfMonth(currentDate);
@@ -120,7 +122,7 @@ const Calendar = ({
               {plannedCount > 0 && !isDeadlineMode && (
                 <span
                   className={styles.plannedBadge}
-                  title={`${plannedCount} intervento/i pianificato/i`}
+                  title={t('interventionsCount', { count: plannedCount })}
                 >
                   {plannedCount}
                 </span>

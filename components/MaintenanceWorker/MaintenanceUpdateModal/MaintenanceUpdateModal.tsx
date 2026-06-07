@@ -3,6 +3,7 @@
 import { useForm, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { updateFaultByWorker } from '@/lib/api/faults';
 import {
@@ -24,12 +25,6 @@ interface MaintenanceUpdateModalProps {
   onSuccess: (updatedFault: FaultCard) => void;
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  'In progress': 'In corso',
-  Completed: 'Completato',
-  Suspended: 'Sospeso',
-};
-
 const MaintenanceUpdateModal = ({
   faultId,
   displayId,
@@ -37,8 +32,15 @@ const MaintenanceUpdateModal = ({
   onClose,
   onSuccess,
 }: MaintenanceUpdateModalProps) => {
+  const t = useTranslations('MaintenanceUpdateModal');
   const queryClient = useQueryClient();
   const availableStatuses = ALLOWED_TRANSITIONS[currentStatus] ?? [];
+
+  const STATUS_LABELS: Record<string, string> = {
+    'In progress': t('statusOptions.inProgress'),
+    Completed: t('statusOptions.completed'),
+    Suspended: t('statusOptions.suspended'),
+  };
 
   const {
     register,
@@ -79,7 +81,7 @@ const MaintenanceUpdateModal = ({
     onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: ['faults'] });
       queryClient.invalidateQueries({ queryKey: ['fault', faultId] });
-      toast.success('Intervento aggiornato con successo');
+      toast.success(t('messages.success'));
       onSuccess(data);
       onClose();
     },
@@ -87,7 +89,7 @@ const MaintenanceUpdateModal = ({
       const message =
         err && typeof err === 'object' && 'message' in err
           ? String((err as { message: unknown }).message)
-          : "Errore durante l'aggiornamento";
+          : t('messages.error');
       toast.error(message);
     },
   });
@@ -101,13 +103,12 @@ const MaintenanceUpdateModal = ({
       <Modal onClose={onClose}>
         <div className={css.formContainer}>
           <div className={css.titleContainer}>
-            <h1 className={css.title}>Aggiorna intervento</h1>
+            <h1 className={css.title}>{t('title')}</h1>
             <p className={css.subtitle}>{displayId}</p>
           </div>
           <p className={css.emptyMessage}>
-            Nessun aggiornamento possibile da stato &quot;{currentStatus}&quot;.
-            {currentStatus === 'Created' &&
-              ' Usa "Prendi in carico" per iniziare.'}
+            {t('messages.noTransitions', { status: currentStatus })}
+            {currentStatus === 'Created' && t('messages.takeOverHint')}
           </p>
           <div className={css.actions}>
             <Button
@@ -115,7 +116,7 @@ const MaintenanceUpdateModal = ({
               className="button button--white"
               onClick={onClose}
             >
-              Chiudi
+              {t('buttons.close')}
             </Button>
           </div>
         </div>
@@ -127,13 +128,13 @@ const MaintenanceUpdateModal = ({
     <Modal onClose={onClose}>
       <div className={css.formContainer}>
         <div className={css.titleContainer}>
-          <h1 className={css.title}>Aggiorna intervento</h1>
+          <h1 className={css.title}>{t('title')}</h1>
           <p className={css.subtitle}>{displayId}</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
           <div className={css.field}>
-            <p className={css.label}>Nuovo stato *</p>
+            <p className={css.label}>{t('labels.newStatus')}</p>
             <SelectDropdown
               options={availableStatuses.map(s => STATUS_LABELS[s] ?? s)}
               selectedValue={STATUS_LABELS[selectedStatus] ?? selectedStatus}
@@ -143,7 +144,7 @@ const MaintenanceUpdateModal = ({
                   label;
                 setValue('statusFault', value, { shouldValidate: false });
               }}
-              placeholder="Seleziona stato"
+              placeholder={t('placeholders.statusSelect')}
             />
             <input type="hidden" {...register('statusFault')} />
             {errors.statusFault && (
@@ -152,10 +153,10 @@ const MaintenanceUpdateModal = ({
           </div>
 
           <div className={css.field}>
-            <p className={css.label}>Commento manutentore</p>
+            <p className={css.label}>{t('labels.maintainerComment')}</p>
             <textarea
               {...register('commentMaintenanceWorker')}
-              placeholder="Dettagli del lavoro svolto..."
+              placeholder={t('placeholders.maintainerComment')}
               className={css.textarea}
               rows={3}
             />
@@ -163,7 +164,7 @@ const MaintenanceUpdateModal = ({
 
           {selectedStatus === 'Completed' && (
             <div className={css.field}>
-              <p className={css.label}>Durata effettiva (minuti) *</p>
+              <p className={css.label}>{t('labels.actualDuration')}</p>
               <input
                 type="number"
                 min={1}
@@ -179,10 +180,10 @@ const MaintenanceUpdateModal = ({
           {selectedStatus === 'Suspended' && (
             <>
               <div className={css.field}>
-                <p className={css.label}>Motivo della sospensione *</p>
+                <p className={css.label}>{t('labels.suspensionReason')}</p>
                 <textarea
                   {...register('suspensionReason')}
-                  placeholder="Perché stai sospendendo? (es. attesa di un pezzo, problema di sicurezza...)"
+                  placeholder={t('placeholders.suspensionReason')}
                   className={css.textarea}
                   rows={3}
                 />
@@ -191,10 +192,10 @@ const MaintenanceUpdateModal = ({
                 )}
               </div>
               <div className={css.field}>
-                <p className={css.label}>Materiale o supporto richiesto</p>
+                <p className={css.label}>{t('labels.materialRequest')}</p>
                 <textarea
                   {...register('materialRequest')}
-                  placeholder="Cosa serve per riprendere? (opzionale)"
+                  placeholder={t('placeholders.materialRequest')}
                   className={css.textarea}
                   rows={2}
                 />
@@ -209,14 +210,14 @@ const MaintenanceUpdateModal = ({
               onClick={onClose}
               disabled={mutation.isPending}
             >
-              Annulla
+              {t('buttons.cancel')}
             </Button>
             <Button
               type="submit"
               className="button button--blue"
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? 'Salvataggio...' : 'Conferma e salva'}
+              {mutation.isPending ? t('buttons.submitting') : t('buttons.submit')}
             </Button>
           </div>
         </form>

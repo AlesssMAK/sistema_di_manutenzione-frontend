@@ -19,6 +19,7 @@ export default function FaultDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const router = useRouter();
+  const t = useTranslations('FaultDetail');
   const tNoFound = useTranslations('NoFound');
   const resolvedParams = use(params);
   const id = resolvedParams.id;
@@ -34,7 +35,7 @@ export default function FaultDetailPage({
         const data = await fetchFaultById(id);
         setFault(data);
       } catch (error) {
-        toast.error('Errore durante il caricamento dei dati');
+        toast.error(t('errors.loadError'));
         console.error(error);
       } finally {
         setIsLoading(false);
@@ -42,7 +43,7 @@ export default function FaultDetailPage({
     };
 
     if (id) getFaultData();
-  }, [id]);
+  }, [id, t]);
   const handleBack = () => {
     router.push('/maintenance-worker');
   };
@@ -71,7 +72,7 @@ export default function FaultDetailPage({
         <div className={css.pageWrapper}>
           <NoFound
             title={tNoFound('noResultsTitle')}
-            message="Intervento non trovato"
+            message={t('errors.interventionNotFound')}
           />
         </div>
       </div>
@@ -88,7 +89,7 @@ export default function FaultDetailPage({
                 type="button"
                 className={css.backButton}
                 onClick={handleBack}
-                title="Torna indietro"
+                title={t('backButton')}
               >
                 <svg
                   width="24"
@@ -104,7 +105,7 @@ export default function FaultDetailPage({
                   <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
               </button>
-              <h2 className={css.title}>Dettaglio Intervento</h2>
+              <h2 className={css.title}>{t('titleIntervento')}</h2>
             </div>
             <span className={css.idBadge}>{fault.faultId}</span>
           </header>
@@ -112,11 +113,11 @@ export default function FaultDetailPage({
           <div className={css.infoGrid}>
             {/* Основная информация */}
             <div className={css.infoItem}>
-              <label>Operatore</label>
+              <label>{t('labels.operator')}</label>
               <p>{fault.nameOperator}</p>
             </div>
             <div className={css.infoItem}>
-              <label>Stato</label>
+              <label>{t('labels.status')}</label>
               <span
                 className={`${css.status} ${css[fault.statusFault || 'CREATED']}`}
               >
@@ -125,7 +126,7 @@ export default function FaultDetailPage({
             </div>
 
             <div className={css.infoItem}>
-              <label>Data di creazione</label>
+              <label>{t('labels.dateCreated')}</label>
               <p>
                 {fault.dataCreated
                   ? new Date(fault.dataCreated).toLocaleDateString('it-IT')
@@ -134,42 +135,42 @@ export default function FaultDetailPage({
               </p>
             </div>
             <div className={css.infoItem}>
-              <label>Ultimo aggiornamento</label>
+              <label>{t('labels.lastUpdated')}</label>
               <p>{new Date(fault.updatedAt).toLocaleString('it-IT')}</p>
             </div>
 
             <div className={css.infoItem}>
-              <label>Macchina (Plant)</label>
+              <label>{t('labels.plant')}</label>
               <p>
                 {fault.plantId?.namePlant} ({fault.plantId?.code})
               </p>
             </div>
             <div className={css.infoItem}>
-              <label>Parte di impianto</label>
+              <label>{t('labels.plantPart')}</label>
               <p>
                 {fault.partId?.namePlantPart} ({fault.partId?.codePlantPart})
               </p>
             </div>
 
             <div className={css.infoItem}>
-              <label>Tipo di guasto</label>
+              <label>{t('labels.type')}</label>
               <p>{fault.typeFault}</p>
             </div>
             <div className={css.infoItem}>
-              <label>Priorità</label>
+              <label>{t('labels.priority')}</label>
               <p className={css.priority}>{fault.priority}</p>
             </div>
 
             <div className={css.infoItem}>
-              <label>Deadline (Дедлайн)</label>
+              <label>{t('labels.deadline')}</label>
               <p className={css.deadline}>
                 {fault.deadline
                   ? new Date(fault.deadline).toLocaleDateString('it-IT')
-                  : 'Non impostata'}
+                  : t('labels.deadlineNotSet')}
               </p>
             </div>
             <div className={css.infoItem}>
-              <label>Tempo stimato (мин)</label>
+              <label>{t('labels.estimatedDuration')}</label>
               <p>{fault.estimatedDuration || 0} min</p>
             </div>
           </div>
@@ -177,35 +178,35 @@ export default function FaultDetailPage({
           {/* Комментарии */}
           <div className={css.detailsBlock}>
             <div className={css.commentBox}>
-              <label>Commento Operatore</label>
-              <p>{fault.comment ? fault.comment : 'Commento assente'}</p>
+              <label>{t('comments.operatorComment')}</label>
+              <p>{fault.comment ? fault.comment : t('comments.noComment')}</p>
             </div>
 
             {/* Комментарий менеджера */}
             <div className={css.commentBox}>
-              <label>Commento Manager</label>
+              <label>{t('comments.managerComment')}</label>
               <p>
                 {fault.managerComment
                   ? fault.managerComment
-                  : 'Commento assente'}
+                  : t('comments.noComment')}
               </p>
             </div>
 
             {/* Commento Maintenance Worker */}
             <div className={css.commentBox}>
-              <label>Commento Maintenance Worker</label>
+              <label>{t('comments.maintainerComment')}</label>
               <p>
                 {fault.commentMaintenanceWorker
                   ? fault.commentMaintenanceWorker
-                  : 'Commento assente'}
+                  : t('comments.noComment')}
               </p>
             </div>
 
             {/* Nota HSE — visibile solo per i fault Safety */}
             {fault.typeFault === 'Safety' && (
               <div className={css.commentBox}>
-                <label>Nota HSE (Sicurezza)</label>
-                <p>{fault.commentSafety || 'Commento assente'}</p>
+                <label>{t('comments.hseNote')}</label>
+                <p>{fault.commentSafety || t('comments.noComment')}</p>
               </div>
             )}
           </div>
@@ -213,7 +214,7 @@ export default function FaultDetailPage({
           {/* Фотографии */}
           {fault.img && fault.img.length > 0 && (
             <div className={css.imageSection}>
-              <label>Foto allegate</label>
+              <label>{t('labels.attachedPhotos')}</label>
               <div className={css.imageGrid}>
                 {fault.img.map((url, index) => (
                   <div
@@ -237,7 +238,7 @@ export default function FaultDetailPage({
               className="button button--blue"
               onClick={() => setIsUpdateModalOpen(true)}
             >
-              Aggiungi commento e cambia stato
+              {t('actions.addCommentAndChangeStatus')}
             </Button>
           </div>
         </div>

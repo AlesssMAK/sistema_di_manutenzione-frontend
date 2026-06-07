@@ -3,6 +3,7 @@
 import { format, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import type { FaultCard } from '@/types/faultType';
 import Button from '@/components/UI/Button/Button';
 import css from './FaultManagerCard.module.css';
@@ -39,6 +40,7 @@ const FaultManagerCard = ({
   detailHref,
 }: FaultManagerCardProps) => {
   const router = useRouter();
+  const t = useTranslations('FaultCard');
 
   const isPlanned = Boolean(fault.plannedDate);
   const isReadOnly = fault.statusFault === 'Completed';
@@ -57,13 +59,13 @@ const FaultManagerCard = ({
           {fault.autoRescheduledFrom?.plannedDate && (
             <span
               className={css.riprogrammatBadge}
-              title={`Originale: ${fault.autoRescheduledFrom.plannedDate}${
+              title={`${t('badges.originalLabel')} ${fault.autoRescheduledFrom.plannedDate}${
                 fault.autoRescheduledFrom.plannedTime
                   ? ' ' + fault.autoRescheduledFrom.plannedTime
                   : ''
               }`}
             >
-              Riprogrammata
+              {t('badges.rescheduled')}
             </span>
           )}
           <span
@@ -83,25 +85,25 @@ const FaultManagerCard = ({
 
       <div className={css.section}>
         <div className={css.row}>
-          <span className={css.label}>Operatore</span>
+          <span className={css.label}>{t('labels.operator')}</span>
           <span className={css.value}>{fault.nameOperator || '—'}</span>
         </div>
         <div className={css.row}>
-          <span className={css.label}>Data creazione</span>
+          <span className={css.label}>{t('labels.dateCreated')}</span>
           <span className={css.value}>
             {formatDate(fault.dataCreated)}
             {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
           </span>
         </div>
         <div className={css.row}>
-          <span className={css.label}>Impianto</span>
+          <span className={css.label}>{t('labels.plant')}</span>
           <span className={css.value}>
             {fault.plantId?.namePlant ?? '—'}
             {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
           </span>
         </div>
         <div className={css.row}>
-          <span className={css.label}>Parte</span>
+          <span className={css.label}>{t('labels.plantPart')}</span>
           <span className={css.value}>
             {fault.partId?.namePlantPart ?? '—'}
             {fault.partId?.codePlantPart
@@ -113,7 +115,7 @@ const FaultManagerCard = ({
 
       {fault.comment && (
         <div className={css.commentBlock}>
-          <span className={css.label}>Descrizione</span>
+          <span className={css.label}>{t('labels.description')}</span>
           <p className={css.commentText}>{fault.comment}</p>
         </div>
       )}
@@ -121,7 +123,7 @@ const FaultManagerCard = ({
       {showAssignedSection && (
         <div className={css.planningBlock}>
           <div className={css.row}>
-            <span className={css.label}>Priorità</span>
+            <span className={css.label}>{t('labels.priority')}</span>
             <span
               className={`${css.priorityBadge} ${
                 priorityClass[fault.priority] ?? ''
@@ -132,7 +134,7 @@ const FaultManagerCard = ({
           </div>
           {fault.plannedDate && (
             <div className={css.row}>
-              <span className={css.label}>Pianificato</span>
+              <span className={css.label}>{t('labels.planned')}</span>
               <span className={css.value}>
                 {formatDate(fault.plannedDate)}
                 {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
@@ -144,24 +146,23 @@ const FaultManagerCard = ({
           )}
           {fault.deadline && (
             <div className={css.row}>
-              <span className={css.label}>Scadenza</span>
+              <span className={css.label}>{t('labels.deadline')}</span>
               <span className={css.value}>{formatDate(fault.deadline)}</span>
             </div>
           )}
           {(fault.assignedMaintainers?.length ?? 0) > 0 && (
             <div className={css.row}>
-              <span className={css.label}>Assegnato a</span>
+              <span className={css.label}>{t('labels.assignedTo')}</span>
               <span className={css.value}>
-                {fault.assignedMaintainers.length}{' '}
-                {fault.assignedMaintainers.length === 1
-                  ? 'manutentore'
-                  : 'manutentori'}
+                {t('maintainerCount', {
+                  count: fault.assignedMaintainers.length,
+                })}
               </span>
             </div>
           )}
           {fault.managerComment && (
             <div className={css.commentBlock}>
-              <span className={css.label}>Note responsabile</span>
+              <span className={css.label}>{t('labels.managerNotes')}</span>
               <p className={css.commentText}>{fault.managerComment}</p>
             </div>
           )}
@@ -174,7 +175,7 @@ const FaultManagerCard = ({
           className="button button--white"
           onClick={handleDetail}
         >
-          Dettagli
+          {t('buttons.details')}
         </Button>
         {!isReadOnly && onPlan && (
           <Button
@@ -182,7 +183,7 @@ const FaultManagerCard = ({
             className="button button--blue"
             onClick={() => onPlan(fault)}
           >
-            {isPlanned ? 'Modifica pianificazione' : 'Pianifica'}
+            {isPlanned ? t('buttons.modify') : t('buttons.plan')}
           </Button>
         )}
       </div>

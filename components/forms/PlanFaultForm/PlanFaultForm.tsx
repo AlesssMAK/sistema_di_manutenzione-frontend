@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import Modal from '@/components/UI/Modal/Modal';
 import Button from '@/components/UI/Button/Button';
@@ -30,14 +31,16 @@ interface PlanFaultFormProps {
   onClose: () => void;
 }
 
-const PRIORITY_OPTIONS: { label: string; value: PriorityFaultType }[] = [
-  { label: 'Bassa', value: 'Low' },
-  { label: 'Media', value: 'Medium' },
-  { label: 'Alta', value: 'High' },
-];
-
 const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
+  const t = useTranslations('PlanFaultForm');
+  const tPriority = useTranslations('Priority');
   const queryClient = useQueryClient();
+
+  const PRIORITY_OPTIONS: { label: string; value: PriorityFaultType }[] = [
+    { label: tPriority('Low'), value: 'Low' },
+    { label: tPriority('Medium'), value: 'Medium' },
+    { label: tPriority('High'), value: 'High' },
+  ];
 
   const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(
     fault.assignedMaintainers ?? []
@@ -87,8 +90,8 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
       queryClient.invalidateQueries({ queryKey: ['fault', fault._id] });
       toast.success(
         fault.plannedDate
-          ? 'Pianificazione aggiornata'
-          : 'Segnalazione pianificata'
+          ? t('messages.modifySuccess')
+          : t('messages.planSuccess')
       );
       onClose();
     },
@@ -96,7 +99,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
       const message =
         err && typeof err === 'object' && 'message' in err
           ? String((err as { message: unknown }).message)
-          : 'Errore durante il salvataggio';
+          : t('messages.saveError');
       toast.error(message);
     },
   });
@@ -123,9 +126,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
       <div className={css.formContainer}>
         <div className={css.titleContainer}>
           <h1 className={css.title}>
-            {fault.plannedDate
-              ? 'Modifica pianificazione'
-              : 'Pianifica segnalazione'}
+            {fault.plannedDate ? t('titleModify') : t('titlePlan')}
           </h1>
           <p className={css.subtitle}>
             {fault.faultId} · {fault.plantId?.namePlant ?? '—'}
@@ -135,7 +136,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
           <div className={css.row}>
             <div className={css.field}>
-              <p className={css.label}>Priorità *</p>
+              <p className={css.label}>{t('labels.priority')}</p>
               <SelectDropdown
                 options={PRIORITY_OPTIONS.map(o => o.label)}
                 selectedValue={priorityLabel}
@@ -152,7 +153,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
             </div>
 
             <div className={css.field}>
-              <p className={css.label}>Durata stimata (min) *</p>
+              <p className={css.label}>{t('labels.estimatedDuration')}</p>
               <Input
                 type="number"
                 min={1}
@@ -166,7 +167,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
 
           <div className={css.row}>
             <div className={css.field}>
-              <p className={css.label}>Data pianificata *</p>
+              <p className={css.label}>{t('labels.plannedDate')}</p>
               <Input type="date" {...register('plannedDate')} />
               {errors.plannedDate && (
                 <p className={css.error}>{errors.plannedDate.message}</p>
@@ -174,7 +175,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
             </div>
 
             <div className={css.field}>
-              <p className={css.label}>Ora pianificata *</p>
+              <p className={css.label}>{t('labels.plannedTime')}</p>
               <Input type="time" {...register('plannedTime')} />
               {errors.plannedTime && (
                 <p className={css.error}>{errors.plannedTime.message}</p>
@@ -183,7 +184,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
           </div>
 
           <div className={css.field}>
-            <p className={css.label}>Scadenza *</p>
+            <p className={css.label}>{t('labels.deadline')}</p>
             <Input type="date" {...register('deadline')} />
             {errors.deadline && (
               <p className={css.error}>{errors.deadline.message}</p>
@@ -191,12 +192,12 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
           </div>
 
           <div className={css.field}>
-            <p className={css.label}>Note responsabile</p>
+            <p className={css.label}>{t('labels.managerComment')}</p>
             <textarea
               {...register('managerComment')}
               className={css.textarea}
               rows={3}
-              placeholder="Eventuali note per il manutentore..."
+              placeholder={t('managerCommentPlaceholder')}
             />
             {errors.managerComment && (
               <p className={css.error}>{errors.managerComment.message}</p>
@@ -204,11 +205,11 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
           </div>
 
           <div className={css.field}>
-            <p className={css.label}>Manutentori assegnati</p>
+            <p className={css.label}>{t('labels.assignedMaintainers')}</p>
             {maintainersLoading ? (
-              <p className={css.hint}>Caricamento...</p>
+              <p className={css.hint}>{t('loadingMaintainers')}</p>
             ) : maintainers.length === 0 ? (
-              <p className={css.hint}>Nessun manutentore disponibile</p>
+              <p className={css.hint}>{t('noMaintainers')}</p>
             ) : (
               <ul className={css.maintainersList}>
                 {maintainers.map(w => {
@@ -228,10 +229,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
                 })}
               </ul>
             )}
-            <p className={css.hint}>
-              Lascia vuoto per mettere la segnalazione nel pool (qualsiasi
-              manutentore potrà prenderla)
-            </p>
+            <p className={css.hint}>{t('poolHint')}</p>
           </div>
 
           <div className={css.actions}>
@@ -240,14 +238,14 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
               className="button button--white"
               onClick={onClose}
             >
-              Annulla
+              {t('buttons.cancel')}
             </Button>
             <Button
               type="submit"
               className="button button--blue"
               disabled={isSubmitting || mutation.isPending}
             >
-              {mutation.isPending ? 'Salvataggio...' : 'Salva'}
+              {mutation.isPending ? t('buttons.saving') : t('buttons.save')}
             </Button>
           </div>
         </form>

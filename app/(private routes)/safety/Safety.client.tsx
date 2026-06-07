@@ -12,21 +12,22 @@ import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import css from './Safety.module.css';
 
-const STATUS_OPTIONS = [
-  { label: 'Tutti gli stati', value: '' },
-  { label: 'Creato', value: 'Created' },
-  { label: 'In corso', value: 'In progress' },
-  { label: 'Sospeso', value: 'Suspended' },
-  { label: 'Scaduto', value: 'Overdue' },
-  { label: 'Completato', value: 'Completed' },
-];
-
 const PER_PAGE = 8;
 
 const SafetyClient = () => {
   const t = useTranslations('SafetyPage');
   const tNoFound = useTranslations('NoFound');
+  const tStatus = useTranslations('StatusFault');
   const setPageTitle = usePageStore(state => state.setPageTitle);
+
+  const STATUS_OPTIONS = [
+    { label: t('statusOptions.all'), value: '' },
+    { label: tStatus('CREATED'), value: 'Created' },
+    { label: tStatus('IN_PROGRESS'), value: 'In progress' },
+    { label: tStatus('SUSPENDED'), value: 'Suspended' },
+    { label: tStatus('OVERDUE'), value: 'Overdue' },
+    { label: tStatus('COMPLETED'), value: 'Completed' },
+  ];
 
   const [statusFault, setStatusFault] = useState<string>('');
   const [page, setPage] = useState(1);
@@ -63,16 +64,14 @@ const SafetyClient = () => {
     <div className="container">
       <div className={css.pageWrapper}>
         <h2 className="title">
-          Monitoraggio Sicurezza
-          <span className={css.safetyBadge}>HSE</span>
+          {t('headerTitle')}
+          <span className={css.safetyBadge}>{t('badge')}</span>
         </h2>
-        <p className="subtitle">
-          Visualizza in tempo reale le segnalazioni di sicurezza. Sola lettura.
-        </p>
+        <p className="subtitle">{t('headerSubtitle')}</p>
 
         <div className={css.toolbar}>
           <div className={css.field}>
-            <label className={css.fieldLabel}>Stato</label>
+            <label className={css.fieldLabel}>{t('statusFilter')}</label>
             <SelectDropdown
               options={STATUS_OPTIONS.map(o => o.label)}
               selectedValue={selectedStatusLabel}
@@ -94,7 +93,7 @@ const SafetyClient = () => {
           ) : faults.length === 0 ? (
             <NoFound
               title={tNoFound('noResultsTitle')}
-              message="Nessuna segnalazione di sicurezza"
+              message={t('empty')}
             />
           ) : (
             <ul className={css.cardList}>

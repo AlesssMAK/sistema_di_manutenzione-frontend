@@ -1,6 +1,7 @@
 import React from 'react';
 import { format, isToday, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
 import css from './DateNow.module.css';
 
 type DateNowMode = 'default' | 'overdue' | 'completed';
@@ -11,25 +12,28 @@ interface DateNowProps {
   priority?: string;
 }
 
-const priorityLabel = (priority?: string) => {
-  if (!priority) return '';
-  if (priority === 'Low') return ', priorità: Bassa';
-  if (priority === 'Medium') return ', priorità: Media';
-  if (priority === 'High') return ', priorità: Alta';
-  return `, priorità: ${priority}`;
-};
-
 const DateNow = ({
   selectedDate,
   mode = 'default',
   priority,
 }: DateNowProps) => {
-  const prioritySuffix = priorityLabel(priority);
+  const t = useTranslations('maintenanceWorkerPage.dateNow');
+  const tPriority = useTranslations('Priority');
+
+  const prioritySuffix = priority
+    ? t('prioritySuffix', {
+        priority:
+          priority === 'Low' || priority === 'Medium' || priority === 'High'
+            ? tPriority(priority)
+            : priority,
+      })
+    : '';
 
   if (mode === 'overdue') {
     return (
       <p className={css.dateDisplay}>
-        Segnalazioni scadute{prioritySuffix}
+        {t('overdue')}
+        {prioritySuffix}
       </p>
     );
   }
@@ -37,7 +41,8 @@ const DateNow = ({
   if (mode === 'completed' && !selectedDate) {
     return (
       <p className={css.dateDisplay}>
-        Storico segnalazioni completate{prioritySuffix}
+        {t('completedHistory')}
+        {prioritySuffix}
       </p>
     );
   }
@@ -48,10 +53,10 @@ const DateNow = ({
       const formatted = format(parsed, 'EEEE, d MMMM yyyy', { locale: it });
       const prefix =
         mode === 'completed'
-          ? 'Completate del:'
+          ? t('completedOf')
           : isToday(parsed)
-            ? 'Oggi,'
-            : 'Attività del:';
+            ? t('today')
+            : t('activityOf');
       const label = `${prefix} ${formatted}`;
       return (
         <p className={css.dateDisplay}>
@@ -64,7 +69,8 @@ const DateNow = ({
 
   return (
     <p className={css.dateDisplay}>
-      Tutte le segnalazioni attive{prioritySuffix}
+      {t('allActive')}
+      {prioritySuffix}
     </p>
   );
 };
