@@ -72,11 +72,71 @@
   },
 
   "maintenanceWorkerPage": {
-    "titlePageForStore": "Konserwator"
+    "titlePageForStore": "Konserwator",
+    "headerTitle": "Planowanie konserwatora",
+    "headerSubtitle": "Przeglądaj i zarządzaj zaplanowanymi interwencjami",
+    "tabs": {
+      "active": "Aktywne",
+      "overdue": "Opóźnione",
+      "completed": "Zakończone"
+    },
+    "scope": {
+      "mine": "Moje",
+      "pool": "Wolne",
+      "all": "Wszystkie",
+      "mineHint": "Tylko interwencje przypisane do mnie",
+      "poolHint": "Interwencje nieprzypisane (pool)",
+      "allHint": "Wszystkie interwencje",
+      "ariaLabel": "Zakres zgłoszeń"
+    },
+    "empty": {
+      "overdue": "Brak opóźnionych zgłoszeń",
+      "completedDate": "Brak zgłoszeń zakończonych w tym dniu",
+      "completed": "Brak zakończonych zgłoszeń",
+      "mineDate": "Brak zgłoszeń przypisanych do Ciebie w tym dniu",
+      "poolDate": "Brak wolnych zgłoszeń w tym dniu",
+      "dateOnly": "Brak zgłoszeń w tym dniu",
+      "mine": "Brak zgłoszeń przypisanych do Ciebie",
+      "pool": "Brak wolnych zgłoszeń (pool pusty)",
+      "default": "Brak zgłoszeń",
+      "resetButton": "Pokaż wszystkie"
+    },
+    "errors": {
+      "loadData": "Błąd podczas ładowania danych",
+      "loadCounts": "Błąd podczas ładowania liczników kalendarza",
+      "loadDeadlines": "Błąd podczas ładowania terminów"
+    },
+    "calendar": {
+      "interventionsCount": "{count} zaplanowana(e) interwencja(e)"
+    },
+    "dayView": {
+      "title": "Widok dnia"
+    },
+    "dateNow": {
+      "overdue": "Zgłoszenia opóźnione",
+      "completedHistory": "Historia zakończonych zgłoszeń",
+      "allActive": "Wszystkie aktywne zgłoszenia",
+      "today": "Dzisiaj,",
+      "activityOf": "Aktywności z dnia:",
+      "completedOf": "Zakończone z dnia:",
+      "prioritySuffix": ", priorytet: {priority}"
+    }
   },
 
   "ManagerPage": {
-    "titlePageForStore": "Kierownik"
+    "titlePageForStore": "Kierownik",
+    "headerTitle": "Panel Kierownika",
+    "headerSubtitle": "Zarządzaj otrzymanymi zgłoszeniami, bieżącymi czynnościami i archiwum",
+    "tabs": {
+      "received": "Otrzymane",
+      "inProgress": "W trakcie",
+      "archive": "Rejestr zakończonych"
+    },
+    "empty": {
+      "received": "Brak oczekujących zgłoszeń",
+      "inProgress": "Brak zgłoszeń w trakcie",
+      "archive": "Brak zarchiwizowanych zgłoszeń"
+    }
   },
 
   "OperatorPage": {
@@ -84,7 +144,166 @@
   },
 
   "SafetyPage": {
-    "titlePageForStore": "Bezpieczeństwo (BHP)"
+    "titlePageForStore": "Bezpieczeństwo (BHP)",
+    "headerTitle": "Monitorowanie Bezpieczeństwa",
+    "headerSubtitle": "Przeglądaj zgłoszenia bezpieczeństwa w czasie rzeczywistym. Tylko do odczytu.",
+    "badge": "BHP",
+    "statusFilter": "Status",
+    "statusOptions": {
+      "all": "Wszystkie statusy"
+    },
+    "empty": "Brak zgłoszeń bezpieczeństwa"
+  },
+
+  "FaultDetail": {
+    "title": "Szczegóły zgłoszenia",
+    "titleIntervento": "Szczegóły interwencji",
+    "backButton": "Powrót",
+    "labels": {
+      "operator": "Operator",
+      "status": "Status",
+      "dateCreated": "Data utworzenia",
+      "lastUpdated": "Ostatnia aktualizacja",
+      "plant": "Zakład",
+      "plantPart": "Część zakładu",
+      "type": "Typ usterki",
+      "priority": "Priorytet",
+      "planned": "Zaplanowane",
+      "estimatedDuration": "Szacowany czas",
+      "deadline": "Termin",
+      "deadlineNotSet": "Nie ustawiono",
+      "assignedMaintainers": "Przypisani konserwatorzy",
+      "attachedPhotos": "Załączone zdjęcia"
+    },
+    "comments": {
+      "operatorDescription": "Opis (Operator)",
+      "operatorComment": "Komentarz operatora",
+      "managerNote": "Notatki kierownika",
+      "managerComment": "Komentarz kierownika",
+      "maintainerNote": "Notatki konserwatora",
+      "maintainerComment": "Komentarz konserwatora",
+      "hseNote": "Notatka BHP (Bezpieczeństwo)",
+      "noDescription": "Brak opisu",
+      "noNote": "Brak notatki",
+      "noComment": "Brak komentarza"
+    },
+    "actions": {
+      "planIntervention": "Zaplanuj interwencję",
+      "modifyPlanning": "Modyfikuj planowanie",
+      "addCommentAndChangeStatus": "Dodaj komentarz i zmień status"
+    },
+    "errors": {
+      "faultNotFound": "Zgłoszenie nie znalezione",
+      "interventionNotFound": "Interwencja nie znaleziona",
+      "loadError": "Błąd podczas ładowania danych"
+    },
+    "hseSection": {
+      "label": "Notatka BHP (Bezpieczeństwo)",
+      "placeholder": "Napisz tu swoją ocenę bezpieczeństwa...",
+      "saveButton": "Zapisz notatkę",
+      "saving": "Zapisywanie...",
+      "emptyReadonly": "Brak notatki BHP",
+      "saved": "Notatka BHP zapisana",
+      "saveError": "Błąd podczas zapisywania notatki"
+    }
+  },
+
+  "FaultCard": {
+    "labels": {
+      "operator": "Operator",
+      "dateCreated": "Data utworzenia",
+      "plant": "Zakład",
+      "plantPart": "Część",
+      "machine": "Maszyna",
+      "plannedTime": "Zaplanowana godzina",
+      "deadline": "Termin",
+      "priority": "Priorytet",
+      "estimatedDuration": "Szacowany czas",
+      "description": "Opis",
+      "comment": "Komentarz",
+      "managerNotes": "Notatki kierownika",
+      "assignedTo": "Przypisane do",
+      "planned": "Zaplanowane"
+    },
+    "maintainerCount": "{count, plural, one {# konserwator} few {# konserwatorów} many {# konserwatorów} other {# konserwatorów}}",
+    "buttons": {
+      "details": "Szczegóły",
+      "plan": "Zaplanuj",
+      "modify": "Modyfikuj planowanie",
+      "takeOver": "Przejmij",
+      "takingOver": "Przejmowanie..."
+    },
+    "messages": {
+      "claimed": "Interwencja przejęta",
+      "claimError": "Błąd podczas przejmowania"
+    },
+    "badges": {
+      "rescheduled": "Przeplanowane",
+      "originalLabel": "Oryginał:"
+    },
+    "empty": "Brak zgłoszeń"
+  },
+
+  "PlanFaultForm": {
+    "titlePlan": "Zaplanuj zgłoszenie",
+    "titleModify": "Modyfikuj planowanie",
+    "labels": {
+      "priority": "Priorytet *",
+      "estimatedDuration": "Szacowany czas (min) *",
+      "plannedDate": "Zaplanowana data *",
+      "plannedTime": "Zaplanowana godzina *",
+      "deadline": "Termin *",
+      "managerComment": "Notatki kierownika",
+      "assignedMaintainers": "Przypisani konserwatorzy"
+    },
+    "managerCommentPlaceholder": "Opcjonalne notatki dla konserwatora...",
+    "loadingMaintainers": "Ładowanie...",
+    "noMaintainers": "Brak dostępnych konserwatorów",
+    "poolHint": "Pozostaw puste, aby umieścić zgłoszenie w puli (dowolny konserwator może je przejąć)",
+    "buttons": {
+      "cancel": "Anuluj",
+      "save": "Zapisz",
+      "saving": "Zapisywanie..."
+    },
+    "messages": {
+      "planSuccess": "Zgłoszenie zaplanowane",
+      "modifySuccess": "Planowanie zaktualizowane",
+      "saveError": "Błąd podczas zapisywania"
+    }
+  },
+
+  "MaintenanceUpdateModal": {
+    "title": "Aktualizuj interwencję",
+    "labels": {
+      "newStatus": "Nowy status *",
+      "maintainerComment": "Komentarz konserwatora",
+      "actualDuration": "Rzeczywisty czas (minuty) *",
+      "suspensionReason": "Powód zawieszenia *",
+      "materialRequest": "Wymagany materiał lub wsparcie"
+    },
+    "statusOptions": {
+      "inProgress": "W toku",
+      "completed": "Zakończono",
+      "suspended": "Wstrzymano"
+    },
+    "placeholders": {
+      "statusSelect": "Wybierz status",
+      "maintainerComment": "Szczegóły wykonanej pracy...",
+      "suspensionReason": "Dlaczego zawieszasz? (np. oczekiwanie na część, problem z bezpieczeństwem...)",
+      "materialRequest": "Co jest potrzebne do wznowienia? (opcjonalne)"
+    },
+    "buttons": {
+      "cancel": "Anuluj",
+      "submit": "Potwierdź i zapisz",
+      "submitting": "Zapisywanie...",
+      "close": "Zamknij"
+    },
+    "messages": {
+      "success": "Interwencja zaktualizowana pomyślnie",
+      "error": "Błąd podczas aktualizacji",
+      "noTransitions": "Brak możliwości aktualizacji ze statusu \"{status}\".",
+      "takeOverHint": " Użyj \"Przejmij\", aby rozpocząć."
+    }
   },
 
   "reportsAndCommunicationsPage": {
@@ -121,7 +340,8 @@
     "CREATED": "Utworzono",
     "IN_PROGRESS": "W toku",
     "COMPLETED": "Zakończono",
-    "SUSPENDED": "Wstrzymano"
+    "SUSPENDED": "Wstrzymano",
+    "OVERDUE": "Opóźnione"
   },
 
   "Priority": {
@@ -175,18 +395,14 @@
     "clear": "Wyczyść filtry"
   },
 
-  "CreateUserForm": {
-    "title": "Nowy użytkownik",
-    "subtitle": "Wypełnij wszystkie pola i wygeneruj kod dostępu dla nowego użytkownika",
-    "role": "Rola",
-    "fullName": "Pełne imię i nazwisko",
-    "email": "E-mail",
-    "password": "Hasło",
-    "accessCode": "Kod dostępu",
-    "generateAutomatically": "Generuj automatycznie",
-    "setManually": "Ustaw ręcznie",
-    "cancel": "Anuluj",
-    "createUser": "Utwórz użytkownika",
-    "userCreatedSuccess": "Użytkownik został pomyślnie utworzony"
+  "btn": {
+    "loading": "ładowanie..."
+  },
+
+  "NoFound": {
+    "noResultsTitle": "Brak wyników",
+    "noResultsMessage": "Spróbuj zmienić lub usunąć filtry, aby zobaczyć inne wyniki",
+    "serverErrorTitle": "Błąd serwera",
+    "serverErrorMessage": "Wystąpił problem podczas ładowania danych. Spróbuj ponownie później"
   }
 }
