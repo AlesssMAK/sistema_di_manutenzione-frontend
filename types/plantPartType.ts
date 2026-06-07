@@ -5,6 +5,7 @@ export interface PlantPart {
   plantId: string;
   namePlantPart: string;
   codePlantPart: string;
+  status: STATUS;
 }
 
 export interface PlantPartsPagination {
@@ -19,6 +20,14 @@ export interface PlantPartsPagination {
 export interface PlantPartsData {
   plantParts: PlantPart[];
   pagination: PlantPartsPagination;
+}
+
+export interface PlantPartsRequest {
+  plantId: string;
+  search?: string;
+  status?: STATUS;
+  page?: number;
+  perPage?: number;
 }
 
 export interface PlantPartRespons {
@@ -47,4 +56,14 @@ export interface UpdatePlantPartRequest {
 export interface UpdatePlantPartResponse {
   success: boolean;
   plantPart: PlantPart;
+}
+
+export interface DeletePlantPartRequest {
+  plantId: string;
+  plantPartId: string;
+}
+
+export interface DeletePlantPartResponse {
+  success: boolean;
+  message: string;
 }
