@@ -290,13 +290,6 @@ const MaintenanceWorkerClient = () => {
           />
         </div>
 
-        <div className={css.controls}>
-          <ScopeFilterBar
-            activeScope={scope}
-            onScopeChange={handleScopeChange}
-          />
-        </div>
-
         <div className={css.workerContainer}>
           <CalendarBlock
             activePriority={priority}
@@ -309,7 +302,7 @@ const MaintenanceWorkerClient = () => {
           />
 
           <div className={css.contentSection}>
-            <div className={css.contextLabel}>
+            <div className={css.contextRow}>
               <DateNow
                 selectedDate={selectedDate}
                 mode={
@@ -320,6 +313,10 @@ const MaintenanceWorkerClient = () => {
                       : 'default'
                 }
                 priority={priority}
+              />
+              <ScopeFilterBar
+                activeScope={scope}
+                onScopeChange={handleScopeChange}
               />
             </div>
 
