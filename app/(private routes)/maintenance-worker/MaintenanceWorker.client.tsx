@@ -291,12 +291,10 @@ const MaintenanceWorkerClient = () => {
         </div>
 
         <div className={css.controls}>
-          {!isOverdueMode && (
-            <ScopeFilterBar
-              activeScope={scope}
-              onScopeChange={handleScopeChange}
-            />
-          )}
+          <ScopeFilterBar
+            activeScope={scope}
+            onScopeChange={handleScopeChange}
+          />
         </div>
 
         <div className={css.workerContainer}>
