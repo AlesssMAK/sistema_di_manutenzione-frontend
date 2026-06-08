@@ -11,6 +11,7 @@ import { useTranslations } from 'use-intl';
 import { logout } from '@/lib/api/auth';
 import { usePageStore } from '@/lib/store/pageStore';
 import LanguageButton from '../LanguageSwitcher/LanguageSwitcher';
+import NotificationBell from './NotificationBell/NotificationBell';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -78,6 +79,7 @@ const Header = () => {
             <LanguageButton />
             {isAuthenticated ? (
               <>
+                <NotificationBell enabled={isAuthenticated} />
                 <div className={css.user}>
                   <svg className={css.user_icon} width="16" height="16">
                     <use href="/sprite.svg#user"></use>

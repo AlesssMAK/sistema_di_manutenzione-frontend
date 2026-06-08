@@ -36,7 +36,11 @@
     "navItem1": "Roles",
     "navItem2": "Reportes",
     "exit": "Salir",
-    "login": "Acceder"
+    "login": "Acceder",
+    "notifications": {
+      "ariaLabel": "Notificaciones",
+      "tooltip": "Ir a los mensajes"
+    }
   },
 
   "AdminSidebar": {

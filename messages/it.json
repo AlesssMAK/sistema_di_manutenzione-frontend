@@ -35,7 +35,11 @@
 "navItem1": "Ruoli",
 "navItem2": "Report",
 "exit": "Esci",
-"login": "Accede"
+"login": "Accede",
+"notifications": {
+  "ariaLabel": "Notifiche",
+  "tooltip": "Vai ai messaggi"
+}
 },
 
 "AdminSidebar": {

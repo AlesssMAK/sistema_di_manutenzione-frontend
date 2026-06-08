@@ -35,7 +35,11 @@
     "navItem1": "Role",
     "navItem2": "Raporty",
     "exit": "Wyloguj",
-    "login": "Logowanie"
+    "login": "Logowanie",
+    "notifications": {
+      "ariaLabel": "Powiadomienia",
+      "tooltip": "Przejdź do wiadomości"
+    }
   },
 
   "AdminSidebar": {
