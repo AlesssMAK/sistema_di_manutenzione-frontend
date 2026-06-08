@@ -409,7 +409,29 @@
   },
 
   "reportsAndCommunicationsPage": {
-    "titlePageForStore": "Reports"
+    "titlePageForStore": "Reports",
+    "title": "Reports & Communications",
+    "subtitle": "Overview of recent fault reports and company-wide announcements.",
+    "sections": {
+      "recentFaults": {
+        "title": "Faults in the last 30 days",
+        "subtitle": "All faults reported in the past month.",
+        "empty": "No faults in the last 30 days"
+      },
+      "broadcasts": {
+        "title": "Communications",
+        "subtitle": "Announcements to everyone and to your role.",
+        "empty": "No communications"
+      }
+    },
+    "broadcastBadge": {
+      "all": "To everyone",
+      "role": "For your role"
+    },
+    "errors": {
+      "loadFaults": "Error loading faults",
+      "loadBroadcasts": "Error loading communications"
+    }
   },
 
   "RolesPage": {

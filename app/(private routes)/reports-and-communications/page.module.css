@@ -1,0 +1,53 @@
+.pageWrapper {
+  padding: 24px 0 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #f8fafc;
+  /* Each block aims at ~half viewport height; bodies scroll internally
+     when content overflows so the page never gets a vertical thrash. */
+  min-height: 320px;
+  max-height: calc(50vh - 40px);
+}
+
+.sectionHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  font-weight: 700;
+  font-size: 18px;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.sectionSubtitle {
+  font-size: 13px;
+  color: #45556c;
+  margin: 0;
+}
+
+.sectionBody {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}

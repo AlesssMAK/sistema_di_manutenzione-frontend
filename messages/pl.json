@@ -377,7 +377,29 @@
   },
 
   "reportsAndCommunicationsPage": {
-    "titlePageForStore": "Raporty"
+    "titlePageForStore": "Raporty",
+    "title": "Raporty i komunikaty",
+    "subtitle": "Przegląd ostatnich zgłoszeń usterek i ogłoszeń firmowych.",
+    "sections": {
+      "recentFaults": {
+        "title": "Usterki z ostatnich 30 dni",
+        "subtitle": "Wszystkie usterki zgłoszone w ciągu ostatniego miesiąca.",
+        "empty": "Brak usterek w ciągu ostatnich 30 dni"
+      },
+      "broadcasts": {
+        "title": "Komunikaty",
+        "subtitle": "Ogłoszenia dla wszystkich oraz dla twojej roli.",
+        "empty": "Brak komunikatów"
+      }
+    },
+    "broadcastBadge": {
+      "all": "Do wszystkich",
+      "role": "Dla twojej roli"
+    },
+    "errors": {
+      "loadFaults": "Błąd ładowania usterek",
+      "loadBroadcasts": "Błąd ładowania komunikatów"
+    }
   },
 
   "RolesPage": {

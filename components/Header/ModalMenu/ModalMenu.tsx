@@ -64,11 +64,13 @@ const ModalMenu = ({
                     {t('navItem1')}{' '}
                   </Link>
                 </li>
-                <li className={css.nav_list_item}>
-                  <Link href="/reports-and-communications" onClick={onClose}>
-                    {t('navItem2')}
-                  </Link>
-                </li>
+                {isAuthenticated && (
+                  <li className={css.nav_list_item}>
+                    <Link href="/reports-and-communications" onClick={onClose}>
+                      {t('navItem2')}
+                    </Link>
+                  </li>
+                )}
               </ul>
             </nav>
             <div className={css.user_container}>

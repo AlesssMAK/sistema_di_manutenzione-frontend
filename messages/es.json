@@ -409,7 +409,29 @@
   },
 
   "reportsAndCommunicationsPage": {
-    "titlePageForStore": "Reportes"
+    "titlePageForStore": "Reportes",
+    "title": "Reportes y Comunicaciones",
+    "subtitle": "Resumen de las averías recientes y los anuncios de la empresa.",
+    "sections": {
+      "recentFaults": {
+        "title": "Averías de los últimos 30 días",
+        "subtitle": "Todas las averías registradas en el último mes.",
+        "empty": "Sin averías en los últimos 30 días"
+      },
+      "broadcasts": {
+        "title": "Comunicaciones",
+        "subtitle": "Anuncios para todos y para tu rol.",
+        "empty": "Sin comunicaciones"
+      }
+    },
+    "broadcastBadge": {
+      "all": "A todos",
+      "role": "Para tu rol"
+    },
+    "errors": {
+      "loadFaults": "Error al cargar averías",
+      "loadBroadcasts": "Error al cargar comunicaciones"
+    }
   },
 
   "RolesPage": {

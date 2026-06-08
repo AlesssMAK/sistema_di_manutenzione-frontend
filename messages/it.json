@@ -408,7 +408,29 @@
 },
 
 "reportsAndCommunicationsPage": {
-  "titlePageForStore": "Report"
+  "titlePageForStore": "Report",
+  "title": "Report e Comunicazioni",
+  "subtitle": "Panoramica delle segnalazioni recenti e degli annunci aziendali.",
+  "sections": {
+    "recentFaults": {
+      "title": "Segnalazioni degli ultimi 30 giorni",
+      "subtitle": "Tutte le segnalazioni registrate nell'ultimo mese.",
+      "empty": "Nessuna segnalazione negli ultimi 30 giorni"
+    },
+    "broadcasts": {
+      "title": "Comunicazioni",
+      "subtitle": "Annunci per tutti e per il tuo ruolo.",
+      "empty": "Nessuna comunicazione"
+    }
+  },
+  "broadcastBadge": {
+    "all": "A tutti",
+    "role": "Per il tuo ruolo"
+  },
+  "errors": {
+    "loadFaults": "Errore caricamento segnalazioni",
+    "loadBroadcasts": "Errore caricamento comunicazioni"
+  }
 },
 
 "RolesPage": {
