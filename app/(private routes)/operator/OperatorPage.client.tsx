@@ -1,26 +1,57 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import css from './OperatorPage.module.css';
 import { usePageStore } from '@/lib/store/pageStore';
-import { useEffect } from 'react';
-import ReportForm from '@/components/forms/ReportForm/ReportForm';
+import { useAuthStore } from '@/lib/store/authStore';
+import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+import MessageInbox from '@/components/Messages/MessageInbox/MessageInbox';
+import MyFaultsList from '@/components/Operator/MyFaultsList/MyFaultsList';
+import css from './OperatorPage.module.css';
+
+type OperatorTab = 'messages' | 'myFaults';
 
 const OperatorPageClient = () => {
   const t = useTranslations('OperatorPage');
   const setPageTitle = usePageStore(state => state.setPageTitle);
+  const { user } = useAuthStore();
+  const userId = String(user?._id ?? '');
+
+  const [activeTab, setActiveTab] = useState<OperatorTab>('messages');
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
-  }, []);
+  }, [setPageTitle, t]);
+
+  const tabs: TabItem<OperatorTab>[] = [
+    { value: 'messages', label: t('tabs.messages') },
+    { value: 'myFaults', label: t('tabs.myFaults') },
+  ];
+
   return (
-    <main>
-      <section className="section">
-        <div className="container">
-          <ReportForm />
+    <div className="container">
+      <div className={css.pageWrapper}>
+        <h2 className="title">{t('title')}</h2>
+        <p className="subtitle">{t('subtitle')}</p>
+
+        <div className={css.tabsBar}>
+          <Tabs<OperatorTab>
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
         </div>
-      </section>
-    </main>
+
+        {/* Operator's "Messaggi" mirrors what the bell links to —
+            operators can't send/receive direct, so this is the
+            broadcast_role view from /messages. */}
+        {activeTab === 'messages' && (
+          <MessageInbox kind="announcements" currentUserId={userId} />
+        )}
+
+        {activeTab === 'myFaults' && <MyFaultsList />}
+      </div>
+    </div>
   );
 };
 

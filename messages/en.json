@@ -179,7 +179,27 @@
   },
 
   "OperatorPage": {
-    "titlePageForStore": "Operator"
+    "titlePageForStore": "Operator",
+    "title": "Operator Dashboard",
+    "subtitle": "Messages addressed to you and faults you've created.",
+    "tabs": {
+      "messages": "Messages",
+      "myFaults": "My faults"
+    },
+    "myFaults": {
+      "subtitle": "Faults you reported.",
+      "period": {
+        "label": "Period",
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "3m": "Last 3 months",
+        "all": "All"
+      },
+      "empty": "No faults reported in this period",
+      "errors": {
+        "load": "Error loading faults"
+      }
+    }
   },
 
   "ReportFaultPage": {

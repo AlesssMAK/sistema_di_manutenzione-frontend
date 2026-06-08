@@ -147,7 +147,27 @@
   },
 
   "OperatorPage": {
-    "titlePageForStore": "Operator"
+    "titlePageForStore": "Operator",
+    "title": "Panel Operatora",
+    "subtitle": "Wiadomości skierowane do ciebie i zgłoszone przez ciebie usterki.",
+    "tabs": {
+      "messages": "Wiadomości",
+      "myFaults": "Moje zgłoszenia"
+    },
+    "myFaults": {
+      "subtitle": "Usterki przez ciebie zgłoszone.",
+      "period": {
+        "label": "Okres",
+        "7d": "Ostatnie 7 dni",
+        "30d": "Ostatnie 30 dni",
+        "3m": "Ostatnie 3 miesiące",
+        "all": "Wszystkie"
+      },
+      "empty": "Brak zgłoszeń w tym okresie",
+      "errors": {
+        "load": "Błąd ładowania zgłoszeń"
+      }
+    }
   },
 
   "ReportFaultPage": {

@@ -12,6 +12,7 @@ interface FetchParams {
   typeFault?: string;
   assignedTo?: string;
   assignedToEmpty?: boolean;
+  createdById?: string;
 }
 export interface FetchFaultCardsParams {
   fault: FaultCard[];
@@ -32,6 +33,7 @@ export const fetchFaultCards = async ({
   typeFault,
   assignedTo,
   assignedToEmpty,
+  createdById,
 }: FetchParams): Promise<FetchFaultCardsParams> => {
   const res = await nextServer.get('/faults', {
     params: {
@@ -45,6 +47,7 @@ export const fetchFaultCards = async ({
       ...(typeFault ? { typeFault } : {}),
       ...(assignedTo ? { assignedTo } : {}),
       ...(assignedToEmpty ? { assignedToEmpty: 'true' } : {}),
+      ...(createdById ? { createdById } : {}),
     },
   });
 

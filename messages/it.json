@@ -178,7 +178,27 @@
 },
 
 "OperatorPage": {
-  "titlePageForStore": "Operatore"
+  "titlePageForStore": "Operatore",
+  "title": "Dashboard Operatore",
+  "subtitle": "Messaggi a te indirizzati e segnalazioni che hai creato.",
+  "tabs": {
+    "messages": "Messaggi",
+    "myFaults": "Le mie segnalazioni"
+  },
+  "myFaults": {
+    "subtitle": "Segnalazioni create da te.",
+    "period": {
+      "label": "Periodo",
+      "7d": "Ultimi 7 giorni",
+      "30d": "Ultimi 30 giorni",
+      "3m": "Ultimi 3 mesi",
+      "all": "Tutte"
+    },
+    "empty": "Nessuna segnalazione creata in questo periodo",
+    "errors": {
+      "load": "Errore caricamento segnalazioni"
+    }
+  }
 },
 
 "ReportFaultPage": {

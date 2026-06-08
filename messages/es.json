@@ -179,7 +179,27 @@
   },
 
   "OperatorPage": {
-    "titlePageForStore": "Operador"
+    "titlePageForStore": "Operador",
+    "title": "Panel del Operador",
+    "subtitle": "Mensajes dirigidos a ti y averías que has reportado.",
+    "tabs": {
+      "messages": "Mensajes",
+      "myFaults": "Mis reportes"
+    },
+    "myFaults": {
+      "subtitle": "Averías reportadas por ti.",
+      "period": {
+        "label": "Período",
+        "7d": "Últimos 7 días",
+        "30d": "Últimos 30 días",
+        "3m": "Últimos 3 meses",
+        "all": "Todos"
+      },
+      "empty": "Sin reportes en este período",
+      "errors": {
+        "load": "Error al cargar reportes"
+      }
+    }
   },
 
   "ReportFaultPage": {
