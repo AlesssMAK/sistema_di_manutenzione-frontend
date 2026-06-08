@@ -9,8 +9,21 @@ interface Props {
 
 export async function GET(req: NextRequest, { params }: Props) {
   try {
+    const search = req.nextUrl.searchParams.get('search') ?? '';
+    const rawStatus = req.nextUrl.searchParams.get('status') ?? '';
+    const status = rawStatus === 'all' ? '' : rawStatus;
+    const page = Number(req.nextUrl.searchParams.get('page') ?? 1);
+    const perPage = Number(req.nextUrl.searchParams.get('perPage') ?? 5);
+
     const { plantId } = await params;
-    const res = await api.get(`/plants/${plantId}/parts`);
+    const res = await api.get(`/plants/${plantId}/parts`, {
+      params: {
+        ...(search ? { search } : {}),
+        ...(status ? { status } : {}),
+        page,
+        perPage,
+      },
+    });
 
     return NextResponse.json(res.data);
   } catch (error) {

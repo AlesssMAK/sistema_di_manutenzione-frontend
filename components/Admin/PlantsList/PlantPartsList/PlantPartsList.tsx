@@ -57,7 +57,7 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
   const { data, isSuccess, isLoading, isFetching, isError } = useQuery({
     queryKey: [
       'plantParts',
-      plant,
+      plant._id,
       debouncedSearch || undefined,
       status || undefined,
       page,
@@ -71,6 +71,8 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
       }),
     placeholderData: keepPreviousData,
   });
+
+  console.log(data?.plantParts);
 
   const onClear = () => {
     setStatus('');
@@ -129,7 +131,11 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
                 </li>
               </ul>
               {data.plantParts.map(plantPart => (
-                <PlantPartCard plantId={plant._id} plantPart={plantPart} />
+                <PlantPartCard
+                  plantId={plant._id}
+                  plantPart={plantPart}
+                  key={plantPart._id}
+                />
               ))}
             </div>
           )}
