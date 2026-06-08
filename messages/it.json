@@ -36,6 +36,7 @@
 "navItem2": "Report",
 "exit": "Esci",
 "login": "Accede",
+"createFault": "Segnala guasto",
 "notifications": {
   "ariaLabel": "Notifiche",
   "tooltip": "Vai ai messaggi"

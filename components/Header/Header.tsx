@@ -12,6 +12,7 @@ import { logout } from '@/lib/api/auth';
 import { usePageStore } from '@/lib/store/pageStore';
 import LanguageButton from '../LanguageSwitcher/LanguageSwitcher';
 import NotificationBell from './NotificationBell/NotificationBell';
+import CreateFaultButton from './CreateFaultButton/CreateFaultButton';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -79,6 +80,7 @@ const Header = () => {
             <LanguageButton />
             {isAuthenticated ? (
               <>
+                <CreateFaultButton />
                 <NotificationBell enabled={isAuthenticated} />
                 <div className={css.user}>
                   <svg className={css.user_icon} width="16" height="16">

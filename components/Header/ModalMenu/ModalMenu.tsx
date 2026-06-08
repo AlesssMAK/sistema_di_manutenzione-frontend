@@ -8,6 +8,8 @@ import { useTranslations } from 'use-intl';
 import { useAuthStore } from '@/lib/store/authStore';
 import Button from '@/components/UI/Button/Button';
 import LanguageButton from '@/components/LanguageSwitcher/LanguageSwitcher';
+import NotificationBell from '../NotificationBell/NotificationBell';
+import CreateFaultButton from '../CreateFaultButton/CreateFaultButton';
 
 export interface ModalMenuProps {
   onClose: () => void;
@@ -72,6 +74,8 @@ const ModalMenu = ({
             <div className={css.user_container}>
               {isAuthenticated ? (
                 <>
+                  <CreateFaultButton onAfterClick={onClose} />
+                  <NotificationBell enabled={isAuthenticated} />
                   <div className={css.user}>
                     <svg className={css.user_icon} width="16" height="16">
                       <use href="/sprite.svg#user"></use>

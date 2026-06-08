@@ -36,6 +36,7 @@
     "navItem2": "Raporty",
     "exit": "Wyloguj",
     "login": "Logowanie",
+    "createFault": "Zgłoś usterkę",
     "notifications": {
       "ariaLabel": "Powiadomienia",
       "tooltip": "Przejdź do wiadomości"

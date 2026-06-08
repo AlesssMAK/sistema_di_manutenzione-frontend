@@ -37,6 +37,7 @@
     "navItem2": "Reports",
     "exit": "Logout",
     "login": "Login",
+    "createFault": "Report fault",
     "notifications": {
       "ariaLabel": "Notifications",
       "tooltip": "Go to messages"

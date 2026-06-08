@@ -37,6 +37,7 @@
     "navItem2": "Reportes",
     "exit": "Salir",
     "login": "Acceder",
+    "createFault": "Reportar avería",
     "notifications": {
       "ariaLabel": "Notificaciones",
       "tooltip": "Ir a los mensajes"
