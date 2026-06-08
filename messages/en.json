@@ -182,6 +182,12 @@
     "titlePageForStore": "Operator"
   },
 
+  "ReportFaultPage": {
+    "titlePageForStore": "Report fault",
+    "title": "Report a fault",
+    "subtitle": "Fill in the form to register a new fault. Any role can report issues observed on plant equipment."
+  },
+
   "SafetyPage": {
     "titlePageForStore": "Safety (HSE)",
     "headerTitle": "Safety Monitoring",

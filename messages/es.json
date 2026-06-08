@@ -182,6 +182,12 @@
     "titlePageForStore": "Operador"
   },
 
+  "ReportFaultPage": {
+    "titlePageForStore": "Reportar avería",
+    "title": "Reportar una avería",
+    "subtitle": "Completa el formulario para registrar una nueva avería. Cualquier rol puede reportar problemas observados en los equipos."
+  },
+
   "SafetyPage": {
     "titlePageForStore": "Seguridad (HSE)",
     "headerTitle": "Monitoreo de Seguridad",

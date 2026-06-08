@@ -150,6 +150,12 @@
     "titlePageForStore": "Operator"
   },
 
+  "ReportFaultPage": {
+    "titlePageForStore": "Zgłoś usterkę",
+    "title": "Zgłoś usterkę",
+    "subtitle": "Wypełnij formularz, aby zarejestrować nową usterkę. Każda rola może zgłaszać problemy zauważone na maszynach."
+  },
+
   "SafetyPage": {
     "titlePageForStore": "Bezpieczeństwo (BHP)",
     "headerTitle": "Monitorowanie Bezpieczeństwa",

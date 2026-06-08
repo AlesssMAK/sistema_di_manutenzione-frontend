@@ -181,6 +181,12 @@
   "titlePageForStore": "Operatore"
 },
 
+"ReportFaultPage": {
+  "titlePageForStore": "Segnala guasto",
+  "title": "Segnala un guasto",
+  "subtitle": "Compila il modulo per registrare un nuovo guasto. Tutti i ruoli possono segnalare problemi notati sugli impianti."
+},
+
 "SafetyPage": {
   "titlePageForStore": "Sicurezza (HSE)",
   "headerTitle": "Monitoraggio Sicurezza",
