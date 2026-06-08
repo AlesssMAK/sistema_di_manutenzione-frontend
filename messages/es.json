@@ -188,6 +188,61 @@
     "subtitle": "Completa el formulario para registrar una nueva avería. Cualquier rol puede reportar problemas observados en los equipos."
   },
 
+  "MessagesPage": {
+    "titlePageForStore": "Mensajes",
+    "title": "Mensajes",
+    "subtitle": "Mensajes directos y anuncios dirigidos a tu rol.",
+    "tabs": {
+      "direct": "Directos",
+      "announcements": "Anuncios"
+    },
+    "card": {
+      "from": "De",
+      "unread": "No leído",
+      "reply": "Responder",
+      "showMore": "Ver detalles"
+    },
+    "detail": {
+      "title": "Detalle del mensaje",
+      "from": "De",
+      "to": "Para",
+      "role": "Rol",
+      "broadcastAll": "Todos los usuarios",
+      "broadcastRole": "Rol: {role}",
+      "sent": "Enviado el",
+      "reply": "Responder",
+      "close": "Cerrar"
+    },
+    "reply": {
+      "title": "Responder a {author}",
+      "subjectLabel": "Asunto",
+      "subjectPlaceholder": "Re: ...",
+      "bodyLabel": "Mensaje *",
+      "bodyPlaceholder": "Escribe tu respuesta...",
+      "cancel": "Cancelar",
+      "send": "Enviar respuesta",
+      "sending": "Enviando..."
+    },
+    "messages": {
+      "replySuccess": "Respuesta enviada",
+      "replyError": "Error al enviar la respuesta",
+      "markReadError": "Error al marcar como leído"
+    },
+    "empty": {
+      "direct": "Sin mensajes directos",
+      "announcements": "Sin anuncios para tu rol"
+    },
+    "errors": {
+      "load": "Error al cargar los mensajes"
+    },
+    "validation": {
+      "bodyRequired": "El mensaje es obligatorio",
+      "bodyTooShort": "El mensaje es demasiado corto",
+      "bodyTooLong": "El mensaje es demasiado largo (máx. 5000)",
+      "subjectTooLong": "El asunto es demasiado largo (máx. 200)"
+    }
+  },
+
   "SafetyPage": {
     "titlePageForStore": "Seguridad (HSE)",
     "headerTitle": "Monitoreo de Seguridad",

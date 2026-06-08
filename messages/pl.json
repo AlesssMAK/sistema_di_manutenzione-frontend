@@ -156,6 +156,61 @@
     "subtitle": "Wypełnij formularz, aby zarejestrować nową usterkę. Każda rola może zgłaszać problemy zauważone na maszynach."
   },
 
+  "MessagesPage": {
+    "titlePageForStore": "Wiadomości",
+    "title": "Wiadomości",
+    "subtitle": "Wiadomości bezpośrednie i ogłoszenia skierowane do twojej roli.",
+    "tabs": {
+      "direct": "Bezpośrednie",
+      "announcements": "Ogłoszenia"
+    },
+    "card": {
+      "from": "Od",
+      "unread": "Nieprzeczytane",
+      "reply": "Odpowiedz",
+      "showMore": "Pokaż szczegóły"
+    },
+    "detail": {
+      "title": "Szczegóły wiadomości",
+      "from": "Od",
+      "to": "Do",
+      "role": "Rola",
+      "broadcastAll": "Wszyscy użytkownicy",
+      "broadcastRole": "Rola: {role}",
+      "sent": "Wysłano",
+      "reply": "Odpowiedz",
+      "close": "Zamknij"
+    },
+    "reply": {
+      "title": "Odpowiedz do {author}",
+      "subjectLabel": "Temat",
+      "subjectPlaceholder": "Re: ...",
+      "bodyLabel": "Wiadomość *",
+      "bodyPlaceholder": "Napisz swoją odpowiedź...",
+      "cancel": "Anuluj",
+      "send": "Wyślij odpowiedź",
+      "sending": "Wysyłanie..."
+    },
+    "messages": {
+      "replySuccess": "Odpowiedź wysłana",
+      "replyError": "Błąd podczas wysyłania",
+      "markReadError": "Błąd oznaczania jako przeczytane"
+    },
+    "empty": {
+      "direct": "Brak wiadomości bezpośrednich",
+      "announcements": "Brak ogłoszeń dla twojej roli"
+    },
+    "errors": {
+      "load": "Błąd ładowania wiadomości"
+    },
+    "validation": {
+      "bodyRequired": "Wiadomość jest wymagana",
+      "bodyTooShort": "Wiadomość jest za krótka",
+      "bodyTooLong": "Wiadomość jest za długa (max 5000)",
+      "subjectTooLong": "Temat jest za długi (max 200)"
+    }
+  },
+
   "SafetyPage": {
     "titlePageForStore": "Bezpieczeństwo (BHP)",
     "headerTitle": "Monitorowanie Bezpieczeństwa",

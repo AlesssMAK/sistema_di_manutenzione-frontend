@@ -1,0 +1,11 @@
+.pageWrapper {
+  padding: 24px 0 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tabsBar {
+  margin-top: 16px;
+  margin-bottom: 20px;
+}

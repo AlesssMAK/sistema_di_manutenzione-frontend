@@ -187,6 +187,61 @@
   "subtitle": "Compila il modulo per registrare un nuovo guasto. Tutti i ruoli possono segnalare problemi notati sugli impianti."
 },
 
+"MessagesPage": {
+  "titlePageForStore": "Messaggi",
+  "title": "Messaggi",
+  "subtitle": "Messaggi diretti e annunci destinati al tuo ruolo.",
+  "tabs": {
+    "direct": "Diretti",
+    "announcements": "Annunci"
+  },
+  "card": {
+    "from": "Da",
+    "unread": "Non letto",
+    "reply": "Rispondi",
+    "showMore": "Mostra dettagli"
+  },
+  "detail": {
+    "title": "Dettaglio messaggio",
+    "from": "Mittente",
+    "to": "Destinatario",
+    "role": "Ruolo",
+    "broadcastAll": "Tutti gli utenti",
+    "broadcastRole": "Ruolo: {role}",
+    "sent": "Inviato il",
+    "reply": "Rispondi",
+    "close": "Chiudi"
+  },
+  "reply": {
+    "title": "Rispondi a {author}",
+    "subjectLabel": "Oggetto",
+    "subjectPlaceholder": "Re: ...",
+    "bodyLabel": "Messaggio *",
+    "bodyPlaceholder": "Scrivi la tua risposta...",
+    "cancel": "Annulla",
+    "send": "Invia risposta",
+    "sending": "Invio..."
+  },
+  "messages": {
+    "replySuccess": "Risposta inviata",
+    "replyError": "Errore durante l'invio",
+    "markReadError": "Errore di lettura"
+  },
+  "empty": {
+    "direct": "Nessun messaggio diretto",
+    "announcements": "Nessun annuncio per il tuo ruolo"
+  },
+  "errors": {
+    "load": "Errore durante il caricamento dei messaggi"
+  },
+  "validation": {
+    "bodyRequired": "Il messaggio è obbligatorio",
+    "bodyTooShort": "Il messaggio è troppo breve",
+    "bodyTooLong": "Il messaggio è troppo lungo (max 5000)",
+    "subjectTooLong": "L'oggetto è troppo lungo (max 200)"
+  }
+},
+
 "SafetyPage": {
   "titlePageForStore": "Sicurezza (HSE)",
   "headerTitle": "Monitoraggio Sicurezza",

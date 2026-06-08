@@ -188,6 +188,61 @@
     "subtitle": "Fill in the form to register a new fault. Any role can report issues observed on plant equipment."
   },
 
+  "MessagesPage": {
+    "titlePageForStore": "Messages",
+    "title": "Messages",
+    "subtitle": "Direct messages and announcements targeted at your role.",
+    "tabs": {
+      "direct": "Direct",
+      "announcements": "Announcements"
+    },
+    "card": {
+      "from": "From",
+      "unread": "Unread",
+      "reply": "Reply",
+      "showMore": "Show details"
+    },
+    "detail": {
+      "title": "Message detail",
+      "from": "From",
+      "to": "To",
+      "role": "Role",
+      "broadcastAll": "All users",
+      "broadcastRole": "Role: {role}",
+      "sent": "Sent at",
+      "reply": "Reply",
+      "close": "Close"
+    },
+    "reply": {
+      "title": "Reply to {author}",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Re: ...",
+      "bodyLabel": "Message *",
+      "bodyPlaceholder": "Write your reply...",
+      "cancel": "Cancel",
+      "send": "Send reply",
+      "sending": "Sending..."
+    },
+    "messages": {
+      "replySuccess": "Reply sent",
+      "replyError": "Error sending reply",
+      "markReadError": "Error marking as read"
+    },
+    "empty": {
+      "direct": "No direct messages",
+      "announcements": "No announcements for your role"
+    },
+    "errors": {
+      "load": "Error loading messages"
+    },
+    "validation": {
+      "bodyRequired": "Message is required",
+      "bodyTooShort": "Message is too short",
+      "bodyTooLong": "Message is too long (max 5000)",
+      "subjectTooLong": "Subject is too long (max 200)"
+    }
+  },
+
   "SafetyPage": {
     "titlePageForStore": "Safety (HSE)",
     "headerTitle": "Safety Monitoring",

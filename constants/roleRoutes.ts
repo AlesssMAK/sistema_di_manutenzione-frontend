@@ -1,7 +1,7 @@
 export const roleRoutes: Record<string, string[]> = {
-  admin: ['/admin'],
-  manager: ['/manager', '/report-fault'],
-  maintenanceWorker: ['/maintenance-worker', '/report-fault'],
-  operator: ['/operator', '/report-fault'],
-  safety: ['/safety', '/report-fault'],
+  admin: ['/admin', '/messages'],
+  manager: ['/manager', '/report-fault', '/messages'],
+  maintenanceWorker: ['/maintenance-worker', '/report-fault', '/messages'],
+  operator: ['/operator', '/report-fault', '/messages'],
+  safety: ['/safety', '/report-fault', '/messages'],
 };
