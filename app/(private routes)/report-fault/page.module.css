@@ -1,0 +1,10 @@
+.pageWrapper {
+  padding: 24px 0 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.formWrap {
+  margin-top: 24px;
+}

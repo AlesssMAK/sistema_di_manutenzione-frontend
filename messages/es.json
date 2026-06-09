@@ -33,21 +33,26 @@
   },
 
   "header": {
-  "navItem1": "Roles",
-  "navItem2": "Reportes",
-  "exit": "Salir",
-  "login": "Acceder"
-},
+    "navItem1": "Roles",
+    "navItem2": "Reportes",
+    "exit": "Salir",
+    "login": "Acceder",
+    "createFault": "Reportar avería",
+    "notifications": {
+      "ariaLabel": "Notificaciones",
+      "tooltip": "Ir a los mensajes"
+    }
+  },
 
-"AdminSidebar": {
-  "users": "Usuarios",
-  "plants": "Máquinas / Instalaciones",
-  "notifications": "Notificaciones",
-  "logsAudit": "Log & Audit",
-  "systemSettings": "Configuración del sistema"
-},
+  "AdminSidebar": {
+    "users": "Usuarios",
+    "plants": "Máquinas / Instalaciones",
+    "notifications": "Notificaciones",
+    "logsAudit": "Log & Audit",
+    "systemSettings": "Configuración del sistema"
+  },
 
-"AdminPage": {
+  "AdminPage": {
     "titlePageForStore": "Administrador: Panel de control",
     "Users": {
       "title": "Gestión de Usuarios",
@@ -64,7 +69,7 @@
       "email": "Correo Asociado",
       "status": "Estado",
       "actions": "Acciones"
-      },
+    },
     "CreateAndEditUserForm": {
       "user": "Usuario",
       "title": "Nuevo Usuario",
@@ -85,7 +90,7 @@
       "editSubtitle": "Gestiona la información de la cuenta del usuario y el código de acceso",
       "roleChangeDescription": "Para completar el cambio de rol, debes introducir el dato requerido: la contraseña al dejar el rol de operador o el código de acceso al asumirlo.",
       "saveChanges": "Guardar Cambios"
-      },
+    },
     "Plants": {
       "title": "Gestión de Máquinas / Instalaciones",
       "subtitle": "Gestiona el catálogo de máquinas e instalaciones",
@@ -93,58 +98,391 @@
       "searchPlaceholder": "Buscar por nombre...",
       "status": "Estado",
       "search": "Buscar"
-      },
+    },
     "PlantsList": {
       "name": "Nombre de Máquina",
+            "namePlantPart": "Nombre Pieza",
       "code": "Código",
       "location": "Ubicación",
       "status": "Estado",
       "actions": "Acciones"
-  }
+    }
   },
 
-"maintenanceWorkerPage": {
-  "titlePageForStore": "Mantenedor"
-},
+  "maintenanceWorkerPage": {
+    "titlePageForStore": "Mantenedor",
+    "headerTitle": "Planificación del Mantenedor",
+    "headerSubtitle": "Visualiza y gestiona las intervenciones planificadas",
+    "tabs": {
+      "active": "Activas",
+      "overdue": "En retraso",
+      "completed": "Completadas"
+    },
+    "scope": {
+      "mine": "Mías",
+      "pool": "Libres",
+      "all": "Todas",
+      "mineHint": "Solo intervenciones asignadas a mí",
+      "poolHint": "Intervenciones sin asignar (pool)",
+      "allHint": "Todas las intervenciones",
+      "ariaLabel": "Ámbito de señalaciones"
+    },
+    "empty": {
+      "overdue": "No hay señalaciones en retraso",
+      "completedDate": "No hay señalaciones completadas en esta fecha",
+      "completed": "No hay señalaciones completadas",
+      "mineDate": "No hay señalaciones asignadas a ti en esta fecha",
+      "poolDate": "No hay señalaciones libres en esta fecha",
+      "dateOnly": "No hay señalaciones en esta fecha",
+      "mine": "No hay señalaciones asignadas a ti",
+      "pool": "No hay señalaciones libres (pool vacío)",
+      "default": "No hay señalaciones",
+      "resetButton": "Mostrar todas"
+    },
+    "errors": {
+      "loadData": "Error al cargar los datos",
+      "loadCounts": "Error al cargar los contadores del calendario",
+      "loadDeadlines": "Error al cargar las fechas límite"
+    },
+    "calendar": {
+      "header": "Calendario",
+      "interventionsCount": "{count} intervención(es) planificada(s)"
+    },
+    "dayView": {
+      "title": "Vista diaria"
+    },
+    "dateNow": {
+      "overdue": "Señalaciones vencidas",
+      "completedHistory": "Historial de señalaciones completadas",
+      "allActive": "Todas las señalaciones activas",
+      "today": "Hoy,",
+      "activityOf": "Actividad del:",
+      "completedOf": "Completadas del:",
+      "prioritySuffix": ", prioridad: {priority}"
+    }
+  },
 
-"ManagerPage": {
-  "titlePageForStore": "Responsable"
-},
+  "ManagerPage": {
+    "titlePageForStore": "Responsable",
+    "headerTitle": "Panel del Responsable",
+    "headerSubtitle": "Gestiona las señalaciones recibidas, las actividades en curso y el archivo",
+    "tabs": {
+      "received": "Recibidas",
+      "inProgress": "En curso",
+      "archive": "Registro completadas"
+    },
+    "empty": {
+      "received": "No hay señalaciones pendientes",
+      "inProgress": "No hay señalaciones en curso",
+      "archive": "No hay señalaciones archivadas"
+    }
+  },
 
-"OperatorPage": {
-  "titlePageForStore": "Operador"
-},
+  "OperatorPage": {
+    "titlePageForStore": "Operador",
+    "title": "Panel del Operador",
+    "subtitle": "Mensajes dirigidos a ti y averías que has reportado.",
+    "tabs": {
+      "messages": "Mensajes",
+      "myFaults": "Mis reportes"
+    },
+    "myFaults": {
+      "subtitle": "Averías reportadas por ti.",
+      "period": {
+        "label": "Período",
+        "7d": "Últimos 7 días",
+        "30d": "Últimos 30 días",
+        "3m": "Últimos 3 meses",
+        "all": "Todos"
+      },
+      "empty": "Sin reportes en este período",
+      "errors": {
+        "load": "Error al cargar reportes"
+      }
+    }
+  },
 
-"SafetyPage": {
-  "titlePageForStore": "Seguridad (HSE)"
-},
+  "ReportFaultPage": {
+    "titlePageForStore": "Reportar avería",
+    "title": "Reportar una avería",
+    "subtitle": "Completa el formulario para registrar una nueva avería. Cualquier rol puede reportar problemas observados en los equipos."
+  },
 
-"reportsAndCommunicationsPage": {
-  "titlePageForStore": "Reportes"
-},
+  "MessagesPage": {
+    "titlePageForStore": "Mensajes",
+    "title": "Mensajes",
+    "subtitle": "Mensajes directos y anuncios dirigidos a tu rol.",
+    "tabs": {
+      "direct": "Directos",
+      "announcements": "Anuncios"
+    },
+    "card": {
+      "from": "De",
+      "unread": "No leído",
+      "reply": "Responder",
+      "showMore": "Ver detalles"
+    },
+    "detail": {
+      "title": "Detalle del mensaje",
+      "from": "De",
+      "to": "Para",
+      "role": "Rol",
+      "broadcastAll": "Todos los usuarios",
+      "broadcastRole": "Rol: {role}",
+      "sent": "Enviado el",
+      "reply": "Responder",
+      "close": "Cerrar"
+    },
+    "reply": {
+      "title": "Responder a {author}",
+      "subjectLabel": "Asunto",
+      "subjectPlaceholder": "Re: ...",
+      "bodyLabel": "Mensaje *",
+      "bodyPlaceholder": "Escribe tu respuesta...",
+      "cancel": "Cancelar",
+      "send": "Enviar respuesta",
+      "sending": "Enviando..."
+    },
+    "messages": {
+      "replySuccess": "Respuesta enviada",
+      "replyError": "Error al enviar la respuesta",
+      "markReadError": "Error al marcar como leído"
+    },
+    "empty": {
+      "direct": "Sin mensajes directos",
+      "announcements": "Sin anuncios para tu rol"
+    },
+    "errors": {
+      "load": "Error al cargar los mensajes"
+    },
+    "validation": {
+      "bodyRequired": "El mensaje es obligatorio",
+      "bodyTooShort": "El mensaje es demasiado corto",
+      "bodyTooLong": "El mensaje es demasiado largo (máx. 5000)",
+      "subjectTooLong": "El asunto es demasiado largo (máx. 200)"
+    }
+  },
 
-"RolesPage": {
-  "titlePageForStore": "Roles"
-},
+  "SafetyPage": {
+    "titlePageForStore": "Seguridad (HSE)",
+    "headerTitle": "Monitoreo de Seguridad",
+    "headerSubtitle": "Visualiza en tiempo real las señalaciones de seguridad. Solo lectura.",
+    "badge": "HSE",
+    "statusFilter": "Estado",
+    "statusOptions": {
+      "all": "Todos los estados"
+    },
+    "empty": "No hay señalaciones de seguridad"
+  },
 
-"NotFound": {
-  "title": "Página no encontrada",
-  "description": "Lamentablemente, la página que buscas no existe o ha sido movida.",
-  "backHome": "Volver a la página principal"
-},
+  "FaultDetail": {
+    "title": "Detalle de la señalación",
+    "titleIntervento": "Detalle de la intervención",
+    "backButton": "Volver",
+    "labels": {
+      "operator": "Operador",
+      "status": "Estado",
+      "dateCreated": "Fecha de creación",
+      "lastUpdated": "Última actualización",
+      "plant": "Instalación",
+      "plantPart": "Parte de la instalación",
+      "type": "Tipo de avería",
+      "priority": "Prioridad",
+      "planned": "Planificado",
+      "estimatedDuration": "Duración estimada",
+      "deadline": "Fecha límite",
+      "deadlineNotSet": "No establecida",
+      "assignedMaintainers": "Mantenedores asignados",
+      "attachedPhotos": "Fotos adjuntas"
+    },
+    "comments": {
+      "operatorDescription": "Descripción (Operador)",
+      "operatorComment": "Comentario Operador",
+      "managerNote": "Notas del responsable",
+      "managerComment": "Comentario del responsable",
+      "maintainerNote": "Notas del mantenedor",
+      "maintainerComment": "Comentario del Mantenedor",
+      "hseNote": "Nota HSE (Seguridad)",
+      "noDescription": "Sin descripción",
+      "noNote": "Sin notas",
+      "noComment": "Sin comentarios"
+    },
+    "actions": {
+      "planIntervention": "Planificar intervención",
+      "modifyPlanning": "Modificar planificación",
+      "addCommentAndChangeStatus": "Añadir comentario y cambiar estado"
+    },
+    "errors": {
+      "faultNotFound": "Señalación no encontrada",
+      "interventionNotFound": "Intervención no encontrada",
+      "loadError": "Error al cargar los datos"
+    },
+    "hseSection": {
+      "label": "Nota HSE (Seguridad)",
+      "placeholder": "Escribe aquí tu evaluación de seguridad...",
+      "saveButton": "Guardar nota",
+      "editButton": "Modificar nota",
+      "saving": "Guardando...",
+      "emptyReadonly": "Sin nota HSE",
+      "saved": "Nota HSE guardada",
+      "saveError": "Error al guardar la nota"
+    }
+  },
 
-"loader": {
-  "loading": "Cargando, por favor espera..."
-},
+  "FaultCard": {
+    "labels": {
+      "operator": "Operador",
+      "dateCreated": "Fecha de creación",
+      "plant": "Instalación",
+      "plantPart": "Parte",
+      "machine": "Máquina",
+      "plannedTime": "Hora planificada",
+      "deadline": "Fecha límite",
+      "priority": "Prioridad",
+      "estimatedDuration": "Duración estimada",
+      "description": "Descripción",
+      "comment": "Comentario",
+      "managerNotes": "Notas del responsable",
+      "assignedTo": "Asignado a",
+      "planned": "Planificado"
+    },
+    "maintainerCount": "{count, plural, one {# mantenedor} other {# mantenedores}}",
+    "buttons": {
+      "details": "Detalles",
+      "viewDetails": "Ver detalles",
+      "loading": "Cargando...",
+      "plan": "Planificar",
+      "modify": "Modificar planificación",
+      "takeOver": "Tomar a cargo",
+      "takingOver": "Tomando a cargo..."
+    },
+    "messages": {
+      "claimed": "Intervención tomada a cargo",
+      "claimError": "Error al tomar a cargo"
+    },
+    "badges": {
+      "rescheduled": "Reprogramada",
+      "originalLabel": "Original:"
+    },
+    "empty": "No hay señalaciones"
+  },
 
-"Error": {
-  "errorTitle": "Algo salió mal!",
-  "errorMessage": "Lo sentimos. Ocurrió un error al procesar tu solicitud.",
-  "tryAgain": "Intentar de nuevo",
-  "goHome": "Ir a home"
-},
+  "PlanFaultForm": {
+    "titlePlan": "Planificar señalación",
+    "titleModify": "Modificar planificación",
+    "labels": {
+      "priority": "Prioridad *",
+      "estimatedDuration": "Duración estimada (min) *",
+      "plannedDate": "Fecha planificada *",
+      "plannedTime": "Hora planificada *",
+      "deadline": "Fecha límite *",
+      "managerComment": "Notas del responsable",
+      "assignedMaintainers": "Mantenedores asignados"
+    },
+    "managerCommentPlaceholder": "Notas opcionales para el mantenedor...",
+    "loadingMaintainers": "Cargando...",
+    "noMaintainers": "No hay mantenedores disponibles",
+    "poolHint": "Deja vacío para poner la señalación en el pool (cualquier mantenedor podrá tomarla)",
+    "buttons": {
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "saving": "Guardando..."
+    },
+    "messages": {
+      "planSuccess": "Señalación planificada",
+      "modifySuccess": "Planificación actualizada",
+      "saveError": "Error al guardar"
+    }
+  },
 
-"TypeFault": {
+  "MaintenanceUpdateModal": {
+    "title": "Actualizar intervención",
+    "labels": {
+      "newStatus": "Nuevo estado *",
+      "maintainerComment": "Comentario del mantenedor",
+      "actualDuration": "Duración efectiva (minutos) *",
+      "suspensionReason": "Motivo de la suspensión *",
+      "materialRequest": "Material o soporte solicitado"
+    },
+    "statusOptions": {
+      "inProgress": "En curso",
+      "completed": "Completado",
+      "suspended": "Suspendido"
+    },
+    "placeholders": {
+      "statusSelect": "Seleccionar estado",
+      "maintainerComment": "Detalles del trabajo realizado...",
+      "suspensionReason": "¿Por qué estás suspendiendo? (p.ej. esperando una pieza, problema de seguridad...)",
+      "materialRequest": "¿Qué se necesita para retomar? (opcional)"
+    },
+    "buttons": {
+      "cancel": "Cancelar",
+      "submit": "Confirmar y guardar",
+      "submitting": "Guardando...",
+      "close": "Cerrar"
+    },
+    "messages": {
+      "success": "Intervención actualizada con éxito",
+      "error": "Error durante la actualización",
+      "noTransitions": "No es posible actualizar desde el estado \"{status}\".",
+      "takeOverHint": " Usa \"Tomar a cargo\" para empezar."
+    }
+  },
+
+  "reportsAndCommunicationsPage": {
+    "titlePageForStore": "Reportes",
+    "title": "Reportes y Comunicaciones",
+    "subtitle": "Resumen de las averías recientes y los anuncios de la empresa.",
+    "sections": {
+      "recentFaults": {
+        "title": "Averías de los últimos 30 días",
+        "subtitle": "Todas las averías registradas en el último mes.",
+        "empty": "Sin averías en los últimos 30 días",
+        "labels": {
+          "id": "ID",
+          "plant": "Planta",
+          "date": "Fecha",
+          "status": "Estado"
+        }
+      },
+      "broadcasts": {
+        "title": "Comunicaciones",
+        "subtitle": "Anuncios para todos y para tu rol.",
+        "empty": "Sin comunicaciones"
+      }
+    },
+    "broadcastBadge": {
+      "all": "A todos",
+      "role": "Para tu rol"
+    },
+    "errors": {
+      "loadFaults": "Error al cargar averías",
+      "loadBroadcasts": "Error al cargar comunicaciones"
+    }
+  },
+
+  "RolesPage": {
+    "titlePageForStore": "Roles"
+  },
+
+  "NotFound": {
+    "title": "Página no encontrada",
+    "description": "Lamentablemente, la página que buscas no existe o ha sido movida.",
+    "backHome": "Volver a la página principal"
+  },
+
+  "loader": {
+    "loading": "Cargando, por favor espera..."
+  },
+
+  "Error": {
+    "errorTitle": "¡Algo salió mal!",
+    "errorMessage": "Lo sentimos. Ocurrió un error al procesar tu solicitud.",
+    "tryAgain": "Intentar de nuevo",
+    "goHome": "Ir a home"
+  },
+
+  "TypeFault": {
     "PRODUCTION": "Producción",
     "SAFETY": "Seguridad"
   },
@@ -153,17 +491,18 @@
     "CREATED": "Creado",
     "IN_PROGRESS": "En progreso",
     "COMPLETED": "Completado",
-    "SUSPENDED": "Suspendido"
+    "SUSPENDED": "Suspendido",
+    "OVERDUE": "Vencido"
   },
 
   "Priority": {
     "Low": "Baja",
     "Medium": "Media",
     "High": "Alta"
-},
+  },
 
   "ReportForm": {
-    "newReport": "Nuevo Señalización",
+    "newReport": "Nueva Señalización",
     "fillForm": "Completa el formulario para reportar una avería o anomalía",
     "reportId": "ID de la señalación",
     "operator": "Operador",
@@ -184,10 +523,10 @@
     "sendReport": "Enviar Reporte",
     "reportCreatedSuccessfully": "Señalización creada con éxito",
     "maxImages": "Máximo 5 imágenes"
-},
+  },
 
-"Roles": {
-  "all": "Todos los roles",
+  "Roles": {
+    "all": "Todos los roles",
     "admin": "Administrador",
     "operator": "Operador",
     "manager": "Responsable",
@@ -201,24 +540,9 @@
     "deactivated": "Desactivado"
   },
 
-"Filters": {
+  "Filters": {
     "title": "Filtros",
     "clear": "Limpiar filtros"
-  },
-
-  "CreateAndEditUserForm": {
-    "title": "Nuevo Usuario",
-    "subtitle": "Completa todos los campos y genera un código de acceso para el nuevo usuario",
-    "role": "Rol *",
-    "fullName": "Nombre Completo *",
-    "email": "Correo Electrónico *",
-    "password": "Contraseña *",
-    "accessCode": "Código de Acceso",
-    "generateAutomatically": "Generar Automáticamente",
-    "setManually": "Configurar Manualmente",
-    "cancel": "Cancelar",
-    "createUser": "Crear Usuario",
-    "userCreatedSuccess": "Usuario creado con éxito"
   },
 
   "btn": {
@@ -231,6 +555,4 @@
     "serverErrorTitle": "Error del servidor",
     "serverErrorMessage": "Ocurrió un problema al cargar los datos. Inténtalo de nuevo más tarde"
   }
-
-
 }

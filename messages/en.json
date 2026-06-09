@@ -29,25 +29,30 @@
       "required": "Field is required",
       "invalidIdentifier": "Invalid format (email or full name)",
       "invalidSecret": "Invalid format (password or personal code)"
-      }
+    }
   },
 
   "header": {
-  "navItem1": "Roles",
-  "navItem2": "Reports",
-  "exit": "Logout",
-  "login": "Login"
-},
+    "navItem1": "Roles",
+    "navItem2": "Reports",
+    "exit": "Logout",
+    "login": "Login",
+    "createFault": "Report fault",
+    "notifications": {
+      "ariaLabel": "Notifications",
+      "tooltip": "Go to messages"
+    }
+  },
 
-"AdminSidebar": {
-  "users": "Users",
-  "plants": "Machines / Plants",
-  "notifications": "Notifications",
-  "logsAudit": "Logs & Audit",
-  "systemSettings": "System settings"
-},
+  "AdminSidebar": {
+    "users": "Users",
+    "plants": "Machines / Plants",
+    "notifications": "Notifications",
+    "logsAudit": "Logs & Audit",
+    "systemSettings": "System settings"
+  },
 
-"AdminPage": {
+  "AdminPage": {
     "titlePageForStore": "Administrator: Control panel",
     "Users": {
       "title": "User Management",
@@ -66,85 +71,418 @@
       "actions": "Actions"
     },
     "CreateAndEditUserForm": {
-        "user": "User",
-        "title": "New User",
-        "subtitle": "Fill in all fields and generate an access code for the new user",
-        "role": "Role",
-        "fullName": "Full Name",
-        "email": "Email",
-        "password": "Password",
-        "accessCode": "Access Code",
-        "generateAutomatically": "Generate Automatically",
-        "setManually": "Set Manually",
-        "cancel": "Cancel",
-        "createUser": "Create User",
-        "userCreatedSuccess": "User successfully created",
-        "userUpdatedSuccess": "User updated successfully",
-        "status": "Status",
-        "editTitle": "Edit User",
-        "editSubtitle": "Manage the user's account information and access code",
-        "roleChangeDescription": "To complete the role change, you must enter the required data: the password when leaving the operator role or the access code when assuming it.",
-        "saveChanges": "Save Changes"
+      "user": "User",
+      "title": "New User",
+      "subtitle": "Fill in all fields and generate an access code for the new user",
+      "role": "Role",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "accessCode": "Access Code",
+      "generateAutomatically": "Generate Automatically",
+      "setManually": "Set Manually",
+      "cancel": "Cancel",
+      "createUser": "Create User",
+      "userCreatedSuccess": "User successfully created",
+      "userUpdatedSuccess": "User updated successfully",
+      "status": "Status",
+      "editTitle": "Edit User",
+      "editSubtitle": "Manage the user's account information and access code",
+      "roleChangeDescription": "To complete the role change, you must enter the required data: the password when leaving the operator role or the access code when assuming it.",
+      "saveChanges": "Save Changes"
+    },
+    "Plants": {
+      "title": "Machine / Plant Management",
+      "subtitle": "Manage the catalog of machines and plants",
+      "newMachine": "New Machine",
+      "searchPlaceholder": "Search by name...",
+      "status": "Status",
+      "search": "Search"
+    },
+    "PlantsList": {
+      "name": "Machine Name",
+      "namePlantPart": "Part Name",
+      "code": "Code",
+      "location": "Location",
+      "status": "Status",
+      "actions": "Actions"
+    }
+  },
+
+  "maintenanceWorkerPage": {
+    "titlePageForStore": "Maintenance Worker",
+    "headerTitle": "Maintenance Worker Planning",
+    "headerSubtitle": "View and manage planned interventions",
+    "tabs": {
+      "active": "Active",
+      "overdue": "Overdue",
+      "completed": "Completed"
+    },
+    "scope": {
+      "mine": "Mine",
+      "pool": "Free",
+      "all": "All",
+      "mineHint": "Only interventions assigned to me",
+      "poolHint": "Unassigned interventions (pool)",
+      "allHint": "All interventions",
+      "ariaLabel": "Scope of reports"
+    },
+    "empty": {
+      "overdue": "No overdue reports",
+      "completedDate": "No completed reports on this date",
+      "completed": "No completed reports",
+      "mineDate": "No reports assigned to you on this date",
+      "poolDate": "No free reports on this date",
+      "dateOnly": "No reports on this date",
+      "mine": "No reports assigned to you",
+      "pool": "No free reports (empty pool)",
+      "default": "No reports",
+      "resetButton": "Show all"
+    },
+    "errors": {
+      "loadData": "Error loading data",
+      "loadCounts": "Error loading calendar counters",
+      "loadDeadlines": "Error loading deadlines"
+    },
+    "calendar": {
+      "header": "Calendar",
+      "interventionsCount": "{count} planned intervention(s)"
+    },
+    "dayView": {
+      "title": "Day view"
+    },
+    "dateNow": {
+      "overdue": "Overdue reports",
+      "completedHistory": "Completed reports history",
+      "allActive": "All active reports",
+      "today": "Today,",
+      "activityOf": "Activity of:",
+      "completedOf": "Completed on:",
+      "prioritySuffix": ", priority: {priority}"
+    }
+  },
+
+  "ManagerPage": {
+    "titlePageForStore": "Manager",
+    "headerTitle": "Manager Dashboard",
+    "headerSubtitle": "Manage received reports, ongoing activities and the archive",
+    "tabs": {
+      "received": "Received",
+      "inProgress": "In progress",
+      "archive": "Completed registry"
+    },
+    "empty": {
+      "received": "No pending reports",
+      "inProgress": "No reports in progress",
+      "archive": "No archived reports"
+    }
+  },
+
+  "OperatorPage": {
+    "titlePageForStore": "Operator",
+    "title": "Operator Dashboard",
+    "subtitle": "Messages addressed to you and faults you've created.",
+    "tabs": {
+      "messages": "Messages",
+      "myFaults": "My faults"
+    },
+    "myFaults": {
+      "subtitle": "Faults you reported.",
+      "period": {
+        "label": "Period",
+        "7d": "Last 7 days",
+        "30d": "Last 30 days",
+        "3m": "Last 3 months",
+        "all": "All"
       },
-      "Plants": {
-        "title": "Machine / Plant Management",
-        "subtitle": "Manage the catalog of machines and plants",
-        "newMachine": "New Machine",
-        "searchPlaceholder": "Search by name...",
-        "status": "Status",
-        "search": "Search"
+      "empty": "No faults reported in this period",
+      "errors": {
+        "load": "Error loading faults"
+      }
+    }
+  },
+
+  "ReportFaultPage": {
+    "titlePageForStore": "Report fault",
+    "title": "Report a fault",
+    "subtitle": "Fill in the form to register a new fault. Any role can report issues observed on plant equipment."
+  },
+
+  "MessagesPage": {
+    "titlePageForStore": "Messages",
+    "title": "Messages",
+    "subtitle": "Direct messages and announcements targeted at your role.",
+    "tabs": {
+      "direct": "Direct",
+      "announcements": "Announcements"
+    },
+    "card": {
+      "from": "From",
+      "unread": "Unread",
+      "reply": "Reply",
+      "showMore": "Show details"
+    },
+    "detail": {
+      "title": "Message detail",
+      "from": "From",
+      "to": "To",
+      "role": "Role",
+      "broadcastAll": "All users",
+      "broadcastRole": "Role: {role}",
+      "sent": "Sent at",
+      "reply": "Reply",
+      "close": "Close"
+    },
+    "reply": {
+      "title": "Reply to {author}",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Re: ...",
+      "bodyLabel": "Message *",
+      "bodyPlaceholder": "Write your reply...",
+      "cancel": "Cancel",
+      "send": "Send reply",
+      "sending": "Sending..."
+    },
+    "messages": {
+      "replySuccess": "Reply sent",
+      "replyError": "Error sending reply",
+      "markReadError": "Error marking as read"
+    },
+    "empty": {
+      "direct": "No direct messages",
+      "announcements": "No announcements for your role"
+    },
+    "errors": {
+      "load": "Error loading messages"
+    },
+    "validation": {
+      "bodyRequired": "Message is required",
+      "bodyTooShort": "Message is too short",
+      "bodyTooLong": "Message is too long (max 5000)",
+      "subjectTooLong": "Subject is too long (max 200)"
+    }
+  },
+
+  "SafetyPage": {
+    "titlePageForStore": "Safety (HSE)",
+    "headerTitle": "Safety Monitoring",
+    "headerSubtitle": "View safety reports in real time. Read-only.",
+    "badge": "HSE",
+    "statusFilter": "Status",
+    "statusOptions": {
+      "all": "All statuses"
+    },
+    "empty": "No safety reports"
+  },
+
+  "FaultDetail": {
+    "title": "Report details",
+    "titleIntervento": "Intervention details",
+    "backButton": "Go back",
+    "labels": {
+      "operator": "Operator",
+      "status": "Status",
+      "dateCreated": "Date created",
+      "lastUpdated": "Last updated",
+      "plant": "Plant",
+      "plantPart": "Plant part",
+      "type": "Fault type",
+      "priority": "Priority",
+      "planned": "Planned",
+      "estimatedDuration": "Estimated duration",
+      "deadline": "Deadline",
+      "deadlineNotSet": "Not set",
+      "assignedMaintainers": "Assigned maintainers",
+      "attachedPhotos": "Attached photos"
+    },
+    "comments": {
+      "operatorDescription": "Description (Operator)",
+      "operatorComment": "Operator Comment",
+      "managerNote": "Manager note",
+      "managerComment": "Manager Comment",
+      "maintainerNote": "Maintainer note",
+      "maintainerComment": "Maintenance Worker Comment",
+      "hseNote": "HSE Note (Safety)",
+      "noDescription": "No description",
+      "noNote": "No note",
+      "noComment": "No comment"
+    },
+    "actions": {
+      "planIntervention": "Plan intervention",
+      "modifyPlanning": "Modify planning",
+      "addCommentAndChangeStatus": "Add comment and change status"
+    },
+    "errors": {
+      "faultNotFound": "Report not found",
+      "interventionNotFound": "Intervention not found",
+      "loadError": "Error loading data"
+    },
+    "hseSection": {
+      "label": "HSE Note (Safety)",
+      "placeholder": "Write your safety assessment here...",
+      "saveButton": "Save note",
+      "editButton": "Edit note",
+      "saving": "Saving...",
+      "emptyReadonly": "No HSE note",
+      "saved": "HSE note saved",
+      "saveError": "Error saving note"
+    }
+  },
+
+  "FaultCard": {
+    "labels": {
+      "operator": "Operator",
+      "dateCreated": "Date created",
+      "plant": "Plant",
+      "plantPart": "Part",
+      "machine": "Machine",
+      "plannedTime": "Planned time",
+      "deadline": "Deadline",
+      "priority": "Priority",
+      "estimatedDuration": "Estimated duration",
+      "description": "Description",
+      "comment": "Comment",
+      "managerNotes": "Manager notes",
+      "assignedTo": "Assigned to",
+      "planned": "Planned"
+    },
+    "maintainerCount": "{count, plural, one {# maintainer} other {# maintainers}}",
+    "buttons": {
+      "details": "Details",
+      "viewDetails": "View details",
+      "loading": "Loading...",
+      "plan": "Plan",
+      "modify": "Modify planning",
+      "takeOver": "Take over",
+      "takingOver": "Taking over..."
+    },
+    "messages": {
+      "claimed": "Intervention taken over",
+      "claimError": "Error during take over"
+    },
+    "badges": {
+      "rescheduled": "Rescheduled",
+      "originalLabel": "Original:"
+    },
+    "empty": "No reports"
+  },
+
+  "PlanFaultForm": {
+    "titlePlan": "Plan report",
+    "titleModify": "Modify planning",
+    "labels": {
+      "priority": "Priority *",
+      "estimatedDuration": "Estimated duration (min) *",
+      "plannedDate": "Planned date *",
+      "plannedTime": "Planned time *",
+      "deadline": "Deadline *",
+      "managerComment": "Manager notes",
+      "assignedMaintainers": "Assigned maintainers"
+    },
+    "managerCommentPlaceholder": "Optional notes for the maintainer...",
+    "loadingMaintainers": "Loading...",
+    "noMaintainers": "No maintainers available",
+    "poolHint": "Leave empty to put the report in the pool (any maintainer can take it)",
+    "buttons": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "saving": "Saving..."
+    },
+    "messages": {
+      "planSuccess": "Report planned",
+      "modifySuccess": "Planning updated",
+      "saveError": "Error during save"
+    }
+  },
+
+  "MaintenanceUpdateModal": {
+    "title": "Update intervention",
+    "labels": {
+      "newStatus": "New status *",
+      "maintainerComment": "Maintainer comment",
+      "actualDuration": "Actual duration (minutes) *",
+      "suspensionReason": "Reason for suspension *",
+      "materialRequest": "Material or support requested"
+    },
+    "statusOptions": {
+      "inProgress": "In progress",
+      "completed": "Completed",
+      "suspended": "Suspended"
+    },
+    "placeholders": {
+      "statusSelect": "Select status",
+      "maintainerComment": "Details of work performed...",
+      "suspensionReason": "Why are you suspending? (e.g. waiting for a part, safety issue...)",
+      "materialRequest": "What's needed to resume? (optional)"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "submit": "Confirm and save",
+      "submitting": "Saving...",
+      "close": "Close"
+    },
+    "messages": {
+      "success": "Intervention updated successfully",
+      "error": "Error during update",
+      "noTransitions": "No update possible from status \"{status}\".",
+      "takeOverHint": " Use \"Take over\" to start."
+    }
+  },
+
+  "reportsAndCommunicationsPage": {
+    "titlePageForStore": "Reports",
+    "title": "Reports & Communications",
+    "subtitle": "Overview of recent fault reports and company-wide announcements.",
+    "sections": {
+      "recentFaults": {
+        "title": "Faults in the last 30 days",
+        "subtitle": "All faults reported in the past month.",
+        "empty": "No faults in the last 30 days",
+        "labels": {
+          "id": "ID",
+          "plant": "Plant",
+          "date": "Date",
+          "status": "Status"
+        }
       },
-      "PlantsList": {
-        "name": "Machine Name",
-        "code": "Code",
-        "location": "Location",
-        "status": "Status",
-        "actions": "Actions"
-  }
+      "broadcasts": {
+        "title": "Communications",
+        "subtitle": "Announcements to everyone and to your role.",
+        "empty": "No communications"
+      }
     },
-    
-    "maintenanceWorkerPage": {
-      "titlePageForStore": "Maintenance Worker"
+    "broadcastBadge": {
+      "all": "To everyone",
+      "role": "For your role"
     },
-    
-    "ManagerPage": {
-      "titlePageForStore": "Manager"
-    },
-    
-    "OperatorPage": {
-  "titlePageForStore": "Operator"
-},
+    "errors": {
+      "loadFaults": "Error loading faults",
+      "loadBroadcasts": "Error loading communications"
+    }
+  },
 
-"SafetyPage": {
-  "titlePageForStore": "Safety (HSE)"
-},
+  "RolesPage": {
+    "titlePageForStore": "Roles"
+  },
 
-"reportsAndCommunicationsPage": {
-  "titlePageForStore": "Reports"
-},
+  "NotFound": {
+    "title": "Page not found",
+    "description": "Unfortunately, the page you are looking for does not exist or has been moved.",
+    "backHome": "Return to homepage"
+  },
 
-"RolesPage": {
-  "titlePageForStore": "Roles"
-},
+  "loader": {
+    "loading": "Loading, please wait..."
+  },
 
-"NotFound": {
-  "title": "Page not found",
-  "description": "Unfortunately, the page you are looking for does not exist or has been moved.",
-  "backHome": "Return to homepage"
-},
+  "Error": {
+    "errorTitle": "Something went wrong!",
+    "errorMessage": "Sorry. An error occurred while processing your request.",
+    "tryAgain": "Try again",
+    "goHome": "Go to home"
+  },
 
-"loader": {
-  "loading": "Loading, please wait..."
-},
-
-"Error":{
-  "errorTitle": "Something went wrong!",
-  "errorMessage": "Sorry. An error occurred while processing your request.",
-  "tryAgain": "Try again",
-  "goHome": "Go to home"
-},
-
-"TypeFault": {
+  "TypeFault": {
     "PRODUCTION": "Production",
     "SAFETY": "Safety"
   },
@@ -153,7 +491,8 @@
     "CREATED": "Created",
     "IN_PROGRESS": "In progress",
     "COMPLETED": "Completed",
-    "SUSPENDED": "Suspended"
+    "SUSPENDED": "Suspended",
+    "OVERDUE": "Overdue"
   },
 
   "Priority": {
@@ -216,9 +555,4 @@
     "serverErrorTitle": "Server Error",
     "serverErrorMessage": "A problem occurred while loading the data. Please try again later"
   }
-
-
-
-
-
 }

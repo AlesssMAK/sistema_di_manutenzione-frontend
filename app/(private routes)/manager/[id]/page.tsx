@@ -5,10 +5,14 @@ import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { format, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
 import { fetchFaultById } from '@/lib/api/faults';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
-import ImageModal from '@/components/ImageModal/ImageModal';
+import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
+import Button from '@/components/UI/Button/Button';
 import css from './page.module.css';
 
 const formatDate = (value?: string) => {
@@ -31,6 +35,8 @@ const ManagerFaultDetailPage = ({
   params: Promise<{ id: string }>;
 }) => {
   const router = useRouter();
+  const t = useTranslations('FaultDetail');
+  const tNoFound = useTranslations('NoFound');
   const resolvedParams = use(params);
   const id = resolvedParams.id;
 
@@ -54,22 +60,39 @@ const ManagerFaultDetailPage = ({
     return () => unsubscribeFromFault(id);
   }, [id, subscribeToFault, unsubscribeFromFault]);
 
-  if (isLoading) return <div className={css.loading}>Caricamento...</div>;
+  if (isLoading)
+    return (
+      <div className="container">
+        <div className={css.pageWrapper}>
+          <Loader />
+        </div>
+      </div>
+    );
   if (isError || !fault)
-    return <div className={css.error}>Segnalazione non trovata</div>;
+    return (
+      <div className="container">
+        <div className={css.pageWrapper}>
+          <NoFound
+            title={tNoFound('noResultsTitle')}
+            message={t('errors.faultNotFound')}
+          />
+        </div>
+      </div>
+    );
 
   const isReadOnly = fault.statusFault === 'Completed';
 
   return (
-    <div className={css.container}>
-      <div className={css.card}>
+    <div className="container">
+      <div className={css.pageWrapper}>
+        <div className={css.card}>
         <header className={css.header}>
           <div className={css.headerLeft}>
             <button
               type="button"
               className={css.backButton}
               onClick={() => router.push('/manager')}
-              title="Torna indietro"
+              title={t('backButton')}
             >
               <svg
                 width="24"
@@ -85,18 +108,18 @@ const ManagerFaultDetailPage = ({
                 <polyline points="12 19 5 12 12 5"></polyline>
               </svg>
             </button>
-            <h2 className={css.title}>Dettaglio segnalazione</h2>
+            <h2 className={css.title}>{t('title')}</h2>
           </div>
           <span className={css.idBadge}>{fault.faultId}</span>
         </header>
 
         <div className={css.infoGrid}>
           <div className={css.infoItem}>
-            <label>Operatore</label>
+            <label>{t('labels.operator')}</label>
             <p>{fault.nameOperator || '—'}</p>
           </div>
           <div className={css.infoItem}>
-            <label>Stato</label>
+            <label>{t('labels.status')}</label>
             <span
               className={`${css.status} ${css[`status${fault.statusFault.replace(' ', '')}`] || ''}`}
             >
@@ -105,26 +128,26 @@ const ManagerFaultDetailPage = ({
           </div>
 
           <div className={css.infoItem}>
-            <label>Data creazione</label>
+            <label>{t('labels.dateCreated')}</label>
             <p>
               {formatDate(fault.dataCreated)}
               {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
             </p>
           </div>
           <div className={css.infoItem}>
-            <label>Ultimo aggiornamento</label>
+            <label>{t('labels.lastUpdated')}</label>
             <p>{formatDateTime(fault.updatedAt)}</p>
           </div>
 
           <div className={css.infoItem}>
-            <label>Impianto</label>
+            <label>{t('labels.plant')}</label>
             <p>
               {fault.plantId?.namePlant ?? '—'}
               {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
             </p>
           </div>
           <div className={css.infoItem}>
-            <label>Parte di impianto</label>
+            <label>{t('labels.plantPart')}</label>
             <p>
               {fault.partId?.namePlantPart ?? '—'}
               {fault.partId?.codePlantPart
@@ -134,56 +157,62 @@ const ManagerFaultDetailPage = ({
           </div>
 
           <div className={css.infoItem}>
-            <label>Tipo guasto</label>
+            <label>{t('labels.type')}</label>
             <p>{fault.typeFault}</p>
           </div>
           <div className={css.infoItem}>
-            <label>Priorità</label>
+            <label>{t('labels.priority')}</label>
             <p className={css.priority}>{fault.priority}</p>
           </div>
 
           <div className={css.infoItem}>
-            <label>Pianificato</label>
+            <label>{t('labels.planned')}</label>
             <p>
               {fault.plannedDate ? formatDate(fault.plannedDate) : '—'}
               {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
             </p>
           </div>
           <div className={css.infoItem}>
-            <label>Durata stimata</label>
+            <label>{t('labels.estimatedDuration')}</label>
             <p>
               {fault.estimatedDuration ? `${fault.estimatedDuration} min` : '—'}
             </p>
           </div>
 
           <div className={css.infoItem}>
-            <label>Scadenza</label>
+            <label>{t('labels.deadline')}</label>
             <p className={css.deadline}>{formatDate(fault.deadline)}</p>
           </div>
           <div className={css.infoItem}>
-            <label>Manutentori assegnati</label>
+            <label>{t('labels.assignedMaintainers')}</label>
             <p>{fault.assignedMaintainers?.length ?? 0}</p>
           </div>
         </div>
 
         <div className={css.detailsBlock}>
           <div className={css.commentBox}>
-            <label>Descrizione (Operatore)</label>
-            <p>{fault.comment || 'Nessuna descrizione'}</p>
+            <label>{t('comments.operatorDescription')}</label>
+            <p>{fault.comment || t('comments.noDescription')}</p>
           </div>
           <div className={css.commentBox}>
-            <label>Note responsabile</label>
-            <p>{fault.managerComment || 'Nessuna nota'}</p>
+            <label>{t('comments.managerNote')}</label>
+            <p>{fault.managerComment || t('comments.noNote')}</p>
           </div>
           <div className={css.commentBox}>
-            <label>Note manutentore</label>
-            <p>{fault.commentMaintenanceWorker || 'Nessuna nota'}</p>
+            <label>{t('comments.maintainerNote')}</label>
+            <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
           </div>
+          {fault.typeFault === 'Safety' && (
+            <div className={css.commentBox}>
+              <label>{t('comments.hseNote')}</label>
+              <p>{fault.commentSafety || t('comments.noNote')}</p>
+            </div>
+          )}
         </div>
 
         {fault.img && fault.img.length > 0 && (
           <div className={css.imageSection}>
-            <label>Foto allegate</label>
+            <label>{t('labels.attachedPhotos')}</label>
             <div className={css.imageGrid}>
               {fault.img.map((url, index) => (
                 <div
@@ -202,19 +231,20 @@ const ManagerFaultDetailPage = ({
           </div>
         )}
 
-        {!isReadOnly && (
-          <div className={css.actions}>
-            <button
-              type="button"
-              className={css.primaryButton}
-              onClick={() => setIsPlanOpen(true)}
-            >
-              {fault.plannedDate
-                ? 'Modifica pianificazione'
-                : 'Pianifica intervento'}
-            </button>
-          </div>
-        )}
+          {!isReadOnly && (
+            <div className={css.actions}>
+              <Button
+                type="button"
+                className="button button--blue"
+                onClick={() => setIsPlanOpen(true)}
+              >
+                {fault.plannedDate
+                  ? t('actions.modifyPlanning')
+                  : t('actions.planIntervention')}
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       {isPlanOpen && (

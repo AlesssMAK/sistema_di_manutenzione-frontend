@@ -1,0 +1,57 @@
+import Button from '@/components/UI/Button/Button';
+import css from './FilterPriorityBar.module.css';
+import { TYPE_PRIORITY } from '@/constants/priorityFaults';
+
+interface FilterPriorityBarProps {
+  activePriority: string;
+  onPriorityChange: (priority: string) => void;
+}
+const FilterPriorityBar = ({
+  activePriority,
+  onPriorityChange,
+}: FilterPriorityBarProps) => {
+  const priorities = [
+    {
+      id: TYPE_PRIORITY.LOW,
+      label: 'Bassa',
+      class: css.bassa,
+      span: css.bassaSpan,
+    },
+    {
+      id: TYPE_PRIORITY.MEDIUM,
+      label: 'Media',
+      class: css.media,
+      span: css.mediaSpan,
+    },
+    {
+      id: TYPE_PRIORITY.HIGH,
+      label: 'Alta',
+      class: css.alta,
+      span: css.altaSpan,
+    },
+  ];
+  return (
+    <div>
+      <h3 className={css.headersFilter}>Legenda Priorità</h3>
+      <ul className={css.listPriority}>
+        {priorities.map(p => (
+          <li key={p.id} className={activePriority === p.id ? css.active : ''}>
+            <button className={p.class} onClick={() => onPriorityChange(p.id)}>
+              <span className={p.span}></span>
+              {p.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+      {activePriority && (
+        <Button
+          onClick={() => onPriorityChange('')}
+          className="button button--blue btn"
+        >
+          Reimposta filtro
+        </Button>
+      )}
+    </div>
+  );
+};
+export default FilterPriorityBar;

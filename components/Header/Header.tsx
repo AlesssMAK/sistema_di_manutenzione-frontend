@@ -11,6 +11,8 @@ import { useTranslations } from 'use-intl';
 import { logout } from '@/lib/api/auth';
 import { usePageStore } from '@/lib/store/pageStore';
 import LanguageButton from '../LanguageSwitcher/LanguageSwitcher';
+import NotificationBell from './NotificationBell/NotificationBell';
+import CreateFaultButton from './CreateFaultButton/CreateFaultButton';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -67,17 +69,21 @@ const Header = () => {
                   {t('navItem1')}{' '}
                 </Link>
               </li>
-              <li className={css.nav_list_item}>
-                <Link href="/reports-and-communications" onClick={close}>
-                  {t('navItem2')}
-                </Link>
-              </li>
+              {isAuthenticated && (
+                <li className={css.nav_list_item}>
+                  <Link href="/reports-and-communications" onClick={close}>
+                    {t('navItem2')}
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
           <div className={css.user_container}>
             <LanguageButton />
             {isAuthenticated ? (
               <>
+                <CreateFaultButton />
+                <NotificationBell enabled={isAuthenticated} />
                 <div className={css.user}>
                   <svg className={css.user_icon} width="16" height="16">
                     <use href="/sprite.svg#user"></use>

@@ -35,7 +35,12 @@
 "navItem1": "Ruoli",
 "navItem2": "Report",
 "exit": "Esci",
-"login": "Accede"
+"login": "Accede",
+"createFault": "Segnala guasto",
+"notifications": {
+  "ariaLabel": "Notifiche",
+  "tooltip": "Vai ai messaggi"
+}
 },
 
 "AdminSidebar": {
@@ -95,6 +100,7 @@
       },
     "PlantsList": {
       "name": "Nome Macchina",
+      "namePlantPart": "Nome Parte",
       "code": "Codice",
       "location": "Ubicazione",
       "status": "Stato",
@@ -103,23 +109,355 @@
   },
 
 "maintenanceWorkerPage": {
-  "titlePageForStore": "Manutentore"
+  "titlePageForStore": "Manutentore",
+  "headerTitle": "Pianificazione Manutentore",
+  "headerSubtitle": "Visualizza e gestisci gli interventi pianificati",
+  "tabs": {
+    "active": "Attive",
+    "overdue": "In ritardo",
+    "completed": "Completate"
+  },
+  "scope": {
+    "mine": "Mie",
+    "pool": "Libere",
+    "all": "Tutte",
+    "mineHint": "Solo interventi assegnati a me",
+    "poolHint": "Interventi non assegnati (pool)",
+    "allHint": "Tutti gli interventi",
+    "ariaLabel": "Ambito segnalazioni"
+  },
+  "empty": {
+    "overdue": "Nessuna segnalazione in ritardo",
+    "completedDate": "Nessuna segnalazione completata in questa data",
+    "completed": "Nessuna segnalazione completata",
+    "mineDate": "Nessuna segnalazione assegnata a te in questa data",
+    "poolDate": "Nessuna segnalazione libera in questa data",
+    "dateOnly": "Nessuna segnalazione in questa data",
+    "mine": "Nessuna segnalazione assegnata a te",
+    "pool": "Nessuna segnalazione libera (pool vuoto)",
+    "default": "Nessuna segnalazione",
+    "resetButton": "Mostra tutte"
+  },
+  "errors": {
+    "loadData": "Errore durante il caricamento dei dati",
+    "loadCounts": "Errore caricamento conteggi calendario",
+    "loadDeadlines": "Errore caricamento scadenze"
+  },
+  "calendar": {
+    "header": "Calendario",
+    "interventionsCount": "{count} intervento/i pianificato/i"
+  },
+  "dayView": {
+    "title": "Vista giornaliera"
+  },
+  "dateNow": {
+    "overdue": "Segnalazioni scadute",
+    "completedHistory": "Storico segnalazioni completate",
+    "allActive": "Tutte le segnalazioni attive",
+    "today": "Oggi,",
+    "activityOf": "Attività del:",
+    "completedOf": "Completate del:",
+    "prioritySuffix": ", priorità: {priority}"
+  }
 },
 
 "ManagerPage": {
-  "titlePageForStore": "Responsabile"
+  "titlePageForStore": "Responsabile",
+  "headerTitle": "Pannello Responsabile",
+  "headerSubtitle": "Gestisci le segnalazioni ricevute, le attività in corso e l'archivio",
+  "tabs": {
+    "received": "Ricevute",
+    "inProgress": "In lavorazione",
+    "archive": "Registro completate"
+  },
+  "empty": {
+    "received": "Nessuna segnalazione in attesa",
+    "inProgress": "Nessuna segnalazione in lavorazione",
+    "archive": "Nessuna segnalazione archiviata"
+  }
 },
 
 "OperatorPage": {
-  "titlePageForStore": "Operatore"
+  "titlePageForStore": "Operatore",
+  "title": "Dashboard Operatore",
+  "subtitle": "Messaggi a te indirizzati e segnalazioni che hai creato.",
+  "tabs": {
+    "messages": "Messaggi",
+    "myFaults": "Le mie segnalazioni"
+  },
+  "myFaults": {
+    "subtitle": "Segnalazioni create da te.",
+    "period": {
+      "label": "Periodo",
+      "7d": "Ultimi 7 giorni",
+      "30d": "Ultimi 30 giorni",
+      "3m": "Ultimi 3 mesi",
+      "all": "Tutte"
+    },
+    "empty": "Nessuna segnalazione creata in questo periodo",
+    "errors": {
+      "load": "Errore caricamento segnalazioni"
+    }
+  }
+},
+
+"ReportFaultPage": {
+  "titlePageForStore": "Segnala guasto",
+  "title": "Segnala un guasto",
+  "subtitle": "Compila il modulo per registrare un nuovo guasto. Tutti i ruoli possono segnalare problemi notati sugli impianti."
+},
+
+"MessagesPage": {
+  "titlePageForStore": "Messaggi",
+  "title": "Messaggi",
+  "subtitle": "Messaggi diretti e annunci destinati al tuo ruolo.",
+  "tabs": {
+    "direct": "Diretti",
+    "announcements": "Annunci"
+  },
+  "card": {
+    "from": "Da",
+    "unread": "Non letto",
+    "reply": "Rispondi",
+    "showMore": "Mostra dettagli"
+  },
+  "detail": {
+    "title": "Dettaglio messaggio",
+    "from": "Mittente",
+    "to": "Destinatario",
+    "role": "Ruolo",
+    "broadcastAll": "Tutti gli utenti",
+    "broadcastRole": "Ruolo: {role}",
+    "sent": "Inviato il",
+    "reply": "Rispondi",
+    "close": "Chiudi"
+  },
+  "reply": {
+    "title": "Rispondi a {author}",
+    "subjectLabel": "Oggetto",
+    "subjectPlaceholder": "Re: ...",
+    "bodyLabel": "Messaggio *",
+    "bodyPlaceholder": "Scrivi la tua risposta...",
+    "cancel": "Annulla",
+    "send": "Invia risposta",
+    "sending": "Invio..."
+  },
+  "messages": {
+    "replySuccess": "Risposta inviata",
+    "replyError": "Errore durante l'invio",
+    "markReadError": "Errore di lettura"
+  },
+  "empty": {
+    "direct": "Nessun messaggio diretto",
+    "announcements": "Nessun annuncio per il tuo ruolo"
+  },
+  "errors": {
+    "load": "Errore durante il caricamento dei messaggi"
+  },
+  "validation": {
+    "bodyRequired": "Il messaggio è obbligatorio",
+    "bodyTooShort": "Il messaggio è troppo breve",
+    "bodyTooLong": "Il messaggio è troppo lungo (max 5000)",
+    "subjectTooLong": "L'oggetto è troppo lungo (max 200)"
+  }
 },
 
 "SafetyPage": {
-  "titlePageForStore": "Sicurezza (HSE)"
+  "titlePageForStore": "Sicurezza (HSE)",
+  "headerTitle": "Monitoraggio Sicurezza",
+  "headerSubtitle": "Visualizza in tempo reale le segnalazioni di sicurezza. Sola lettura.",
+  "badge": "HSE",
+  "statusFilter": "Stato",
+  "statusOptions": {
+    "all": "Tutti gli stati"
+  },
+  "empty": "Nessuna segnalazione di sicurezza"
+},
+
+"FaultDetail": {
+  "title": "Dettaglio segnalazione",
+  "titleIntervento": "Dettaglio Intervento",
+  "backButton": "Torna indietro",
+  "labels": {
+    "operator": "Operatore",
+    "status": "Stato",
+    "dateCreated": "Data creazione",
+    "lastUpdated": "Ultimo aggiornamento",
+    "plant": "Impianto",
+    "plantPart": "Parte di impianto",
+    "type": "Tipo guasto",
+    "priority": "Priorità",
+    "planned": "Pianificato",
+    "estimatedDuration": "Durata stimata",
+    "deadline": "Scadenza",
+    "deadlineNotSet": "Non impostata",
+    "assignedMaintainers": "Manutentori assegnati",
+    "attachedPhotos": "Foto allegate"
+  },
+  "comments": {
+    "operatorDescription": "Descrizione (Operatore)",
+    "operatorComment": "Commento Operatore",
+    "managerNote": "Note responsabile",
+    "managerComment": "Commento Manager",
+    "maintainerNote": "Note manutentore",
+    "maintainerComment": "Commento Maintenance Worker",
+    "hseNote": "Nota HSE (Sicurezza)",
+    "noDescription": "Nessuna descrizione",
+    "noNote": "Nessuna nota",
+    "noComment": "Commento assente"
+  },
+  "actions": {
+    "planIntervention": "Pianifica intervento",
+    "modifyPlanning": "Modifica pianificazione",
+    "addCommentAndChangeStatus": "Aggiungi commento e cambia stato"
+  },
+  "errors": {
+    "faultNotFound": "Segnalazione non trovata",
+    "interventionNotFound": "Intervento non trovato",
+    "loadError": "Errore durante il caricamento dei dati"
+  },
+  "hseSection": {
+    "label": "Nota HSE (Sicurezza)",
+    "placeholder": "Scrivi qui la tua valutazione di sicurezza...",
+    "saveButton": "Salva nota",
+    "editButton": "Modifica la nota",
+    "saving": "Salvataggio...",
+    "emptyReadonly": "Nessuna nota HSE",
+    "saved": "Nota HSE salvata",
+    "saveError": "Errore durante il salvataggio della nota"
+  }
+},
+
+"FaultCard": {
+  "labels": {
+    "operator": "Operatore",
+    "dateCreated": "Data creazione",
+    "plant": "Impianto",
+    "plantPart": "Parte",
+    "machine": "Macchina",
+    "plannedTime": "Ora pianificata",
+    "deadline": "Scadenza",
+    "priority": "Priorità",
+    "estimatedDuration": "Durata stimata",
+    "description": "Descrizione",
+    "comment": "Commento",
+    "managerNotes": "Note responsabile",
+    "assignedTo": "Assegnato a",
+    "planned": "Pianificato"
+  },
+  "maintainerCount": "{count, plural, one {# manutentore} other {# manutentori}}",
+  "buttons": {
+    "details": "Dettagli",
+    "viewDetails": "Visualizza dettagli",
+    "loading": "Caricamento...",
+    "plan": "Pianifica",
+    "modify": "Modifica pianificazione",
+    "takeOver": "Prendi in carico",
+    "takingOver": "Presa in carico..."
+  },
+  "messages": {
+    "claimed": "Intervento preso in carico",
+    "claimError": "Errore durante la presa in carico"
+  },
+  "badges": {
+    "rescheduled": "Riprogrammata",
+    "originalLabel": "Originale:"
+  },
+  "empty": "Nessuna segnalazione"
+},
+
+"PlanFaultForm": {
+  "titlePlan": "Pianifica segnalazione",
+  "titleModify": "Modifica pianificazione",
+  "labels": {
+    "priority": "Priorità *",
+    "estimatedDuration": "Durata stimata (min) *",
+    "plannedDate": "Data pianificata *",
+    "plannedTime": "Ora pianificata *",
+    "deadline": "Scadenza *",
+    "managerComment": "Note responsabile",
+    "assignedMaintainers": "Manutentori assegnati"
+  },
+  "managerCommentPlaceholder": "Eventuali note per il manutentore...",
+  "loadingMaintainers": "Caricamento...",
+  "noMaintainers": "Nessun manutentore disponibile",
+  "poolHint": "Lascia vuoto per mettere la segnalazione nel pool (qualsiasi manutentore potrà prenderla)",
+  "buttons": {
+    "cancel": "Annulla",
+    "save": "Salva",
+    "saving": "Salvataggio..."
+  },
+  "messages": {
+    "planSuccess": "Segnalazione pianificata",
+    "modifySuccess": "Pianificazione aggiornata",
+    "saveError": "Errore durante il salvataggio"
+  }
+},
+
+"MaintenanceUpdateModal": {
+  "title": "Aggiorna intervento",
+  "labels": {
+    "newStatus": "Nuovo stato *",
+    "maintainerComment": "Commento manutentore",
+    "actualDuration": "Durata effettiva (minuti) *",
+    "suspensionReason": "Motivo della sospensione *",
+    "materialRequest": "Materiale o supporto richiesto"
+  },
+  "statusOptions": {
+    "inProgress": "In corso",
+    "completed": "Completato",
+    "suspended": "Sospeso"
+  },
+  "placeholders": {
+    "statusSelect": "Seleziona stato",
+    "maintainerComment": "Dettagli del lavoro svolto...",
+    "suspensionReason": "Perché stai sospendendo? (es. attesa di un pezzo, problema di sicurezza...)",
+    "materialRequest": "Cosa serve per riprendere? (opzionale)"
+  },
+  "buttons": {
+    "cancel": "Annulla",
+    "submit": "Conferma e salva",
+    "submitting": "Salvataggio...",
+    "close": "Chiudi"
+  },
+  "messages": {
+    "success": "Intervento aggiornato con successo",
+    "error": "Errore durante l'aggiornamento",
+    "noTransitions": "Nessun aggiornamento possibile da stato \"{status}\".",
+    "takeOverHint": " Usa \"Prendi in carico\" per iniziare."
+  }
 },
 
 "reportsAndCommunicationsPage": {
-  "titlePageForStore": "Report"
+  "titlePageForStore": "Report",
+  "title": "Report e Comunicazioni",
+  "subtitle": "Panoramica delle segnalazioni recenti e degli annunci aziendali.",
+  "sections": {
+    "recentFaults": {
+      "title": "Segnalazioni degli ultimi 30 giorni",
+      "subtitle": "Tutte le segnalazioni registrate nell'ultimo mese.",
+      "empty": "Nessuna segnalazione negli ultimi 30 giorni",
+      "labels": {
+        "id": "ID",
+        "plant": "Impianto",
+        "date": "Data",
+        "status": "Stato"
+      }
+    },
+    "broadcasts": {
+      "title": "Comunicazioni",
+      "subtitle": "Annunci per tutti e per il tuo ruolo.",
+      "empty": "Nessuna comunicazione"
+    }
+  },
+  "broadcastBadge": {
+    "all": "A tutti",
+    "role": "Per il tuo ruolo"
+  },
+  "errors": {
+    "loadFaults": "Errore caricamento segnalazioni",
+    "loadBroadcasts": "Errore caricamento comunicazioni"
+  }
 },
 
 "RolesPage": {
@@ -152,7 +490,8 @@
     "CREATED": "Creato",
     "IN_PROGRESS": "In corso",
     "COMPLETED": "Completato",
-    "SUSPENDED": "Sospeso"
+    "SUSPENDED": "Sospeso",
+    "OVERDUE": "Scaduto"
   },
 
   "Priority": {

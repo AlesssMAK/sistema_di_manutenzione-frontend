@@ -25,18 +25,17 @@
   width: 100%;
   margin-top: 32px;
 }
-.controls {
+.tabsBarWrap {
+  margin-top: 24px;
+}
+
+.contextRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 16px;
-  margin-bottom: 10px;
-}
-
-.contextLabel {
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .loadingText {

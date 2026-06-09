@@ -1,4 +1,4 @@
-import { UserRoles } from './userTypes';
+import { User, UserRoles } from './userTypes';
 
 export interface RegisterRequest {
   role: UserRoles;
@@ -7,6 +7,12 @@ export interface RegisterRequest {
   password: string | undefined;
   personalCode: string | undefined;
   avatar: string | null;
+}
+
+export interface RegisterResponse {
+  success: boolean;
+  message: string;
+  data: User;
 }
 
 export interface LoginOperatorRequest {

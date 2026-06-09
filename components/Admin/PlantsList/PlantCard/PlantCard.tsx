@@ -9,6 +9,7 @@ import { useState } from 'react';
 import css from './PlantCard.module.css';
 import { updatePlant } from '@/lib/api/plants';
 import CreateAndEditPlantAndPlantPartsForm from '@/components/forms/CreateAndEditPlantAndPlantPartsForm/CreateAndEditPlantAndPlantPartsForm';
+import PlantPartsList from '../PlantPartsList/PlantPartsList';
 
 interface PlantCardProps {
   plant: Plant;
@@ -45,8 +46,6 @@ const PlantCard = ({ plant }: PlantCardProps) => {
   };
 
   const handleStatusUpdate = async ({ plantId, status }: UpdateStatus) => {
-    console.log(plantId);
-
     mutation.mutate({ plantId, data: { status } });
   };
 
@@ -156,6 +155,12 @@ const PlantCard = ({ plant }: PlantCardProps) => {
           onClose={() => setOpenUpdatePlantModal(false)}
           isPlantEditMode={true}
           initialData={InitialData}
+        />
+      )}
+      {openPlantPartsListModal && (
+        <PlantPartsList
+          onClose={() => setOpenPlantPartsListModal(false)}
+          plant={plant}
         />
       )}
     </div>

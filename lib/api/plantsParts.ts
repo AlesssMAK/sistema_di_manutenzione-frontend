@@ -1,16 +1,28 @@
 import {
   CreatePlantPartsRequest,
+  DeletePlantPartRequest,
+  DeletePlantPartResponse,
   PlantPart,
   PlantPartRespons,
+  PlantPartsRequest,
   UpdatePlantPartRequest,
   UpdatePlantPartResponse,
 } from '@/types/plantPartType';
 import nextServer from './api';
 
-export const getAllPartsByPlantId = async (
-  plantId: string,
-  params?: Record<string, unknown>
-) => {
+export const getAllPartsByPlantId = async ({
+  plantId,
+  search,
+  status,
+  page,
+  perPage,
+}: PlantPartsRequest) => {
+  const params = {
+    search,
+    status,
+    page,
+    perPage,
+  };
   const res = await nextServer.get<PlantPartRespons>(
     `/plants/${plantId}/parts`,
     { params }
@@ -28,9 +40,19 @@ export const updatePlantParts = async ({
   plantPartId,
   data,
 }: UpdatePlantPartRequest) => {
-  const res = await nextServer.post<UpdatePlantPartResponse>(
+  const res = await nextServer.put<UpdatePlantPartResponse>(
     `/plants/${plantId}/parts/${plantPartId}`,
     data
   );
   return res.data;
+};
+
+export const deletePlantPart = async ({
+  plantId,
+  plantPartId,
+}: DeletePlantPartRequest) => {
+  const res = await nextServer.delete<DeletePlantPartResponse>(
+    `/plants/${plantId}/parts/${plantPartId}`
+  );
+  return res.data.success;
 };

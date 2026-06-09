@@ -4,18 +4,21 @@ import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
 import { useAuthStore } from '@/lib/store/authStore';
-import ShowMoreButton from '../ShowmoreButton/ShowmoreButton';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { claimFault } from '@/lib/api/faults';
+import { useState } from 'react';
 
 interface FaultCardsListProps {
   faults: FaultCard[];
 }
 
 const FaultCardsList = ({ faults }: FaultCardsListProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const t = useTranslations('FaultCard');
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
@@ -24,13 +27,13 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
     mutationFn: (id: string) => claimFault(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['faults'] });
-      toast.success('Intervento preso in carico');
+      toast.success(t('messages.claimed'));
     },
     onError: (err: unknown) => {
       const message =
         err && typeof err === 'object' && 'message' in err
           ? String((err as { message: unknown }).message)
-          : "Errore durante la presa in carico";
+          : t('messages.claimError');
       toast.error(message);
     },
   });
@@ -58,11 +61,12 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   };
 
   const handleDetailClick = (id: string) => {
+    setIsLoading(true);
     router.push(`/maintenance-worker/${id}`);
   };
 
   if (!faults || faults.length === 0) {
-    return <div className={css.container}>Nessuna segnalazione</div>;
+    return <div className={css.container}>{t('empty')}</div>;
   }
 
   return (
@@ -80,13 +84,13 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                   {fault.autoRescheduledFrom?.plannedDate && (
                     <span
                       className={css.riprogrammatBadge}
-                      title={`Originale: ${fault.autoRescheduledFrom.plannedDate}${
+                      title={`${t('badges.originalLabel')} ${fault.autoRescheduledFrom.plannedDate}${
                         fault.autoRescheduledFrom.plannedTime
                           ? ' ' + fault.autoRescheduledFrom.plannedTime
                           : ''
                       }`}
                     >
-                      Riprogrammata
+                      {t('badges.rescheduled')}
                     </span>
                   )}
                   <div className={css.headerButton}>
@@ -104,7 +108,8 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
 
                 <div className={css.details}>
                   <p className={css.namePlant}>
-                    <strong>Macchina:</strong> {fault.plantId?.namePlant}
+                    <strong>{t('labels.machine')}:</strong>{' '}
+                    {fault.plantId?.namePlant}
                   </p>
                 </div>
                 <Button
@@ -123,21 +128,23 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 <div className={css.detailsGrid}>
                   {/* Colonna sinistra */}
                   <div className={css.detailItem}>
-                    <span className={css.label}>Parte</span>
+                    <span className={css.label}>{t('labels.plantPart')}</span>
                     <p className={css.value}>{fault.partId?.namePlantPart}</p>
-                    <span className={css.label}>Ora pianificata</span>
+                    <span className={css.label}>{t('labels.plannedTime')}</span>
                     <p className={css.value}>{fault.plannedTime}</p>
-                    <span className={css.label}>Scadenza</span>
+                    <span className={css.label}>{t('labels.deadline')}</span>
                     <p className={css.value}>{fault.deadline}</p>
                   </div>
 
                   {/* Colonna destra */}
                   <div className={css.detailItem}>
-                    <span className={css.label}>Priorità</span>
+                    <span className={css.label}>{t('labels.priority')}</span>
                     <p className={`${css.value} ${css.priorityValue}`}>
                       {fault.priority}
                     </p>
-                    <span className={css.label}>Durata stimata</span>
+                    <span className={css.label}>
+                      {t('labels.estimatedDuration')}
+                    </span>
                     <p className={css.value}>{fault.estimatedDuration}</p>
                   </div>
                 </div>
@@ -145,7 +152,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
 
               {fault.comment && (
                 <div className={css.commentContainer}>
-                  <h4 className={css.commentLabel}>Commento:</h4>
+                  <h4 className={css.commentLabel}>{t('labels.comment')}:</h4>
                   <p className={css.commentText}>{fault.comment}</p>
                 </div>
               )}
@@ -159,14 +166,20 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                   disabled={claimMutation.isPending}
                 >
                   {claimMutation.isPending
-                    ? 'Presa in carico...'
-                    : 'Prendi in carico'}
+                    ? t('buttons.takingOver')
+                    : t('buttons.takeOver')}
                 </Button>
               )}
-              <ShowMoreButton
-                isLoading={false}
-                onShowMore={() => handleDetailClick(fault._id)}
-              />
+              <Button
+                type="button"
+                className="button button--blue"
+                width={200}
+                height={40}
+                onClick={() => handleDetailClick(fault._id)}
+                disabled={isLoading}
+              >
+                {isLoading ? t('buttons.loading') : t('buttons.viewDetails')}
+              </Button>
             </div>
           </li>
         ))}

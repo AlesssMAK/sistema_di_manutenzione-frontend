@@ -1,0 +1,103 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: min(560px, 92vw);
+  padding: 4px;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #45556c;
+  margin: 0;
+}
+
+.error {
+  font-size: 12px;
+  color: #b91c1c;
+  margin: 0;
+}
+
+.emptyMessage {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #45556c;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.input {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #1e40af;
+  background: #ffffff;
+}
+
+.textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #1e40af;
+  background: #ffffff;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

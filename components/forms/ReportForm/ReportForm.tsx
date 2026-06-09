@@ -111,8 +111,9 @@ const ReportForm = () => {
     if (!selectedPlantId) return;
 
     const allPlantParts = async () => {
-      const plantParts = await getAllPartsByPlantId(selectedPlantId, {
-        paginate: false,
+      const plantParts = await getAllPartsByPlantId({
+        plantId: selectedPlantId,
+        perPage: 200,
       });
 
       setIsPlantParts(plantParts.plantParts);
