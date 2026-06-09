@@ -320,6 +320,7 @@
     "label": "Nota HSE (Sicurezza)",
     "placeholder": "Scrivi qui la tua valutazione di sicurezza...",
     "saveButton": "Salva nota",
+    "editButton": "Modifica la nota",
     "saving": "Salvataggio...",
     "emptyReadonly": "Nessuna nota HSE",
     "saved": "Nota HSE salvata",
@@ -435,7 +436,13 @@
     "recentFaults": {
       "title": "Segnalazioni degli ultimi 30 giorni",
       "subtitle": "Tutte le segnalazioni registrate nell'ultimo mese.",
-      "empty": "Nessuna segnalazione negli ultimi 30 giorni"
+      "empty": "Nessuna segnalazione negli ultimi 30 giorni",
+      "labels": {
+        "id": "ID",
+        "plant": "Impianto",
+        "date": "Data",
+        "status": "Stato"
+      }
     },
     "broadcasts": {
       "title": "Comunicazioni",

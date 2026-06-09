@@ -25,20 +25,6 @@ const ReportsAndCommunicationsClient = () => {
           <section className={css.section}>
             <header className={css.sectionHeader}>
               <h3 className={css.sectionTitle}>
-                {t('sections.recentFaults.title')}
-              </h3>
-              <p className={css.sectionSubtitle}>
-                {t('sections.recentFaults.subtitle')}
-              </p>
-            </header>
-            <div className={css.sectionBody}>
-              <RecentFaultsList />
-            </div>
-          </section>
-
-          <section className={css.section}>
-            <header className={css.sectionHeader}>
-              <h3 className={css.sectionTitle}>
                 {t('sections.broadcasts.title')}
               </h3>
               <p className={css.sectionSubtitle}>
@@ -47,6 +33,20 @@ const ReportsAndCommunicationsClient = () => {
             </header>
             <div className={css.sectionBody}>
               <BroadcastsList />
+            </div>
+          </section>
+
+          <section className={css.section}>
+            <header className={css.sectionHeader}>
+              <h3 className={css.sectionTitle}>
+                {t('sections.recentFaults.title')}
+              </h3>
+              <p className={css.sectionSubtitle}>
+                {t('sections.recentFaults.subtitle')}
+              </p>
+            </header>
+            <div className={css.sectionBody}>
+              <RecentFaultsList />
             </div>
           </section>
         </div>

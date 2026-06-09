@@ -321,6 +321,7 @@
       "label": "Nota HSE (Seguridad)",
       "placeholder": "Escribe aquí tu evaluación de seguridad...",
       "saveButton": "Guardar nota",
+      "editButton": "Modificar nota",
       "saving": "Guardando...",
       "emptyReadonly": "Sin nota HSE",
       "saved": "Nota HSE guardada",
@@ -436,7 +437,13 @@
       "recentFaults": {
         "title": "Averías de los últimos 30 días",
         "subtitle": "Todas las averías registradas en el último mes.",
-        "empty": "Sin averías en los últimos 30 días"
+        "empty": "Sin averías en los últimos 30 días",
+        "labels": {
+          "id": "ID",
+          "plant": "Planta",
+          "date": "Fecha",
+          "status": "Estado"
+        }
       },
       "broadcasts": {
         "title": "Comunicaciones",

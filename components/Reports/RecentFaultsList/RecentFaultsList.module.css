@@ -4,30 +4,85 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .row {
-  display: grid;
-  grid-template-columns: 110px 1fr auto auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-bottom: 1.17px solid rgba(0, 0, 0, 0.1);
+  padding: 16px;
+
+  @media screen and (min-width: 768px) {
+    gap: 0;
+    flex-direction: row;
+    align-items: center;
+    padding: 12px;
+  }
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.head_container {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 12px;
-  padding: 10px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #fff;
+}
+
+.bottom_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Mobile-only labels — hidden from tablet up (>=768px) where the row
+   fits inline and labels become noise. */
+.title {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #0a0a0a;
+  opacity: 0.7;
+  margin: 0 0 2px;
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+}
+
+.item_id {
+  @media screen and (min-width: 768px) {
+    width: 140px;
+  }
 }
 
 .faultId {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 14px;
   color: #0a0a0a;
   letter-spacing: 0.3px;
+  margin: 0;
+}
+
+.item_plant {
+  flex: 1;
+  min-width: 0;
+
+  @media screen and (min-width: 768px) {
+    flex: 1;
+    margin: 0 16px;
+  }
 }
 
 .plant {
+  font-weight: 400;
   font-size: 14px;
   color: #0a0a0a;
+  margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -38,19 +93,34 @@
   font-size: 12px;
 }
 
+.item_date {
+  @media screen and (min-width: 768px) {
+    width: 140px;
+  }
+}
+
 .date {
-  font-size: 12px;
-  color: #64748b;
+  font-size: 13px;
+  color: #45556c;
+  margin: 0;
   white-space: nowrap;
 }
 
+.item_status {
+  @media screen and (min-width: 768px) {
+    width: 140px;
+  }
+}
+
 .status {
-  padding: 3px 10px;
+  display: inline-block;
+  padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
-  text-transform: capitalize;
+  border: 1.17px solid rgba(0, 0, 0, 0);
+  width: fit-content;
 }
 
 .statusCreated {

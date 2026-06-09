@@ -16,14 +16,20 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 20px;
+  padding: 16px;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   background: #f8fafc;
-  /* Each block aims at ~half viewport height; bodies scroll internally
-     when content overflows so the page never gets a vertical thrash. */
-  min-height: 320px;
-  max-height: calc(50vh - 40px);
+  min-height: 280px;
+
+  /* From tablet up, each block aims at ~half viewport height; bodies
+     scroll internally when content overflows so the page never gets a
+     vertical thrash. On phones the whole page just scrolls naturally so
+     fault cards (taller in stacked layout) stay fully readable. */
+  @media screen and (min-width: 768px) {
+    padding: 20px;
+    max-height: calc(50vh - 40px);
+  }
 }
 
 .sectionHeader {

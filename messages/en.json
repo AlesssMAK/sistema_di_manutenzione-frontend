@@ -321,6 +321,7 @@
       "label": "HSE Note (Safety)",
       "placeholder": "Write your safety assessment here...",
       "saveButton": "Save note",
+      "editButton": "Edit note",
       "saving": "Saving...",
       "emptyReadonly": "No HSE note",
       "saved": "HSE note saved",
@@ -436,7 +437,13 @@
       "recentFaults": {
         "title": "Faults in the last 30 days",
         "subtitle": "All faults reported in the past month.",
-        "empty": "No faults in the last 30 days"
+        "empty": "No faults in the last 30 days",
+        "labels": {
+          "id": "ID",
+          "plant": "Plant",
+          "date": "Date",
+          "status": "Status"
+        }
       },
       "broadcasts": {
         "title": "Communications",

@@ -1,26 +1,44 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 20px;
+  gap: 14px;
+  padding: 14px;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 1px 3px rgba(10, 10, 10, 0.06);
+
+  @media screen and (min-width: 768px) {
+    gap: 16px;
+    padding: 20px;
+    border-radius: 12px;
+  }
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
+/* Match the blue ID pill used in detail pages so the same fault reads
+   the same in the list and in its detail screen. */
 .faultId {
-  font-weight: 700;
-  font-size: 18px;
-  color: #0a0a0a;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+
+  @media screen and (min-width: 768px) {
+    padding: 4px 12px;
+    font-size: 14px;
+  }
 }
 
 .badges {
@@ -100,22 +118,51 @@
   border-top: 1px dashed #e2e8f0;
 }
 
+/* Phone: label sits above value (vertical stack) so plant names and
+   dates aren't squashed into a 90-100px column. Tablet+: back to a
+   label-aligned row with a 140px label gutter. */
 .row {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 12px;
+  }
 }
 
 .label {
-  flex: 0 0 140px;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 600;
   color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+
+  @media screen and (min-width: 768px) {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+}
+
+/* Only inside a .row (which is flex-row on tablet+) does the 140px
+   basis make sense as a label gutter. Inside .commentBlock (which is
+   flex-column) the same flex-basis would become a 140px tall block,
+   leaving a big empty gap under "Descrizione". */
+.row .label {
+  @media screen and (min-width: 768px) {
+    flex: 0 0 140px;
+  }
 }
 
 .value {
   font-size: 14px;
   color: #0a0a0a;
+  overflow-wrap: anywhere;
 }
 
 .priorityBadge {
@@ -147,6 +194,9 @@
   padding: 12px;
   border-radius: 8px;
   background: #f8fafc;
+  /* Long unbroken comment strings shouldn't blow the card wider on a
+     320px viewport. */
+  overflow-wrap: anywhere;
 }
 
 .commentText {
@@ -156,9 +206,26 @@
   color: #0a0a0a;
 }
 
+/* Phone: footer buttons stack and span full width — gives a clean
+   tap target on narrow viewports where two side-by-side buttons would
+   each shrink to ~110px. Tablet+: standard right-aligned row. */
 .footer {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
   padding-top: 8px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+}
+
+.footer > :global(button) {
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    width: auto;
+  }
 }

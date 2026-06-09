@@ -1,23 +1,42 @@
 .pageWrapper {
-  padding: 24px 0;
+  padding: 16px 0;
+
+  @media screen and (min-width: 768px) {
+    padding: 24px 0;
+  }
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 28px;
+  gap: 18px;
+  padding: 16px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 1px 3px rgba(10, 10, 10, 0.06);
+
+  @media screen and (min-width: 768px) {
+    gap: 24px;
+    padding: 28px;
+    border-radius: 12px;
+  }
 }
 
+/* Phone: header stacks vertically — title (with HSE badge) full width,
+   then idBadge below. On a 320px viewport the row would clip otherwise. */
 .header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
 }
 
 .headerLeft {
@@ -46,12 +65,20 @@
 
 .title {
   margin: 0;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
   color: #0a0a0a;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  /* Allow the HSE badge to wrap under the title on the smallest screens. */
+  flex-wrap: wrap;
+
+  @media screen and (min-width: 768px) {
+    font-size: 22px;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
 }
 
 .hseBadge {
@@ -66,19 +93,45 @@
 }
 
 .idBadge {
-  padding: 4px 12px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: #dbeafe;
   color: #1e40af;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.4px;
+
+  @media screen and (min-width: 768px) {
+    padding: 4px 12px;
+    font-size: 14px;
+  }
 }
 
+/* Phone: vertical stack, with .infoRow pairing short fields (status,
+   type, priority) to save vertical space. Tablet+: collapses into a
+   regular 2-column grid like before. */
 .infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  @media screen and (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 24px;
+  }
+}
+
+.infoRow {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 24px;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+
+  /* On tablet+ let the children participate directly in the parent
+     2-column grid instead of nesting. */
+  @media screen and (min-width: 768px) {
+    display: contents;
+  }
 }
 
 .infoItem {
@@ -136,6 +189,20 @@
   font-weight: 600;
 }
 
+/* Priority text color matches the badge palette used in
+   FaultManagerCard so the UI reads the same across cards and detail.
+   Double-class selector bumps specificity above `.infoItem p` (0,1,1)
+   which would otherwise force the value back to black. */
+.priority.priorityLow {
+  color: #15803d;
+}
+.priority.priorityMedium {
+  color: #d97706;
+}
+.priority.priorityHigh {
+  color: #dc2626;
+}
+
 .deadline {
   font-weight: 600;
   color: #b91c1c;
@@ -148,12 +215,19 @@
 }
 
 .commentBox {
-  padding: 12px 16px;
+  padding: 12px;
   border-radius: 8px;
   background: #f8fafc;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  /* Long operator descriptions or unbroken IDs shouldn't overflow on
+     320px viewports. */
+  overflow-wrap: anywhere;
+
+  @media screen and (min-width: 768px) {
+    padding: 12px 16px;
+  }
 }
 
 .commentBox label {
@@ -187,8 +261,15 @@
 
 .imageGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
+  /* Phone: smaller minmax so 2 thumbnails fit on a 320px row.
+     Auto-fill keeps it responsive on every breakpoint up. */
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
 }
 
 .imageWrapper {
@@ -210,10 +291,14 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 16px;
+  padding: 12px;
   border: 1px solid #fecaca;
   border-radius: 10px;
   background: #fef2f2;
+
+  @media screen and (min-width: 768px) {
+    padding: 16px;
+  }
 }
 
 .hseLabel {
@@ -254,6 +339,21 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+}
+
+/* When only the "Modifica la nota" button is in the row (no counter),
+   anchor it to the right instead of the default space-between. */
+.hseActionsEnd {
+  justify-content: flex-end;
+}
+
+/* Wrapper for the read-only HSE view: blends the saved note into the
+   neutral comment column (commentBox style) and stacks the edit
+   button below it. No red callout — we only flag the active edit. */
+.hseReadonlyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .hseCounter {

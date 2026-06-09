@@ -13,6 +13,13 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import Button from '@/components/UI/Button/Button';
 import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
 
+const priorityClass = (priority: string | undefined, styles: Record<string, string>) => {
+  if (priority === 'Low') return styles.priorityLow;
+  if (priority === 'Medium') return styles.priorityMedium;
+  if (priority === 'High') return styles.priorityHigh;
+  return '';
+};
+
 export default function FaultDetailPage({
   params,
 }: {
@@ -111,20 +118,23 @@ export default function FaultDetailPage({
           </header>
 
           <div className={css.infoGrid}>
-            {/* Основная информация */}
-            <div className={css.infoItem}>
-              <label>{t('labels.operator')}</label>
-              <p>{fault.nameOperator}</p>
-            </div>
-            <div className={css.infoItem}>
-              <label>{t('labels.status')}</label>
-              <span
-                className={`${css.status} ${css[fault.statusFault || 'CREATED']}`}
-              >
-                {fault.statusFault}
-              </span>
+            {/* Short pair on phone: operator + status badge */}
+            <div className={css.infoRow}>
+              <div className={css.infoItem}>
+                <label>{t('labels.operator')}</label>
+                <p>{fault.nameOperator}</p>
+              </div>
+              <div className={css.infoItem}>
+                <label>{t('labels.status')}</label>
+                <span
+                  className={`${css.status} ${css[fault.statusFault || 'CREATED']}`}
+                >
+                  {fault.statusFault}
+                </span>
+              </div>
             </div>
 
+            {/* Full-width on phone: dates with time are too long to split */}
             <div className={css.infoItem}>
               <label>{t('labels.dateCreated')}</label>
               <p>
@@ -139,6 +149,8 @@ export default function FaultDetailPage({
               <p>{new Date(fault.updatedAt).toLocaleString('it-IT')}</p>
             </div>
 
+            {/* Full-width on phone: plant/part names with codes are
+                unpredictably long */}
             <div className={css.infoItem}>
               <label>{t('labels.plant')}</label>
               <p>
@@ -152,26 +164,34 @@ export default function FaultDetailPage({
               </p>
             </div>
 
-            <div className={css.infoItem}>
-              <label>{t('labels.type')}</label>
-              <p>{fault.typeFault}</p>
-            </div>
-            <div className={css.infoItem}>
-              <label>{t('labels.priority')}</label>
-              <p className={css.priority}>{fault.priority}</p>
+            {/* Short pair on phone: type + priority */}
+            <div className={css.infoRow}>
+              <div className={css.infoItem}>
+                <label>{t('labels.type')}</label>
+                <p>{fault.typeFault}</p>
+              </div>
+              <div className={css.infoItem}>
+                <label>{t('labels.priority')}</label>
+                <p className={`${css.priority} ${priorityClass(fault.priority, css)}`}>
+                  {fault.priority}
+                </p>
+              </div>
             </div>
 
-            <div className={css.infoItem}>
-              <label>{t('labels.deadline')}</label>
-              <p className={css.deadline}>
-                {fault.deadline
-                  ? new Date(fault.deadline).toLocaleDateString('it-IT')
-                  : t('labels.deadlineNotSet')}
-              </p>
-            </div>
-            <div className={css.infoItem}>
-              <label>{t('labels.estimatedDuration')}</label>
-              <p>{fault.estimatedDuration || 0} min</p>
+            {/* Short pair on phone: deadline + estimated duration */}
+            <div className={css.infoRow}>
+              <div className={css.infoItem}>
+                <label>{t('labels.deadline')}</label>
+                <p className={css.deadline}>
+                  {fault.deadline
+                    ? new Date(fault.deadline).toLocaleDateString('it-IT')
+                    : t('labels.deadlineNotSet')}
+                </p>
+              </div>
+              <div className={css.infoItem}>
+                <label>{t('labels.estimatedDuration')}</label>
+                <p>{fault.estimatedDuration || 0} min</p>
+              </div>
             </div>
           </div>
 

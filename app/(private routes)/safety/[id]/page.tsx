@@ -33,6 +33,13 @@ const formatDateTime = (value?: string) => {
     : value;
 };
 
+const priorityClass = (priority: string | undefined, styles: Record<string, string>) => {
+  if (priority === 'Low') return styles.priorityLow;
+  if (priority === 'Medium') return styles.priorityMedium;
+  if (priority === 'High') return styles.priorityHigh;
+  return '';
+};
+
 const SafetyFaultDetailPage = ({
   params,
 }: {
@@ -50,6 +57,9 @@ const SafetyFaultDetailPage = ({
   const { subscribeToFault, unsubscribeFromFault } = useSocket();
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [commentDraft, setCommentDraft] = useState('');
+  // When a note already exists we want a read-only view by default —
+  // the user clicks "Modifica la nota" to enter edit mode.
+  const [isEditingNote, setIsEditingNote] = useState(false);
 
   const {
     data: fault,
@@ -80,6 +90,8 @@ const SafetyFaultDetailPage = ({
       queryClient.invalidateQueries({ queryKey: ['fault', id] });
       queryClient.invalidateQueries({ queryKey: ['faults'] });
       toast.success(t('hseSection.saved'));
+      // Drop back to read-only view once the save lands.
+      setIsEditingNote(false);
     },
     onError: (err: unknown) => {
       const message =
@@ -113,6 +125,11 @@ const SafetyFaultDetailPage = ({
 
   const canEditComment = user?.role === 'safety' || user?.role === 'admin';
   const draftChanged = commentDraft.trim() !== (fault.commentSafety ?? '').trim();
+  const hasSavedNote = Boolean(fault.commentSafety?.trim());
+  // Show the textarea when the user is actively editing, OR when no
+  // note exists yet (the assumed first-write flow). Non-editors never
+  // see the editor regardless.
+  const showEditor = canEditComment && (isEditingNote || !hasSavedNote);
 
   return (
     <div className="container">
@@ -149,21 +166,26 @@ const SafetyFaultDetailPage = ({
         </header>
 
         <div className={css.infoGrid}>
-          <div className={css.infoItem}>
-            <label>{t('labels.operator')}</label>
-            <p>{fault.nameOperator || '—'}</p>
-          </div>
-          <div className={css.infoItem}>
-            <label>{t('labels.status')}</label>
-            <span
-              className={`${css.status} ${
-                css[`status${fault.statusFault.replace(' ', '')}`] || ''
-              }`}
-            >
-              {fault.statusFault}
-            </span>
+          {/* Short pair on phone: operator + status badge */}
+          <div className={css.infoRow}>
+            <div className={css.infoItem}>
+              <label>{t('labels.operator')}</label>
+              <p>{fault.nameOperator || '—'}</p>
+            </div>
+            <div className={css.infoItem}>
+              <label>{t('labels.status')}</label>
+              <span
+                className={`${css.status} ${
+                  css[`status${fault.statusFault.replace(' ', '')}`] || ''
+                }`}
+              >
+                {fault.statusFault}
+              </span>
+            </div>
           </div>
 
+          {/* Full-width on phone: italian-formatted dates are too long
+              to split at 320px (≈"01 febbraio 2026 · 12:34"). */}
           <div className={css.infoItem}>
             <label>{t('labels.dateCreated')}</label>
             <p>
@@ -176,6 +198,8 @@ const SafetyFaultDetailPage = ({
             <p>{formatDateTime(fault.updatedAt)}</p>
           </div>
 
+          {/* Full-width on phone: plant/part names with codes are
+              unpredictably long. */}
           <div className={css.infoItem}>
             <label>{t('labels.plant')}</label>
             <p>
@@ -193,15 +217,22 @@ const SafetyFaultDetailPage = ({
             </p>
           </div>
 
-          <div className={css.infoItem}>
-            <label>{t('labels.type')}</label>
-            <p>{fault.typeFault}</p>
-          </div>
-          <div className={css.infoItem}>
-            <label>{t('labels.priority')}</label>
-            <p className={css.priority}>{fault.priority}</p>
+          {/* Short pair on phone: type + priority */}
+          <div className={css.infoRow}>
+            <div className={css.infoItem}>
+              <label>{t('labels.type')}</label>
+              <p>{fault.typeFault}</p>
+            </div>
+            <div className={css.infoItem}>
+              <label>{t('labels.priority')}</label>
+              <p className={`${css.priority} ${priorityClass(fault.priority, css)}`}>
+                {fault.priority}
+              </p>
+            </div>
           </div>
 
+          {/* Full-width on phone: planned has a time suffix, deadline
+              uses italian full-month formatting. */}
           <div className={css.infoItem}>
             <label>{t('labels.planned')}</label>
             <p>
@@ -251,41 +282,59 @@ const SafetyFaultDetailPage = ({
           </div>
         )}
 
-        <div className={css.hseSection}>
-          <label className={css.hseLabel}>{t('hseSection.label')}</label>
-          {canEditComment ? (
-            <>
-              <textarea
-                className={css.hseTextarea}
-                rows={4}
-                maxLength={2000}
-                value={commentDraft}
-                onChange={e => setCommentDraft(e.target.value)}
-                placeholder={t('hseSection.placeholder')}
-                disabled={mutation.isPending}
-              />
-              <div className={css.hseActions}>
-                <span className={css.hseCounter}>
-                  {commentDraft.length} / 2000
-                </span>
+        {showEditor ? (
+          /* Edit mode: keep the HSE-styled red callout so the user
+             sees this is a safety-critical edit context. */
+          <div className={css.hseSection}>
+            <label className={css.hseLabel}>{t('hseSection.label')}</label>
+            <textarea
+              className={css.hseTextarea}
+              rows={4}
+              maxLength={2000}
+              value={commentDraft}
+              onChange={e => setCommentDraft(e.target.value)}
+              placeholder={t('hseSection.placeholder')}
+              disabled={mutation.isPending}
+            />
+            <div className={css.hseActions}>
+              <span className={css.hseCounter}>
+                {commentDraft.length} / 2000
+              </span>
+              <Button
+                type="button"
+                className="button button--blue"
+                onClick={() => mutation.mutate(commentDraft.trim())}
+                disabled={mutation.isPending || !draftChanged}
+              >
+                {mutation.isPending
+                  ? t('hseSection.saving')
+                  : t('hseSection.saveButton')}
+              </Button>
+            </div>
+          </div>
+        ) : (
+          /* Read-only mode: blend the saved note into the rest of the
+             comments column (no red callout, plain commentBox style)
+             so it doesn't keep screaming after the user has already
+             written it. Edit button sits below. */
+          <div className={css.hseReadonlyBlock}>
+            <div className={css.commentBox}>
+              <label>{t('hseSection.label')}</label>
+              <p>{fault.commentSafety || t('hseSection.emptyReadonly')}</p>
+            </div>
+            {canEditComment && hasSavedNote && (
+              <div className={`${css.hseActions} ${css.hseActionsEnd}`}>
                 <Button
                   type="button"
                   className="button button--blue"
-                  onClick={() => mutation.mutate(commentDraft.trim())}
-                  disabled={mutation.isPending || !draftChanged}
+                  onClick={() => setIsEditingNote(true)}
                 >
-                  {mutation.isPending
-                    ? t('hseSection.saving')
-                    : t('hseSection.saveButton')}
+                  {t('hseSection.editButton')}
                 </Button>
               </div>
-            </>
-          ) : (
-            <p className={css.hseReadonly}>
-              {fault.commentSafety || t('hseSection.emptyReadonly')}
-            </p>
-          )}
-        </div>
+            )}
+          </div>
+        )}
         </div>
       </div>
 

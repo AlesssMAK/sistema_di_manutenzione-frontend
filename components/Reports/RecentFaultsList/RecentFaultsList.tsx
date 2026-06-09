@@ -93,19 +93,35 @@ const RecentFaultsList = () => {
     <ul className={css.list}>
       {recent.map(fault => (
         <li key={fault._id} className={css.row}>
-          <span className={css.faultId}>{fault.faultId}</span>
-          <span className={css.plant}>
-            {fault.plantId?.namePlant ?? '—'}{' '}
-            <span className={css.plantPart}>
-              · {fault.partId?.namePlantPart ?? '—'}
+          <div className={css.head_container}>
+            <div className={css.item_id}>
+              <h3 className={css.title}>{t('sections.recentFaults.labels.id')}</h3>
+              <p className={css.faultId}>{fault.faultId}</p>
+            </div>
+            <div className={css.item_date}>
+              <h3 className={css.title}>{t('sections.recentFaults.labels.date')}</h3>
+              <p className={css.date}>{formatDay(fault.dataCreated)}</p>
+            </div>
+          </div>
+
+          <div className={css.item_plant}>
+            <h3 className={css.title}>{t('sections.recentFaults.labels.plant')}</h3>
+            <p className={css.plant}>
+              {fault.plantId?.namePlant ?? '—'}{' '}
+              <span className={css.plantPart}>
+                · {fault.partId?.namePlantPart ?? '—'}
+              </span>
+            </p>
+          </div>
+
+          <div className={css.item_status}>
+            <h3 className={css.title}>{t('sections.recentFaults.labels.status')}</h3>
+            <span
+              className={`${css.status} ${statusClass[fault.statusFault] ?? ''}`}
+            >
+              {tStatus(statusKey(fault.statusFault))}
             </span>
-          </span>
-          <span className={css.date}>{formatDay(fault.dataCreated)}</span>
-          <span
-            className={`${css.status} ${statusClass[fault.statusFault] ?? ''}`}
-          >
-            {tStatus(statusKey(fault.statusFault))}
-          </span>
+          </div>
         </li>
       ))}
     </ul>
