@@ -1,97 +1,95 @@
-.workerHeaderPage {
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 1.2;
-  color: #0a0a0a;
-  margin-top: 20px;
+.pageWrapper {
+  padding: 16px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  @media screen and (min-width: 1440px) {
+    padding: 24px 0 40px;
+  }
 }
-.workerTextPage {
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #45556c;
+
+/* Tabs now live inside contentSection — no top margin needed since
+   they're the first element in that column. */
+.tabsBarWrap {
+  margin: 0;
 }
+
+/* Phone/tablet: stack calendar above the fault list — at <1440px the
+   container is too narrow (≈704px on a typical tablet) to fit a
+   400px calendar sidebar alongside a usable fault column. Only
+   1440+ unlocks the side-by-side layout. */
 .workerContainer {
   display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  padding-top: 32px;
-  padding-bottom: 40px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 16px;
+  padding-top: 16px;
+  padding-bottom: 32px;
+
+  @media screen and (min-width: 1440px) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 14px;
+    padding-top: 24px;
+    padding-bottom: 40px;
+  }
 }
+
+.contentSection {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Phone/tablet: DateNow + ScopeFilterBar stack so neither gets
+   cramped — the bar wants ~270px and DateNow's text can be long.
+   Desktop (1440+): back to a horizontal row with space-between. */
+.contextRow {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 16px;
+
+  @media screen and (min-width: 1440px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+.loadingWrap {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
 .loadMoreButton {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin-top: 32px;
-}
-.tabsBarWrap {
   margin-top: 24px;
-}
 
-.contextRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.loadingText {
-  font-size: 16px;
-  color: #45556c;
-  margin-left: 24px;
+  @media screen and (min-width: 1440px) {
+    margin-top: 32px;
+  }
 }
 
 .noResults {
-  margin-top: 32px;
+  margin-top: 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
-}
 
-.noResultsText {
-  font-size: 16px;
-  color: #45556c;
-  margin: 0;
-}
-
-.emptyHintButton {
-  padding: 8px 16px;
-  border: 1px solid #1e40af;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #1e40af;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s ease;
-}
-
-.emptyHintButton:hover {
-  background: #1e40af;
-  color: #ffffff;
-}
-
-.deadlineButton {
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: 2px solid #ff4d4f;
-  background: transparent;
-  color: #ff4d4f;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.deadlineButton.active {
-  background: #ff4d4f;
-  color: #fff;
-}
-
-.deadlineButton:hover {
-  opacity: 0.8;
+  @media screen and (min-width: 1440px) {
+    margin-top: 32px;
+  }
 }

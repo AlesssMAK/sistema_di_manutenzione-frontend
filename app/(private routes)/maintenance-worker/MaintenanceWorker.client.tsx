@@ -281,14 +281,6 @@ const MaintenanceWorkerClient = () => {
         <h2 className="title">{t('headerTitle')}</h2>
         <p className="subtitle">{t('headerSubtitle')}</p>
 
-        <div className={css.tabsBarWrap}>
-          <Tabs<FaultViewMode>
-            tabs={VIEW_MODE_TABS}
-            activeTab={viewMode}
-            onTabChange={handleModeChange}
-          />
-        </div>
-
         <div className={css.workerContainer}>
           <CalendarBlock
             activePriority={priority}
@@ -301,6 +293,18 @@ const MaintenanceWorkerClient = () => {
           />
 
           <div className={css.contentSection}>
+            {/* Tabs sit inside contentSection so on phone/tablet they
+                land below the calendar (stacked column layout) and
+                on desktop they head the fault column next to the
+                calendar sidebar. */}
+            <div className={css.tabsBarWrap}>
+              <Tabs<FaultViewMode>
+                tabs={VIEW_MODE_TABS}
+                activeTab={viewMode}
+                onTabChange={handleModeChange}
+              />
+            </div>
+
             <div className={css.contextRow}>
               <DateNow
                 selectedDate={selectedDate}

@@ -1,19 +1,34 @@
+/* Phone & tablet: stretch to its column width — at <1440px the
+   calendar lives above the fault list, not beside it. Desktop:
+   pinned to a 480px sidebar (matches Calendar's own max-width
+   and gives the month grid breathing room on wide screens). */
 .calendarBlockContainer {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: flex-start;
   flex-direction: column;
-  gap: 39px;
+  gap: 24px;
   border: 1.17px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  padding: 23px 0px 0px 23px;
-  width: 400px;
-  height: 816px;
+  padding: 16px;
   background: #fff;
+  width: 100%;
+
+  @media screen and (min-width: 1440px) {
+    flex-shrink: 0;
+    width: 480px;
+    gap: 32px;
+    padding: 23px;
+  }
 }
+
 .calendarHeader {
   font-weight: 700;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.4;
   color: #0a0a0a;
+
+  @media screen and (min-width: 1440px) {
+    font-size: 20px;
+  }
 }
