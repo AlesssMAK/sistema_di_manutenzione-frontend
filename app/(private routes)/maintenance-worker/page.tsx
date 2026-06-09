@@ -1,11 +1,7 @@
 import MaintenanceWorkerClient from './MaintenanceWorker.client';
 
-const maintenanceWorkerPage = () => {
-  return (
-    <div className="container">
-      <MaintenanceWorkerClient />
-    </div>
-  );
+const MaintenanceWorkerPage = () => {
+  return <MaintenanceWorkerClient />;
 };
 
-export default maintenanceWorkerPage;
+export default MaintenanceWorkerPage;

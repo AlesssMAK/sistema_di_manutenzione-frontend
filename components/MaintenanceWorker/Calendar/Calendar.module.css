@@ -1,11 +1,17 @@
+/* Phone & tablet: fill the calendar block — at <1440px the calendar
+   lives stacked above the fault list, so it can use the full width
+   of the page. Desktop (1440+): clamp to 480px sidebar width. */
 .calendarWrapper {
   width: 100%;
-  max-width: 400px;
   background: #fff;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
   overflow: hidden;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+  @media screen and (min-width: 1440px) {
+    max-width: 480px;
+  }
 }
 
 .header {

@@ -1,13 +1,18 @@
 .dateDisplay {
-  font-size: 14px;
-  font-weight: 700;
-
-  text-transform: lowercase;
-  margin: 0;
-  margin-left: 24px;
   display: block;
-
-  font-size: 20px;
+  margin: 0;
+  text-transform: lowercase;
+  font-weight: 700;
   line-height: 1.4;
   color: #0a0a0a;
+
+  /* Phone & tablet: no left margin (sits inside a stacked column).
+     Desktop (1440+): scales up and aligns next to the scope bar in
+     the same row. */
+  font-size: 15px;
+
+  @media screen and (min-width: 1440px) {
+    margin-left: 24px;
+    font-size: 20px;
+  }
 }

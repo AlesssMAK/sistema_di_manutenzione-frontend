@@ -1,22 +1,40 @@
+/* Phone & tablet: span full width so the 3 buttons split evenly
+   across the row (no awkward right-shifted pill when the page is
+   stacked). Desktop (1440+): shrink back to an inline pill that
+   hugs its content alongside DateNow. */
 .bar {
-  display: inline-flex;
+  display: flex;
+  width: 100%;
   gap: 4px;
   padding: 4px;
   border-radius: 10px;
   background: #f1f5f9;
+
+  @media screen and (min-width: 1440px) {
+    display: inline-flex;
+    width: auto;
+  }
 }
 
 .button {
-  min-width: 80px;
-  padding: 8px 16px;
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
   border: none;
   border-radius: 8px;
   background: transparent;
   color: #45556c;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
+
+  @media screen and (min-width: 1440px) {
+    flex: 0 0 auto;
+    min-width: 80px;
+    padding: 8px 16px;
+    font-size: 14px;
+  }
 }
 
 .button:hover:not(:disabled) {
