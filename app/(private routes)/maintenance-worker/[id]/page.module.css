@@ -68,6 +68,36 @@
   }
 }
 
+/* Wrapper for the right side of the header — holds idBadge plus the
+   optional "Riprogrammata" pill. Stacks on phone with idBadge so the
+   row doesn't blow out, sits inline on tablet+. */
+.headerRight {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  @media screen and (min-width: 768px) {
+    gap: 10px;
+  }
+}
+
+/* Phase C: ReplanJob set autoRescheduledFrom on this fault. Mirrors
+   the badge style used in FaultCardsList. */
+.rescheduledBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  cursor: help;
+}
+
 /* Phone: vertical stack but with selective 2-column rows for short
    fields (status/type/priority/etc.) to save vertical space. Long
    fields (plant name, full datetime) stay full-width. Tablet+: the

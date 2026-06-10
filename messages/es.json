@@ -293,7 +293,16 @@
       "deadline": "Fecha límite",
       "deadlineNotSet": "No establecida",
       "assignedMaintainers": "Mantenedores asignados",
-      "attachedPhotos": "Fotos adjuntas"
+      "attachedPhotos": "Fotos adjuntas",
+      "actualDuration": "Duración real",
+      "completedAt": "Completado el",
+      "suspensionReason": "Motivo de suspensión",
+      "materialRequest": "Material solicitado",
+      "claimedAt": "Tomado a cargo el"
+    },
+    "badges": {
+      "rescheduled": "Reprogramada",
+      "originalLabel": "Original:"
     },
     "comments": {
       "operatorDescription": "Descripción (Operador)",

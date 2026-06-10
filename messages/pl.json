@@ -261,7 +261,16 @@
       "deadline": "Termin",
       "deadlineNotSet": "Nie ustawiono",
       "assignedMaintainers": "Przypisani konserwatorzy",
-      "attachedPhotos": "Załączone zdjęcia"
+      "attachedPhotos": "Załączone zdjęcia",
+      "actualDuration": "Rzeczywisty czas",
+      "completedAt": "Ukończono",
+      "suspensionReason": "Powód zawieszenia",
+      "materialRequest": "Żądany materiał",
+      "claimedAt": "Przyjęto do realizacji"
+    },
+    "badges": {
+      "rescheduled": "Przełożone",
+      "originalLabel": "Pierwotnie:"
     },
     "comments": {
       "operatorDescription": "Opis (Operator)",

@@ -293,7 +293,16 @@
       "deadline": "Deadline",
       "deadlineNotSet": "Not set",
       "assignedMaintainers": "Assigned maintainers",
-      "attachedPhotos": "Attached photos"
+      "attachedPhotos": "Attached photos",
+      "actualDuration": "Actual duration",
+      "completedAt": "Completed at",
+      "suspensionReason": "Suspension reason",
+      "materialRequest": "Material requested",
+      "claimedAt": "Taken in charge at"
+    },
+    "badges": {
+      "rescheduled": "Rescheduled",
+      "originalLabel": "Original:"
     },
     "comments": {
       "operatorDescription": "Description (Operator)",
