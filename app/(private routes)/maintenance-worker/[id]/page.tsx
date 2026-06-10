@@ -20,6 +20,41 @@ const priorityClass = (priority: string | undefined, styles: Record<string, stri
   return '';
 };
 
+/** Map raw backend statusFault to the StatusFault i18n key. */
+const statusKey = (status: string | undefined) => {
+  if (status === 'In progress') return 'IN_PROGRESS';
+  if (status === 'Completed') return 'COMPLETED';
+  if (status === 'Suspended') return 'SUSPENDED';
+  if (status === 'Overdue') return 'OVERDUE';
+  return 'CREATED';
+};
+
+/** Pick the status-badge CSS class for the given raw status. */
+const statusClass = (status: string | undefined, styles: Record<string, string>) => {
+  if (status === 'In progress') return styles.statusInProgress;
+  if (status === 'Completed') return styles.statusCompleted;
+  if (status === 'Suspended') return styles.statusSuspended;
+  if (status === 'Overdue') return styles.statusOverdue;
+  return styles.statusCreated;
+};
+
+/** Urgency bucket for the deadline date — drives the color modifier. */
+const deadlineUrgencyClass = (
+  deadline: string | undefined,
+  styles: Record<string, string>
+) => {
+  if (!deadline) return '';
+  const due = new Date(deadline);
+  if (Number.isNaN(due.getTime())) return '';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  due.setHours(0, 0, 0, 0);
+  const diffDays = Math.round((due.getTime() - today.getTime()) / 86400000);
+  if (diffDays <= 3) return styles.deadlineUrgent;
+  if (diffDays <= 7) return styles.deadlineSoon;
+  return styles.deadlineFar;
+};
+
 export default function FaultDetailPage({
   params,
 }: {
@@ -28,6 +63,9 @@ export default function FaultDetailPage({
   const router = useRouter();
   const t = useTranslations('FaultDetail');
   const tNoFound = useTranslations('NoFound');
+  const tStatus = useTranslations('StatusFault');
+  const tType = useTranslations('TypeFault');
+  const tPriority = useTranslations('Priority');
   const resolvedParams = use(params);
   const id = resolvedParams.id;
   const [fault, setFault] = useState<FaultCard | null>(null);
@@ -126,10 +164,8 @@ export default function FaultDetailPage({
               </div>
               <div className={css.infoItem}>
                 <label>{t('labels.status')}</label>
-                <span
-                  className={`${css.status} ${css[fault.statusFault || 'CREATED']}`}
-                >
-                  {fault.statusFault}
+                <span className={`${css.status} ${statusClass(fault.statusFault, css)}`}>
+                  {tStatus(statusKey(fault.statusFault))}
                 </span>
               </div>
             </div>
@@ -168,12 +204,14 @@ export default function FaultDetailPage({
             <div className={css.infoRow}>
               <div className={css.infoItem}>
                 <label>{t('labels.type')}</label>
-                <p>{fault.typeFault}</p>
+                <p>
+                  {tType(fault.typeFault === 'Safety' ? 'SAFETY' : 'PRODUCTION')}
+                </p>
               </div>
               <div className={css.infoItem}>
                 <label>{t('labels.priority')}</label>
                 <p className={`${css.priority} ${priorityClass(fault.priority, css)}`}>
-                  {fault.priority}
+                  {tPriority(fault.priority)}
                 </p>
               </div>
             </div>
@@ -182,7 +220,9 @@ export default function FaultDetailPage({
             <div className={css.infoRow}>
               <div className={css.infoItem}>
                 <label>{t('labels.deadline')}</label>
-                <p className={css.deadline}>
+                <p
+                  className={`${css.deadline} ${deadlineUrgencyClass(fault.deadline, css)}`}
+                >
                   {fault.deadline
                     ? new Date(fault.deadline).toLocaleDateString('it-IT')
                     : t('labels.deadlineNotSet')}
