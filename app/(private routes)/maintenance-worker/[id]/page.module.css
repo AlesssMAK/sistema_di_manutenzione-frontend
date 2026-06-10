@@ -68,6 +68,36 @@
   }
 }
 
+/* Wrapper for the right side of the header — holds idBadge plus the
+   optional "Riprogrammata" pill. Stacks on phone with idBadge so the
+   row doesn't blow out, sits inline on tablet+. */
+.headerRight {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+
+  @media screen and (min-width: 768px) {
+    gap: 10px;
+  }
+}
+
+/* Phase C: ReplanJob set autoRescheduledFrom on this fault. Mirrors
+   the badge style used in FaultCardsList. */
+.rescheduledBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  cursor: help;
+}
+
 /* Phone: vertical stack but with selective 2-column rows for short
    fields (status/type/priority/etc.) to save vertical space. Long
    fields (plant name, full datetime) stay full-width. Tablet+: the
@@ -113,24 +143,38 @@
   font-size: 14px;
 }
 
-/* Статусы */
+/* Status badge — same palette as FaultManagerCard / safety detail
+   so a status reads consistently across the app. */
 .status {
-  padding: 4px 8px;
-  border-radius: 6px;
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  align-self: flex-start;
 }
-.CREATED {
-  background: #e5e7eb;
-  color: #374151;
-}
-.IN_PROGRESS {
+
+.statusCreated {
   background: #dbeafe;
   color: #1e40af;
 }
-.FIXED {
+.statusInProgress {
+  background: #fef3c7;
+  color: #92400e;
+}
+.statusSuspended {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+.statusOverdue {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.statusCompleted {
   background: #dcfce7;
-  color: #166534;
+  color: #15803d;
 }
 
 .priority {
@@ -151,8 +195,21 @@
   color: #dc2626;
 }
 
+/* Deadline color reflects urgency — same palette as priority. The
+   double-class selector bumps specificity above `.infoItem p`
+   (0,1,1) so the modifier wins. */
 .deadline {
-  color: #ef4444;
+  font-weight: 600;
+}
+
+.deadline.deadlineUrgent {
+  color: #dc2626;
+}
+.deadline.deadlineSoon {
+  color: #d97706;
+}
+.deadline.deadlineFar {
+  color: #15803d;
 }
 
 .detailsBlock {

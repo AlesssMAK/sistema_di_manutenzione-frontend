@@ -292,7 +292,16 @@
     "deadline": "Scadenza",
     "deadlineNotSet": "Non impostata",
     "assignedMaintainers": "Manutentori assegnati",
-    "attachedPhotos": "Foto allegate"
+    "attachedPhotos": "Foto allegate",
+    "actualDuration": "Durata effettiva",
+    "completedAt": "Completato il",
+    "suspensionReason": "Motivo della sospensione",
+    "materialRequest": "Materiale richiesto",
+    "claimedAt": "Preso in carico il"
+  },
+  "badges": {
+    "rescheduled": "Riprogrammata",
+    "originalLabel": "Originale:"
   },
   "comments": {
     "operatorDescription": "Descrizione (Operatore)",

@@ -1,23 +1,75 @@
 'use client';
 
 import { use, useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { format, isValid, parseISO } from 'date-fns';
+import { it } from 'date-fns/locale';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import { fetchFaultById } from '@/lib/api/faults';
 import { FaultCard } from '@/types/faultType';
-import toast from 'react-hot-toast';
-import { useTranslations } from 'next-intl';
-import css from './page.module.css';
-import { useRouter } from 'next/navigation';
+import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Button from '@/components/UI/Button/Button';
 import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
+import css from './page.module.css';
 
 const priorityClass = (priority: string | undefined, styles: Record<string, string>) => {
   if (priority === 'Low') return styles.priorityLow;
   if (priority === 'Medium') return styles.priorityMedium;
   if (priority === 'High') return styles.priorityHigh;
   return '';
+};
+
+/** Map raw backend statusFault to the StatusFault i18n key. */
+const statusKey = (status: string | undefined) => {
+  if (status === 'In progress') return 'IN_PROGRESS';
+  if (status === 'Completed') return 'COMPLETED';
+  if (status === 'Suspended') return 'SUSPENDED';
+  if (status === 'Overdue') return 'OVERDUE';
+  return 'CREATED';
+};
+
+/** Pick the status-badge CSS class for the given raw status. */
+const statusClass = (status: string | undefined, styles: Record<string, string>) => {
+  if (status === 'In progress') return styles.statusInProgress;
+  if (status === 'Completed') return styles.statusCompleted;
+  if (status === 'Suspended') return styles.statusSuspended;
+  if (status === 'Overdue') return styles.statusOverdue;
+  return styles.statusCreated;
+};
+
+/** Urgency bucket for the deadline date — drives the color modifier. */
+const deadlineUrgencyClass = (
+  deadline: string | undefined,
+  styles: Record<string, string>
+) => {
+  if (!deadline) return '';
+  const due = new Date(deadline);
+  if (Number.isNaN(due.getTime())) return '';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  due.setHours(0, 0, 0, 0);
+  const diffDays = Math.round((due.getTime() - today.getTime()) / 86400000);
+  if (diffDays <= 3) return styles.deadlineUrgent;
+  if (diffDays <= 7) return styles.deadlineSoon;
+  return styles.deadlineFar;
+};
+
+const formatDay = (value?: string) => {
+  if (!value) return '—';
+  const parsed = parseISO(value);
+  return isValid(parsed) ? format(parsed, 'dd MMMM yyyy', { locale: it }) : value;
+};
+
+const formatDateTime = (value?: string) => {
+  if (!value) return '—';
+  const parsed = parseISO(value);
+  return isValid(parsed)
+    ? format(parsed, 'dd MMMM yyyy HH:mm', { locale: it })
+    : value;
 };
 
 export default function FaultDetailPage({
@@ -28,43 +80,47 @@ export default function FaultDetailPage({
   const router = useRouter();
   const t = useTranslations('FaultDetail');
   const tNoFound = useTranslations('NoFound');
+  const tStatus = useTranslations('StatusFault');
+  const tType = useTranslations('TypeFault');
+  const tPriority = useTranslations('Priority');
+  const queryClient = useQueryClient();
+  const { subscribeToFault, unsubscribeFromFault } = useSocket();
   const resolvedParams = use(params);
   const id = resolvedParams.id;
-  const [fault, setFault] = useState<FaultCard | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
-  useEffect(() => {
-    const getFaultData = async () => {
-      try {
-        setIsLoading(true);
-        const data = await fetchFaultById(id);
-        setFault(data);
-      } catch (error) {
-        toast.error(t('errors.loadError'));
-        console.error(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const {
+    data: fault,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['fault', id],
+    queryFn: () => fetchFaultById(id),
+    enabled: Boolean(id),
+  });
 
-    if (id) getFaultData();
-  }, [id, t]);
+  // Subscribe to socket events so status changes / comments / replans
+  // pushed by another role land in the cache without a manual reload.
+  useEffect(() => {
+    if (!id) return;
+    subscribeToFault(id);
+    return () => unsubscribeFromFault(id);
+  }, [id, subscribeToFault, unsubscribeFromFault]);
+
   const handleBack = () => {
     router.push('/maintenance-worker');
   };
 
   const handleUpdateSuccess = (updatedData: FaultCard) => {
-    setFault(prev => {
-      if (!prev) return updatedData;
-      return {
-        ...updatedData,
-        faultId: prev.faultId,
-      };
-    });
+    // Preserve the human-readable faultId (modal payload uses _id).
+    queryClient.setQueryData<FaultCard | undefined>(['fault', id], prev =>
+      prev ? { ...updatedData, faultId: prev.faultId } : updatedData
+    );
+    queryClient.invalidateQueries({ queryKey: ['faults'] });
     setIsUpdateModalOpen(false);
   };
+
   if (isLoading)
     return (
       <div className="container">
@@ -73,7 +129,7 @@ export default function FaultDetailPage({
         </div>
       </div>
     );
-  if (!fault)
+  if (isError || !fault)
     return (
       <div className="container">
         <div className={css.pageWrapper}>
@@ -84,6 +140,10 @@ export default function FaultDetailPage({
         </div>
       </div>
     );
+
+  const isCompleted = fault.statusFault === 'Completed';
+  const isSuspended = fault.statusFault === 'Suspended';
+  const wasRescheduled = Boolean(fault.autoRescheduledFrom?.plannedDate);
 
   return (
     <div className="container">
@@ -114,7 +174,21 @@ export default function FaultDetailPage({
               </button>
               <h2 className={css.title}>{t('titleIntervento')}</h2>
             </div>
-            <span className={css.idBadge}>{fault.faultId}</span>
+            <div className={css.headerRight}>
+              {wasRescheduled && (
+                <span
+                  className={css.rescheduledBadge}
+                  title={`${t('badges.originalLabel')} ${fault.autoRescheduledFrom?.plannedDate ?? ''}${
+                    fault.autoRescheduledFrom?.plannedTime
+                      ? ' ' + fault.autoRescheduledFrom.plannedTime
+                      : ''
+                  }`}
+                >
+                  {t('badges.rescheduled')}
+                </span>
+              )}
+              <span className={css.idBadge}>{fault.faultId}</span>
+            </div>
           </header>
 
           <div className={css.infoGrid}>
@@ -126,10 +200,8 @@ export default function FaultDetailPage({
               </div>
               <div className={css.infoItem}>
                 <label>{t('labels.status')}</label>
-                <span
-                  className={`${css.status} ${css[fault.statusFault || 'CREATED']}`}
-                >
-                  {fault.statusFault}
+                <span className={`${css.status} ${statusClass(fault.statusFault, css)}`}>
+                  {tStatus(statusKey(fault.statusFault))}
                 </span>
               </div>
             </div>
@@ -168,12 +240,14 @@ export default function FaultDetailPage({
             <div className={css.infoRow}>
               <div className={css.infoItem}>
                 <label>{t('labels.type')}</label>
-                <p>{fault.typeFault}</p>
+                <p>
+                  {tType(fault.typeFault === 'Safety' ? 'SAFETY' : 'PRODUCTION')}
+                </p>
               </div>
               <div className={css.infoItem}>
                 <label>{t('labels.priority')}</label>
                 <p className={`${css.priority} ${priorityClass(fault.priority, css)}`}>
-                  {fault.priority}
+                  {tPriority(fault.priority)}
                 </p>
               </div>
             </div>
@@ -182,7 +256,9 @@ export default function FaultDetailPage({
             <div className={css.infoRow}>
               <div className={css.infoItem}>
                 <label>{t('labels.deadline')}</label>
-                <p className={css.deadline}>
+                <p
+                  className={`${css.deadline} ${deadlineUrgencyClass(fault.deadline, css)}`}
+                >
                   {fault.deadline
                     ? new Date(fault.deadline).toLocaleDateString('it-IT')
                     : t('labels.deadlineNotSet')}
@@ -193,6 +269,48 @@ export default function FaultDetailPage({
                 <p>{fault.estimatedDuration || 0} min</p>
               </div>
             </div>
+
+            {/* Phase C: when the fault is completed, show the actual
+                duration alongside when it was closed — gives the
+                worker (and anyone auditing) the real-vs-estimate
+                signal in one glance. */}
+            {isCompleted && (
+              <div className={css.infoRow}>
+                <div className={css.infoItem}>
+                  <label>{t('labels.actualDuration')}</label>
+                  <p>{fault.actualDuration ? `${fault.actualDuration} min` : '—'}</p>
+                </div>
+                <div className={css.infoItem}>
+                  <label>{t('labels.completedAt')}</label>
+                  <p>{formatDateTime(fault.completedAt)}</p>
+                </div>
+              </div>
+            )}
+
+            {/* Phase C: when suspended, surface the reason + material
+                request so whoever picks the fault back up knows
+                what's needed to resume. */}
+            {isSuspended && fault.suspensionReason && (
+              <div className={css.infoItem}>
+                <label>{t('labels.suspensionReason')}</label>
+                <p>{fault.suspensionReason}</p>
+              </div>
+            )}
+            {isSuspended && fault.materialRequest && (
+              <div className={css.infoItem}>
+                <label>{t('labels.materialRequest')}</label>
+                <p>{fault.materialRequest}</p>
+              </div>
+            )}
+
+            {/* Phase C: claim audit trail (any non-Created fault that
+                has been picked up). */}
+            {fault.claimedAt && (
+              <div className={css.infoItem}>
+                <label>{t('labels.claimedAt')}</label>
+                <p>{formatDateTime(fault.claimedAt)}</p>
+              </div>
+            )}
           </div>
 
           {/* Комментарии */}
@@ -252,15 +370,20 @@ export default function FaultDetailPage({
               </div>
             </div>
           )}
-          <div className={css.actions}>
-            <Button
-              type="button"
-              className="button button--blue"
-              onClick={() => setIsUpdateModalOpen(true)}
-            >
-              {t('actions.addCommentAndChangeStatus')}
-            </Button>
-          </div>
+          {/* Completed faults are terminal — the modal's state machine
+              already blocks any transition, so don't tempt the user
+              with a button that can't do anything. */}
+          {!isCompleted && (
+            <div className={css.actions}>
+              <Button
+                type="button"
+                className="button button--blue"
+                onClick={() => setIsUpdateModalOpen(true)}
+              >
+                {t('actions.addCommentAndChangeStatus')}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
       {/* Modal di aggiornamento */}
