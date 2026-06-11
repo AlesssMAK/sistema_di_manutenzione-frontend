@@ -322,7 +322,8 @@
       "comment": "Komentarz",
       "managerNotes": "Notatki kierownika",
       "assignedTo": "Przypisane do",
-      "planned": "Zaplanowane"
+      "planned": "Zaplanowane",
+      "pool": "Pula"
     },
     "maintainerCount": "{count, plural, one {# konserwator} few {# konserwatorów} many {# konserwatorów} other {# konserwatorów}}",
     "buttons": {

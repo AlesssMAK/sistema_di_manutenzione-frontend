@@ -354,7 +354,8 @@
       "comment": "Comment",
       "managerNotes": "Manager notes",
       "assignedTo": "Assigned to",
-      "planned": "Planned"
+      "planned": "Planned",
+      "pool": "Pool"
     },
     "maintainerCount": "{count, plural, one {# maintainer} other {# maintainers}}",
     "buttons": {

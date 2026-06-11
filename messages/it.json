@@ -353,7 +353,8 @@
     "comment": "Commento",
     "managerNotes": "Note responsabile",
     "assignedTo": "Assegnato a",
-    "planned": "Pianificato"
+    "planned": "Pianificato",
+    "pool": "Pool"
   },
   "maintainerCount": "{count, plural, one {# manutentore} other {# manutentori}}",
   "buttons": {

@@ -72,10 +72,27 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   return (
     <div className={css.containerFaultCardList}>
       <ul className={css.faultList}>
-        {faults.map(fault => (
+        {faults.map(fault => {
+          const scope = cardScope(fault);
+          const assignedCount = (fault.assignedMaintainers ?? []).length;
+          // What to put in the assignee pill: my own name only when the
+          // fault is actually mine, "Pool" when nobody owns it yet, or
+          // the maintainer count for someone else's fault. Was previously
+          // hard-coded to user.fullName regardless — every card lit up
+          // with the logged-in user's name even when the fault belonged
+          // to the pool or another worker.
+          const assigneeLabel =
+            scope === 'mine'
+              ? user?.fullName ?? ''
+              : scope === 'pool'
+                ? t('labels.pool')
+                : t('maintainerCount', { count: assignedCount });
+          const assigneeIcon = scope === 'mine' ? 'user' : 'users';
+
+          return (
           <li
             key={fault._id}
-            className={`${css.faultCard} ${scopeClassName[cardScope(fault)]}`}
+            className={`${css.faultCard} ${scopeClassName[scope]}`}
           >
             <div className={css.content}>
               <div>
@@ -120,9 +137,9 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 >
                   <div className={css.user}>
                     <svg className={css.user_icon} width="12" height="12">
-                      <use href="/sprite.svg#user"></use>
+                      <use href={`/sprite.svg#${assigneeIcon}`}></use>
                     </svg>
-                    <p className={css.user_name}>{user?.fullName}</p>
+                    <p className={css.user_name}>{assigneeLabel}</p>
                   </div>
                 </Button>
                 <div className={css.detailsGrid}>
@@ -182,7 +199,8 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
               </Button>
             </div>
           </li>
-        ))}
+          );
+        })}
       </ul>
     </div>
   );
