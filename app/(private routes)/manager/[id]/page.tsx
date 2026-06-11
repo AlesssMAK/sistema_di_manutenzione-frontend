@@ -93,19 +93,10 @@ const ManagerFaultDetailPage = ({
               className={css.backButton}
               onClick={() => router.push('/manager')}
               title={t('backButton')}
+              aria-label={t('backButton')}
             >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="19" y1="12" x2="5" y2="12"></line>
-                <polyline points="12 19 5 12 12 5"></polyline>
+              <svg width="20" height="20" aria-hidden="true">
+                <use href="/sprite.svg#arrow_back_ios_new" />
               </svg>
             </button>
             <h2 className={css.title}>{t('title')}</h2>
