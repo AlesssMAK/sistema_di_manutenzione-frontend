@@ -245,7 +245,6 @@
 
   "FaultDetail": {
     "title": "Szczegóły zgłoszenia",
-    "titleIntervento": "Szczegóły interwencji",
     "backButton": "Powrót",
     "labels": {
       "operator": "Operator",
@@ -270,7 +269,9 @@
     },
     "badges": {
       "rescheduled": "Przełożone",
-      "originalLabel": "Pierwotnie:"
+      "originalLabel": "Pierwotnie:",
+      "assignedToMe": "Przypisane do ciebie",
+      "pool": "Pool"
     },
     "comments": {
       "operatorDescription": "Opis (Operator)",

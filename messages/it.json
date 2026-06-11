@@ -276,7 +276,6 @@
 
 "FaultDetail": {
   "title": "Dettaglio segnalazione",
-  "titleIntervento": "Dettaglio Intervento",
   "backButton": "Torna indietro",
   "labels": {
     "operator": "Operatore",
@@ -301,7 +300,9 @@
   },
   "badges": {
     "rescheduled": "Riprogrammata",
-    "originalLabel": "Originale:"
+    "originalLabel": "Originale:",
+    "assignedToMe": "Assegnato a te",
+    "pool": "Pool"
   },
   "comments": {
     "operatorDescription": "Descrizione (Operatore)",
