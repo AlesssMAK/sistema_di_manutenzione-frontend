@@ -44,9 +44,11 @@
   }
 }
 
-/* Сама карточка — full-width, content-driven height. Hardcoded
-   min-height 400 + width 773 прибрано (порожні карточки
-   розтягувалися, full-card не вміщалася в contentSection). */
+/* Card — neutral grey perimeter so the scope-coloured left strip
+   (mine=green / pool=amber / other=gray, applied via .faultCard_*
+   modifier below) actually stands out. Width is content-driven; the
+   old hardcoded 773px + min-height 400 are gone. No cursor:pointer:
+   the card itself is not clickable, only the action buttons are. */
 .faultCard {
   display: flex;
   flex-direction: column;
@@ -55,13 +57,11 @@
   box-sizing: border-box;
 
   background: #fff;
-  border: 1.17px solid #00c950;
-  border-left: 4px solid #00c950;
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   padding: 14px;
 
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
 
   @media screen and (min-width: 1440px) {
@@ -69,11 +69,13 @@
   }
 }
 
+/* Hover/focus: blue accent that matches the project-wide brand
+   colour. The left strip is left alone so the scope coding stays
+   readable on hover (mine stays green, pool amber, etc.). */
 .faultCard:hover,
-.faultCard:focus {
-  border-color: #ff4d4f;
-  border-left-color: #ff4d4f;
-  box-shadow: 0 4px 12px rgba(255, 77, 79, 0.15);
+.faultCard:focus-within {
+  border-color: #1e40af;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.15);
 }
 
 .content {
@@ -162,21 +164,31 @@
   overflow-wrap: anywhere;
 }
 
+/* Assignee pill — purely informational, not a button. Was previously
+   wrapped in <Button> which gave it a pointer cursor and a hover
+   transform for no reason. */
 .user {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 12px;
+  color: #45556c;
+  width: fit-content;
 }
 
 .user_icon {
   stroke: #45556c;
   fill: transparent;
+  flex-shrink: 0;
 }
 
 .user_name {
-  font-weight: 400;
-  font-size: 12px;
-  color: #193cb8;
+  font-weight: 500;
+  color: #1e40af;
   margin: 0;
 }
 

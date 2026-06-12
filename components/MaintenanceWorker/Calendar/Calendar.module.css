@@ -73,16 +73,23 @@
   background-color: #fff;
 }
 
+/* Day cell — single source of truth (we had three duplicated .cell
+   declarations and two .cell:hover rules; cleaned up so the actual
+   behavior is obvious). */
 .cell {
-  height: 64px;
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  padding: 8px;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 4px;
   border-right: 1px solid #e2e8f0;
   border-bottom: 1px solid #e2e8f0;
-  transition: background 0.2s;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
+
 .cell:nth-child(7n) {
   border-right: none;
 }
@@ -93,7 +100,6 @@
 
 .cell:hover {
   background-color: #eff6ff;
-  cursor: pointer;
 }
 
 .otherMonth {
@@ -116,14 +122,6 @@
   border-radius: 50%;
   font-weight: 700;
 }
-/* .cell {
-  cursor: pointer;
-  transition: background-color 0.2s;
-} */
-
-.cell:hover {
-  background-color: #f0f0f0;
-}
 
 .selected {
   background-color: #0070f3 !important;
@@ -132,15 +130,6 @@
 
 .selectedText {
   color: white !important;
-}
-.cell {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  cursor: pointer;
 }
 .deadlineCell {
   background-color: #ffeeee !important;

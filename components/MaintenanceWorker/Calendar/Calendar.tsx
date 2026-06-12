@@ -41,7 +41,9 @@ const Calendar = ({
   const endDate = endOfWeek(monthEnd, { weekStartsOn: 1 });
 
   const calendarDays = eachDayOfInterval({ start: startDate, end: endDate });
-  const daysOfWeek = ['LUN', 'MAR', 'MER', 'GIO', 'VEN', 'SAB', 'DOM'];
+  // Monday-first headers (matches startOfWeek({ weekStartsOn: 1 }) below).
+  const dayKeys = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
+  const daysOfWeek = dayKeys.map(k => t(`daysOfWeek.${k}`));
   const handleDayClick = (day: Date) => {
     const formattedDate = format(day, 'yyyy-MM-dd');
 

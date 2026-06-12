@@ -1,5 +1,7 @@
 'use client';
 
+import { format, isValid, parseISO } from 'date-fns';
+import { it } from 'date-fns/locale';
 import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
@@ -11,6 +13,21 @@ import toast from 'react-hot-toast';
 import { claimFault } from '@/lib/api/faults';
 import { useState } from 'react';
 
+/** Map raw backend statusFault to the StatusFault i18n key. */
+const statusKey = (status: string | undefined) => {
+  if (status === 'In progress') return 'IN_PROGRESS';
+  if (status === 'Completed') return 'COMPLETED';
+  if (status === 'Suspended') return 'SUSPENDED';
+  if (status === 'Overdue') return 'OVERDUE';
+  return 'CREATED';
+};
+
+const formatDay = (value?: string) => {
+  if (!value) return '—';
+  const parsed = parseISO(value);
+  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale: it }) : value;
+};
+
 interface FaultCardsListProps {
   faults: FaultCard[];
 }
@@ -19,6 +36,8 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations('FaultCard');
+  const tStatus = useTranslations('StatusFault');
+  const tPriority = useTranslations('Priority');
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
@@ -118,7 +137,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                         ] ?? ''
                       }`}
                     >
-                      {fault.statusFault}
+                      {tStatus(statusKey(fault.statusFault))}
                     </span>
                   </div>
                 </div>
@@ -129,19 +148,12 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                     {fault.plantId?.namePlant}
                   </p>
                 </div>
-                <Button
-                  type="button"
-                  className="button--white"
-                  width={160}
-                  height={30}
-                >
-                  <div className={css.user}>
-                    <svg className={css.user_icon} width="12" height="12">
-                      <use href={`/sprite.svg#${assigneeIcon}`}></use>
-                    </svg>
-                    <p className={css.user_name}>{assigneeLabel}</p>
-                  </div>
-                </Button>
+                <div className={css.user}>
+                  <svg className={css.user_icon} width="12" height="12">
+                    <use href={`/sprite.svg#${assigneeIcon}`}></use>
+                  </svg>
+                  <p className={css.user_name}>{assigneeLabel}</p>
+                </div>
                 <div className={css.detailsGrid}>
                   {/* Colonna sinistra */}
                   <div className={css.detailItem}>
@@ -150,19 +162,23 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                     <span className={css.label}>{t('labels.plannedTime')}</span>
                     <p className={css.value}>{fault.plannedTime}</p>
                     <span className={css.label}>{t('labels.deadline')}</span>
-                    <p className={css.value}>{fault.deadline}</p>
+                    <p className={css.value}>{formatDay(fault.deadline)}</p>
                   </div>
 
                   {/* Colonna destra */}
                   <div className={css.detailItem}>
                     <span className={css.label}>{t('labels.priority')}</span>
                     <p className={`${css.value} ${css.priorityValue}`}>
-                      {fault.priority}
+                      {tPriority(fault.priority)}
                     </p>
                     <span className={css.label}>
                       {t('labels.estimatedDuration')}
                     </span>
-                    <p className={css.value}>{fault.estimatedDuration}</p>
+                    <p className={css.value}>
+                      {fault.estimatedDuration
+                        ? `${fault.estimatedDuration} min`
+                        : '—'}
+                    </p>
                   </div>
                 </div>
               </div>

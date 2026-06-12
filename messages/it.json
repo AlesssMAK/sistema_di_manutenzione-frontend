@@ -145,7 +145,16 @@
   },
   "calendar": {
     "header": "Calendario",
-    "interventionsCount": "{count} intervento/i pianificato/i"
+    "interventionsCount": "{count} intervento/i pianificato/i",
+    "daysOfWeek": {
+      "mon": "LUN",
+      "tue": "MAR",
+      "wed": "MER",
+      "thu": "GIO",
+      "fri": "VEN",
+      "sat": "SAB",
+      "sun": "DOM"
+    }
   },
   "dayView": {
     "title": "Vista giornaliera"

@@ -114,7 +114,16 @@
     },
     "calendar": {
       "header": "Kalendarz",
-      "interventionsCount": "{count} zaplanowana(e) interwencja(e)"
+      "interventionsCount": "{count} zaplanowana(e) interwencja(e)",
+      "daysOfWeek": {
+        "mon": "PON",
+        "tue": "WT",
+        "wed": "ŚR",
+        "thu": "CZW",
+        "fri": "PT",
+        "sat": "SO",
+        "sun": "ND"
+      }
     },
     "dayView": {
       "title": "Widok dnia"
