@@ -363,7 +363,8 @@
     "managerNotes": "Note responsabile",
     "assignedTo": "Assegnato a",
     "planned": "Pianificato",
-    "pool": "Pool"
+    "pool": "Pool",
+    "technician": "Tecnico"
   },
   "maintainerCount": "{count, plural, one {# manutentore} other {# manutentori}}",
   "buttons": {

@@ -112,6 +112,15 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
           <li
             key={fault._id}
             className={`${css.faultCard} ${scopeClassName[scope]}`}
+            role="button"
+            tabIndex={0}
+            onClick={() => handleDetailClick(fault._id)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleDetailClick(fault._id);
+              }
+            }}
           >
             <div className={css.content}>
               <div>
@@ -148,15 +157,21 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                     {fault.plantId?.namePlant}
                   </p>
                 </div>
-                <div className={css.user}>
-                  <svg className={css.user_icon} width="12" height="12">
-                    <use href={`/sprite.svg#${assigneeIcon}`}></use>
-                  </svg>
-                  <p className={css.user_name}>{assigneeLabel}</p>
-                </div>
                 <div className={css.detailsGrid}>
                   {/* Colonna sinistra */}
                   <div className={css.detailItem}>
+                    <span className={css.label}>{t('labels.technician')}</span>
+                    <p className={css.value}>
+                      <svg
+                        className={css.assigneeIcon}
+                        width="12"
+                        height="12"
+                        aria-hidden="true"
+                      >
+                        <use href={`/sprite.svg#${assigneeIcon}`} />
+                      </svg>
+                      {assigneeLabel}
+                    </p>
                     <span className={css.label}>{t('labels.plantPart')}</span>
                     <p className={css.value}>{fault.partId?.namePlantPart}</p>
                     <span className={css.label}>{t('labels.plannedTime')}</span>
@@ -190,7 +205,10 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 </div>
               )}
             </div>
-            <div className={css.shmorebtn}>
+            {/* Buttons stop click propagation so they don't double-fire
+                the card-level onClick (which also navigates to the
+                detail page). */}
+            <div className={css.shmorebtn} onClick={e => e.stopPropagation()}>
               {canClaim(fault) && (
                 <Button
                   type="button"

@@ -332,7 +332,8 @@
       "managerNotes": "Notatki kierownika",
       "assignedTo": "Przypisane do",
       "planned": "Zaplanowane",
-      "pool": "Pula"
+      "pool": "Pula",
+      "technician": "Konserwator"
     },
     "maintainerCount": "{count, plural, one {# konserwator} few {# konserwatorów} many {# konserwatorów} other {# konserwatorów}}",
     "buttons": {

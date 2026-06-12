@@ -47,8 +47,9 @@
 /* Card — neutral grey perimeter so the scope-coloured left strip
    (mine=green / pool=amber / other=gray, applied via .faultCard_*
    modifier below) actually stands out. Width is content-driven; the
-   old hardcoded 773px + min-height 400 are gone. No cursor:pointer:
-   the card itself is not clickable, only the action buttons are. */
+   old hardcoded 773px + min-height 400 are gone. The card itself
+   is clickable (opens the detail page); the buttons inside still
+   work independently — they stopPropagation in the JSX. */
 .faultCard {
   display: flex;
   flex-direction: column;
@@ -61,12 +62,18 @@
   border-radius: 12px;
   padding: 14px;
 
+  cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   outline: none;
 
   @media screen and (min-width: 1440px) {
     padding: 20px;
   }
+}
+
+.faultCard:focus-visible {
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
 }
 
 /* Hover/focus: blue accent that matches the project-wide brand
@@ -164,32 +171,14 @@
   overflow-wrap: anywhere;
 }
 
-/* Assignee pill — purely informational, not a button. Was previously
-   wrapped in <Button> which gave it a pointer cursor and a hover
-   transform for no reason. */
-.user {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 1px solid #e2e8f0;
-  background: #f8fafc;
-  font-size: 12px;
-  color: #45556c;
-  width: fit-content;
-}
-
-.user_icon {
+/* Inline icon prefix for the "Tecnico" value row — kept subtle so
+   the row reads like every other label/value pair (icon is just a
+   visual cue, not a pill). */
+.assigneeIcon {
   stroke: #45556c;
   fill: transparent;
-  flex-shrink: 0;
-}
-
-.user_name {
-  font-weight: 500;
-  color: #1e40af;
-  margin: 0;
+  vertical-align: middle;
+  margin-right: 6px;
 }
 
 /* Phone & tablet: single-column details. Desktop (1440+) unlocks

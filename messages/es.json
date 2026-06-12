@@ -364,7 +364,8 @@
       "managerNotes": "Notas del responsable",
       "assignedTo": "Asignado a",
       "planned": "Planificado",
-      "pool": "Pool"
+      "pool": "Pool",
+      "technician": "Técnico"
     },
     "maintainerCount": "{count, plural, one {# mantenedor} other {# mantenedores}}",
     "buttons": {
