@@ -85,7 +85,9 @@
   border: 1px solid transparent;
   font-family: inherit;
   font-size: 14px;
-  resize: vertical;
+  /* No user-resize: the modal layout was reflowing awkwardly when
+     workers stretched the textarea taller than the surrounding fields. */
+  resize: none;
   transition: border-color 0.15s ease;
 }
 
