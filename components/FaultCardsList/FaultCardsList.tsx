@@ -151,26 +151,27 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                   </div>
                 </div>
 
-                <div className={css.details}>
-                  <p className={css.namePlant}>
-                    <strong>{t('labels.machine')}:</strong>{' '}
-                    {fault.plantId?.namePlant}
-                  </p>
+                {/* Manutentore row (assignee) — takes the position
+                    previously held by Macchina; Macchina moved into
+                    the grid below. */}
+                <div className={css.assigneeRow}>
+                  <strong className={css.assigneeLabel}>
+                    {t('labels.technician')}:
+                  </strong>
+                  <div className={css.user}>
+                    <svg className={css.user_icon} width="12" height="12">
+                      <use href={`/sprite.svg#${assigneeIcon}`}></use>
+                    </svg>
+                    <p className={css.user_name}>{assigneeLabel}</p>
+                  </div>
                 </div>
                 <div className={css.detailsGrid}>
                   {/* Colonna sinistra */}
                   <div className={css.detailItem}>
-                    <span className={css.label}>{t('labels.technician')}</span>
+                    <span className={css.label}>{t('labels.machine')}</span>
                     <p className={css.value}>
-                      <svg
-                        className={css.assigneeIcon}
-                        width="12"
-                        height="12"
-                        aria-hidden="true"
-                      >
-                        <use href={`/sprite.svg#${assigneeIcon}`} />
-                      </svg>
-                      {assigneeLabel}
+                      {fault.plantId?.namePlant}
+                      {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
                     </p>
                     <span className={css.label}>{t('labels.plantPart')}</span>
                     <p className={css.value}>{fault.partId?.namePlantPart}</p>

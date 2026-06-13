@@ -171,14 +171,46 @@
   overflow-wrap: anywhere;
 }
 
-/* Inline icon prefix for the "Tecnico" value row — kept subtle so
-   the row reads like every other label/value pair (icon is just a
-   visual cue, not a pill). */
-.assigneeIcon {
+/* "Manutentore: <pill>" row sitting above the details grid.
+   The label is bold inline; the pill carries the icon + name. */
+.assigneeRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.assigneeLabel {
+  font-size: 14px;
+  color: #0a0a0a;
+  font-weight: 600;
+}
+
+/* Assignee pill — purely informational, not a button. */
+.user {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 12px;
+  color: #45556c;
+  width: fit-content;
+}
+
+.user_icon {
   stroke: #45556c;
   fill: transparent;
-  vertical-align: middle;
-  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.user_name {
+  font-weight: 500;
+  color: #1e40af;
+  margin: 0;
 }
 
 /* Phone & tablet: single-column details. Desktop (1440+) unlocks
