@@ -365,7 +365,7 @@
       "assignedTo": "Assigned to",
       "planned": "Planned",
       "pool": "Pool",
-      "technician": "Technician"
+      "technician": "Maintenance Worker"
     },
     "maintainerCount": "{count, plural, one {# maintainer} other {# maintainers}}",
     "buttons": {
