@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query';
 import { usePageStore } from '@/lib/store/pageStore';
 import { fetchFaultCards } from '@/lib/api/faults';
 import { FaultCard } from '@/types/faultType';
@@ -21,6 +21,8 @@ const TAB_TO_STATUS: Record<ManagerTab, string> = {
   inProgress: 'In progress,Suspended,Overdue',
   archive: 'Completed',
 };
+
+const TAB_ORDER: ManagerTab[] = ['received', 'inProgress', 'archive'];
 
 const PER_PAGE = 8;
 
@@ -54,6 +56,28 @@ const ManagerClient = () => {
     placeholderData: keepPreviousData,
   });
 
+  const countsResults = useQueries({
+    queries: TAB_ORDER.map(tab => ({
+      queryKey: ['faults', 'manager', tab, 'count'],
+      queryFn: () =>
+        fetchFaultCards({
+          page: 1,
+          perPage: 1,
+          statusFault: TAB_TO_STATUS[tab],
+        }),
+      placeholderData: keepPreviousData,
+    })),
+  });
+
+  const counts = TAB_ORDER.reduce<Partial<Record<ManagerTab, number>>>(
+    (acc, tab, i) => {
+      const total = countsResults[i].data?.totalFault;
+      if (total !== undefined) acc[tab] = total;
+      return acc;
+    },
+    {}
+  );
+
   const handleTabChange = (tab: ManagerTab) => {
     if (tab === activeTab) return;
     setActiveTab(tab);
@@ -78,13 +102,7 @@ const ManagerClient = () => {
             tabs={TABS}
             activeTab={activeTab}
             onTabChange={handleTabChange}
-            counts={
-              data?.totalFault !== undefined
-                ? ({ [activeTab]: data.totalFault } as Partial<
-                    Record<ManagerTab, number>
-                  >)
-                : undefined
-            }
+            counts={counts}
           />
         </div>
 
