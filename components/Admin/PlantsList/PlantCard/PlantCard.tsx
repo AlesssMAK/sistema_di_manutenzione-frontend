@@ -154,7 +154,7 @@ const PlantCard = ({ plant }: PlantCardProps) => {
         <CreateAndEditPlantAndPlantPartsForm
           onClose={() => setOpenUpdatePlantModal(false)}
           isPlantEditMode={true}
-          initialData={InitialData}
+          initialDataForPlant={InitialData}
         />
       )}
       {openPlantPartsListModal && (

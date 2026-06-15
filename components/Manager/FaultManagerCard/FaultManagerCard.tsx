@@ -153,11 +153,22 @@ const FaultManagerCard = ({
           {(fault.assignedMaintainers?.length ?? 0) > 0 && (
             <div className={css.row}>
               <span className={css.label}>{t('labels.assignedTo')}</span>
-              <span className={css.value}>
-                {t('maintainerCount', {
-                  count: fault.assignedMaintainers.length,
+              <div className={css.maintainerChips}>
+                {fault.assignedMaintainers.map((m, i) => {
+                  const isObj = typeof m === 'object' && m !== null;
+                  const key = isObj ? m._id : String(m);
+                  const name = isObj ? m.fullName : '—';
+                  return (
+                    <span
+                      key={key ?? i}
+                      className={css.maintainerChip}
+                      title={isObj ? m.email : undefined}
+                    >
+                      {name}
+                    </span>
+                  );
                 })}
-              </span>
+              </div>
             </div>
           )}
           {fault.managerComment && (

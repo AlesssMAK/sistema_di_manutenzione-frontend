@@ -114,7 +114,16 @@
     },
     "calendar": {
       "header": "Kalendarz",
-      "interventionsCount": "{count} zaplanowana(e) interwencja(e)"
+      "interventionsCount": "{count} zaplanowana(e) interwencja(e)",
+      "daysOfWeek": {
+        "mon": "PON",
+        "tue": "WT",
+        "wed": "ŚR",
+        "thu": "CZW",
+        "fri": "PT",
+        "sat": "SO",
+        "sun": "ND"
+      }
     },
     "dayView": {
       "title": "Widok dnia"
@@ -245,7 +254,6 @@
 
   "FaultDetail": {
     "title": "Szczegóły zgłoszenia",
-    "titleIntervento": "Szczegóły interwencji",
     "backButton": "Powrót",
     "labels": {
       "operator": "Operator",
@@ -270,7 +278,9 @@
     },
     "badges": {
       "rescheduled": "Przełożone",
-      "originalLabel": "Pierwotnie:"
+      "originalLabel": "Pierwotnie:",
+      "assignedToMe": "Przypisane do ciebie",
+      "pool": "Pool"
     },
     "comments": {
       "operatorDescription": "Opis (Operator)",
@@ -321,7 +331,9 @@
       "comment": "Komentarz",
       "managerNotes": "Notatki kierownika",
       "assignedTo": "Przypisane do",
-      "planned": "Zaplanowane"
+      "planned": "Zaplanowane",
+      "pool": "Pula",
+      "technician": "Konserwator"
     },
     "maintainerCount": "{count, plural, one {# konserwator} few {# konserwatorów} many {# konserwatorów} other {# konserwatorów}}",
     "buttons": {

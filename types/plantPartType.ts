@@ -48,7 +48,7 @@ export interface UpdatePlantPart {
 }
 
 export interface UpdatePlantPartRequest {
-  plantId: string;
+  plantIdForPart: string;
   plantPartId: string;
   data: UpdatePlantPart;
 }

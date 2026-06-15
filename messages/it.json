@@ -145,7 +145,16 @@
   },
   "calendar": {
     "header": "Calendario",
-    "interventionsCount": "{count} intervento/i pianificato/i"
+    "interventionsCount": "{count} intervento/i pianificato/i",
+    "daysOfWeek": {
+      "mon": "LUN",
+      "tue": "MAR",
+      "wed": "MER",
+      "thu": "GIO",
+      "fri": "VEN",
+      "sat": "SAB",
+      "sun": "DOM"
+    }
   },
   "dayView": {
     "title": "Vista giornaliera"
@@ -276,7 +285,6 @@
 
 "FaultDetail": {
   "title": "Dettaglio segnalazione",
-  "titleIntervento": "Dettaglio Intervento",
   "backButton": "Torna indietro",
   "labels": {
     "operator": "Operatore",
@@ -301,7 +309,9 @@
   },
   "badges": {
     "rescheduled": "Riprogrammata",
-    "originalLabel": "Originale:"
+    "originalLabel": "Originale:",
+    "assignedToMe": "Assegnato a te",
+    "pool": "Pool"
   },
   "comments": {
     "operatorDescription": "Descrizione (Operatore)",
@@ -309,7 +319,7 @@
     "managerNote": "Note responsabile",
     "managerComment": "Commento Manager",
     "maintainerNote": "Note manutentore",
-    "maintainerComment": "Commento Maintenance Worker",
+    "maintainerComment": "Commento Manutentore",
     "hseNote": "Nota HSE (Sicurezza)",
     "noDescription": "Nessuna descrizione",
     "noNote": "Nessuna nota",
@@ -352,7 +362,9 @@
     "comment": "Commento",
     "managerNotes": "Note responsabile",
     "assignedTo": "Assegnato a",
-    "planned": "Pianificato"
+    "planned": "Pianificato",
+    "pool": "Pool",
+    "technician": "Manutentore"
   },
   "maintainerCount": "{count, plural, one {# manutentore} other {# manutentori}}",
   "buttons": {

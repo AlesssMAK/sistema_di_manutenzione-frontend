@@ -146,7 +146,16 @@
     },
     "calendar": {
       "header": "Calendario",
-      "interventionsCount": "{count} intervención(es) planificada(s)"
+      "interventionsCount": "{count} intervención(es) planificada(s)",
+      "daysOfWeek": {
+        "mon": "LUN",
+        "tue": "MAR",
+        "wed": "MIÉ",
+        "thu": "JUE",
+        "fri": "VIE",
+        "sat": "SÁB",
+        "sun": "DOM"
+      }
     },
     "dayView": {
       "title": "Vista diaria"
@@ -277,7 +286,6 @@
 
   "FaultDetail": {
     "title": "Detalle de la señalación",
-    "titleIntervento": "Detalle de la intervención",
     "backButton": "Volver",
     "labels": {
       "operator": "Operador",
@@ -302,7 +310,9 @@
     },
     "badges": {
       "rescheduled": "Reprogramada",
-      "originalLabel": "Original:"
+      "originalLabel": "Original:",
+      "assignedToMe": "Asignado a ti",
+      "pool": "Pool"
     },
     "comments": {
       "operatorDescription": "Descripción (Operador)",
@@ -353,7 +363,9 @@
       "comment": "Comentario",
       "managerNotes": "Notas del responsable",
       "assignedTo": "Asignado a",
-      "planned": "Planificado"
+      "planned": "Planificado",
+      "pool": "Pool",
+      "technician": "Mantenedor"
     },
     "maintainerCount": "{count, plural, one {# mantenedor} other {# mantenedores}}",
     "buttons": {

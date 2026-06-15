@@ -1,5 +1,7 @@
 'use client';
 
+import { format, isValid, parseISO } from 'date-fns';
+import { it } from 'date-fns/locale';
 import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { FaultCard } from '@/types/faultType';
@@ -11,6 +13,21 @@ import toast from 'react-hot-toast';
 import { claimFault } from '@/lib/api/faults';
 import { useState } from 'react';
 
+/** Map raw backend statusFault to the StatusFault i18n key. */
+const statusKey = (status: string | undefined) => {
+  if (status === 'In progress') return 'IN_PROGRESS';
+  if (status === 'Completed') return 'COMPLETED';
+  if (status === 'Suspended') return 'SUSPENDED';
+  if (status === 'Overdue') return 'OVERDUE';
+  return 'CREATED';
+};
+
+const formatDay = (value?: string) => {
+  if (!value) return '—';
+  const parsed = parseISO(value);
+  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale: it }) : value;
+};
+
 interface FaultCardsListProps {
   faults: FaultCard[];
 }
@@ -19,6 +36,8 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations('FaultCard');
+  const tStatus = useTranslations('StatusFault');
+  const tPriority = useTranslations('Priority');
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
@@ -72,10 +91,36 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   return (
     <div className={css.containerFaultCardList}>
       <ul className={css.faultList}>
-        {faults.map(fault => (
+        {faults.map(fault => {
+          const scope = cardScope(fault);
+          const assignedCount = (fault.assignedMaintainers ?? []).length;
+          // What to put in the assignee pill: my own name only when the
+          // fault is actually mine, "Pool" when nobody owns it yet, or
+          // the maintainer count for someone else's fault. Was previously
+          // hard-coded to user.fullName regardless — every card lit up
+          // with the logged-in user's name even when the fault belonged
+          // to the pool or another worker.
+          const assigneeLabel =
+            scope === 'mine'
+              ? user?.fullName ?? ''
+              : scope === 'pool'
+                ? t('labels.pool')
+                : t('maintainerCount', { count: assignedCount });
+          const assigneeIcon = scope === 'mine' ? 'user' : 'users';
+
+          return (
           <li
             key={fault._id}
-            className={`${css.faultCard} ${scopeClassName[cardScope(fault)]}`}
+            className={`${css.faultCard} ${scopeClassName[scope]}`}
+            role="button"
+            tabIndex={0}
+            onClick={() => handleDetailClick(fault._id)}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleDetailClick(fault._id);
+              }
+            }}
           >
             <div className={css.content}>
               <div>
@@ -101,51 +146,55 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                         ] ?? ''
                       }`}
                     >
-                      {fault.statusFault}
+                      {tStatus(statusKey(fault.statusFault))}
                     </span>
                   </div>
                 </div>
 
-                <div className={css.details}>
-                  <p className={css.namePlant}>
-                    <strong>{t('labels.machine')}:</strong>{' '}
-                    {fault.plantId?.namePlant}
-                  </p>
-                </div>
-                <Button
-                  type="button"
-                  className="button--white"
-                  width={160}
-                  height={30}
-                >
+                {/* Manutentore row (assignee) — takes the position
+                    previously held by Macchina; Macchina moved into
+                    the grid below. */}
+                <div className={css.assigneeRow}>
+                  <strong className={css.assigneeLabel}>
+                    {t('labels.technician')}:
+                  </strong>
                   <div className={css.user}>
                     <svg className={css.user_icon} width="12" height="12">
-                      <use href="/sprite.svg#user"></use>
+                      <use href={`/sprite.svg#${assigneeIcon}`}></use>
                     </svg>
-                    <p className={css.user_name}>{user?.fullName}</p>
+                    <p className={css.user_name}>{assigneeLabel}</p>
                   </div>
-                </Button>
+                </div>
                 <div className={css.detailsGrid}>
                   {/* Colonna sinistra */}
                   <div className={css.detailItem}>
+                    <span className={css.label}>{t('labels.machine')}</span>
+                    <p className={css.value}>
+                      {fault.plantId?.namePlant}
+                      {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
+                    </p>
                     <span className={css.label}>{t('labels.plantPart')}</span>
                     <p className={css.value}>{fault.partId?.namePlantPart}</p>
                     <span className={css.label}>{t('labels.plannedTime')}</span>
                     <p className={css.value}>{fault.plannedTime}</p>
                     <span className={css.label}>{t('labels.deadline')}</span>
-                    <p className={css.value}>{fault.deadline}</p>
+                    <p className={css.value}>{formatDay(fault.deadline)}</p>
                   </div>
 
                   {/* Colonna destra */}
                   <div className={css.detailItem}>
                     <span className={css.label}>{t('labels.priority')}</span>
                     <p className={`${css.value} ${css.priorityValue}`}>
-                      {fault.priority}
+                      {tPriority(fault.priority)}
                     </p>
                     <span className={css.label}>
                       {t('labels.estimatedDuration')}
                     </span>
-                    <p className={css.value}>{fault.estimatedDuration}</p>
+                    <p className={css.value}>
+                      {fault.estimatedDuration
+                        ? `${fault.estimatedDuration} min`
+                        : '—'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -157,7 +206,10 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                 </div>
               )}
             </div>
-            <div className={css.shmorebtn}>
+            {/* Buttons stop click propagation so they don't double-fire
+                the card-level onClick (which also navigates to the
+                detail page). */}
+            <div className={css.shmorebtn} onClick={e => e.stopPropagation()}>
               {canClaim(fault) && (
                 <Button
                   type="button"
@@ -182,7 +234,8 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
               </Button>
             </div>
           </li>
-        ))}
+          );
+        })}
       </ul>
     </div>
   );

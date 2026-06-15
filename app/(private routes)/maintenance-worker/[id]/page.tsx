@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { fetchFaultById } from '@/lib/api/faults';
 import { FaultCard } from '@/types/faultType';
+import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
@@ -85,6 +86,7 @@ export default function FaultDetailPage({
   const tPriority = useTranslations('Priority');
   const queryClient = useQueryClient();
   const { subscribeToFault, unsubscribeFromFault } = useSocket();
+  const { user } = useAuthStore();
   const resolvedParams = use(params);
   const id = resolvedParams.id;
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -145,36 +147,52 @@ export default function FaultDetailPage({
   const isSuspended = fault.statusFault === 'Suspended';
   const wasRescheduled = Boolean(fault.autoRescheduledFrom?.plannedDate);
 
+  // Assignment scope from the current user's point of view — mirrors
+  // the FaultCardsList color coding (mine / pool / other) so the
+  // worker reads the same signal in list and detail. "other" gets no
+  // badge — there's no useful action to surface in that case.
+  const myId = user?._id ? String(user._id) : '';
+  const assignedToMe =
+    myId !== '' && (fault.assignedMaintainers ?? []).map(String).includes(myId);
+  const isPool = (fault.assignedMaintainers?.length ?? 0) === 0;
+
   return (
     <div className="container">
       <div className={css.pageWrapper}>
         <div className={css.card}>
           <header className={css.header}>
             <div className={css.headerLeft}>
-              {/* Кнопка-стрелка назад */}
               <button
                 type="button"
                 className={css.backButton}
                 onClick={handleBack}
                 title={t('backButton')}
+                aria-label={t('backButton')}
               >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="19" y1="12" x2="5" y2="12"></line>
-                  <polyline points="12 19 5 12 12 5"></polyline>
+                <svg width="20" height="20" aria-hidden="true">
+                  <use href="/sprite.svg#arrow_back_ios_new" />
                 </svg>
               </button>
-              <h2 className={css.title}>{t('titleIntervento')}</h2>
+              <h2 className={css.title}>{t('title')}</h2>
             </div>
             <div className={css.headerRight}>
+              {/* Scope badge — tells the worker at a glance whether
+                  this fault is theirs, sitting in the pool, or
+                  belongs to someone else (no badge in that case). */}
+              {assignedToMe && (
+                <span
+                  className={`${css.scopeBadge} ${css.scopeBadgeMine}`}
+                >
+                  {t('badges.assignedToMe')}
+                </span>
+              )}
+              {!assignedToMe && isPool && (
+                <span
+                  className={`${css.scopeBadge} ${css.scopeBadgePool}`}
+                >
+                  {t('badges.pool')}
+                </span>
+              )}
               {wasRescheduled && (
                 <span
                   className={css.rescheduledBadge}
@@ -210,15 +228,13 @@ export default function FaultDetailPage({
             <div className={css.infoItem}>
               <label>{t('labels.dateCreated')}</label>
               <p>
-                {fault.dataCreated
-                  ? new Date(fault.dataCreated).toLocaleDateString('it-IT')
-                  : '---'}{' '}
-                {fault.timeCreated || ''}
+                {formatDay(fault.dataCreated)}
+                {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
               </p>
             </div>
             <div className={css.infoItem}>
               <label>{t('labels.lastUpdated')}</label>
-              <p>{new Date(fault.updatedAt).toLocaleString('it-IT')}</p>
+              <p>{formatDateTime(fault.updatedAt)}</p>
             </div>
 
             {/* Full-width on phone: plant/part names with codes are
@@ -260,7 +276,7 @@ export default function FaultDetailPage({
                   className={`${css.deadline} ${deadlineUrgencyClass(fault.deadline, css)}`}
                 >
                   {fault.deadline
-                    ? new Date(fault.deadline).toLocaleDateString('it-IT')
+                    ? formatDay(fault.deadline)
                     : t('labels.deadlineNotSet')}
                 </p>
               </div>

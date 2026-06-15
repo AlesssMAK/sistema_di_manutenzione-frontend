@@ -69,7 +69,13 @@ const MaintenanceUpdateModal = ({
       updateFaultByWorker({
         faultId,
         statusFault: values.statusFault,
-        commentMaintenanceWorker: values.commentMaintenanceWorker || undefined,
+        // For Suspended the suspensionReason field below already
+        // captures the worker's comment — sending a separate
+        // commentMaintenanceWorker would just duplicate it.
+        ...(values.statusFault !== 'Suspended' && {
+          commentMaintenanceWorker:
+            values.commentMaintenanceWorker || undefined,
+        }),
         ...(values.statusFault === 'Completed' && {
           actualDuration: values.actualDuration as number,
         }),
@@ -152,15 +158,20 @@ const MaintenanceUpdateModal = ({
             )}
           </div>
 
-          <div className={css.field}>
-            <p className={css.label}>{t('labels.maintainerComment')}</p>
-            <textarea
-              {...register('commentMaintenanceWorker')}
-              placeholder={t('placeholders.maintainerComment')}
-              className={css.textarea}
-              rows={3}
-            />
-          </div>
+          {/* Hide the generic maintainer comment when suspending —
+              the suspensionReason field below captures the same
+              intent and was previously a confusing duplicate. */}
+          {selectedStatus !== 'Suspended' && (
+            <div className={css.field}>
+              <p className={css.label}>{t('labels.maintainerComment')}</p>
+              <textarea
+                {...register('commentMaintenanceWorker')}
+                placeholder={t('placeholders.maintainerComment')}
+                className={css.textarea}
+                rows={3}
+              />
+            </div>
+          )}
 
           {selectedStatus === 'Completed' && (
             <div className={css.field}>

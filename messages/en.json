@@ -146,7 +146,16 @@
     },
     "calendar": {
       "header": "Calendar",
-      "interventionsCount": "{count} planned intervention(s)"
+      "interventionsCount": "{count} planned intervention(s)",
+      "daysOfWeek": {
+        "mon": "MON",
+        "tue": "TUE",
+        "wed": "WED",
+        "thu": "THU",
+        "fri": "FRI",
+        "sat": "SAT",
+        "sun": "SUN"
+      }
     },
     "dayView": {
       "title": "Day view"
@@ -277,7 +286,6 @@
 
   "FaultDetail": {
     "title": "Report details",
-    "titleIntervento": "Intervention details",
     "backButton": "Go back",
     "labels": {
       "operator": "Operator",
@@ -302,7 +310,9 @@
     },
     "badges": {
       "rescheduled": "Rescheduled",
-      "originalLabel": "Original:"
+      "originalLabel": "Original:",
+      "assignedToMe": "Assigned to you",
+      "pool": "Pool"
     },
     "comments": {
       "operatorDescription": "Description (Operator)",
@@ -353,7 +363,9 @@
       "comment": "Comment",
       "managerNotes": "Manager notes",
       "assignedTo": "Assigned to",
-      "planned": "Planned"
+      "planned": "Planned",
+      "pool": "Pool",
+      "technician": "Maintenance Worker"
     },
     "maintainerCount": "{count, plural, one {# maintainer} other {# maintainers}}",
     "buttons": {

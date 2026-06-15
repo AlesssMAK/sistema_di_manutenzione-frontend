@@ -98,6 +98,30 @@
   cursor: help;
 }
 
+/* Scope badge — mirrors the FaultCardsList border-left color coding
+   (mine=green, pool=amber) so the worker recognises the assignment
+   state at a glance. "other" gets no badge. */
+.scopeBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.scopeBadgeMine {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.scopeBadgePool {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
 /* Phone: vertical stack but with selective 2-column rows for short
    fields (status/type/priority/etc.) to save vertical space. Long
    fields (plant name, full datetime) stay full-width. Tablet+: the
