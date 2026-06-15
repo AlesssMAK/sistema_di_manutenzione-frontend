@@ -172,6 +172,22 @@
   font-weight: 600;
 }
 
+.maintainerChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.maintainerChip {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
 .priorityLow {
   background: #dcfce7;
   color: #166534;

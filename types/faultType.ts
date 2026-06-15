@@ -10,6 +10,14 @@ export type PriorityFaultType = 'Low' | 'Medium' | 'High';
 export type TypeFault = 'Production' | 'Safety';
 export type FaultAction = 'created' | 'updated';
 
+export interface MaintainerRef {
+  _id: string;
+  fullName: string;
+  email?: string;
+}
+
+export type AssignedMaintainer = string | MaintainerRef;
+
 export interface FaultCard {
   _id: string;
   faultId: string;
@@ -35,7 +43,7 @@ export interface FaultCard {
   dataCreated?: string;
   timeCreated?: string;
   estimatedDuration?: number;
-  assignedMaintainers: string[];
+  assignedMaintainers: AssignedMaintainer[];
   typeFault: TypeFault;
   img?: [];
   managerComment?: string;
@@ -74,7 +82,7 @@ export interface Fault {
   comment: string;
   img?: string;
   priority: PriorityFaultType;
-  assignedMaintainers: string[];
+  assignedMaintainers: AssignedMaintainer[];
   managerComment?: string;
   deadline?: string;
   plannedDate?: string;

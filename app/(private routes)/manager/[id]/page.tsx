@@ -176,7 +176,26 @@ const ManagerFaultDetailPage = ({
           </div>
           <div className={css.infoItem}>
             <label>{t('labels.assignedMaintainers')}</label>
-            <p>{fault.assignedMaintainers?.length ?? 0}</p>
+            {fault.assignedMaintainers?.length ? (
+              <div className={css.maintainerChips}>
+                {fault.assignedMaintainers.map((m, i) => {
+                  const isObj = typeof m === 'object' && m !== null;
+                  const key = isObj ? m._id : String(m);
+                  const name = isObj ? m.fullName : '—';
+                  return (
+                    <span
+                      key={key ?? i}
+                      className={css.maintainerChip}
+                      title={isObj ? m.email : undefined}
+                    >
+                      {name}
+                    </span>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className={css.maintainerEmpty}>—</p>
+            )}
           </div>
         </div>
 

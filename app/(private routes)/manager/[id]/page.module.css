@@ -63,6 +63,28 @@
   letter-spacing: 0.4px;
 }
 
+.maintainerChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.maintainerChip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.maintainerEmpty {
+  color: #6b7280;
+  font-size: 14px;
+}
+
 .infoGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
