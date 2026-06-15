@@ -7,6 +7,7 @@ import CreateAndEditPlantAndPlantPartsForm from '@/components/forms/CreateAndEdi
 import { updatePlantParts } from '@/lib/api/plantsParts';
 import { PlantPart, UpdatePlantPartRequest } from '@/types/plantPartType';
 import { getStatusOptions, STATUS } from '@/constants/status';
+import DeletePlanPartModal from './DeletePlantPartModal/DeletePlanPartModal';
 
 interface PlantPartCardProps {
   plantId: string;
@@ -14,7 +15,7 @@ interface PlantPartCardProps {
 }
 
 interface UpdateStatus {
-  plantId: string;
+  plantIdForPart: string;
   plantPartId: string;
   status: STATUS;
 }
@@ -22,12 +23,17 @@ interface UpdateStatus {
 const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
   const [openUpdatePlantPartModal, setOpenUpdatePlantPartModal] =
     useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const t = useTranslations('AdminPage.PlantsList');
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: ({ plantId, plantPartId, data }: UpdatePlantPartRequest) =>
-      updatePlantParts({ plantId, plantPartId, data }),
+    mutationFn: ({
+      plantIdForPart,
+      plantPartId,
+      data,
+    }: UpdatePlantPartRequest) =>
+      updatePlantParts({ plantIdForPart, plantPartId, data }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['plantParts'] });
     },
@@ -36,16 +42,20 @@ const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
   const statuses = getStatusOptions();
   const status = statuses.find(status => status.value === plantPart.status);
 
+  const InitialData = {
+    plantId: plantPart.plantId,
+    plantPartId: plantPart._id,
+    namePlantPart: plantPart.namePlantPart || '',
+    codePlantPart: plantPart.codePlantPart || '',
+    status: plantPart.status || '',
+  };
+
   const handleStatusUpdate = async ({
-    plantId,
+    plantIdForPart,
     plantPartId,
     status,
   }: UpdateStatus) => {
-    mutation.mutate({ plantId, plantPartId, data: { status } });
-  };
-
-  const deletePlantPart = async () => {
-    console.log();
+    mutation.mutate({ plantIdForPart, plantPartId, data: { status } });
   };
 
   return (
@@ -103,7 +113,7 @@ const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
                   height={32}
                   onClick={() =>
                     handleStatusUpdate({
-                      plantId: plantId,
+                      plantIdForPart: plantId,
                       plantPartId: plantPart._id,
                       status: 'deactivated',
                     })
@@ -121,7 +131,7 @@ const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
                   height={32}
                   onClick={() =>
                     handleStatusUpdate({
-                      plantId: plantId,
+                      plantIdForPart: plantId,
                       plantPartId: plantPart._id,
                       status: 'active',
                     })
@@ -138,7 +148,7 @@ const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
                 width={38}
                 height={32}
                 onClick={() => {
-                  deletePlantPart();
+                  setOpenDeleteModal(true);
                 }}
               >
                 <svg width="16" height="16" className={css.btn_icon_delete}>
@@ -152,7 +162,16 @@ const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
           <CreateAndEditPlantAndPlantPartsForm
             onClose={() => setOpenUpdatePlantPartModal(false)}
             isPlantPartsEditMode={true}
-            // initialData={InitialData}
+            initialDataForPlantPart={InitialData}
+          />
+        )}
+        {openDeleteModal && (
+          <DeletePlanPartModal
+            plantId={plantPart.plantId}
+            plantPartId={plantPart._id}
+            onClose={() => {
+              setOpenDeleteModal(false);
+            }}
           />
         )}
       </div>

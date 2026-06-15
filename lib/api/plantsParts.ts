@@ -36,12 +36,12 @@ export const createPlantParts = async (data: CreatePlantPartsRequest) => {
 };
 
 export const updatePlantParts = async ({
-  plantId,
+  plantIdForPart,
   plantPartId,
   data,
 }: UpdatePlantPartRequest) => {
   const res = await nextServer.put<UpdatePlantPartResponse>(
-    `/plants/${plantId}/parts/${plantPartId}`,
+    `/plants/${plantIdForPart}/parts/${plantPartId}`,
     data
   );
   return res.data;

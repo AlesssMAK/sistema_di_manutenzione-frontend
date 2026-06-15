@@ -4,6 +4,10 @@
   padding-top: 17px;
 }
 
+.non_border {
+  border-top: none;
+}
+
 .title {
   font-size: 28px;
 }
@@ -33,6 +37,10 @@
   display: flex;
   justify-content: end;
   margin-bottom: 12px;
+}
+
+.status_plant_btn_container {
+  justify-content: start;
 }
 
 .btn {
