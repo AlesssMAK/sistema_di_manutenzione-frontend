@@ -20,11 +20,23 @@ import {
   type PlanFaultValues,
 } from '@/lib/validation/planFaultValidation';
 import type {
+  AssignedMaintainer,
   FaultCard,
   PriorityFaultType,
   TypeFault,
 } from '@/types/faultType';
 import css from './PlanFaultForm.module.css';
+
+/**
+ * Normalize an assigned-maintainer entry to its ObjectId string.
+ * The `Fault` payload may carry either raw ids (legacy/list responses
+ * pre-populate) or populated `{ _id, fullName, email }` objects after
+ * the manager controller started populating in `f9d9de1`. The form
+ * always works with ids — names come from the `getMaintenanceWorkers`
+ * query separately.
+ */
+const toId = (m: AssignedMaintainer): string =>
+  typeof m === 'string' ? m : m._id;
 
 interface PlanFaultFormProps {
   fault: FaultCard;
@@ -43,7 +55,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
   ];
 
   const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(
-    fault.assignedMaintainers ?? []
+    (fault.assignedMaintainers ?? []).map(toId)
   );
 
   const {
@@ -62,7 +74,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
       estimatedDuration: fault.estimatedDuration ?? 60,
       deadline: fault.deadline ?? '',
       managerComment: fault.managerComment ?? '',
-      assignedMaintainers: fault.assignedMaintainers ?? [],
+      assignedMaintainers: (fault.assignedMaintainers ?? []).map(toId),
     },
   });
 
