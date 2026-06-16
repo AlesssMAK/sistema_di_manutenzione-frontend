@@ -87,7 +87,11 @@ const ReportForm = () => {
   useEffect(() => {
     const allPlants = async () => {
       const plants = await getAllPlants({ perPage: 40 });
-      setIsPlants(plants.plants);
+      const activePlant = plants.plants.filter(
+        item => item.status === 'active'
+      );
+
+      setIsPlants(activePlant);
     };
     allPlants();
   }, []);
@@ -115,8 +119,10 @@ const ReportForm = () => {
         plantId: selectedPlantId,
         perPage: 200,
       });
-
-      setIsPlantParts(plantParts.plantParts);
+      const activePlantParts = plantParts.plantParts.filter(
+        item => item.status === 'active'
+      );
+      setIsPlantParts(activePlantParts);
     };
 
     allPlantParts();
@@ -174,8 +180,6 @@ const ReportForm = () => {
       }
     }
   }, [isPlantParts, draft.partId, setValue]);
-
-  console.log(isPlantParts);
 
   return (
     <form onSubmit={handleSubmit(onReportSubmit)} className={css.form}>

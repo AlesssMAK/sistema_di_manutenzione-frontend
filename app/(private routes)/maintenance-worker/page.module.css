@@ -1,12 +1,8 @@
 .pageWrapper {
-  padding: 16px 0 32px;
+  padding: 32px 0 48px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-
-  @media screen and (min-width: 1440px) {
-    padding: 24px 0 40px;
-  }
 }
 
 /* Tabs now live inside contentSection — no top margin needed since

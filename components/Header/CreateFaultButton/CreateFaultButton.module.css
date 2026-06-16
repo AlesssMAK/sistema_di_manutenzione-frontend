@@ -1,13 +1,17 @@
 .button {
-  display: inline-flex;
-  align-items: center;
   gap: 6px;
-  white-space: nowrap;
-  padding: 8px 14px;
 }
 
 .icon {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+  fill: transparent;
+  stroke: #fff;
+  transition: stroke 0.2s ease;
+}
+
+.button:hover .icon,
+.button:focus-visible .icon {
+  stroke: #0a0a0a;
 }
