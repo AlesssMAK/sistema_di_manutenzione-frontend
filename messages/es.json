@@ -316,15 +316,11 @@
     },
     "comments": {
       "operatorDescription": "Descripción (Operador)",
-      "operatorComment": "Comentario Operador",
       "managerNote": "Notas del responsable",
-      "managerComment": "Comentario del responsable",
       "maintainerNote": "Notas del mantenedor",
-      "maintainerComment": "Comentario del Mantenedor",
       "hseNote": "Nota HSE (Seguridad)",
       "noDescription": "Sin descripción",
-      "noNote": "Sin notas",
-      "noComment": "Sin comentarios"
+      "noNote": "Sin notas"
     },
     "actions": {
       "planIntervention": "Planificar intervención",

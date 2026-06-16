@@ -329,30 +329,24 @@ export default function FaultDetailPage({
             )}
           </div>
 
-          {/* Комментарии */}
+          {/* Comments — using the same i18n keys as manager/[id] +
+              safety/[id] so the same field reads the same on every
+              detail page. */}
           <div className={css.detailsBlock}>
             <div className={css.commentBox}>
-              <label>{t('comments.operatorComment')}</label>
-              <p>{fault.comment ? fault.comment : t('comments.noComment')}</p>
+              <label>{t('comments.operatorDescription')}</label>
+              <p>{fault.comment || t('comments.noDescription')}</p>
             </div>
 
-            {/* Комментарий менеджера */}
             <div className={css.commentBox}>
-              <label>{t('comments.managerComment')}</label>
-              <p>
-                {fault.managerComment
-                  ? fault.managerComment
-                  : t('comments.noComment')}
-              </p>
+              <label>{t('comments.managerNote')}</label>
+              <p>{fault.managerComment || t('comments.noNote')}</p>
             </div>
 
-            {/* Commento Maintenance Worker */}
             <div className={css.commentBox}>
-              <label>{t('comments.maintainerComment')}</label>
+              <label>{t('comments.maintainerNote')}</label>
               <p>
-                {fault.commentMaintenanceWorker
-                  ? fault.commentMaintenanceWorker
-                  : t('comments.noComment')}
+                {fault.commentMaintenanceWorker || t('comments.noNote')}
               </p>
             </div>
 
@@ -360,7 +354,7 @@ export default function FaultDetailPage({
             {fault.typeFault === 'Safety' && (
               <div className={css.commentBox}>
                 <label>{t('comments.hseNote')}</label>
-                <p>{fault.commentSafety || t('comments.noComment')}</p>
+                <p>{fault.commentSafety || t('comments.noNote')}</p>
               </div>
             )}
           </div>
