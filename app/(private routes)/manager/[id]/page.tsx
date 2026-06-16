@@ -29,6 +29,54 @@ const formatDateTime = (value?: string) => {
     : value;
 };
 
+/** Map raw backend statusFault to the StatusFault i18n key. */
+const statusKey = (status: string | undefined) => {
+  if (status === 'In progress') return 'IN_PROGRESS';
+  if (status === 'Completed') return 'COMPLETED';
+  if (status === 'Suspended') return 'SUSPENDED';
+  if (status === 'Overdue') return 'OVERDUE';
+  return 'CREATED';
+};
+
+/** Pick the status-badge CSS class for the given raw status. */
+const statusClass = (
+  status: string | undefined,
+  styles: Record<string, string>
+) => {
+  if (status === 'In progress') return styles.statusInprogress;
+  if (status === 'Completed') return styles.statusCompleted;
+  if (status === 'Suspended') return styles.statusSuspended;
+  if (status === 'Overdue') return styles.statusOverdue;
+  return styles.statusCreated;
+};
+
+const priorityClass = (
+  priority: string | undefined,
+  styles: Record<string, string>
+) => {
+  if (priority === 'Low') return styles.priorityLow;
+  if (priority === 'Medium') return styles.priorityMedium;
+  if (priority === 'High') return styles.priorityHigh;
+  return '';
+};
+
+/** Urgency bucket for the deadline date — drives the color modifier. */
+const deadlineUrgencyClass = (
+  deadline: string | undefined,
+  styles: Record<string, string>
+) => {
+  if (!deadline) return '';
+  const due = new Date(deadline);
+  if (Number.isNaN(due.getTime())) return '';
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  due.setHours(0, 0, 0, 0);
+  const diffDays = Math.round((due.getTime() - today.getTime()) / 86400000);
+  if (diffDays <= 3) return styles.deadlineUrgent;
+  if (diffDays <= 7) return styles.deadlineSoon;
+  return styles.deadlineFar;
+};
+
 const ManagerFaultDetailPage = ({
   params,
 }: {
@@ -38,6 +86,9 @@ const ManagerFaultDetailPage = ({
   const t = useTranslations('FaultDetail');
   const tPlan = useTranslations('PlanFaultForm');
   const tNoFound = useTranslations('NoFound');
+  const tStatus = useTranslations('StatusFault');
+  const tType = useTranslations('TypeFault');
+  const tPriority = useTranslations('Priority');
   const resolvedParams = use(params);
   const id = resolvedParams.id;
 
@@ -113,10 +164,8 @@ const ManagerFaultDetailPage = ({
           </div>
           <div className={css.infoItem}>
             <label>{t('labels.status')}</label>
-            <span
-              className={`${css.status} ${css[`status${fault.statusFault.replace(' ', '')}`] || ''}`}
-            >
-              {fault.statusFault}
+            <span className={`${css.status} ${statusClass(fault.statusFault, css)}`}>
+              {tStatus(statusKey(fault.statusFault))}
             </span>
           </div>
 
@@ -151,11 +200,13 @@ const ManagerFaultDetailPage = ({
 
           <div className={css.infoItem}>
             <label>{t('labels.type')}</label>
-            <p>{fault.typeFault}</p>
+            <p>{tType(fault.typeFault === 'Safety' ? 'SAFETY' : 'PRODUCTION')}</p>
           </div>
           <div className={css.infoItem}>
             <label>{t('labels.priority')}</label>
-            <p className={css.priority}>{fault.priority}</p>
+            <p className={`${css.priority} ${priorityClass(fault.priority, css)}`}>
+              {tPriority(fault.priority)}
+            </p>
           </div>
 
           <div className={css.infoItem}>
@@ -174,7 +225,9 @@ const ManagerFaultDetailPage = ({
 
           <div className={css.infoItem}>
             <label>{t('labels.deadline')}</label>
-            <p className={css.deadline}>{formatDate(fault.deadline)}</p>
+            <p className={`${css.deadline} ${deadlineUrgencyClass(fault.deadline, css)}`}>
+              {formatDate(fault.deadline)}
+            </p>
           </div>
           <div className={css.infoItem}>
             <label>{t('labels.assignedMaintainers')}</label>
