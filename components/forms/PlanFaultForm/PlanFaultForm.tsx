@@ -13,10 +13,12 @@ import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import {
   assignFault,
   getMaintenanceWorkers,
+  reassignFault,
   type AssignFaultPayload,
 } from '@/lib/api/manager';
 import {
   planFaultSchema,
+  reassignFaultFormSchema,
   type PlanFaultValues,
 } from '@/lib/validation/planFaultValidation';
 import type {
@@ -41,9 +43,18 @@ const toId = (m: AssignedMaintainer): string =>
 interface PlanFaultFormProps {
   fault: FaultCard;
   onClose: () => void;
+  /** "plan" (default) shows the full planning form; "reassign" hides
+   *  every planning field and only lets the manager swap the
+   *  maintainer list — submits to PATCH /manager/fault/:id/reassign. */
+  mode?: 'plan' | 'reassign';
 }
 
-const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
+const PlanFaultForm = ({
+  fault,
+  onClose,
+  mode = 'plan',
+}: PlanFaultFormProps) => {
+  const isReassign = mode === 'reassign';
   const t = useTranslations('PlanFaultForm');
   const tPriority = useTranslations('Priority');
   const queryClient = useQueryClient();
@@ -65,7 +76,14 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
     watch,
     formState: { errors, isSubmitting },
   } = useForm<PlanFaultValues>({
-    resolver: yupResolver(planFaultSchema) as Resolver<PlanFaultValues>,
+    // Both schemas share the same shape; the cast lets us pick at
+    // runtime without yup's generic type machinery clashing on the
+    // union.
+    resolver: yupResolver(
+      (isReassign
+        ? reassignFaultFormSchema
+        : planFaultSchema) as typeof planFaultSchema
+    ) as Resolver<PlanFaultValues>,
     mode: 'onSubmit',
     defaultValues: {
       priority: fault.priority ?? 'Medium',
@@ -95,7 +113,7 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
     );
   };
 
-  const mutation = useMutation({
+  const planMutation = useMutation({
     mutationFn: (payload: AssignFaultPayload) => assignFault(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['faults'] });
@@ -116,8 +134,31 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
     },
   });
 
+  const reassignMutation = useMutation({
+    mutationFn: (ids: string[]) => reassignFault(fault._id, ids),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['faults'] });
+      queryClient.invalidateQueries({ queryKey: ['fault', fault._id] });
+      toast.success(t('messages.modifySuccess'));
+      onClose();
+    },
+    onError: (err: unknown) => {
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: unknown }).message)
+          : t('messages.saveError');
+      toast.error(message);
+    },
+  });
+
+  const mutation = isReassign ? reassignMutation : planMutation;
+
   const onSubmit = (values: PlanFaultValues) => {
-    mutation.mutate({
+    if (isReassign) {
+      reassignMutation.mutate(selectedMaintainers);
+      return;
+    }
+    planMutation.mutate({
       faultId: fault._id,
       priority: values.priority as PriorityFaultType,
       plannedDate: values.plannedDate,
@@ -138,7 +179,11 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
       <div className={css.formContainer}>
         <div className={css.titleContainer}>
           <h1 className={css.title}>
-            {fault.plannedDate ? t('titleModify') : t('titlePlan')}
+            {isReassign
+              ? t('titleReassign')
+              : fault.plannedDate
+                ? t('titleModify')
+                : t('titlePlan')}
           </h1>
           <p className={css.subtitle}>
             {fault.faultId} · {fault.plantId?.namePlant ?? '—'}
@@ -146,6 +191,11 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
+          {/* Planning fields hidden in reassign mode — the manager
+              only swaps the maintainer list, everything else stays
+              as it was. */}
+          {!isReassign && (
+          <>
           <div className={css.row}>
             <div className={css.field}>
               <p className={css.label}>{t('labels.priority')}</p>
@@ -215,6 +265,8 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
               <p className={css.error}>{errors.managerComment.message}</p>
             )}
           </div>
+          </>
+          )}
 
           <div className={css.field}>
             <p className={css.label}>{t('labels.assignedMaintainers')}</p>
@@ -241,7 +293,12 @@ const PlanFaultForm = ({ fault, onClose }: PlanFaultFormProps) => {
                 })}
               </ul>
             )}
-            <p className={css.hint}>{t('poolHint')}</p>
+            {errors.assignedMaintainers && (
+              <p className={css.error}>
+                {errors.assignedMaintainers.message as string}
+              </p>
+            )}
+            {!isReassign && <p className={css.hint}>{t('poolHint')}</p>}
           </div>
 
           <div className={css.actions}>

@@ -387,6 +387,8 @@
   "PlanFaultForm": {
     "titlePlan": "Planificar señalación",
     "titleModify": "Modificar planificación",
+    "titleReassign": "Reasignar intervención",
+    "buttonReassign": "Reasignar",
     "labels": {
       "priority": "Prioridad *",
       "estimatedDuration": "Duración estimada (min) *",
