@@ -1,9 +1,5 @@
 .pageWrapper {
-  padding: 16px 0;
-
-  @media screen and (min-width: 768px) {
-    padding: 32px 0;
-  }
+  padding: 32px 0 48px;
 }
 
 /* Phone: tighter toolbar so the dropdown isn't drowning in chrome

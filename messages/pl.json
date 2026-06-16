@@ -284,15 +284,11 @@
     },
     "comments": {
       "operatorDescription": "Opis (Operator)",
-      "operatorComment": "Komentarz operatora",
       "managerNote": "Notatki kierownika",
-      "managerComment": "Komentarz kierownika",
       "maintainerNote": "Notatki konserwatora",
-      "maintainerComment": "Komentarz konserwatora",
       "hseNote": "Notatka BHP (Bezpieczeństwo)",
       "noDescription": "Brak opisu",
-      "noNote": "Brak notatki",
-      "noComment": "Brak komentarza"
+      "noNote": "Brak notatki"
     },
     "actions": {
       "planIntervention": "Zaplanuj interwencję",

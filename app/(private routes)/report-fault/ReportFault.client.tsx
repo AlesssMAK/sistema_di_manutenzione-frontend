@@ -17,12 +17,7 @@ const ReportFaultClient = () => {
   return (
     <div className="container">
       <div className={css.pageWrapper}>
-        <h2 className="title">{t('title')}</h2>
-        <p className="subtitle">{t('subtitle')}</p>
-
-        <div className={css.formWrap}>
-          <ReportForm />
-        </div>
+        <ReportForm />
       </div>
     </div>
   );

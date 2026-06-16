@@ -11,7 +11,9 @@
   border-radius: 6px;
   cursor: pointer;
   color: #45556c;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .bell:hover {
@@ -28,6 +30,8 @@
   width: 20px;
   height: 20px;
   display: block;
+  fill: transparent;
+  stroke: #0a0a0a;
 }
 
 .badge {

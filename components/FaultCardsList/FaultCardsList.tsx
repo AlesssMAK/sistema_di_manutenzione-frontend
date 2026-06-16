@@ -4,7 +4,7 @@ import { format, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
 import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
-import type { FaultCard } from '@/types/faultType';
+import type { AssignedMaintainer, FaultCard } from '@/types/faultType';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -27,6 +27,20 @@ const formatDay = (value?: string) => {
   const parsed = parseISO(value);
   return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale: it }) : value;
 };
+
+/**
+ * Backend `Fault.assignedMaintainers` is now populated with
+ * `{ _id, fullName, email }` objects (since `f9d9de1`), but older
+ * list responses or seeded fixtures may still ship raw id strings.
+ * These helpers smooth over both shapes:
+ *   - toId(m)   → identifier (for membership checks)
+ *   - toName(m) → display name when populated, else null
+ */
+const toId = (m: AssignedMaintainer): string =>
+  typeof m === 'string' ? m : m._id;
+
+const toName = (m: AssignedMaintainer): string | null =>
+  typeof m === 'object' && m !== null && 'fullName' in m ? m.fullName : null;
 
 interface FaultCardsListProps {
   faults: FaultCard[];
@@ -62,14 +76,14 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
       fault.statusFault === 'Created' || fault.statusFault === 'Overdue';
     const assigned = fault.assignedMaintainers ?? [];
     const isInPool = assigned.length === 0;
-    const isAssignedToMe = assigned.map(String).includes(userId);
+    const isAssignedToMe = assigned.map(toId).includes(userId);
     return isClaimableStatus && (isInPool || isAssignedToMe);
   };
 
   const cardScope = (fault: FaultCard): 'mine' | 'pool' | 'other' => {
     const assigned = fault.assignedMaintainers ?? [];
     if (assigned.length === 0) return 'pool';
-    if (assigned.map(String).includes(userId)) return 'mine';
+    if (assigned.map(toId).includes(userId)) return 'mine';
     return 'other';
   };
 
@@ -93,19 +107,25 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
       <ul className={css.faultList}>
         {faults.map(fault => {
           const scope = cardScope(fault);
-          const assignedCount = (fault.assignedMaintainers ?? []).length;
-          // What to put in the assignee pill: my own name only when the
-          // fault is actually mine, "Pool" when nobody owns it yet, or
-          // the maintainer count for someone else's fault. Was previously
-          // hard-coded to user.fullName regardless — every card lit up
-          // with the logged-in user's name even when the fault belonged
-          // to the pool or another worker.
+          const assigned = fault.assignedMaintainers ?? [];
+          // For "other" scope, prefer the populated full names that
+          // the backend has been shipping since `f9d9de1`. If the
+          // payload ever falls back to raw id strings (e.g. an older
+          // endpoint that doesn't populate), drop to the plural
+          // maintainerCount fallback so the pill never shows ids.
+          const populatedNames = assigned
+            .map(toName)
+            .filter((n): n is string => Boolean(n));
+          const allPopulated =
+            assigned.length > 0 && populatedNames.length === assigned.length;
           const assigneeLabel =
             scope === 'mine'
               ? user?.fullName ?? ''
               : scope === 'pool'
                 ? t('labels.pool')
-                : t('maintainerCount', { count: assignedCount });
+                : allPopulated
+                  ? populatedNames.join(', ')
+                  : t('maintainerCount', { count: assigned.length });
           const assigneeIcon = scope === 'mine' ? 'user' : 'users';
 
           return (

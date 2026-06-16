@@ -23,7 +23,7 @@ const CreateFaultButton = ({ onAfterClick }: CreateFaultButtonProps) => {
   const { user, isAuthenticated } = useAuthStore();
 
   if (!isAuthenticated || !user) return null;
-  if (user.role === 'admin') return null;
+  // if (user.role === 'admin') return null;
 
   const handleClick = () => {
     router.push('/report-fault');
