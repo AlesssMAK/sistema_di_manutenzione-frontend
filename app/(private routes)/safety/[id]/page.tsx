@@ -40,6 +40,27 @@ const priorityClass = (priority: string | undefined, styles: Record<string, stri
   return '';
 };
 
+/** Map raw backend statusFault to the StatusFault i18n key. */
+const statusKey = (status: string | undefined) => {
+  if (status === 'In progress') return 'IN_PROGRESS';
+  if (status === 'Completed') return 'COMPLETED';
+  if (status === 'Suspended') return 'SUSPENDED';
+  if (status === 'Overdue') return 'OVERDUE';
+  return 'CREATED';
+};
+
+/** Pick the status-badge CSS class for the given raw status. */
+const statusClass = (
+  status: string | undefined,
+  styles: Record<string, string>
+) => {
+  if (status === 'In progress') return styles.statusInprogress;
+  if (status === 'Completed') return styles.statusCompleted;
+  if (status === 'Suspended') return styles.statusSuspended;
+  if (status === 'Overdue') return styles.statusOverdue;
+  return styles.statusCreated;
+};
+
 const SafetyFaultDetailPage = ({
   params,
 }: {
@@ -49,6 +70,9 @@ const SafetyFaultDetailPage = ({
   const t = useTranslations('FaultDetail');
   const tSafety = useTranslations('SafetyPage');
   const tNoFound = useTranslations('NoFound');
+  const tStatus = useTranslations('StatusFault');
+  const tType = useTranslations('TypeFault');
+  const tPriority = useTranslations('Priority');
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const resolvedParams = use(params);
@@ -165,12 +189,8 @@ const SafetyFaultDetailPage = ({
             </div>
             <div className={css.infoItem}>
               <label>{t('labels.status')}</label>
-              <span
-                className={`${css.status} ${
-                  css[`status${fault.statusFault.replace(' ', '')}`] || ''
-                }`}
-              >
-                {fault.statusFault}
+              <span className={`${css.status} ${statusClass(fault.statusFault, css)}`}>
+                {tStatus(statusKey(fault.statusFault))}
               </span>
             </div>
           </div>
@@ -212,12 +232,14 @@ const SafetyFaultDetailPage = ({
           <div className={css.infoRow}>
             <div className={css.infoItem}>
               <label>{t('labels.type')}</label>
-              <p>{fault.typeFault}</p>
+              <p>
+                {tType(fault.typeFault === 'Safety' ? 'SAFETY' : 'PRODUCTION')}
+              </p>
             </div>
             <div className={css.infoItem}>
               <label>{t('labels.priority')}</label>
               <p className={`${css.priority} ${priorityClass(fault.priority, css)}`}>
-                {fault.priority}
+                {tPriority(fault.priority)}
               </p>
             </div>
           </div>

@@ -22,6 +22,55 @@ export interface FetchFaultCardsParams {
   perPage: number;
 }
 
+export interface FaultDeadlineBucket {
+  date: string;
+  count: number;
+  byPriority: { Low: number; Medium: number; High: number };
+}
+
+export interface FaultDeadlinesResponse {
+  field: 'plannedDate' | 'deadline';
+  dateFrom: string;
+  dateTo: string;
+  dates: FaultDeadlineBucket[];
+}
+
+interface FetchDeadlinesParams {
+  dateFrom: string;
+  dateTo: string;
+  field?: 'plannedDate' | 'deadline';
+  statusFault?: string;
+  priority?: string;
+  assignedTo?: string;
+  assignedToEmpty?: boolean;
+}
+
+export const fetchFaultDeadlines = async ({
+  dateFrom,
+  dateTo,
+  field = 'plannedDate',
+  statusFault,
+  priority,
+  assignedTo,
+  assignedToEmpty,
+}: FetchDeadlinesParams): Promise<FaultDeadlinesResponse> => {
+  const res = await nextServer.get<FaultDeadlinesResponse>(
+    '/faults/deadlines',
+    {
+      params: {
+        dateFrom,
+        dateTo,
+        field,
+        ...(statusFault ? { statusFault } : {}),
+        ...(priority ? { priority } : {}),
+        ...(assignedTo ? { assignedTo } : {}),
+        ...(assignedToEmpty ? { assignedToEmpty: 'true' } : {}),
+      },
+    }
+  );
+  return res.data;
+};
+
 export const fetchFaultCards = async ({
   page,
   perPage,

@@ -386,6 +386,8 @@
 "PlanFaultForm": {
   "titlePlan": "Pianifica segnalazione",
   "titleModify": "Modifica pianificazione",
+  "titleReassign": "Riassegna intervento",
+  "buttonReassign": "Riassegna",
   "labels": {
     "priority": "Priorità *",
     "estimatedDuration": "Durata stimata (min) *",

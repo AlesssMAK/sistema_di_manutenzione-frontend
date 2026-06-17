@@ -355,6 +355,8 @@
   "PlanFaultForm": {
     "titlePlan": "Zaplanuj zgłoszenie",
     "titleModify": "Modyfikuj planowanie",
+    "titleReassign": "Przepisz interwencję",
+    "buttonReassign": "Przepisz",
     "labels": {
       "priority": "Priorytet *",
       "estimatedDuration": "Szacowany czas (min) *",

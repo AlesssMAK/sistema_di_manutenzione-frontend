@@ -387,6 +387,8 @@
   "PlanFaultForm": {
     "titlePlan": "Plan report",
     "titleModify": "Modify planning",
+    "titleReassign": "Reassign intervention",
+    "buttonReassign": "Reassign",
     "labels": {
       "priority": "Priority *",
       "estimatedDuration": "Estimated duration (min) *",

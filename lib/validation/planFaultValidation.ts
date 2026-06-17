@@ -43,3 +43,24 @@ export const planFaultSchema = yup.object({
 });
 
 export type PlanFaultValues = yup.InferType<typeof planFaultSchema>;
+
+/**
+ * Reduced schema for the reassign-only mode of PlanFaultForm. Only
+ * the maintainers list matters; the other planning fields stay in
+ * the form (as defaults from the current fault) but are not edited
+ * or validated. Field names match planFaultSchema so the same
+ * useForm typings work for both modes.
+ */
+export const reassignFaultFormSchema = yup.object({
+  priority: yup.string().oneOf(['Low', 'Medium', 'High']).default('Medium'),
+  plannedDate: yup.string().default(''),
+  plannedTime: yup.string().default(''),
+  estimatedDuration: yup.number().default(0),
+  deadline: yup.string().default(''),
+  managerComment: yup.string().max(2000, 'Massimo 2000 caratteri').default(''),
+  assignedMaintainers: yup
+    .array()
+    .of(yup.string().required())
+    .min(1, 'Selezionare almeno un manutentore')
+    .default([]),
+});

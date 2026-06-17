@@ -150,9 +150,31 @@
   font-weight: 600;
 }
 
+/* Priority by severity. Double-class selector bumps specificity
+   above `.infoItem p` (0,1,1) so the modifier wins. */
+.priority.priorityLow {
+  color: #15803d;
+}
+.priority.priorityMedium {
+  color: #d97706;
+}
+.priority.priorityHigh {
+  color: #dc2626;
+}
+
+/* Deadline urgency — buckets by days-to-due. Same specificity trick
+   as priority above. */
 .deadline {
   font-weight: 600;
-  color: #b91c1c;
+}
+.deadline.deadlineUrgent {
+  color: #dc2626;
+}
+.deadline.deadlineSoon {
+  color: #d97706;
+}
+.deadline.deadlineFar {
+  color: #15803d;
 }
 
 .detailsBlock {
