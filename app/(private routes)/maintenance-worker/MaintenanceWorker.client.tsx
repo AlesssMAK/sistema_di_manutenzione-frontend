@@ -16,7 +16,7 @@ import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Button from '@/components/UI/Button/Button';
 import { FaultCard } from '@/types/faultType';
-import { fetchFaultCards } from '@/lib/api/faults';
+import { fetchFaultCards, fetchFaultDeadlines } from '@/lib/api/faults';
 import { useAuthStore } from '@/lib/store/authStore';
 import CalendarBlock from '@/components/MaintenanceWorker/CalendarBlock/CalendarBlock';
 import DateNow from '@/components/MaintenanceWorker/DateNow/DateNow';
@@ -145,19 +145,23 @@ const MaintenanceWorkerClient = () => {
               ? { assignedToEmpty: true }
               : {};
 
-        // TODO: replace with GET /faults/deadlines once backend endpoint lands
-        const data = await fetchFaultCards({
-          page: 1,
-          perPage: 200,
+        // Per-day planned counts via the aggregated endpoint
+        // (replaces the old perPage:200 trick). Window = current
+        // month ± 1, which is what the calendar can show anyway.
+        const today = new Date();
+        const from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+        const to = new Date(today.getFullYear(), today.getMonth() + 2, 0);
+        const data = await fetchFaultDeadlines({
+          field: 'plannedDate',
+          dateFrom: from.toISOString().slice(0, 10),
+          dateTo: to.toISOString().slice(0, 10),
           statusFault: ACTIVE_STATUSES,
           ...scopeParams,
         });
 
         const counts: Record<string, number> = {};
-        (data.fault || []).forEach(f => {
-          if (f.plannedDate) {
-            counts[f.plannedDate] = (counts[f.plannedDate] ?? 0) + 1;
-          }
+        data.dates.forEach(bucket => {
+          counts[bucket.date] = bucket.count;
         });
         setPlannedCounts(counts);
       } catch (error) {
@@ -169,22 +173,20 @@ const MaintenanceWorkerClient = () => {
 
   const fetchOverdueDeadlines = useCallback(async (currentPriority: string) => {
     try {
-      const data = await fetchFaultCards({
-        page: 1,
-        perPage: 200,
-        priority: currentPriority,
+      // Overdue heatmap via the aggregated endpoint. Wide window so
+      // we catch deadlines that drifted past the visible month.
+      const today = new Date();
+      const from = new Date(today.getFullYear() - 1, 0, 1);
+      const to = new Date(today.getFullYear() + 1, 11, 31);
+      const data = await fetchFaultDeadlines({
+        field: 'deadline',
+        dateFrom: from.toISOString().slice(0, 10),
+        dateTo: to.toISOString().slice(0, 10),
         statusFault: 'Overdue',
+        ...(currentPriority ? { priority: currentPriority } : {}),
       });
 
-      const dates = (data.fault || [])
-        .filter(
-          (item): item is FaultCard & { deadline: string } => !!item.deadline
-        )
-        .map(item =>
-          item.deadline.includes('T')
-            ? item.deadline.split('T')[0]
-            : item.deadline
-        );
+      const dates = data.dates.map(bucket => bucket.date);
 
       setOverdueDeadlineDates(dates);
     } catch (error) {
