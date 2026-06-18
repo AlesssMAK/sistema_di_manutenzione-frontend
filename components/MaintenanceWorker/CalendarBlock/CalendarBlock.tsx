@@ -1,7 +1,10 @@
 import { useTranslations } from 'next-intl';
-import Calendar from '../Calendar/Calendar';
+import Calendar, {
+  type PlannedDayBucket,
+} from '../Calendar/Calendar';
 import FilterPriorityBar from '../FilterPriorityBar/FilterPriorityBar';
 import css from './CalendarBlock.module.css';
+
 interface CalendarBlockProps {
   activePriority: string;
   onPriorityChange: (priority: string) => void;
@@ -9,7 +12,7 @@ interface CalendarBlockProps {
   onDateChange: (d: string) => void;
   deadlineDates?: string[];
   isDeadlineMode?: boolean;
-  plannedCounts?: Record<string, number>;
+  plannedDays?: Record<string, PlannedDayBucket>;
 }
 const CalendarBlock = ({
   activePriority,
@@ -18,7 +21,7 @@ const CalendarBlock = ({
   onDateChange,
   deadlineDates = [],
   isDeadlineMode = false,
-  plannedCounts = {},
+  plannedDays = {},
 }: CalendarBlockProps) => {
   const t = useTranslations('maintenanceWorkerPage.calendar');
   return (
@@ -29,7 +32,7 @@ const CalendarBlock = ({
         onDataCreatedChange={onDateChange}
         deadlineDates={deadlineDates}
         isDeadlineMode={isDeadlineMode}
-        plannedCounts={plannedCounts}
+        plannedDays={plannedDays}
       />
       <FilterPriorityBar
         activePriority={activePriority}
