@@ -8,6 +8,8 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import Modal from '@/components/UI/Modal/Modal';
 import Button from '@/components/UI/Button/Button';
+import Input from '@/components/UI/Input/Input';
+import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import {
   composeMessageSchema,
   type ComposeMessageValues,
@@ -15,14 +17,17 @@ import {
 import { createBroadcast, createDirectMessage } from '@/lib/api/messages';
 import { getAllUsers } from '@/lib/api/users';
 import type { UserRoles } from '@/types/userTypes';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
 import css from './ComposeMessageModal.module.css';
+
+type Channel = 'direct' | 'broadcastAll' | 'broadcastRole';
 
 interface ComposeMessageModalProps {
   currentUserId: string;
   /** Channels the current user is allowed to use. Operators get
    *  filtered out of 'direct' by the backend; the caller decides
    *  which channels to surface. */
-  allowedChannels: Array<'direct' | 'broadcastAll' | 'broadcastRole'>;
+  allowedChannels: Channel[];
   onClose: () => void;
 }
 
@@ -40,10 +45,11 @@ const ComposeMessageModal = ({
   onClose,
 }: ComposeMessageModalProps) => {
   const t = useTranslations('MessagesPage.compose');
+  const tBtn = useTranslations('btn');
   const tRoles = useTranslations('Roles');
   const queryClient = useQueryClient();
 
-  const defaultChannel = allowedChannels[0] ?? 'broadcastAll';
+  const defaultChannel: Channel = allowedChannels[0] ?? 'broadcastAll';
 
   const {
     register,
@@ -65,25 +71,52 @@ const ComposeMessageModal = ({
     },
   });
 
-  const channel = watch('channel');
+  const channel = watch('channel') as Channel;
+  const recipientId = watch('recipientId');
+  const targetRole = watch('targetRole');
 
-  // Recipients only matter for direct messages — fetch when that
-  // tab is active. Filters out self + deactivated users; the BE
-  // would reject either anyway, but failing in the picker is a
-  // better UX than after the user types out a message.
+  // ---- channel selector via SelectDropdown -------------------------
+  const channelOptions = useMemo(
+    () => allowedChannels.map((c) => ({ value: c, label: t(`channels.${c}`) })),
+    [allowedChannels, t],
+  );
+  const channelMapper = useMemo(
+    () => createOptionMapper(channelOptions),
+    [channelOptions],
+  );
+
+  // ---- recipient list for direct -----------------------------------
   const { data: usersData, isLoading: usersLoading } = useQuery({
     queryKey: ['users', 'all-for-compose'],
     queryFn: () => getAllUsers({ perPage: 200 }),
     enabled: channel === 'direct',
   });
 
-  const recipients = useMemo(() => {
+  const recipientOptions = useMemo(() => {
     const all = usersData?.users ?? [];
-    return all.filter(
-      (u) => u._id !== currentUserId && u.status === 'active',
-    );
-  }, [usersData, currentUserId]);
+    return all
+      .filter((u) => u._id !== currentUserId && u.status === 'active')
+      .map((u) => ({
+        value: u._id,
+        label: `${u.fullName} — ${tRoles(u.role)}`,
+      }));
+  }, [usersData, currentUserId, tRoles]);
+  const recipientMapper = useMemo(
+    () => createOptionMapper(recipientOptions),
+    [recipientOptions],
+  );
 
+  // ---- role list for broadcastRole ---------------------------------
+  const roleOptions = useMemo(
+    () => TARGETABLE_ROLES.map((r) => ({ value: r, label: tRoles(r) })),
+    [tRoles],
+  );
+  const roleMapper = useMemo(
+    () => createOptionMapper(roleOptions),
+    [roleOptions],
+  );
+
+  // ---- mutation ----------------------------------------------------
   const mutation = useMutation({
     mutationFn: async (values: ComposeMessageValues) => {
       if (values.channel === 'direct') {
@@ -126,56 +159,51 @@ const ComposeMessageModal = ({
 
   return (
     <Modal onClose={onClose}>
-      <div className={css.container}>
-        <div className={css.titleWrap}>
-          <h1 className={css.title}>{t('title')}</h1>
-          <p className={css.subtitle}>{t('subtitle')}</p>
+      <div className={css.form_container}>
+        <div className={css.title_container}>
+          <h1 className="title">{t('title')}</h1>
+          <p className="subtitle">{t('subtitle')}</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
           {allowedChannels.length > 1 && (
-            <div className={css.channelTabs}>
-              {allowedChannels.map((ch) => (
-                <button
-                  key={ch}
-                  type="button"
-                  className={`${css.channelTab} ${channel === ch ? css.channelTabActive : ''}`}
-                  onClick={() => {
-                    setValue('channel', ch);
-                    // Wipe the off-channel fields so a previous
-                    // selection doesn't bleed into the new payload.
-                    if (ch !== 'direct') setValue('recipientId', '');
-                    if (ch !== 'broadcastRole') setValue('targetRole', '');
-                  }}
-                >
-                  {t(`channels.${ch}`)}
-                </button>
-              ))}
+            <div className={css.form_item_container}>
+              <p className={css.form_label}>{t('labels.channel')} *</p>
+              <SelectDropdown
+                selectedValue={channelMapper.getLabelByValue(channel) ?? ''}
+                options={channelMapper.labelsArray}
+                onSelect={(label) => {
+                  const value = channelMapper.getValueByLabel(label);
+                  if (!value) return;
+                  setValue('channel', value);
+                  // Wipe off-channel fields so a stale selection
+                  // doesn't bleed into the new payload.
+                  if (value !== 'direct') setValue('recipientId', '');
+                  if (value !== 'broadcastRole') setValue('targetRole', '');
+                }}
+              />
+              <Input type="hidden" {...register('channel')} />
             </div>
           )}
 
           {channel === 'direct' && (
-            <div className={css.field}>
-              <label className={css.label} htmlFor="compose-recipient">
-                {t('labels.recipient')}
-              </label>
-              <select
-                id="compose-recipient"
-                className={css.input}
+            <div className={css.form_item_container}>
+              <p className={css.form_label}>{t('labels.recipient')} *</p>
+              <SelectDropdown
                 disabled={usersLoading}
-                {...register('recipientId')}
-              >
-                <option value="">
-                  {usersLoading
+                placeholder={
+                  usersLoading
                     ? t('placeholders.loadingRecipients')
-                    : t('placeholders.recipient')}
-                </option>
-                {recipients.map((u) => (
-                  <option key={u._id} value={u._id}>
-                    {u.fullName} — {tRoles(u.role)}
-                  </option>
-                ))}
-              </select>
+                    : t('placeholders.recipient')
+                }
+                selectedValue={recipientMapper.getLabelByValue(recipientId) ?? ''}
+                options={recipientMapper.labelsArray}
+                onSelect={(label) => {
+                  const value = recipientMapper.getValueByLabel(label) ?? '';
+                  setValue('recipientId', value, { shouldValidate: true });
+                }}
+              />
+              <Input type="hidden" {...register('recipientId')} />
               {errors.recipientId && (
                 <p className={css.error}>{errors.recipientId.message}</p>
               )}
@@ -183,64 +211,60 @@ const ComposeMessageModal = ({
           )}
 
           {channel === 'broadcastRole' && (
-            <div className={css.field}>
-              <label className={css.label} htmlFor="compose-role">
-                {t('labels.targetRole')}
-              </label>
-              <select
-                id="compose-role"
-                className={css.input}
-                {...register('targetRole')}
-              >
-                <option value="">{t('placeholders.targetRole')}</option>
-                {TARGETABLE_ROLES.map((r) => (
-                  <option key={r} value={r}>
-                    {tRoles(r)}
-                  </option>
-                ))}
-              </select>
+            <div className={css.form_item_container}>
+              <p className={css.form_label}>{t('labels.targetRole')} *</p>
+              <SelectDropdown
+                placeholder={t('placeholders.targetRole')}
+                selectedValue={
+                  roleMapper.getLabelByValue(targetRole as UserRoles) ?? ''
+                }
+                options={roleMapper.labelsArray}
+                onSelect={(label) => {
+                  const value = roleMapper.getValueByLabel(label) ?? '';
+                  setValue('targetRole', value, { shouldValidate: true });
+                }}
+              />
+              <Input type="hidden" {...register('targetRole')} />
               {errors.targetRole && (
                 <p className={css.error}>{errors.targetRole.message}</p>
               )}
             </div>
           )}
 
-          <div className={css.field}>
-            <label className={css.label} htmlFor="compose-subject">
-              {t('labels.subject')}
-            </label>
-            <input
-              id="compose-subject"
-              type="text"
-              className={css.input}
-              placeholder={t('placeholders.subject')}
+          <div className={css.form_item_container}>
+            <p className={css.form_label}>{t('labels.subject')}</p>
+            <Input
               {...register('subject')}
+              type="text"
+              placeholder={t('placeholders.subject')}
+              style={{
+                height: '36px',
+                borderRadius: '6px',
+                background: '#f3f3f5',
+                border: 'none',
+              }}
             />
             {errors.subject && (
               <p className={css.error}>{errors.subject.message}</p>
             )}
           </div>
 
-          <div className={css.field}>
-            <label className={css.label} htmlFor="compose-body">
-              {t('labels.body')}
-            </label>
+          <div className={css.form_item_container}>
+            <p className={css.form_label}>{t('labels.body')} *</p>
             <textarea
-              id="compose-body"
+              {...register('body')}
               className={css.textarea}
               rows={6}
               placeholder={t('placeholders.body')}
-              {...register('body')}
             />
-            {errors.body && (
-              <p className={css.error}>{errors.body.message}</p>
-            )}
+            {errors.body && <p className={css.error}>{errors.body.message}</p>}
           </div>
 
-          <div className={css.actions}>
+          <div className={css.btn_form_container}>
             <Button
               type="button"
               className="button button--white"
+              width="100%"
               onClick={onClose}
               disabled={mutation.isPending}
             >
@@ -249,9 +273,12 @@ const ComposeMessageModal = ({
             <Button
               type="submit"
               className="button button--blue"
+              width="100%"
               disabled={isSubmitting || mutation.isPending}
             >
-              {mutation.isPending ? t('buttons.sending') : t('buttons.send')}
+              {mutation.isPending
+                ? tBtn('loading')
+                : t('buttons.send')}
             </Button>
           </div>
         </form>

@@ -262,10 +262,11 @@
         "broadcastAll": "Broadcast to all"
       },
       "labels": {
-        "recipient": "Recipient *",
-        "targetRole": "Target role *",
+        "channel": "Channel",
+        "recipient": "Recipient",
+        "targetRole": "Target role",
         "subject": "Subject",
-        "body": "Message *"
+        "body": "Message"
       },
       "placeholders": {
         "recipient": "Pick a recipient",

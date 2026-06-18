@@ -262,10 +262,11 @@
         "broadcastAll": "Anuncio para todos"
       },
       "labels": {
-        "recipient": "Destinatario *",
-        "targetRole": "Rol destinatario *",
+        "channel": "Canal",
+        "recipient": "Destinatario",
+        "targetRole": "Rol destinatario",
         "subject": "Asunto",
-        "body": "Mensaje *"
+        "body": "Mensaje"
       },
       "placeholders": {
         "recipient": "Elige un destinatario",

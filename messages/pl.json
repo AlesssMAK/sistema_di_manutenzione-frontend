@@ -230,10 +230,11 @@
         "broadcastAll": "Ogłoszenie dla wszystkich"
       },
       "labels": {
-        "recipient": "Odbiorca *",
-        "targetRole": "Rola odbiorcy *",
+        "channel": "Kanał",
+        "recipient": "Odbiorca",
+        "targetRole": "Rola odbiorcy",
         "subject": "Temat",
-        "body": "Wiadomość *"
+        "body": "Wiadomość"
       },
       "placeholders": {
         "recipient": "Wybierz odbiorcę",

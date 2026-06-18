@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { usePageStore } from '@/lib/store/pageStore';
 import { useAuthStore } from '@/lib/store/authStore';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+import Button from '@/components/UI/Button/Button';
 import MessageInbox, {
   type InboxKind,
 } from '@/components/Messages/MessageInbox/MessageInbox';
@@ -48,26 +49,34 @@ const MessagesClient = () => {
   return (
     <div className="container">
       <div className={css.pageWrapper}>
-        <h2 className="title">{t('title')}</h2>
-        <p className="subtitle">{t('subtitle')}</p>
-
-        <div className={css.toolbar}>
-          <div className={css.tabsBar}>
-            <Tabs<InboxKind>
-              tabs={tabs}
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-            />
+        {/* Header row mirrors the admin user-list pattern: title +
+            subtitle on the left, primary action button on the right
+            (drops below on phone via the head_container breakpoint). */}
+        <div className={css.head_container}>
+          <div className={css.title_container}>
+            <h2 className="title">{t('title')}</h2>
+            <p className="subtitle">{t('subtitle')}</p>
           </div>
           {canCompose && (
-            <button
+            <Button
               type="button"
-              className={css.composeButton}
+              className={`${css.btn} button button--blue`}
               onClick={() => setComposeOpen(true)}
             >
+              <svg width="16" height="16" className={css.btn_icon}>
+                <use href="/sprite.svg#plus"></use>
+              </svg>
               {t('compose.openButton')}
-            </button>
+            </Button>
           )}
+        </div>
+
+        <div className={css.tabsBar}>
+          <Tabs<InboxKind>
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
         </div>
 
         <MessageInbox kind={activeTab} currentUserId={userId} />

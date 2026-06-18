@@ -5,37 +5,47 @@
   gap: 8px;
 }
 
+/* Mirrors the admin head_container: phone stacks title+subtitle and
+   the button vertically, desktop drops them onto one row with the
+   button right-aligned. */
+.head_container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  @media screen and (min-width: 768px) {
+    gap: 32px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    gap: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.title_container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.btn {
+  gap: 6px;
+}
+
+.btn_icon {
+  stroke: #fff;
+  transition: stroke 0.2s ease;
+}
+
+.btn:hover .btn_icon,
+.btn:focus-visible .btn_icon {
+  stroke: #0a0a0a;
+}
+
 .tabsBar {
   margin-top: 16px;
   margin-bottom: 20px;
-}
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.composeButton {
-  height: 36px;
-  padding: 0 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 6px;
-  background: #2563eb;
-  color: #fff;
-  border: 1.17px solid #2563eb;
-  cursor: pointer;
-  transition:
-    background 0.2s ease,
-    color 0.2s ease;
-}
-
-.composeButton:hover,
-.composeButton:focus-visible {
-  background: #fff;
-  color: #0a0a0a;
-  border-color: rgba(0, 0, 0, 0.1);
 }
