@@ -7,7 +7,6 @@ import CreateAndEditPlantAndPlantPartsForm from '@/components/forms/CreateAndEdi
 import { updatePlantParts } from '@/lib/api/plantsParts';
 import { PlantPart, UpdatePlantPartRequest } from '@/types/plantPartType';
 import { getStatusOptions, STATUS } from '@/constants/status';
-import DeletePlanPartModal from './DeletePlantPartModal/DeletePlanPartModal';
 
 interface PlantPartCardProps {
   plantId: string;
@@ -23,7 +22,6 @@ interface UpdateStatus {
 const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
   const [openUpdatePlantPartModal, setOpenUpdatePlantPartModal] =
     useState(false);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const t = useTranslations('AdminPage.PlantsList');
   const queryClient = useQueryClient();
 
@@ -142,19 +140,6 @@ const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
                   </svg>
                 </Button>
               )}
-              <Button
-                type="button"
-                className={`${css.btn} ${css.btn_delete} button button--blue`}
-                width={38}
-                height={32}
-                onClick={() => {
-                  setOpenDeleteModal(true);
-                }}
-              >
-                <svg width="16" height="16" className={css.btn_icon_delete}>
-                  <use href="/sprite.svg#delete"></use>
-                </svg>
-              </Button>
             </div>
           </div>
         </div>
@@ -163,15 +148,6 @@ const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
             onClose={() => setOpenUpdatePlantPartModal(false)}
             isPlantPartsEditMode={true}
             initialDataForPlantPart={InitialData}
-          />
-        )}
-        {openDeleteModal && (
-          <DeletePlanPartModal
-            plantId={plantPart.plantId}
-            plantPartId={plantPart._id}
-            onClose={() => {
-              setOpenDeleteModal(false);
-            }}
           />
         )}
       </div>
