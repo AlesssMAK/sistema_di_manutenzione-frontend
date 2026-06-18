@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# sistema_di_manutenzione — frontend
 
-## Getting Started
+Next.js 16 frontend for the MMS (maintenance management system).
+Each role gets its own dashboard plus a shared messaging / report
+flow; everything is mobile-first.
 
-First, run the development server:
+The API lives in a separate repo:
+[sistema_di_manutenzione-backend](https://github.com/AlesssMAK/sistema_di_manutenzione-backend).
+
+## Stack
+
+- **Next.js 16** (App Router, server-side proxy routes under
+  `app/api/*` that forward to the Express backend with the user's
+  session cookie)
+- **TypeScript** + **React 19**
+- **State**:
+  - [TanStack Query](https://tanstack.com/query) — server cache,
+    cache-aware invalidation on socket events
+  - [Zustand](https://zustand.docs.pmnd.rs) — small client stores
+    (auth, page meta, draft report persisted to localStorage)
+- **Forms** — React Hook Form + Yup
+- **i18n** — `next-intl` with four locales: `it` (primary), `en`,
+  `es`, `pl`
+- **Dates** — `date-fns` with `locale: it` for display
+- **Realtime** — `socket.io-client`, scoped per fault subscription
+- **UI** — CSS Modules, mobile-first (768 / 1440 breakpoint
+  heuristic), no UI library
+
+## Pages by role
+
+| Path | Role | What's there |
+|---|---|---|
+| `/login` | all | Phone + password sign-in |
+| `/report-fault` | operator + maintenanceWorker + safety | New fault form (with localStorage draft autosave) |
+| `/maintenance-worker` | maintenanceWorker | Calendar + active / overdue / completed tabs + scope filter (mine / pool / all) |
+| `/manager` | manager | Active / new / planned / completed tabs with live counters; planning + reassign + add-maintainers |
+| `/safety` | safety | Safety-typed faults list + detail with HSE notes |
+| `/operator` | operator | Personal dashboard: own faults (7d/30d/3m/all) + messages mirror |
+| `/messages` | all | Direct and role-broadcast tabs, reply support |
+| `/reports-and-communications` | manager + admin | Broadcasts + recent faults (30d) |
+| `/admin` | admin | Users, plants, plant-parts CRUD |
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/AlesssMAK/sistema_di_manutenzione-frontend
+cd sistema_di_manutenzione-frontend
+npm install
+cp .env.example .env.local  # set NEXT_PUBLIC_BACKEND_API_URL if not localhost:3040
+npm run dev                 # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The frontend always talks to the backend through `app/api/*`
+proxy routes, never directly. That keeps the session cookie
+HttpOnly on the Next.js side.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Env vars
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Var | Default | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_API_URL` | `http://localhost:3000` | Frontend's own origin (used for absolute URLs in metadata, OG tags, etc.) |
+| `NEXT_PUBLIC_BACKEND_API_URL` | `http://localhost:3040` | Express backend base URL the proxy routes forward to |
 
-## Learn More
+## Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server (default port 3000) |
+| `npm run build` | Production build |
+| `npm start` | Production server on built output |
+| `npm run lint` | ESLint with next-config |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Layout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/
+  (private routes)/       Authenticated layouts per role
+  api/                    Next.js route handlers — proxy to backend
+  login/                  Public auth pages
+components/
+  Admin/                  Admin CRUD: users, plants, parts
+  Header/                 App header + role-aware modal menu
+  MaintenanceWorker/      Calendar, day-slot grid, scope filter
+  Manager/                Fault cards, tab counters
+  Operator/               Personal dashboard
+  Messages/               Direct + broadcast UI
+  Reports/                Recent-faults list
+  forms/                  Shared forms (ReportForm, PlanFaultForm, …)
+  UI/                     Buttons, modals, inputs, dropdowns, loader
+lib/
+  api/                    Typed axios calls grouped by feature
+  store/                  Zustand stores
+  validation/             Yup schemas
+messages/                 i18n bundles (it / en / es / pl)
+types/                    Shared TS types
+```
