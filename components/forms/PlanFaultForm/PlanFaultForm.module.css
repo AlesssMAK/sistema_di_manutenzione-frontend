@@ -117,3 +117,26 @@
   gap: 12px;
   margin-top: 8px;
 }
+
+/* Readonly chip row shown in addMaintainers mode so the manager
+   sees who is already on the fault before picking extras. Same
+   blue pill as .idBadge/.maintainerChip on detail pages. */
+.existingChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.existingChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 600;
+}

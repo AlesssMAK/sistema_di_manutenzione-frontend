@@ -388,7 +388,9 @@
     "titlePlan": "Plan report",
     "titleModify": "Modify planning",
     "titleReassign": "Reassign intervention",
+    "titleAddMaintainers": "Add maintainers",
     "buttonReassign": "Reassign",
+    "buttonAddMaintainers": "Add maintainers",
     "labels": {
       "priority": "Priority *",
       "estimatedDuration": "Estimated duration (min) *",
@@ -396,11 +398,14 @@
       "plannedTime": "Planned time *",
       "deadline": "Deadline *",
       "managerComment": "Manager notes",
-      "assignedMaintainers": "Assigned maintainers"
+      "assignedMaintainers": "Assigned maintainers",
+      "alreadyAssigned": "Already assigned",
+      "additionalMaintainers": "Maintainers to add"
     },
     "managerCommentPlaceholder": "Optional notes for the maintainer...",
     "loadingMaintainers": "Loading...",
     "noMaintainers": "No maintainers available",
+    "noMaintainersToAdd": "All maintainers are already assigned",
     "poolHint": "Leave empty to put the report in the pool (any maintainer can take it)",
     "buttons": {
       "cancel": "Cancel",

@@ -388,7 +388,9 @@
     "titlePlan": "Planificar señalación",
     "titleModify": "Modificar planificación",
     "titleReassign": "Reasignar intervención",
+    "titleAddMaintainers": "Añadir mantenedores",
     "buttonReassign": "Reasignar",
+    "buttonAddMaintainers": "Añadir mantenedores",
     "labels": {
       "priority": "Prioridad *",
       "estimatedDuration": "Duración estimada (min) *",
@@ -396,11 +398,14 @@
       "plannedTime": "Hora planificada *",
       "deadline": "Fecha límite *",
       "managerComment": "Notas del responsable",
-      "assignedMaintainers": "Mantenedores asignados"
+      "assignedMaintainers": "Mantenedores asignados",
+      "alreadyAssigned": "Ya asignados",
+      "additionalMaintainers": "Mantenedores a añadir"
     },
     "managerCommentPlaceholder": "Notas opcionales para el mantenedor...",
     "loadingMaintainers": "Cargando...",
     "noMaintainers": "No hay mantenedores disponibles",
+    "noMaintainersToAdd": "Todos los mantenedores ya están asignados",
     "poolHint": "Deja vacío para poner la señalación en el pool (cualquier mantenedor podrá tomarla)",
     "buttons": {
       "cancel": "Cancelar",

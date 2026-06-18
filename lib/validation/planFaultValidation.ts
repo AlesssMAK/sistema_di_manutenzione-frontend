@@ -64,3 +64,23 @@ export const reassignFaultFormSchema = yup.object({
     .min(1, 'Selezionare almeno un manutentore')
     .default([]),
 });
+
+/**
+ * Append-only variant: the form starts with an empty selection
+ * (already-assigned maintainers are shown as readonly chips
+ * separately) and validates that at least one new maintainer was
+ * picked before submitting.
+ */
+export const addMaintainersFormSchema = yup.object({
+  priority: yup.string().oneOf(['Low', 'Medium', 'High']).default('Medium'),
+  plannedDate: yup.string().default(''),
+  plannedTime: yup.string().default(''),
+  estimatedDuration: yup.number().default(0),
+  deadline: yup.string().default(''),
+  managerComment: yup.string().max(2000, 'Massimo 2000 caratteri').default(''),
+  assignedMaintainers: yup
+    .array()
+    .of(yup.string().required())
+    .min(1, 'Selezionare almeno un manutentore da aggiungere')
+    .default([]),
+});

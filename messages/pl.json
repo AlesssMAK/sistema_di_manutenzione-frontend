@@ -356,7 +356,9 @@
     "titlePlan": "Zaplanuj zgłoszenie",
     "titleModify": "Modyfikuj planowanie",
     "titleReassign": "Przepisz interwencję",
+    "titleAddMaintainers": "Dodaj konserwatorów",
     "buttonReassign": "Przepisz",
+    "buttonAddMaintainers": "Dodaj konserwatorów",
     "labels": {
       "priority": "Priorytet *",
       "estimatedDuration": "Szacowany czas (min) *",
@@ -364,11 +366,14 @@
       "plannedTime": "Zaplanowana godzina *",
       "deadline": "Termin *",
       "managerComment": "Notatki kierownika",
-      "assignedMaintainers": "Przypisani konserwatorzy"
+      "assignedMaintainers": "Przypisani konserwatorzy",
+      "alreadyAssigned": "Już przypisani",
+      "additionalMaintainers": "Konserwatorzy do dodania"
     },
     "managerCommentPlaceholder": "Opcjonalne notatki dla konserwatora...",
     "loadingMaintainers": "Ładowanie...",
     "noMaintainers": "Brak dostępnych konserwatorów",
+    "noMaintainersToAdd": "Wszyscy konserwatorzy są już przypisani",
     "poolHint": "Pozostaw puste, aby umieścić zgłoszenie w puli (dowolny konserwator może je przejąć)",
     "buttons": {
       "cancel": "Anuluj",

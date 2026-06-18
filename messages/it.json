@@ -387,7 +387,9 @@
   "titlePlan": "Pianifica segnalazione",
   "titleModify": "Modifica pianificazione",
   "titleReassign": "Riassegna intervento",
+  "titleAddMaintainers": "Aggiungi manutentori",
   "buttonReassign": "Riassegna",
+  "buttonAddMaintainers": "Aggiungi manutentori",
   "labels": {
     "priority": "Priorità *",
     "estimatedDuration": "Durata stimata (min) *",
@@ -395,11 +397,14 @@
     "plannedTime": "Ora pianificata *",
     "deadline": "Scadenza *",
     "managerComment": "Note responsabile",
-    "assignedMaintainers": "Manutentori assegnati"
+    "assignedMaintainers": "Manutentori assegnati",
+    "alreadyAssigned": "Già assegnati",
+    "additionalMaintainers": "Manutentori da aggiungere"
   },
   "managerCommentPlaceholder": "Eventuali note per il manutentore...",
   "loadingMaintainers": "Caricamento...",
   "noMaintainers": "Nessun manutentore disponibile",
+  "noMaintainersToAdd": "Tutti i manutentori sono già assegnati",
   "poolHint": "Lascia vuoto per mettere la segnalazione nel pool (qualsiasi manutentore potrà prenderla)",
   "buttons": {
     "cancel": "Annulla",
