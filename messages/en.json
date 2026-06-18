@@ -252,6 +252,38 @@
       "send": "Send reply",
       "sending": "Sending..."
     },
+    "compose": {
+      "openButton": "New message",
+      "title": "New message",
+      "subtitle": "Send a direct message or an announcement",
+      "channels": {
+        "direct": "Direct",
+        "broadcastRole": "Role announcement",
+        "broadcastAll": "Broadcast to all"
+      },
+      "labels": {
+        "recipient": "Recipient *",
+        "targetRole": "Target role *",
+        "subject": "Subject",
+        "body": "Message *"
+      },
+      "placeholders": {
+        "recipient": "Pick a recipient",
+        "loadingRecipients": "Loading...",
+        "targetRole": "Pick a role",
+        "subject": "Subject (optional)",
+        "body": "Write the message..."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "send": "Send",
+        "sending": "Sending..."
+      },
+      "messages": {
+        "sendSuccess": "Message sent",
+        "sendError": "Error sending message"
+      }
+    },
     "messages": {
       "replySuccess": "Reply sent",
       "replyError": "Error sending reply",

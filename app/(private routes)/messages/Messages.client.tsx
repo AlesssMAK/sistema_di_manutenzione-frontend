@@ -8,6 +8,7 @@ import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import MessageInbox, {
   type InboxKind,
 } from '@/components/Messages/MessageInbox/MessageInbox';
+import ComposeMessageModal from '@/components/Messages/ComposeMessageModal/ComposeMessageModal';
 import css from './page.module.css';
 
 const MessagesClient = () => {
@@ -22,6 +23,15 @@ const MessagesClient = () => {
   const [activeTab, setActiveTab] = useState<InboxKind>(
     isOperator ? 'announcements' : 'direct'
   );
+  const [composeOpen, setComposeOpen] = useState(false);
+
+  // BE blocks operators from sending direct messages and broadcasts
+  // are also out of their scope — hide the compose entry point
+  // entirely for them. Everyone else gets all three channels; the
+  // backend still enforces per-channel rules.
+  const allowedChannels: Array<'direct' | 'broadcastAll' | 'broadcastRole'> =
+    isOperator ? [] : ['direct', 'broadcastRole', 'broadcastAll'];
+  const canCompose = allowedChannels.length > 0;
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
@@ -41,15 +51,34 @@ const MessagesClient = () => {
         <h2 className="title">{t('title')}</h2>
         <p className="subtitle">{t('subtitle')}</p>
 
-        <div className={css.tabsBar}>
-          <Tabs<InboxKind>
-            tabs={tabs}
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-          />
+        <div className={css.toolbar}>
+          <div className={css.tabsBar}>
+            <Tabs<InboxKind>
+              tabs={tabs}
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+            />
+          </div>
+          {canCompose && (
+            <button
+              type="button"
+              className={css.composeButton}
+              onClick={() => setComposeOpen(true)}
+            >
+              {t('compose.openButton')}
+            </button>
+          )}
         </div>
 
         <MessageInbox kind={activeTab} currentUserId={userId} />
+
+        {composeOpen && (
+          <ComposeMessageModal
+            currentUserId={userId}
+            allowedChannels={allowedChannels}
+            onClose={() => setComposeOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

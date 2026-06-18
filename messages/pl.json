@@ -220,6 +220,38 @@
       "send": "Wyślij odpowiedź",
       "sending": "Wysyłanie..."
     },
+    "compose": {
+      "openButton": "Nowa wiadomość",
+      "title": "Nowa wiadomość",
+      "subtitle": "Wyślij wiadomość bezpośrednią lub ogłoszenie",
+      "channels": {
+        "direct": "Bezpośrednia",
+        "broadcastRole": "Ogłoszenie dla roli",
+        "broadcastAll": "Ogłoszenie dla wszystkich"
+      },
+      "labels": {
+        "recipient": "Odbiorca *",
+        "targetRole": "Rola odbiorcy *",
+        "subject": "Temat",
+        "body": "Wiadomość *"
+      },
+      "placeholders": {
+        "recipient": "Wybierz odbiorcę",
+        "loadingRecipients": "Ładowanie...",
+        "targetRole": "Wybierz rolę",
+        "subject": "Temat (opcjonalny)",
+        "body": "Napisz wiadomość..."
+      },
+      "buttons": {
+        "cancel": "Anuluj",
+        "send": "Wyślij",
+        "sending": "Wysyłanie..."
+      },
+      "messages": {
+        "sendSuccess": "Wiadomość wysłana",
+        "sendError": "Błąd wysyłania"
+      }
+    },
     "messages": {
       "replySuccess": "Odpowiedź wysłana",
       "replyError": "Błąd podczas wysyłania",

@@ -252,6 +252,38 @@
       "send": "Enviar respuesta",
       "sending": "Enviando..."
     },
+    "compose": {
+      "openButton": "Nuevo mensaje",
+      "title": "Nuevo mensaje",
+      "subtitle": "Envía un mensaje directo o un anuncio",
+      "channels": {
+        "direct": "Directo",
+        "broadcastRole": "Anuncio por rol",
+        "broadcastAll": "Anuncio para todos"
+      },
+      "labels": {
+        "recipient": "Destinatario *",
+        "targetRole": "Rol destinatario *",
+        "subject": "Asunto",
+        "body": "Mensaje *"
+      },
+      "placeholders": {
+        "recipient": "Elige un destinatario",
+        "loadingRecipients": "Cargando...",
+        "targetRole": "Elige un rol",
+        "subject": "Asunto (opcional)",
+        "body": "Escribe el mensaje..."
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "send": "Enviar",
+        "sending": "Enviando..."
+      },
+      "messages": {
+        "sendSuccess": "Mensaje enviado",
+        "sendError": "Error al enviar"
+      }
+    },
     "messages": {
       "replySuccess": "Respuesta enviada",
       "replyError": "Error al enviar la respuesta",
