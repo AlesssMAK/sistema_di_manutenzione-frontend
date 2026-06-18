@@ -17,6 +17,8 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import Button from '@/components/UI/Button/Button';
 import { FaultCard } from '@/types/faultType';
 import { fetchFaultCards, fetchFaultDeadlines } from '@/lib/api/faults';
+import { fetchSystemSettings } from '@/lib/api/systemSettings';
+import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/lib/store/authStore';
 import CalendarBlock from '@/components/MaintenanceWorker/CalendarBlock/CalendarBlock';
 import { type PlannedDayBucket } from '@/components/MaintenanceWorker/Calendar/Calendar';
@@ -57,6 +59,27 @@ const MaintenanceWorkerClient = () => {
 
   // race-guard: stale responses must not overwrite fresh state
   const requestIdRef = useRef(0);
+
+  // SystemSettings is a tiny singleton document — fetch once and
+  // reuse across the session. Cached for an hour because the
+  // admin-side settings UI invalidates the cache on save anyway.
+  const { data: settings } = useQuery({
+    queryKey: ['systemSettings'],
+    queryFn: fetchSystemSettings,
+    staleTime: 60 * 60 * 1000,
+  });
+  // Parse 'HH:mm' → hour bucket the slot grid renders. End hour is
+  // inclusive in DaySlotGrid (renders the row), so we floor the
+  // end-of-workday to the last hour that contains slot time. The
+  // 8/17 fallback matches the previous hard-coded values.
+  const parseHour = (hhmm: string | undefined, fallback: number) => {
+    if (!hhmm) return fallback;
+    const [h] = hhmm.split(':');
+    const n = Number(h);
+    return Number.isFinite(n) ? n : fallback;
+  };
+  const startHour = parseHour(settings?.workHours?.start, 8);
+  const endHour = parseHour(settings?.workHours?.end, 17);
 
   const isOverdueMode = viewMode === 'overdue';
   const isCompletedMode = viewMode === 'completed';
@@ -385,7 +408,12 @@ const MaintenanceWorkerClient = () => {
         </div>
 
         {!isOverdueMode && selectedDate && (
-          <DaySlotGrid selectedDate={selectedDate} faults={items} />
+          <DaySlotGrid
+            selectedDate={selectedDate}
+            faults={items}
+            startHour={startHour}
+            endHour={endHour}
+          />
         )}
       </div>
     </div>
