@@ -11,7 +11,7 @@ import { getAllPartsByPlantId } from '@/lib/api/plantsParts';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useFaultDraft } from '@/lib/store/reportStore';
 import { reportSchema } from '@/lib/validation/reportFormValidation';
-import { ReportFormValues } from '@/types/faultType';
+import type { ReportFormValues, TypeFault } from '@/types/faultType';
 import { PlantPart } from '@/types/plantPartType';
 import { Plant } from '@/types/plantType';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -36,22 +36,14 @@ const ReportForm = () => {
   const t = useTranslations('ReportForm');
   const tBtn = useTranslations('btn');
   const { user } = useAuthStore();
-  const { draft, setDraft, clearDraft } = useFaultDraft();
+  // Subscribe per-slot — function refs are stable, the draft slice
+  // is the only piece this form cares about. Avoids re-rendering on
+  // unrelated store updates.
+  const draft = useFaultDraft(s => s.draft);
+  const setDraft = useFaultDraft(s => s.setDraft);
+  const clearDraft = useFaultDraft(s => s.clearDraft);
   const now = new Date();
   const date = now.toISOString().split('T')[0];
-
-  const handleChange = (
-    event: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = event.target;
-
-    setDraft({
-      ...draft,
-      [name]: value,
-    });
-  };
 
   const {
     register,
@@ -62,8 +54,16 @@ const ReportForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<ReportFormValues>({
     resolver: yupResolver(reportSchema),
+    // Seed RHF from the persisted draft so default values match
+    // whatever the user typed before the page reload. The store
+    // reads localStorage synchronously on creation, so by the time
+    // this hook runs the draft is already hydrated client-side.
     defaultValues: {
       img: [],
+      typeFault: draft.typeFault,
+      comment: draft.comment,
+      plantId: draft.plantId,
+      partId: draft.partId,
     },
   });
 
@@ -274,7 +274,6 @@ const ReportForm = () => {
             type="hidden"
             {...register('partId')}
             value={draft.partId}
-            onChange={handleChange}
           />
           {errors.partId && (
             <p className={css.error}>{errors.partId.message}</p>
@@ -290,9 +289,14 @@ const ReportForm = () => {
                 type="radio"
                 className={css.type_input}
                 value="Production"
-                {...register('typeFault')}
+                {...register('typeFault', {
+                  onChange: e =>
+                    setDraft({
+                      ...draft,
+                      typeFault: e.target.value as TypeFault,
+                    }),
+                })}
                 checked={draft.typeFault === 'Production'}
-                onChange={handleChange}
               />
               <p className={css.type_text}>{t('production')}</p>
             </label>
@@ -301,9 +305,14 @@ const ReportForm = () => {
                 type="radio"
                 className={css.type_input}
                 value="Safety"
-                {...register('typeFault')}
+                {...register('typeFault', {
+                  onChange: e =>
+                    setDraft({
+                      ...draft,
+                      typeFault: e.target.value as TypeFault,
+                    }),
+                })}
                 checked={draft.typeFault === 'Safety'}
-                onChange={handleChange}
               />
               <p className={css.type_text}>{t('safety')}</p>
             </label>
@@ -319,12 +328,14 @@ const ReportForm = () => {
           <label>
             <textarea
               id="comment"
-              {...register('comment')}
+              {...register('comment', {
+                onChange: e =>
+                  setDraft({ ...draft, comment: e.target.value }),
+              })}
               required
               className={css.textarea}
               placeholder={t('describeIssue')}
               value={draft.comment}
-              onChange={handleChange}
             />
           </label>
           {errors.comment && (
@@ -347,9 +358,12 @@ const ReportForm = () => {
           className="button button--white"
           width="100%"
           onClick={() => {
-            (clearDraft(),
-              setSelectedPlantLabel(''),
-              setSelectedPlantPartLabel(''));
+            clearDraft();
+            // Reset RHF too so stale validation errors from a
+            // previous submit attempt disappear with the form.
+            reset();
+            setSelectedPlantLabel('');
+            setSelectedPlantPartLabel('');
           }}
         >
           {t('cancel')}
