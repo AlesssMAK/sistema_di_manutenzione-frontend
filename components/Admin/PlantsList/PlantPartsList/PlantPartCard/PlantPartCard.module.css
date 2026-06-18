@@ -141,18 +141,3 @@
 .btn {
   padding: 0;
 }
-
-.btn_icon_delete {
-  fill: none;
-  stroke: #fff;
-}
-
-.btn:hover .btn_icon_delete,
-.btn:focus-visible .btn_icon_delete {
-  stroke: #0a0a0a;
-}
-
-.btn_delete {
-  background-color: #d4183d;
-  border: none;
-}

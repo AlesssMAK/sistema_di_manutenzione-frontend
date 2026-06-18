@@ -1,7 +1,5 @@
 import {
   CreatePlantPartsRequest,
-  DeletePlantPartRequest,
-  DeletePlantPartResponse,
   PlantPart,
   PlantPartRespons,
   PlantPartsRequest,
@@ -45,14 +43,4 @@ export const updatePlantParts = async ({
     data
   );
   return res.data;
-};
-
-export const deletePlantPart = async ({
-  plantId,
-  plantPartId,
-}: DeletePlantPartRequest) => {
-  const res = await nextServer.delete<DeletePlantPartResponse>(
-    `/plants/${plantId}/parts/${plantPartId}`
-  );
-  return res.data.success;
 };

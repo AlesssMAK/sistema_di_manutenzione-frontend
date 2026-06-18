@@ -252,6 +252,39 @@
       "send": "Enviar respuesta",
       "sending": "Enviando..."
     },
+    "compose": {
+      "openButton": "Nuevo mensaje",
+      "title": "Nuevo mensaje",
+      "subtitle": "Envía un mensaje directo o un anuncio",
+      "channels": {
+        "direct": "Directo",
+        "broadcastRole": "Anuncio por rol",
+        "broadcastAll": "Anuncio para todos"
+      },
+      "labels": {
+        "channel": "Canal",
+        "recipient": "Destinatario",
+        "targetRole": "Rol destinatario",
+        "subject": "Asunto",
+        "body": "Mensaje"
+      },
+      "placeholders": {
+        "recipient": "Elige un destinatario",
+        "loadingRecipients": "Cargando...",
+        "targetRole": "Elige un rol",
+        "subject": "Asunto (opcional)",
+        "body": "Escribe el mensaje..."
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "send": "Enviar",
+        "sending": "Enviando..."
+      },
+      "messages": {
+        "sendSuccess": "Mensaje enviado",
+        "sendError": "Error al enviar"
+      }
+    },
     "messages": {
       "replySuccess": "Respuesta enviada",
       "replyError": "Error al enviar la respuesta",
@@ -388,7 +421,9 @@
     "titlePlan": "Planificar señalación",
     "titleModify": "Modificar planificación",
     "titleReassign": "Reasignar intervención",
+    "titleAddMaintainers": "Añadir mantenedores",
     "buttonReassign": "Reasignar",
+    "buttonAddMaintainers": "Añadir mantenedores",
     "labels": {
       "priority": "Prioridad *",
       "estimatedDuration": "Duración estimada (min) *",
@@ -396,11 +431,14 @@
       "plannedTime": "Hora planificada *",
       "deadline": "Fecha límite *",
       "managerComment": "Notas del responsable",
-      "assignedMaintainers": "Mantenedores asignados"
+      "assignedMaintainers": "Mantenedores asignados",
+      "alreadyAssigned": "Ya asignados",
+      "additionalMaintainers": "Mantenedores a añadir"
     },
     "managerCommentPlaceholder": "Notas opcionales para el mantenedor...",
     "loadingMaintainers": "Cargando...",
     "noMaintainers": "No hay mantenedores disponibles",
+    "noMaintainersToAdd": "Todos los mantenedores ya están asignados",
     "poolHint": "Deja vacío para poner la señalación en el pool (cualquier mantenedor podrá tomarla)",
     "buttons": {
       "cancel": "Cancelar",

@@ -1,16 +1,123 @@
-.btn_list {
-  display: flex;
-  gap: 4px;
-  border: 1.17px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  padding: 4px;
+.container {
+  position: relative;
+  display: inline-block;
 }
 
-.active {
-  background-color: #2563eb;
+/* Mirror the original `button button--white .langButton` look so the
+   trigger sits in the header the same way the IT/EN/ES row used to. */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 28px;
+  min-width: 54px;
+  padding: 0 10px;
+  background: #fff;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  color: #0a0a0a;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.trigger:hover,
+.trigger:focus-visible {
+  background: #e9ebef;
+}
+
+.trigger:active {
+  background: #2563eb;
+  color: #fff;
+  transform: scale(0.97);
+}
+
+.triggerOpen {
+  background: #e9ebef;
+}
+
+.triggerLabel {
+  line-height: 1;
+}
+
+/* Sprite arrow points left by default — rotate down/up around the
+   open state. */
+.arrow {
+  transform: rotate(-90deg);
+  transition: transform 0.15s ease;
+}
+
+.arrowUp {
+  transform: rotate(90deg);
+}
+
+/* Menu wrapper picks up the original `.btn_list` chrome (same
+   1.17px outer border, 6px radius, 4px padding) so the dropdown
+   reads as the same control just vertically stacked. */
+.menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px;
+  margin: 0;
+  list-style: none;
+  background: #fff;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  z-index: 50;
+}
+
+/* Each option = same `button--white` style as the trigger so the
+   visual language is consistent. */
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 28px;
+  padding: 0 10px;
+  background: #fff;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  color: #0a0a0a;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.option:hover,
+.option:focus-visible {
+  background: #e9ebef;
+}
+
+.option:active {
+  transform: scale(0.97);
+}
+
+/* Selected locale highlight — same blue the original `.active`
+   class used on the button row. */
+.optionActive {
+  background: #2563eb;
   color: #fff;
 }
 
-.active:hover {
+.optionActive:hover {
+  /* Preserve the quirky original behaviour where the active button's
+     hover reverted text to dark — keeps the new dropdown visually
+     consistent with the old row. */
   color: #0a0a0a;
 }

@@ -57,13 +57,3 @@ export interface UpdatePlantPartResponse {
   success: boolean;
   plantPart: PlantPart;
 }
-
-export interface DeletePlantPartRequest {
-  plantId: string;
-  plantPartId: string;
-}
-
-export interface DeletePlantPartResponse {
-  success: boolean;
-  message: string;
-}

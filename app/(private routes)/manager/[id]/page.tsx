@@ -95,6 +95,7 @@ const ManagerFaultDetailPage = ({
   const { subscribeToFault, unsubscribeFromFault } = useSocket();
   const [isPlanOpen, setIsPlanOpen] = useState(false);
   const [isReassignOpen, setIsReassignOpen] = useState(false);
+  const [isAddMaintainersOpen, setIsAddMaintainersOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const {
@@ -307,17 +308,29 @@ const ManagerFaultDetailPage = ({
                   ? t('actions.modifyPlanning')
                   : t('actions.planIntervention')}
               </Button>
-              {/* Reassign — only when there's already an assignee to
-                  swap out (pool faults go through Pianifica instead). */}
+              {/* Reassign + Aggiungi tecnici — only when there's
+                  already an assignee (pool faults go through
+                  Pianifica instead). Both share the gate; the
+                  semantic split lets the manager pick the right
+                  intent without overloading one button. */}
               {fault.plannedDate &&
                 (fault.assignedMaintainers?.length ?? 0) > 0 && (
-                  <Button
-                    type="button"
-                    className="button button--white"
-                    onClick={() => setIsReassignOpen(true)}
-                  >
-                    {tPlan('buttonReassign')}
-                  </Button>
+                  <>
+                    <Button
+                      type="button"
+                      className="button button--white"
+                      onClick={() => setIsAddMaintainersOpen(true)}
+                    >
+                      {tPlan('buttonAddMaintainers')}
+                    </Button>
+                    <Button
+                      type="button"
+                      className="button button--white"
+                      onClick={() => setIsReassignOpen(true)}
+                    >
+                      {tPlan('buttonReassign')}
+                    </Button>
+                  </>
                 )}
             </div>
           )}
@@ -332,6 +345,13 @@ const ManagerFaultDetailPage = ({
           fault={fault}
           mode="reassign"
           onClose={() => setIsReassignOpen(false)}
+        />
+      )}
+      {isAddMaintainersOpen && (
+        <PlanFaultForm
+          fault={fault}
+          mode="addMaintainers"
+          onClose={() => setIsAddMaintainersOpen(false)}
         />
       )}
 

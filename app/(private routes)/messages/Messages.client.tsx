@@ -5,9 +5,11 @@ import { useTranslations } from 'next-intl';
 import { usePageStore } from '@/lib/store/pageStore';
 import { useAuthStore } from '@/lib/store/authStore';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+import Button from '@/components/UI/Button/Button';
 import MessageInbox, {
   type InboxKind,
 } from '@/components/Messages/MessageInbox/MessageInbox';
+import ComposeMessageModal from '@/components/Messages/ComposeMessageModal/ComposeMessageModal';
 import css from './page.module.css';
 
 const MessagesClient = () => {
@@ -22,6 +24,15 @@ const MessagesClient = () => {
   const [activeTab, setActiveTab] = useState<InboxKind>(
     isOperator ? 'announcements' : 'direct'
   );
+  const [composeOpen, setComposeOpen] = useState(false);
+
+  // BE blocks operators from sending direct messages and broadcasts
+  // are also out of their scope — hide the compose entry point
+  // entirely for them. Everyone else gets all three channels; the
+  // backend still enforces per-channel rules.
+  const allowedChannels: Array<'direct' | 'broadcastAll' | 'broadcastRole'> =
+    isOperator ? [] : ['direct', 'broadcastRole', 'broadcastAll'];
+  const canCompose = allowedChannels.length > 0;
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
@@ -38,8 +49,27 @@ const MessagesClient = () => {
   return (
     <div className="container">
       <div className={css.pageWrapper}>
-        <h2 className="title">{t('title')}</h2>
-        <p className="subtitle">{t('subtitle')}</p>
+        {/* Header row mirrors the admin user-list pattern: title +
+            subtitle on the left, primary action button on the right
+            (drops below on phone via the head_container breakpoint). */}
+        <div className={css.head_container}>
+          <div className={css.title_container}>
+            <h2 className="title">{t('title')}</h2>
+            <p className="subtitle">{t('subtitle')}</p>
+          </div>
+          {canCompose && (
+            <Button
+              type="button"
+              className={`${css.btn} button button--blue`}
+              onClick={() => setComposeOpen(true)}
+            >
+              <svg width="16" height="16" className={css.btn_icon}>
+                <use href="/sprite.svg#plus"></use>
+              </svg>
+              {t('compose.openButton')}
+            </Button>
+          )}
+        </div>
 
         <div className={css.tabsBar}>
           <Tabs<InboxKind>
@@ -50,6 +80,14 @@ const MessagesClient = () => {
         </div>
 
         <MessageInbox kind={activeTab} currentUserId={userId} />
+
+        {composeOpen && (
+          <ComposeMessageModal
+            currentUserId={userId}
+            allowedChannels={allowedChannels}
+            onClose={() => setComposeOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

@@ -18,19 +18,28 @@ import { it } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
 import styles from './Calendar.module.css';
 
+export type PlannedDayPriority = 'Low' | 'Medium' | 'High';
+
+export interface PlannedDayBucket {
+  count: number;
+  /** Highest-severity priority among the day's planned faults; drives
+   *  the badge colour. Null when count is 0. */
+  highestPriority: PlannedDayPriority | null;
+}
+
 interface FilterDataCreatedBarProps {
   activeDataCreated: string;
   onDataCreatedChange: (dataCreated: string) => void;
   deadlineDates?: string[];
   isDeadlineMode?: boolean;
-  plannedCounts?: Record<string, number>;
+  plannedDays?: Record<string, PlannedDayBucket>;
 }
 const Calendar = ({
   activeDataCreated,
   onDataCreatedChange,
   deadlineDates = [],
   isDeadlineMode = false,
-  plannedCounts = {},
+  plannedDays = {},
 }: FilterDataCreatedBarProps) => {
   const t = useTranslations('maintenanceWorkerPage.calendar');
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -107,7 +116,20 @@ const Calendar = ({
             ${isSelected ? styles.selectedText : ''}
           `;
 
-          const plannedCount = plannedCounts[formattedDay] ?? 0;
+          const bucket = plannedDays[formattedDay];
+          const plannedCount = bucket?.count ?? 0;
+          // Badge tint follows the severity of the worst fault on
+          // that day so the calendar reads like a heatmap at a
+          // glance. Null priority falls back to the neutral default
+          // class.
+          const priorityClass =
+            bucket?.highestPriority === 'High'
+              ? styles.plannedBadgeHigh
+              : bucket?.highestPriority === 'Medium'
+                ? styles.plannedBadgeMedium
+                : bucket?.highestPriority === 'Low'
+                  ? styles.plannedBadgeLow
+                  : '';
 
           return (
             <div
@@ -123,7 +145,7 @@ const Calendar = ({
               {/* Counter of planned interventions for this day (current scope) */}
               {plannedCount > 0 && !isDeadlineMode && (
                 <span
-                  className={styles.plannedBadge}
+                  className={`${styles.plannedBadge} ${priorityClass}`}
                   title={t('interventionsCount', { count: plannedCount })}
                 >
                   {plannedCount}

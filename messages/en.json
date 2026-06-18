@@ -252,6 +252,39 @@
       "send": "Send reply",
       "sending": "Sending..."
     },
+    "compose": {
+      "openButton": "New message",
+      "title": "New message",
+      "subtitle": "Send a direct message or an announcement",
+      "channels": {
+        "direct": "Direct",
+        "broadcastRole": "Role announcement",
+        "broadcastAll": "Broadcast to all"
+      },
+      "labels": {
+        "channel": "Channel",
+        "recipient": "Recipient",
+        "targetRole": "Target role",
+        "subject": "Subject",
+        "body": "Message"
+      },
+      "placeholders": {
+        "recipient": "Pick a recipient",
+        "loadingRecipients": "Loading...",
+        "targetRole": "Pick a role",
+        "subject": "Subject (optional)",
+        "body": "Write the message..."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "send": "Send",
+        "sending": "Sending..."
+      },
+      "messages": {
+        "sendSuccess": "Message sent",
+        "sendError": "Error sending message"
+      }
+    },
     "messages": {
       "replySuccess": "Reply sent",
       "replyError": "Error sending reply",
@@ -388,7 +421,9 @@
     "titlePlan": "Plan report",
     "titleModify": "Modify planning",
     "titleReassign": "Reassign intervention",
+    "titleAddMaintainers": "Add maintainers",
     "buttonReassign": "Reassign",
+    "buttonAddMaintainers": "Add maintainers",
     "labels": {
       "priority": "Priority *",
       "estimatedDuration": "Estimated duration (min) *",
@@ -396,11 +431,14 @@
       "plannedTime": "Planned time *",
       "deadline": "Deadline *",
       "managerComment": "Manager notes",
-      "assignedMaintainers": "Assigned maintainers"
+      "assignedMaintainers": "Assigned maintainers",
+      "alreadyAssigned": "Already assigned",
+      "additionalMaintainers": "Maintainers to add"
     },
     "managerCommentPlaceholder": "Optional notes for the maintainer...",
     "loadingMaintainers": "Loading...",
     "noMaintainers": "No maintainers available",
+    "noMaintainersToAdd": "All maintainers are already assigned",
     "poolHint": "Leave empty to put the report in the pool (any maintainer can take it)",
     "buttons": {
       "cancel": "Cancel",

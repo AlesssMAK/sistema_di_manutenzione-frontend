@@ -35,8 +35,30 @@
 .user_container {
   display: flex;
   gap: 16px;
-  justify-content: space-between;
+  flex-direction: column;
+
   align-items: center;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+.btn_container {
+  display: flex;
+  gap: 16px;
+}
+
+.user_item_container {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  align-items: center;
+
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
 }
 
 .nav {

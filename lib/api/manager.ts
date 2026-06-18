@@ -31,6 +31,17 @@ export const reassignFault = async (
   return data;
 };
 
+export const addMaintainers = async (
+  faultId: string,
+  additionalMaintainers: string[]
+): Promise<FaultCard> => {
+  const { data } = await nextServer.post<FaultCard>(
+    `/manager/fault/${faultId}/add-maintainers`,
+    { additionalMaintainers }
+  );
+  return data;
+};
+
 export interface MaintenanceWorkerOption {
   _id: string;
   fullName: string;

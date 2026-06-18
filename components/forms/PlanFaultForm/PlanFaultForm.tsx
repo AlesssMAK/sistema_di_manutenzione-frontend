@@ -11,12 +11,14 @@ import Button from '@/components/UI/Button/Button';
 import Input from '@/components/UI/Input/Input';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import {
+  addMaintainers,
   assignFault,
   getMaintenanceWorkers,
   reassignFault,
   type AssignFaultPayload,
 } from '@/lib/api/manager';
 import {
+  addMaintainersFormSchema,
   planFaultSchema,
   reassignFaultFormSchema,
   type PlanFaultValues,
@@ -45,8 +47,11 @@ interface PlanFaultFormProps {
   onClose: () => void;
   /** "plan" (default) shows the full planning form; "reassign" hides
    *  every planning field and only lets the manager swap the
-   *  maintainer list — submits to PATCH /manager/fault/:id/reassign. */
-  mode?: 'plan' | 'reassign';
+   *  maintainer list — submits to PATCH /manager/fault/:id/reassign.
+   *  "addMaintainers" is append-only: shows already-assigned workers
+   *  as readonly chips and lets the manager pick extra ones from the
+   *  remaining pool — submits to POST .../add-maintainers. */
+  mode?: 'plan' | 'reassign' | 'addMaintainers';
 }
 
 const PlanFaultForm = ({
@@ -55,6 +60,8 @@ const PlanFaultForm = ({
   mode = 'plan',
 }: PlanFaultFormProps) => {
   const isReassign = mode === 'reassign';
+  const isAddMaintainers = mode === 'addMaintainers';
+  const planningHidden = isReassign || isAddMaintainers;
   const t = useTranslations('PlanFaultForm');
   const tPriority = useTranslations('Priority');
   const queryClient = useQueryClient();
@@ -65,8 +72,12 @@ const PlanFaultForm = ({
     { label: tPriority('High'), value: 'High' },
   ];
 
+  const existingIds = (fault.assignedMaintainers ?? []).map(toId);
+  // In addMaintainers mode the selection is "new picks only" — never
+  // pre-fill with existing ids or the BE would reject the payload as
+  // duplicates.
   const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(
-    (fault.assignedMaintainers ?? []).map(toId)
+    isAddMaintainers ? [] : existingIds
   );
 
   const {
@@ -80,9 +91,11 @@ const PlanFaultForm = ({
     // runtime without yup's generic type machinery clashing on the
     // union.
     resolver: yupResolver(
-      (isReassign
-        ? reassignFaultFormSchema
-        : planFaultSchema) as typeof planFaultSchema
+      (isAddMaintainers
+        ? addMaintainersFormSchema
+        : isReassign
+          ? reassignFaultFormSchema
+          : planFaultSchema) as typeof planFaultSchema
     ) as Resolver<PlanFaultValues>,
     mode: 'onSubmit',
     defaultValues: {
@@ -92,7 +105,7 @@ const PlanFaultForm = ({
       estimatedDuration: fault.estimatedDuration ?? 60,
       deadline: fault.deadline ?? '',
       managerComment: fault.managerComment ?? '',
-      assignedMaintainers: (fault.assignedMaintainers ?? []).map(toId),
+      assignedMaintainers: isAddMaintainers ? [] : existingIds,
     },
   });
 
@@ -151,9 +164,34 @@ const PlanFaultForm = ({
     },
   });
 
-  const mutation = isReassign ? reassignMutation : planMutation;
+  const addMaintainersMutation = useMutation({
+    mutationFn: (ids: string[]) => addMaintainers(fault._id, ids),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['faults'] });
+      queryClient.invalidateQueries({ queryKey: ['fault', fault._id] });
+      toast.success(t('messages.modifySuccess'));
+      onClose();
+    },
+    onError: (err: unknown) => {
+      const message =
+        err && typeof err === 'object' && 'message' in err
+          ? String((err as { message: unknown }).message)
+          : t('messages.saveError');
+      toast.error(message);
+    },
+  });
+
+  const mutation = isAddMaintainers
+    ? addMaintainersMutation
+    : isReassign
+      ? reassignMutation
+      : planMutation;
 
   const onSubmit = (values: PlanFaultValues) => {
+    if (isAddMaintainers) {
+      addMaintainersMutation.mutate(selectedMaintainers);
+      return;
+    }
     if (isReassign) {
       reassignMutation.mutate(selectedMaintainers);
       return;
@@ -179,11 +217,13 @@ const PlanFaultForm = ({
       <div className={css.formContainer}>
         <div className={css.titleContainer}>
           <h1 className={css.title}>
-            {isReassign
-              ? t('titleReassign')
-              : fault.plannedDate
-                ? t('titleModify')
-                : t('titlePlan')}
+            {isAddMaintainers
+              ? t('titleAddMaintainers')
+              : isReassign
+                ? t('titleReassign')
+                : fault.plannedDate
+                  ? t('titleModify')
+                  : t('titlePlan')}
           </h1>
           <p className={css.subtitle}>
             {fault.faultId} · {fault.plantId?.namePlant ?? '—'}
@@ -191,10 +231,10 @@ const PlanFaultForm = ({
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
-          {/* Planning fields hidden in reassign mode — the manager
-              only swaps the maintainer list, everything else stays
-              as it was. */}
-          {!isReassign && (
+          {/* Planning fields hidden in reassign/addMaintainers modes —
+              the manager only swaps or extends the maintainer list,
+              everything else stays as it was. */}
+          {!planningHidden && (
           <>
           <div className={css.row}>
             <div className={css.field}>
@@ -268,37 +308,78 @@ const PlanFaultForm = ({
           </>
           )}
 
-          <div className={css.field}>
-            <p className={css.label}>{t('labels.assignedMaintainers')}</p>
-            {maintainersLoading ? (
-              <p className={css.hint}>{t('loadingMaintainers')}</p>
-            ) : maintainers.length === 0 ? (
-              <p className={css.hint}>{t('noMaintainers')}</p>
-            ) : (
-              <ul className={css.maintainersList}>
-                {maintainers.map(w => {
-                  const checked = selectedMaintainers.includes(w._id);
+          {isAddMaintainers && existingIds.length > 0 && (
+            <div className={css.field}>
+              <p className={css.label}>{t('labels.alreadyAssigned')}</p>
+              <ul className={css.existingChips}>
+                {(fault.assignedMaintainers ?? []).map((m, i) => {
+                  const isObj = typeof m === 'object' && m !== null;
+                  const key = isObj ? m._id : String(m);
+                  const name = isObj ? m.fullName : '—';
                   return (
-                    <li key={w._id} className={css.maintainerItem}>
-                      <label className={css.maintainerLabel}>
-                        <input
-                          type="checkbox"
-                          checked={checked}
-                          onChange={() => toggleMaintainer(w._id)}
-                        />
-                        <span>{w.fullName}</span>
-                      </label>
+                    <li
+                      key={key ?? i}
+                      className={css.existingChip}
+                      title={isObj ? m.email : undefined}
+                    >
+                      {name}
                     </li>
                   );
                 })}
               </ul>
-            )}
+            </div>
+          )}
+
+          <div className={css.field}>
+            <p className={css.label}>
+              {isAddMaintainers
+                ? t('labels.additionalMaintainers')
+                : t('labels.assignedMaintainers')}
+            </p>
+            {maintainersLoading ? (
+              <p className={css.hint}>{t('loadingMaintainers')}</p>
+            ) : (() => {
+                // In addMaintainers mode hide the already-assigned ones —
+                // the BE rejects duplicates anyway and the readonly chip
+                // row above already shows who is on the fault.
+                const visible = isAddMaintainers
+                  ? maintainers.filter(w => !existingIds.includes(w._id))
+                  : maintainers;
+                if (visible.length === 0) {
+                  return (
+                    <p className={css.hint}>
+                      {isAddMaintainers
+                        ? t('noMaintainersToAdd')
+                        : t('noMaintainers')}
+                    </p>
+                  );
+                }
+                return (
+                  <ul className={css.maintainersList}>
+                    {visible.map(w => {
+                      const checked = selectedMaintainers.includes(w._id);
+                      return (
+                        <li key={w._id} className={css.maintainerItem}>
+                          <label className={css.maintainerLabel}>
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => toggleMaintainer(w._id)}
+                            />
+                            <span>{w.fullName}</span>
+                          </label>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                );
+              })()}
             {errors.assignedMaintainers && (
               <p className={css.error}>
                 {errors.assignedMaintainers.message as string}
               </p>
             )}
-            {!isReassign && <p className={css.hint}>{t('poolHint')}</p>}
+            {!planningHidden && <p className={css.hint}>{t('poolHint')}</p>}
           </div>
 
           <div className={css.actions}>

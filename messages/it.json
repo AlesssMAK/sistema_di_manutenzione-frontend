@@ -251,6 +251,39 @@
     "send": "Invia risposta",
     "sending": "Invio..."
   },
+  "compose": {
+    "openButton": "Nuovo messaggio",
+    "title": "Nuovo messaggio",
+    "subtitle": "Invia un messaggio diretto o un annuncio",
+    "channels": {
+      "direct": "Diretto",
+      "broadcastRole": "Annuncio per ruolo",
+      "broadcastAll": "Annuncio per tutti"
+    },
+    "labels": {
+      "channel": "Canale",
+      "recipient": "Destinatario",
+      "targetRole": "Ruolo destinatario",
+      "subject": "Oggetto",
+      "body": "Messaggio"
+    },
+    "placeholders": {
+      "recipient": "Seleziona un destinatario",
+      "loadingRecipients": "Caricamento...",
+      "targetRole": "Seleziona un ruolo",
+      "subject": "Oggetto (opzionale)",
+      "body": "Scrivi il messaggio..."
+    },
+    "buttons": {
+      "cancel": "Annulla",
+      "send": "Invia",
+      "sending": "Invio..."
+    },
+    "messages": {
+      "sendSuccess": "Messaggio inviato",
+      "sendError": "Errore durante l'invio"
+    }
+  },
   "messages": {
     "replySuccess": "Risposta inviata",
     "replyError": "Errore durante l'invio",
@@ -387,7 +420,9 @@
   "titlePlan": "Pianifica segnalazione",
   "titleModify": "Modifica pianificazione",
   "titleReassign": "Riassegna intervento",
+  "titleAddMaintainers": "Aggiungi manutentori",
   "buttonReassign": "Riassegna",
+  "buttonAddMaintainers": "Aggiungi manutentori",
   "labels": {
     "priority": "Priorità *",
     "estimatedDuration": "Durata stimata (min) *",
@@ -395,11 +430,14 @@
     "plannedTime": "Ora pianificata *",
     "deadline": "Scadenza *",
     "managerComment": "Note responsabile",
-    "assignedMaintainers": "Manutentori assegnati"
+    "assignedMaintainers": "Manutentori assegnati",
+    "alreadyAssigned": "Già assegnati",
+    "additionalMaintainers": "Manutentori da aggiungere"
   },
   "managerCommentPlaceholder": "Eventuali note per il manutentore...",
   "loadingMaintainers": "Caricamento...",
   "noMaintainers": "Nessun manutentore disponibile",
+  "noMaintainersToAdd": "Tutti i manutentori sono già assegnati",
   "poolHint": "Lascia vuoto per mettere la segnalazione nel pool (qualsiasi manutentore potrà prenderla)",
   "buttons": {
     "cancel": "Annulla",

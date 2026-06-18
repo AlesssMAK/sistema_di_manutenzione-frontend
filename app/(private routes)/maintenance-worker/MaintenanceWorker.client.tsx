@@ -17,8 +17,11 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import Button from '@/components/UI/Button/Button';
 import { FaultCard } from '@/types/faultType';
 import { fetchFaultCards, fetchFaultDeadlines } from '@/lib/api/faults';
+import { fetchSystemSettings } from '@/lib/api/systemSettings';
+import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/lib/store/authStore';
 import CalendarBlock from '@/components/MaintenanceWorker/CalendarBlock/CalendarBlock';
+import { type PlannedDayBucket } from '@/components/MaintenanceWorker/Calendar/Calendar';
 import DateNow from '@/components/MaintenanceWorker/DateNow/DateNow';
 
 export type FaultViewMode = 'active' | 'overdue' | 'completed';
@@ -50,12 +53,33 @@ const MaintenanceWorkerClient = () => {
   const [overdueDeadlineDates, setOverdueDeadlineDates] = useState<string[]>(
     []
   );
-  const [plannedCounts, setPlannedCounts] = useState<Record<string, number>>(
-    {}
-  );
+  const [plannedDays, setPlannedDays] = useState<
+    Record<string, PlannedDayBucket>
+  >({});
 
   // race-guard: stale responses must not overwrite fresh state
   const requestIdRef = useRef(0);
+
+  // SystemSettings is a tiny singleton document — fetch once and
+  // reuse across the session. Cached for an hour because the
+  // admin-side settings UI invalidates the cache on save anyway.
+  const { data: settings } = useQuery({
+    queryKey: ['systemSettings'],
+    queryFn: fetchSystemSettings,
+    staleTime: 60 * 60 * 1000,
+  });
+  // Parse 'HH:mm' → hour bucket the slot grid renders. End hour is
+  // inclusive in DaySlotGrid (renders the row), so we floor the
+  // end-of-workday to the last hour that contains slot time. The
+  // 8/17 fallback matches the previous hard-coded values.
+  const parseHour = (hhmm: string | undefined, fallback: number) => {
+    if (!hhmm) return fallback;
+    const [h] = hhmm.split(':');
+    const n = Number(h);
+    return Number.isFinite(n) ? n : fallback;
+  };
+  const startHour = parseHour(settings?.workHours?.start, 8);
+  const endHour = parseHour(settings?.workHours?.end, 17);
 
   const isOverdueMode = viewMode === 'overdue';
   const isCompletedMode = viewMode === 'completed';
@@ -134,7 +158,7 @@ const MaintenanceWorkerClient = () => {
       // Badges are only meaningful for active work — overdue uses the red
       // deadlineCell highlighting; completed is just historical browsing.
       if (currentMode !== 'active') {
-        setPlannedCounts({});
+        setPlannedDays({});
         return;
       }
       try {
@@ -159,11 +183,21 @@ const MaintenanceWorkerClient = () => {
           ...scopeParams,
         });
 
-        const counts: Record<string, number> = {};
+        const days: Record<string, PlannedDayBucket> = {};
         data.dates.forEach(bucket => {
-          counts[bucket.date] = bucket.count;
+          // High > Medium > Low precedence: a single High-priority
+          // fault on a day is enough to tint the badge red.
+          const highestPriority =
+            bucket.byPriority.High > 0
+              ? 'High'
+              : bucket.byPriority.Medium > 0
+                ? 'Medium'
+                : bucket.byPriority.Low > 0
+                  ? 'Low'
+                  : null;
+          days[bucket.date] = { count: bucket.count, highestPriority };
         });
-        setPlannedCounts(counts);
+        setPlannedDays(days);
       } catch (error) {
         console.error(t('errors.loadCounts'), error);
       }
@@ -291,7 +325,7 @@ const MaintenanceWorkerClient = () => {
             onDateChange={handleDateChange}
             deadlineDates={isOverdueMode ? overdueDeadlineDates : []}
             isDeadlineMode={isOverdueMode}
-            plannedCounts={plannedCounts}
+            plannedDays={plannedDays}
           />
 
           <div className={css.contentSection}>
@@ -374,7 +408,12 @@ const MaintenanceWorkerClient = () => {
         </div>
 
         {!isOverdueMode && selectedDate && (
-          <DaySlotGrid selectedDate={selectedDate} faults={items} />
+          <DaySlotGrid
+            selectedDate={selectedDate}
+            faults={items}
+            startHour={startHour}
+            endHour={endHour}
+          />
         )}
       </div>
     </div>

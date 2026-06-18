@@ -1,0 +1,67 @@
+/* Mirrors CreateAndEditUserForm.module.css — same modal width,
+   same .form_label / .form_item_container / .error positioning,
+   same .btn_form_container at the bottom. Keeps the visual
+   language of project modals consistent. */
+.form_container {
+  @media screen and (min-width: 768px) {
+    width: 520px;
+  }
+}
+
+.title_container {
+  margin-bottom: 40px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form_item_container {
+  position: relative;
+}
+
+.form_label {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1;
+  color: #0a0a0a;
+  margin-bottom: 8px;
+}
+
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: #1e40af;
+  background: #ffffff;
+}
+
+.error {
+  position: absolute;
+  color: red;
+  font-size: 12px;
+  bottom: -16px;
+  left: 8px;
+}
+
+.btn_form_container {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+  }
+}

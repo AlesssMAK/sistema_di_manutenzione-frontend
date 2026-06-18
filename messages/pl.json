@@ -220,6 +220,39 @@
       "send": "Wyślij odpowiedź",
       "sending": "Wysyłanie..."
     },
+    "compose": {
+      "openButton": "Nowa wiadomość",
+      "title": "Nowa wiadomość",
+      "subtitle": "Wyślij wiadomość bezpośrednią lub ogłoszenie",
+      "channels": {
+        "direct": "Bezpośrednia",
+        "broadcastRole": "Ogłoszenie dla roli",
+        "broadcastAll": "Ogłoszenie dla wszystkich"
+      },
+      "labels": {
+        "channel": "Kanał",
+        "recipient": "Odbiorca",
+        "targetRole": "Rola odbiorcy",
+        "subject": "Temat",
+        "body": "Wiadomość"
+      },
+      "placeholders": {
+        "recipient": "Wybierz odbiorcę",
+        "loadingRecipients": "Ładowanie...",
+        "targetRole": "Wybierz rolę",
+        "subject": "Temat (opcjonalny)",
+        "body": "Napisz wiadomość..."
+      },
+      "buttons": {
+        "cancel": "Anuluj",
+        "send": "Wyślij",
+        "sending": "Wysyłanie..."
+      },
+      "messages": {
+        "sendSuccess": "Wiadomość wysłana",
+        "sendError": "Błąd wysyłania"
+      }
+    },
     "messages": {
       "replySuccess": "Odpowiedź wysłana",
       "replyError": "Błąd podczas wysyłania",
@@ -356,7 +389,9 @@
     "titlePlan": "Zaplanuj zgłoszenie",
     "titleModify": "Modyfikuj planowanie",
     "titleReassign": "Przepisz interwencję",
+    "titleAddMaintainers": "Dodaj konserwatorów",
     "buttonReassign": "Przepisz",
+    "buttonAddMaintainers": "Dodaj konserwatorów",
     "labels": {
       "priority": "Priorytet *",
       "estimatedDuration": "Szacowany czas (min) *",
@@ -364,11 +399,14 @@
       "plannedTime": "Zaplanowana godzina *",
       "deadline": "Termin *",
       "managerComment": "Notatki kierownika",
-      "assignedMaintainers": "Przypisani konserwatorzy"
+      "assignedMaintainers": "Przypisani konserwatorzy",
+      "alreadyAssigned": "Już przypisani",
+      "additionalMaintainers": "Konserwatorzy do dodania"
     },
     "managerCommentPlaceholder": "Opcjonalne notatki dla konserwatora...",
     "loadingMaintainers": "Ładowanie...",
     "noMaintainers": "Brak dostępnych konserwatorów",
+    "noMaintainersToAdd": "Wszyscy konserwatorzy są już przypisani",
     "poolHint": "Pozostaw puste, aby umieścić zgłoszenie w puli (dowolny konserwator może je przejąć)",
     "buttons": {
       "cancel": "Anuluj",
