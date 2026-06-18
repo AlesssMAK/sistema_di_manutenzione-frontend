@@ -76,24 +76,28 @@ const ModalMenu = ({
             <div className={css.user_container}>
               {isAuthenticated ? (
                 <>
-                  <CreateFaultButton onAfterClick={onClose} />
-                  <NotificationBell enabled={isAuthenticated} />
-                  <div className={css.user}>
-                    <svg className={css.user_icon} width="16" height="16">
-                      <use href="/sprite.svg#user"></use>
-                    </svg>
-                    <p className={css.user_name}>{user?.fullName}</p>
+                  <div className={css.btn_container}>
+                    <CreateFaultButton onAfterClick={onClose} />
+                    <NotificationBell enabled={isAuthenticated} />
                   </div>
-                  <Button
-                    className={`${css.exit_btn} button button--white`}
-                    width={121}
-                    onClick={handleLogout}
-                  >
-                    <svg className={css.exit_icon} width="16" height="16">
-                      <use href="/sprite.svg#exit"></use>
-                    </svg>
-                    <span className={css.btn_text}>{t('exit')}</span>
-                  </Button>
+                  <div className={css.user_item_container}>
+                    <div className={css.user}>
+                      <svg className={css.user_icon} width="16" height="16">
+                        <use href="/sprite.svg#user"></use>
+                      </svg>
+                      <p className={css.user_name}>{user?.fullName}</p>
+                    </div>
+                    <Button
+                      className={`${css.exit_btn} button button--white`}
+                      width={121}
+                      onClick={handleLogout}
+                    >
+                      <svg className={css.exit_icon} width="16" height="16">
+                        <use href="/sprite.svg#exit"></use>
+                      </svg>
+                      <span className={css.btn_text}>{t('exit')}</span>
+                    </Button>
+                  </div>
                 </>
               ) : (
                 <Button

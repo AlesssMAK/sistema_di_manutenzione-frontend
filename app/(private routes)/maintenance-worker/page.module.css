@@ -76,16 +76,3 @@
     margin-top: 32px;
   }
 }
-
-.noResults {
-  margin-top: 24px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-
-  @media screen and (min-width: 1440px) {
-    margin-top: 32px;
-  }
-}
