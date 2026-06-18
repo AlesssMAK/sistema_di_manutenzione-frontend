@@ -1,16 +1,89 @@
-.btn_list {
-  display: flex;
-  gap: 4px;
-  border: 1.17px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  padding: 4px;
+.container {
+  position: relative;
+  display: inline-block;
 }
 
-.active {
-  background-color: #2563eb;
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  background: #fff;
+  color: #0a0a0a;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.trigger:hover {
+  border-color: #1e40af;
+}
+
+.triggerOpen {
+  border-color: #1e40af;
+}
+
+.triggerLabel {
+  line-height: 1;
+}
+
+/* The sprite arrow points left by default — rotate it to point
+   down for the closed state and up when the menu is open. */
+.arrow {
+  transform: rotate(-90deg);
+  transition: transform 0.15s ease;
+}
+
+.arrowUp {
+  transform: rotate(90deg);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 100%;
+  list-style: none;
+  padding: 4px;
+  margin: 0;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  z-index: 50;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0a0a0a;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.option:hover {
+  background: #eff6ff;
+}
+
+.optionActive {
+  background: #2563eb;
   color: #fff;
 }
 
-.active:hover {
-  color: #0a0a0a;
+.optionActive:hover {
+  background: #1e40af;
+  color: #fff;
 }
