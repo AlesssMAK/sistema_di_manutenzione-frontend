@@ -30,7 +30,7 @@ The API lives in a separate repo:
 
 | Path | Role | What's there |
 |---|---|---|
-| `/login` | all | Phone + password sign-in |
+| `/login` | all | Email / fullName + password (operators sign in with their personalCode instead) |
 | `/report-fault` | operator + maintenanceWorker + safety | New fault form (with localStorage draft autosave) |
 | `/maintenance-worker` | maintenanceWorker | Calendar + active / overdue / completed tabs + scope filter (mine / pool / all) |
 | `/manager` | manager | Active / new / planned / completed tabs with live counters; planning + reassign + add-maintainers |
