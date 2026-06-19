@@ -106,6 +106,55 @@
       "location": "Location",
       "status": "Status",
       "actions": "Actions"
+    },
+    "PlantPartsList": {
+      "title": "Machine parts management",
+      "subtitlePrefix": "Plant",
+      "search": "Search",
+      "searchPlaceholder": "Search by name",
+      "status": "Status",
+      "name": "Part Name",
+      "code": "Code",
+      "actions": "Actions"
+    },
+    "CreateAndEditPlantAndPlantPartsForm": {
+      "titleNew": "New Machine",
+      "titleEdit": "Edit Machine",
+      "subtitle": "Manage the machine or plant information",
+      "partsTitle": "Plant parts",
+      "partsSubtitle": "Add the parts that make up this plant",
+      "labels": {
+        "namePlant": "Machine Name",
+        "code": "Code",
+        "location": "Location",
+        "status": "Status",
+        "namePlantPart": "Part Name",
+        "codePlantPart": "Part Code"
+      },
+      "partsListTitle": "Added parts:",
+      "removePartAriaLabel": "Remove part",
+      "buttons": {
+        "addPart": "Add",
+        "cancel": "Cancel",
+        "create": "Create Machine",
+        "saveChanges": "Save Changes"
+      },
+      "validation": {
+        "fillBothFields": "Fill both fields",
+        "codeAlreadyAdded": "Code already added"
+      },
+      "errors": {
+        "unknownError": "Unknown error",
+        "plantNameExists": "A machine with this name already exists",
+        "plantCodeExists": "A machine with this code already exists",
+        "partCodeExists": "A machine part with this code already exists",
+        "partCodesExistsCancellation": "Part codes already exist. The machine was not created."
+      },
+      "messages": {
+        "plantCreated": "Machine and parts created successfully",
+        "plantUpdated": "The machine was updated successfully",
+        "partUpdated": "The machine part was updated successfully"
+      }
     }
   },
 

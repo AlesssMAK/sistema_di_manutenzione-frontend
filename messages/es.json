@@ -106,6 +106,55 @@
       "location": "Ubicación",
       "status": "Estado",
       "actions": "Acciones"
+    },
+    "PlantPartsList": {
+      "title": "Gestión de piezas de máquina",
+      "subtitlePrefix": "Máquina",
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por nombre",
+      "status": "Estado",
+      "name": "Nombre Pieza",
+      "code": "Código",
+      "actions": "Acciones"
+    },
+    "CreateAndEditPlantAndPlantPartsForm": {
+      "titleNew": "Nueva Máquina",
+      "titleEdit": "Editar Máquina",
+      "subtitle": "Gestiona la información de la máquina o instalación",
+      "partsTitle": "Piezas de la máquina",
+      "partsSubtitle": "Añade las piezas que componen esta máquina",
+      "labels": {
+        "namePlant": "Nombre de Máquina",
+        "code": "Código",
+        "location": "Ubicación",
+        "status": "Estado",
+        "namePlantPart": "Nombre de la pieza",
+        "codePlantPart": "Código de la pieza"
+      },
+      "partsListTitle": "Piezas añadidas:",
+      "removePartAriaLabel": "Quitar pieza",
+      "buttons": {
+        "addPart": "Añadir",
+        "cancel": "Cancelar",
+        "create": "Crear Máquina",
+        "saveChanges": "Guardar cambios"
+      },
+      "validation": {
+        "fillBothFields": "Rellena ambos campos",
+        "codeAlreadyAdded": "Código ya añadido"
+      },
+      "errors": {
+        "unknownError": "Error desconocido",
+        "plantNameExists": "Ya existe una máquina con este nombre",
+        "plantCodeExists": "Ya existe una máquina con este código",
+        "partCodeExists": "Ya existe una pieza con este código",
+        "partCodesExistsCancellation": "Códigos de piezas ya existen. La máquina no se ha creado."
+      },
+      "messages": {
+        "plantCreated": "Máquina y piezas creadas con éxito",
+        "plantUpdated": "La máquina se actualizó correctamente",
+        "partUpdated": "La pieza de la máquina se actualizó correctamente"
+      }
     }
   },
 

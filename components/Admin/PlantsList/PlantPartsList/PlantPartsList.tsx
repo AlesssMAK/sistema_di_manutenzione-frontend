@@ -25,6 +25,7 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
   const [status, setStatus] = useState<STATUS | string>('');
   const [debouncedSearch] = useDebounce(search, 500);
 
+  const t = useTranslations('AdminPage.PlantPartsList');
   const tStatuses = useTranslations('Statuses');
   const tNoFound = useTranslations('NoFound');
 
@@ -35,16 +36,16 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
     {
       id: 'search',
       type: 'input',
-      label: 'Cerca',
+      label: t('search'),
       value: search,
-      placeholder: 'Cerca per nome',
+      placeholder: t('searchPlaceholder'),
       onChange: setSearch,
       icon: 'search',
     },
     {
       id: 'status',
       type: 'select',
-      label: 'Status',
+      label: t('status'),
       value: statusMapper.getLabelByValue(status) ?? tStatuses('all'),
       options: statusMapper.labelsArray,
       onSelect: label => {
@@ -84,9 +85,9 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
       <Modal onClose={onClose}>
         <div className={css.plan_parts_list_container}>
           <div className={css.title_container}>
-            <h1 className="title">Gestione parti di impianto</h1>
+            <h1 className="title">{t('title')}</h1>
             <p className="subtitle">
-              Impianto: {plant.namePlant} {plant.code}
+              {t('subtitlePrefix')}: {plant.namePlant} {plant.code}
             </p>
           </div>
           <Filters items={filters} onClear={onClear} />
@@ -118,16 +119,16 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
             <div className={css.plant_parts_title_container}>
               <ul className={css.title_list}>
                 <li className={`${css.title_list_item} ${css.name}`}>
-                  <h3 className={`${css.title} ${css.name}`}>Nome Parte</h3>
+                  <h3 className={`${css.title} ${css.name}`}>{t('name')}</h3>
                 </li>
                 <li className={`${css.title_list_item} ${css.code}`}>
-                  <h3 className={css.title}>Codice</h3>
+                  <h3 className={css.title}>{t('code')}</h3>
                 </li>
                 <li className={`${css.title_list_item} ${css.status}`}>
-                  <h3 className={css.title}>Stato</h3>
+                  <h3 className={css.title}>{t('status')}</h3>
                 </li>
                 <li className={`${css.title_list_item} ${css.action}`}>
-                  <h3 className={css.title}>Azioni</h3>
+                  <h3 className={css.title}>{t('actions')}</h3>
                 </li>
               </ul>
               {data.plantParts.map(plantPart => (

@@ -65,7 +65,10 @@
     "Plants": {
       "title": "Zarządzanie maszynami / zakładami",
       "subtitle": "Zarządzaj katalogiem maszyn i zakładów",
-      "newMachine": "Nowa maszyna"
+      "newMachine": "Nowa maszyna",
+      "searchPlaceholder": "Szukaj po nazwie...",
+      "status": "Status",
+      "search": "Szukaj"
     },
     "UsersList": {
       "name": "Imię i nazwisko użytkownika",
@@ -74,6 +77,63 @@
       "email": "Powiązany e-mail",
       "status": "Status",
       "actions": "Akcje"
+    },
+    "PlantsList": {
+      "name": "Nazwa maszyny",
+      "namePlantPart": "Nazwa części",
+      "code": "Kod",
+      "location": "Lokalizacja",
+      "status": "Status",
+      "actions": "Akcje"
+    },
+    "PlantPartsList": {
+      "title": "Zarządzanie częściami maszyny",
+      "subtitlePrefix": "Maszyna",
+      "search": "Szukaj",
+      "searchPlaceholder": "Szukaj po nazwie",
+      "status": "Status",
+      "name": "Nazwa części",
+      "code": "Kod",
+      "actions": "Akcje"
+    },
+    "CreateAndEditPlantAndPlantPartsForm": {
+      "titleNew": "Nowa maszyna",
+      "titleEdit": "Edytuj maszynę",
+      "subtitle": "Zarządzaj informacjami o maszynie lub zakładzie",
+      "partsTitle": "Części maszyny",
+      "partsSubtitle": "Dodaj części, z których składa się ta maszyna",
+      "labels": {
+        "namePlant": "Nazwa maszyny",
+        "code": "Kod",
+        "location": "Lokalizacja",
+        "status": "Status",
+        "namePlantPart": "Nazwa części",
+        "codePlantPart": "Kod części"
+      },
+      "partsListTitle": "Dodane części:",
+      "removePartAriaLabel": "Usuń część",
+      "buttons": {
+        "addPart": "Dodaj",
+        "cancel": "Anuluj",
+        "create": "Utwórz maszynę",
+        "saveChanges": "Zapisz zmiany"
+      },
+      "validation": {
+        "fillBothFields": "Wypełnij oba pola",
+        "codeAlreadyAdded": "Kod już dodany"
+      },
+      "errors": {
+        "unknownError": "Nieznany błąd",
+        "plantNameExists": "Maszyna o tej nazwie już istnieje",
+        "plantCodeExists": "Maszyna o tym kodzie już istnieje",
+        "partCodeExists": "Część maszyny o tym kodzie już istnieje",
+        "partCodesExistsCancellation": "Kody części już istnieją. Maszyna nie została utworzona."
+      },
+      "messages": {
+        "plantCreated": "Maszyna i części utworzone pomyślnie",
+        "plantUpdated": "Maszyna została zaktualizowana pomyślnie",
+        "partUpdated": "Część maszyny została zaktualizowana pomyślnie"
+      }
     }
   },
 
