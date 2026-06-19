@@ -44,6 +44,15 @@ const MessageDetailModal = ({
       ? message.authorId.fullName
       : message.authorName;
 
+  // Don't offer a reply CTA when I'm the author — the backend
+  // rejects self-reply with 400, and there's no useful UX in
+  // letting someone reply to their own broadcast.
+  const authorIdStr =
+    typeof message.authorId === 'object' && message.authorId
+      ? String(message.authorId._id)
+      : String(message.authorId);
+  const isAuthor = authorIdStr === String(currentUserId);
+
   // Auto-mark on first open so the badge ticks down immediately.
   // Idempotent on the backend ($addToSet), but skip if I'm already in readBy.
   const markMutation = useMutation({
@@ -123,13 +132,15 @@ const MessageDetailModal = ({
             >
               {t('close')}
             </Button>
-            <Button
-              type="button"
-              className="button button--blue"
-              onClick={() => setIsReplying(true)}
-            >
-              {t('reply')}
-            </Button>
+            {!isAuthor && (
+              <Button
+                type="button"
+                className="button button--blue"
+                onClick={() => setIsReplying(true)}
+              >
+                {t('reply')}
+              </Button>
+            )}
           </div>
         )}
       </div>
