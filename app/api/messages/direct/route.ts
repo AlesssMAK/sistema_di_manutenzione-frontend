@@ -7,7 +7,13 @@ import { api } from '../../api';
 export async function POST(req: NextRequest) {
   const cookie = await cookies();
   try {
-    const body = await req.json();
+    // Compose modal with images sends multipart/form-data; plain
+    // text-only sends JSON. Branch on the inbound content-type so the
+    // multer middleware on the backend gets the format it expects.
+    const isMultipart = (
+      req.headers.get('content-type') ?? ''
+    ).startsWith('multipart/form-data');
+    const body = isMultipart ? await req.formData() : await req.json();
     const res = await api.post('/messages/direct', body, {
       headers: { Cookie: cookie.toString() },
     });

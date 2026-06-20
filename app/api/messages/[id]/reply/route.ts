@@ -12,7 +12,14 @@ export async function POST(
   const { id } = await params;
 
   try {
-    const body = await req.json();
+    // ReplyForm with image attachments sends multipart/form-data;
+    // plain text-only sends JSON. Branch on the inbound content-type
+    // so the multer middleware on the backend gets the format it
+    // expects.
+    const isMultipart = (
+      req.headers.get('content-type') ?? ''
+    ).startsWith('multipart/form-data');
+    const body = isMultipart ? await req.formData() : await req.json();
     const res = await api.post(`/messages/${id}/reply`, body, {
       headers: { Cookie: cookie.toString() },
     });
