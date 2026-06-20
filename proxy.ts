@@ -13,15 +13,15 @@ export async function proxy(request: NextRequest) {
   const isLoginRoute = pathname.startsWith('/login');
 
   try {
-    // if (isLoginRoute) {
-    //   const { ok } = await handleSessionRefresh(accessToken, refreshToken);
+    if (isLoginRoute) {
+      const { ok } = await handleSessionRefresh(accessToken, refreshToken);
 
-    //   if (ok) {
-    //     return NextResponse.redirect(new URL('/', request.nextUrl.origin));
-    //   }
+      if (ok) {
+        return NextResponse.redirect(new URL('/', request.nextUrl.origin));
+      }
 
-    //   return NextResponse.next();
-    // }
+      return NextResponse.next();
+    }
 
     const isProtected = Object.values(roleRoutes)
       .flat()
@@ -30,15 +30,13 @@ export async function proxy(request: NextRequest) {
     if (isProtected) {
       const { ok } = await handleSessionRefresh(accessToken, refreshToken);
 
-      // розкомітити після написання всього коду
+      if (!ok) {
+        return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+      }
 
-      // if (!ok) {
-      //   return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
-      // }
-
-      // if (!isAllowed(role, pathname)) {
-      //   return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
-      // }
+      if (!isAllowed(role, pathname)) {
+        return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
+      }
     }
 
     return NextResponse.next();
@@ -51,11 +49,17 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // '/login',
-    // '/admin/:path*',
-    // '/manager/:path*',
-    // '/maintenance-worker/:path*',    <----  // розкомітити після написання всього коду
-    // '/operator/:path*',
-    // '/safety/:path*',
+    '/login',
+    '/admin/:path*',
+    '/manager/:path*',
+    '/maintenance-worker/:path*',
+    '/operator/:path*',
+    '/safety/:path*',
+    // Cross-role pages already declared per-role in roleRoutes but
+    // missing from the matcher — the guard never fired for them and
+    // they rendered without a session/role check.
+    '/messages/:path*',
+    '/reports-and-communications/:path*',
+    '/report-fault/:path*',
   ],
 };
