@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { isAxiosError } from 'axios';
 import { logErrorResponse } from '@/app/api/_utils/utils';
 import { api } from '@/app/api/api';
+import { cookies } from 'next/headers';
 
 interface Props {
   params: Promise<{ plantId: string }>;
 }
 
 export async function GET(req: NextRequest, { params }: Props) {
+  const cookie = await cookies();
   try {
     const search = req.nextUrl.searchParams.get('search') ?? '';
     const rawStatus = req.nextUrl.searchParams.get('status') ?? '';
@@ -22,6 +24,9 @@ export async function GET(req: NextRequest, { params }: Props) {
         ...(status ? { status } : {}),
         page,
         perPage,
+      },
+      headers: {
+        Cookie: cookie.toString(),
       },
     });
 

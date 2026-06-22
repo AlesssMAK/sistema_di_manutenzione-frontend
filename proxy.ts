@@ -55,11 +55,5 @@ export const config = {
     '/maintenance-worker/:path*',
     '/operator/:path*',
     '/safety/:path*',
-    // Cross-role pages already declared per-role in roleRoutes but
-    // missing from the matcher — the guard never fired for them and
-    // they rendered without a session/role check.
-    '/messages/:path*',
-    '/reports-and-communications/:path*',
-    '/report-fault/:path*',
   ],
 };

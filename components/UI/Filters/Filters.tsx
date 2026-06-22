@@ -4,12 +4,13 @@ import { useTranslations } from 'next-intl';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import SelectDropdown from '../SelectDropdown/SelectDropdown';
+import DatePickerInput from '../DatePickerInput/DatePickerInput';
 import css from './Filters.module.css';
 
 interface FiltersTypes {
   id: string;
   label: string;
-  type: 'input' | 'select';
+  type: 'input' | 'select' | 'date';
 }
 
 interface FiltersInput extends FiltersTypes {
@@ -28,7 +29,16 @@ interface FiltersSelect extends FiltersTypes {
   placeholder?: string;
 }
 
-export type FiltersItem = FiltersInput | FiltersSelect;
+interface FiltersDate extends FiltersTypes {
+  type: 'date';
+  // ISO 'YYYY-MM-DD' or '' — rendered via the localized
+  // DatePickerInput so dates follow the active app language.
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+}
+
+export type FiltersItem = FiltersInput | FiltersSelect | FiltersDate;
 
 export interface FiltersProps {
   items: FiltersItem[];
@@ -88,6 +98,19 @@ const Filters = ({ items, onClear }: FiltersProps) => {
                   onSelect={item.onSelect}
                   placeholder={item.placeholder || ''}
                   disabled={false}
+                />
+              </div>
+            );
+          }
+
+          if (item.type === 'date') {
+            return (
+              <div key={item.id} className={css.filter_item}>
+                <p className={css.label}>{item.label}</p>
+                <DatePickerInput
+                  value={item.value}
+                  onChange={item.onChange}
+                  placeholder={item.placeholder}
                 />
               </div>
             );

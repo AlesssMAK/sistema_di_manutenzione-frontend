@@ -5,27 +5,22 @@ import { cookies } from 'next/headers';
 import { api } from '../../api';
 
 export async function POST(req: NextRequest) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get('accessToken')?.value;
+
   try {
-    const cookieStore = await cookies();
+    if (accessToken) {
+      return NextResponse.json({ authenticated: true });
+    }
 
-    const accessToken = cookieStore.get('accessToken')?.value;
-    const refreshToken = cookieStore.get('refreshToken')?.value;
-
-    await api.post('auth/logout', null, {
-      headers: {
-        Cookie: `accessToken=${accessToken}; refreshToken=${refreshToken}`,
-      },
+    const refreshRes = await api.post('/auth/refresh', {
+      headers: { Cookie: cookieStore.toString() },
     });
 
-    cookieStore.delete('accessToken');
-    cookieStore.delete('refreshToken');
-    cookieStore.delete('role');
-    cookieStore.delete('sessionId');
-
-    return NextResponse.json(
-      { message: 'Logged out successfully' },
-      { status: 200 }
-    );
+    if (refreshRes) {
+      return NextResponse.json({ authenticated: true });
+    }
+    return NextResponse.json({ authenticated: false }, { status: 401 });
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);

@@ -125,7 +125,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     control: createPlantAndPlantPartsForm.control,
     name: 'parts',
   });
-  console.log(updatePlantPartForm.formState.errors);
+  console.log(createPlantAndPlantPartsForm.formState.errors);
 
   const handleAddPart = () => {
     const name = newPartName.trim();
@@ -152,6 +152,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     data: CreatePlantAndPlantPartsFormValues
   ) => {
     let createdPlantId: string | null = null;
+    console.log('DATA', data);
 
     // ━━━━━━━━━━ 1. Create Plant ━━━━━━━━━━
     try {
@@ -206,6 +207,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
       });
     } catch (error) {
       if (createdPlantId) {
+        console.log('CREATED PLANT PARTS ERROR');
         try {
           await deletePlant(createdPlantId);
         } catch (e) {

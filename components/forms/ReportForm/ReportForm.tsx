@@ -36,9 +36,6 @@ const ReportForm = () => {
   const t = useTranslations('ReportForm');
   const tBtn = useTranslations('btn');
   const { user } = useAuthStore();
-  // Subscribe per-slot — function refs are stable, the draft slice
-  // is the only piece this form cares about. Avoids re-rendering on
-  // unrelated store updates.
   const draft = useFaultDraft(s => s.draft);
   const setDraft = useFaultDraft(s => s.setDraft);
   const clearDraft = useFaultDraft(s => s.clearDraft);
@@ -54,10 +51,6 @@ const ReportForm = () => {
     formState: { errors, isSubmitting },
   } = useForm<ReportFormValues>({
     resolver: yupResolver(reportSchema),
-    // Seed RHF from the persisted draft so default values match
-    // whatever the user typed before the page reload. The store
-    // reads localStorage synchronously on creation, so by the time
-    // this hook runs the draft is already hydrated client-side.
     defaultValues: {
       img: [],
       typeFault: draft.typeFault,
@@ -329,8 +322,7 @@ const ReportForm = () => {
             <textarea
               id="comment"
               {...register('comment', {
-                onChange: e =>
-                  setDraft({ ...draft, comment: e.target.value }),
+                onChange: e => setDraft({ ...draft, comment: e.target.value }),
               })}
               required
               className={css.textarea}

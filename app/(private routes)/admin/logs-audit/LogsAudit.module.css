@@ -1,0 +1,54 @@
+.pageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+/* Universal Filters component carries its own chrome; just space it
+   from the tabs below. */
+.filtersWrap {
+  margin-bottom: 20px;
+}
+
+/* Tab bar above the single content area (Accessi / Modifiche). */
+.tabsBar {
+  margin-bottom: 20px;
+}
+
+.sectionLoader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 0;
+}
+
+.empty {
+  padding: 24px 16px;
+  text-align: center;
+  color: #64748b;
+  font-size: 14px;
+  margin: 0;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.paginationWrap {
+  margin-top: 16px;
+}
+
+.footerNote {
+  padding: 14px 16px;
+  border: 1.17px solid #bfdbfe;
+  border-radius: 8px;
+  background: #eff6ff;
+  color: #1e3a8a;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.footerNoteStrong {
+  font-weight: 600;
+}

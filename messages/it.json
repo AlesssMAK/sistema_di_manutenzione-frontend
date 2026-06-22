@@ -154,6 +154,96 @@
         "plantUpdated": "La macchina è stata aggiornata con successo",
         "partUpdated": "La parte della macchina è stata aggiornata con successo"
       }
+    },
+    "LogsAudit": {
+      "title": "Log & Audit del Sistema",
+      "subtitle": "Visualizza cronologia accessi e modifiche al sistema",
+      "system": "Sistema",
+      "filters": {
+        "search": "Utente",
+        "searchPlaceholder": "Cerca per nome...",
+        "role": "Ruolo",
+        "allRoles": "Tutti i ruoli",
+        "from": "Dal",
+        "to": "Al",
+        "clear": "Pulisci",
+        "datePlaceholder": "gg/mm/aaaa"
+      },
+      "datePicker": {
+        "prevMonth": "Mese precedente",
+        "nextMonth": "Mese successivo",
+        "clear": "Pulisci",
+        "today": "Oggi"
+      },
+      "actions": {
+        "auth_login": "Accesso",
+        "auth_logout": "Disconnessione",
+        "auth_refresh": "Rinnovo sessione",
+        "auth_register": "Registrazione utente",
+        "user_create": "Creazione utente",
+        "user_update": "Modifica utente",
+        "user_delete": "Eliminazione utente",
+        "user_verify": "Verifica utente",
+        "plant_create": "Creazione macchina",
+        "plant_update": "Modifica macchina",
+        "plant_delete": "Disattivazione macchina",
+        "part_create": "Creazione parte",
+        "part_update": "Modifica parte",
+        "part_delete": "Disattivazione parte",
+        "fault_create": "Creazione segnalazione",
+        "fault_update": "Modifica segnalazione",
+        "fault_delete": "Eliminazione segnalazione",
+        "fault_statusChange": "Cambio stato segnalazione",
+        "fault_assign": "Assegnazione segnalazione",
+        "fault_reassign": "Riassegnazione segnalazione",
+        "fault_verify": "Verifica segnalazione",
+        "fault_auto_overdue": "Segnalazione in ritardo (auto)",
+        "fault_auto_replanned": "Ripianificazione automatica",
+        "comment_create": "Creazione commento",
+        "comment_delete": "Eliminazione commento",
+        "settings_update": "Modifica impostazioni",
+        "message_create": "Invio messaggio",
+        "message_broadcast": "Invio annuncio",
+        "message_reply": "Risposta messaggio",
+        "message_delete": "Eliminazione messaggio",
+        "cron_reschedule": "Ripianificazione (cron)",
+        "cron_markOverdue": "Marcatura in ritardo (cron)"
+      },
+      "sections": {
+        "access": {
+          "title": "Cronologia Accessi",
+          "empty": "Nessun accesso registrato"
+        },
+        "changes": {
+          "title": "Modifiche al Sistema",
+          "empty": "Nessuna modifica registrata"
+        }
+      },
+      "columns": {
+        "date": "Data e Ora",
+        "actor": "Utente",
+        "role": "Ruolo",
+        "action": "Azione",
+        "changeType": "Tipo di Modifica",
+        "target": "Oggetto",
+        "summary": "Descrizione",
+        "details": "Dettagli",
+        "openDetail": "Apri dettaglio"
+      },
+      "footer": {
+        "label": "Nota",
+        "body": "I log sono in sola lettura e vengono conservati per garantire la tracciabilità di tutte le operazioni effettuate nel sistema. I dati vengono archiviati conformemente alle normative vigenti."
+      },
+      "detail": {
+        "title": "Dettaglio evento",
+        "date": "Data",
+        "actor": "Attore",
+        "target": "Oggetto",
+        "summary": "Descrizione",
+        "ip": "IP",
+        "userAgent": "User agent",
+        "extra": "Dati aggiuntivi"
+      }
     }
   },
 

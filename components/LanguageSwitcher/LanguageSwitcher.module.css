@@ -1,6 +1,12 @@
 .container {
   position: relative;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  height: 38px;
+  padding: 5px;
 }
 
 /* Mirror the original `button button--white .langButton` look so the
@@ -49,7 +55,7 @@
    open state. */
 .arrow {
   transform: rotate(-90deg);
-  transition: transform 0.15s ease;
+  transition: transform 0.2s ease;
 }
 
 .arrowUp {

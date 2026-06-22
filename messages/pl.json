@@ -134,6 +134,96 @@
         "plantUpdated": "Maszyna została zaktualizowana pomyślnie",
         "partUpdated": "Część maszyny została zaktualizowana pomyślnie"
       }
+    },
+    "LogsAudit": {
+      "title": "Logi & Audyt systemu",
+      "subtitle": "Przeglądaj historię dostępów i zmian w systemie",
+      "system": "System",
+      "filters": {
+        "search": "Użytkownik",
+        "searchPlaceholder": "Szukaj po nazwie...",
+        "role": "Rola",
+        "allRoles": "Wszystkie role",
+        "from": "Od",
+        "to": "Do",
+        "clear": "Wyczyść",
+        "datePlaceholder": "dd.mm.rrrr"
+      },
+      "datePicker": {
+        "prevMonth": "Poprzedni miesiąc",
+        "nextMonth": "Następny miesiąc",
+        "clear": "Wyczyść",
+        "today": "Dziś"
+      },
+      "actions": {
+        "auth_login": "Logowanie",
+        "auth_logout": "Wylogowanie",
+        "auth_refresh": "Odnowienie sesji",
+        "auth_register": "Rejestracja użytkownika",
+        "user_create": "Utworzenie użytkownika",
+        "user_update": "Modyfikacja użytkownika",
+        "user_delete": "Usunięcie użytkownika",
+        "user_verify": "Weryfikacja użytkownika",
+        "plant_create": "Utworzenie maszyny",
+        "plant_update": "Modyfikacja maszyny",
+        "plant_delete": "Dezaktywacja maszyny",
+        "part_create": "Utworzenie części",
+        "part_update": "Modyfikacja części",
+        "part_delete": "Dezaktywacja części",
+        "fault_create": "Utworzenie zgłoszenia",
+        "fault_update": "Modyfikacja zgłoszenia",
+        "fault_delete": "Usunięcie zgłoszenia",
+        "fault_statusChange": "Zmiana statusu zgłoszenia",
+        "fault_assign": "Przypisanie zgłoszenia",
+        "fault_reassign": "Ponowne przypisanie zgłoszenia",
+        "fault_verify": "Weryfikacja zgłoszenia",
+        "fault_auto_overdue": "Zgłoszenie opóźnione (auto)",
+        "fault_auto_replanned": "Automatyczne przeplanowanie",
+        "comment_create": "Utworzenie komentarza",
+        "comment_delete": "Usunięcie komentarza",
+        "settings_update": "Modyfikacja ustawień",
+        "message_create": "Wysłanie wiadomości",
+        "message_broadcast": "Wysłanie ogłoszenia",
+        "message_reply": "Odpowiedź na wiadomość",
+        "message_delete": "Usunięcie wiadomości",
+        "cron_reschedule": "Przeplanowanie (cron)",
+        "cron_markOverdue": "Oznaczenie opóźnienia (cron)"
+      },
+      "sections": {
+        "access": {
+          "title": "Historia dostępów",
+          "empty": "Brak zarejestrowanych dostępów"
+        },
+        "changes": {
+          "title": "Zmiany w systemie",
+          "empty": "Brak zarejestrowanych zmian"
+        }
+      },
+      "columns": {
+        "date": "Data i godzina",
+        "actor": "Użytkownik",
+        "role": "Rola",
+        "action": "Akcja",
+        "changeType": "Typ zmiany",
+        "target": "Obiekt",
+        "summary": "Opis",
+        "details": "Szczegóły",
+        "openDetail": "Otwórz szczegóły"
+      },
+      "footer": {
+        "label": "Uwaga",
+        "body": "Logi są tylko do odczytu i są przechowywane w celu zapewnienia śledzenia wszystkich operacji wykonanych w systemie. Dane są archiwizowane zgodnie z obowiązującymi przepisami."
+      },
+      "detail": {
+        "title": "Szczegóły zdarzenia",
+        "date": "Data",
+        "actor": "Aktor",
+        "target": "Obiekt",
+        "summary": "Opis",
+        "ip": "IP",
+        "userAgent": "User agent",
+        "extra": "Dane dodatkowe"
+      }
     }
   },
 

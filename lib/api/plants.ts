@@ -28,7 +28,7 @@ export const createPlant = async (data: CreatePlantRequest) => {
     '/plants',
     data
   );
-  return res.data.plant;
+  return res.data.data;
 };
 
 export const updatePlant = async ({ plantId, data }: UpdatePlantRequest) => {
@@ -36,7 +36,7 @@ export const updatePlant = async ({ plantId, data }: UpdatePlantRequest) => {
     `/plants/${plantId}`,
     data
   );
-  return res.data.plant;
+  return res.data.data;
 };
 
 export const deletePlant = async (plantId: string) => {

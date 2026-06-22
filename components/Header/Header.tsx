@@ -83,12 +83,13 @@ const Header = () => {
             {isAuthenticated ? (
               <>
                 <CreateFaultButton />
-                <NotificationBell enabled={isAuthenticated} />
+
                 <div className={css.user}>
                   <svg className={css.user_icon} width="16" height="16">
                     <use href="/sprite.svg#user"></use>
                   </svg>
                   <p className={css.user_name}>{user?.fullName}</p>
+                  <NotificationBell enabled={isAuthenticated} />
                 </div>
                 <Button
                   className={`${css.exit_btn} button button--white`}

@@ -21,6 +21,6 @@ export const logout = async (): Promise<void> => {
 };
 
 export const checkSession = async (): Promise<boolean> => {
-  await nextServer.post<CheckSessionRequest>('/auth/refresh');
+  await nextServer.post<CheckSessionRequest>('/auth/check');
   return true;
 };

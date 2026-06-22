@@ -155,6 +155,96 @@
         "plantUpdated": "The machine was updated successfully",
         "partUpdated": "The machine part was updated successfully"
       }
+    },
+    "LogsAudit": {
+      "title": "System Logs & Audit",
+      "subtitle": "View access history and changes to the system",
+      "system": "System",
+      "filters": {
+        "search": "User",
+        "searchPlaceholder": "Search by name...",
+        "role": "Role",
+        "allRoles": "All roles",
+        "from": "From",
+        "to": "To",
+        "clear": "Clear",
+        "datePlaceholder": "dd/mm/yyyy"
+      },
+      "datePicker": {
+        "prevMonth": "Previous month",
+        "nextMonth": "Next month",
+        "clear": "Clear",
+        "today": "Today"
+      },
+      "actions": {
+        "auth_login": "Login",
+        "auth_logout": "Logout",
+        "auth_refresh": "Session refresh",
+        "auth_register": "User registration",
+        "user_create": "User created",
+        "user_update": "User updated",
+        "user_delete": "User deleted",
+        "user_verify": "User verified",
+        "plant_create": "Machine created",
+        "plant_update": "Machine updated",
+        "plant_delete": "Machine deactivated",
+        "part_create": "Part created",
+        "part_update": "Part updated",
+        "part_delete": "Part deactivated",
+        "fault_create": "Report created",
+        "fault_update": "Report updated",
+        "fault_delete": "Report deleted",
+        "fault_statusChange": "Report status changed",
+        "fault_assign": "Report assigned",
+        "fault_reassign": "Report reassigned",
+        "fault_verify": "Report verified",
+        "fault_auto_overdue": "Report overdue (auto)",
+        "fault_auto_replanned": "Auto-rescheduled",
+        "comment_create": "Comment created",
+        "comment_delete": "Comment deleted",
+        "settings_update": "Settings updated",
+        "message_create": "Message sent",
+        "message_broadcast": "Announcement sent",
+        "message_reply": "Message reply",
+        "message_delete": "Message deleted",
+        "cron_reschedule": "Rescheduled (cron)",
+        "cron_markOverdue": "Marked overdue (cron)"
+      },
+      "sections": {
+        "access": {
+          "title": "Access History",
+          "empty": "No accesses recorded"
+        },
+        "changes": {
+          "title": "System Changes",
+          "empty": "No changes recorded"
+        }
+      },
+      "columns": {
+        "date": "Date & Time",
+        "actor": "User",
+        "role": "Role",
+        "action": "Action",
+        "changeType": "Change Type",
+        "target": "Target",
+        "summary": "Summary",
+        "details": "Details",
+        "openDetail": "Open detail"
+      },
+      "footer": {
+        "label": "Note",
+        "body": "Logs are read-only and retained to ensure traceability of every operation performed in the system. Data is stored in compliance with applicable regulations."
+      },
+      "detail": {
+        "title": "Event detail",
+        "date": "Date",
+        "actor": "Actor",
+        "target": "Target",
+        "summary": "Summary",
+        "ip": "IP",
+        "userAgent": "User agent",
+        "extra": "Extra data"
+      }
     }
   },
 

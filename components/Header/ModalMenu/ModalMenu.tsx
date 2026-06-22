@@ -78,7 +78,6 @@ const ModalMenu = ({
                 <>
                   <div className={css.btn_container}>
                     <CreateFaultButton onAfterClick={onClose} />
-                    <NotificationBell enabled={isAuthenticated} />
                   </div>
                   <div className={css.user_item_container}>
                     <div className={css.user}>
@@ -86,6 +85,7 @@ const ModalMenu = ({
                         <use href="/sprite.svg#user"></use>
                       </svg>
                       <p className={css.user_name}>{user?.fullName}</p>
+                      <NotificationBell enabled={isAuthenticated} />
                     </div>
                     <Button
                       className={`${css.exit_btn} button button--white`}
