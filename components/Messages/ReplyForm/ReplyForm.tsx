@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -12,6 +13,7 @@ import {
 import { replyToMessage } from '@/lib/api/messages';
 import type { Message } from '@/types/messageType';
 import Button from '@/components/UI/Button/Button';
+import { UploadImages } from '@/components/UI/UploadImages/UploadImages';
 import css from './ReplyForm.module.css';
 
 interface ReplyFormProps {
@@ -28,8 +30,10 @@ const ReplyForm = ({
   onCancel,
 }: ReplyFormProps) => {
   const t = useTranslations('MessagesPage.reply');
+  const tCompose = useTranslations('MessagesPage.compose');
   const tMessages = useTranslations('MessagesPage.messages');
   const queryClient = useQueryClient();
+  const [images, setImages] = useState<File[]>([]);
 
   const {
     register,
@@ -49,6 +53,7 @@ const ReplyForm = ({
       replyToMessage(originalMessage._id, {
         subject: values.subject || undefined,
         body: values.body,
+        img: images,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['messages'] });
@@ -98,6 +103,11 @@ const ReplyForm = ({
           {...register('body')}
         />
         {errors.body && <p className={css.error}>{errors.body.message}</p>}
+      </div>
+
+      <div className={css.field}>
+        <label className={css.label}>{tCompose('labels.images')}</label>
+        <UploadImages value={images} onChange={setImages} />
       </div>
 
       <div className={css.actions}>

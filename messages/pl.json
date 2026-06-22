@@ -384,7 +384,8 @@
         "recipient": "Odbiorca",
         "targetRole": "Rola odbiorcy",
         "subject": "Temat",
-        "body": "Wiadomość"
+        "body": "Wiadomość",
+        "images": "Zdjęcia (opcjonalne)"
       },
       "placeholders": {
         "recipient": "Wybierz odbiorcę",

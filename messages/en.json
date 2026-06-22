@@ -405,7 +405,8 @@
         "recipient": "Recipient",
         "targetRole": "Target role",
         "subject": "Subject",
-        "body": "Message"
+        "body": "Message",
+        "images": "Images (optional)"
       },
       "placeholders": {
         "recipient": "Pick a recipient",

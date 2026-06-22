@@ -19,14 +19,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);
-      console.log('AUTH PROVAIDER');
 
       const isAuthenticated = await checkSession();
       if (isAuthenticated) {
-        console.log('AUTH PROVIDER → CALLING GET ME');
         const user = await getMe();
         if (user) {
-          console.log('AUTH PROVAIDER SET USER');
           setUser(user);
         }
       } else {
@@ -36,8 +33,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     };
     fetchUser();
   }, [setLoading, setUser, clearIsAuthenticated]);
-
-  console.log('MONT AUTH PROVAIDER');
 
   return children;
 };

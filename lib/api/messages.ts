@@ -12,20 +12,58 @@ import type {
 
 // ---------- create ----------
 
+// When a message carries image attachments we send multipart/form-data
+// (the proxy + multer expect that); otherwise plain JSON. Files go
+// under the `img` field — the same name the backend's multer
+// `upload.array('img', 5)` reads.
+const appendImages = (form: FormData, img?: File[]) => {
+  (img ?? []).forEach((file) => form.append('img', file));
+};
+
 export const createDirectMessage = async (
   payload: CreateDirectPayload
 ): Promise<Message> => {
-  const { data } = await nextServer.post<Message>('/messages/direct', payload);
+  if (payload.img && payload.img.length > 0) {
+    const form = new FormData();
+    form.append('recipientId', payload.recipientId);
+    if (payload.subject) form.append('subject', payload.subject);
+    form.append('body', payload.body);
+    appendImages(form, payload.img);
+    const { data } = await nextServer.post<Message>('/messages/direct', form);
+    return data;
+  }
+  const { recipientId, subject, body } = payload;
+  const { data } = await nextServer.post<Message>('/messages/direct', {
+    recipientId,
+    subject,
+    body,
+  });
   return data;
 };
 
 export const createBroadcast = async (
   payload: CreateBroadcastPayload
 ): Promise<Message> => {
-  const { data } = await nextServer.post<Message>(
-    '/messages/broadcast',
-    payload
-  );
+  if (payload.img && payload.img.length > 0) {
+    const form = new FormData();
+    form.append('target', payload.target);
+    if (payload.targetRole) form.append('targetRole', payload.targetRole);
+    if (payload.subject) form.append('subject', payload.subject);
+    form.append('body', payload.body);
+    appendImages(form, payload.img);
+    const { data } = await nextServer.post<Message>(
+      '/messages/broadcast',
+      form
+    );
+    return data;
+  }
+  const { target, targetRole, subject, body } = payload;
+  const { data } = await nextServer.post<Message>('/messages/broadcast', {
+    target,
+    targetRole,
+    subject,
+    body,
+  });
   return data;
 };
 
@@ -85,10 +123,22 @@ export const replyToMessage = async (
   id: string,
   payload: ReplyMessagePayload
 ): Promise<Message> => {
-  const { data } = await nextServer.post<Message>(
-    `/messages/${id}/reply`,
-    payload
-  );
+  if (payload.img && payload.img.length > 0) {
+    const form = new FormData();
+    if (payload.subject) form.append('subject', payload.subject);
+    form.append('body', payload.body);
+    appendImages(form, payload.img);
+    const { data } = await nextServer.post<Message>(
+      `/messages/${id}/reply`,
+      form
+    );
+    return data;
+  }
+  const { subject, body } = payload;
+  const { data } = await nextServer.post<Message>(`/messages/${id}/reply`, {
+    subject,
+    body,
+  });
   return data;
 };
 

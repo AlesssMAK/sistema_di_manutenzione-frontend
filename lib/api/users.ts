@@ -26,9 +26,7 @@ export const getAllUsers = async ({
 };
 
 export const getMe = async () => {
-  console.log('GET ME → API CALL');
   const me = await nextServer.get<GetMeRespons>('/users/me');
-  console.log('GET ME', me.data.user);
   return me.data.user;
 };
 

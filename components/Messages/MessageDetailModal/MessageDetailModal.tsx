@@ -10,6 +10,7 @@ import { markAsRead } from '@/lib/api/messages';
 import type { Message } from '@/types/messageType';
 import Modal from '@/components/UI/Modal/Modal';
 import Button from '@/components/UI/Button/Button';
+import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import ReplyForm from '../ReplyForm/ReplyForm';
 import css from './MessageDetailModal.module.css';
 
@@ -38,6 +39,7 @@ const MessageDetailModal = ({
   const tRoles = useTranslations('Roles');
   const queryClient = useQueryClient();
   const [isReplying, setIsReplying] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
   const authorName =
     typeof message.authorId === 'object' && message.authorId
@@ -81,6 +83,7 @@ const MessageDetailModal = ({
   };
 
   return (
+    <>
     <Modal onClose={onClose}>
       <div className={css.wrap}>
         <h2 className={css.title}>{t('title')}</h2>
@@ -107,6 +110,21 @@ const MessageDetailModal = ({
         </div>
 
         <div className={css.body}>{message.body}</div>
+
+        {message.img && message.img.length > 0 && (
+          <div className={css.imageGrid}>
+            {message.img.map((url, i) => (
+              <button
+                key={i}
+                type="button"
+                className={css.imageThumb}
+                onClick={() => setZoomedImage(url)}
+              >
+                <img src={url} alt={`${i + 1}`} />
+              </button>
+            ))}
+          </div>
+        )}
 
         {isReplying ? (
           <div>
@@ -145,6 +163,10 @@ const MessageDetailModal = ({
         )}
       </div>
     </Modal>
+    {zoomedImage && (
+      <ImageModal imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} />
+    )}
+    </>
   );
 };
 

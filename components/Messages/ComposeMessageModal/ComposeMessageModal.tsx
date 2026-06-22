@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -10,6 +10,7 @@ import Modal from '@/components/UI/Modal/Modal';
 import Button from '@/components/UI/Button/Button';
 import Input from '@/components/UI/Input/Input';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import { UploadImages } from '@/components/UI/UploadImages/UploadImages';
 import {
   composeMessageSchema,
   type ComposeMessageValues,
@@ -75,6 +76,11 @@ const ComposeMessageModal = ({
   const recipientId = watch('recipientId');
   const targetRole = watch('targetRole');
 
+  // Attachments live outside RHF — simpler than threading File[]
+  // through the yup schema, and the API client decides JSON vs
+  // multipart based on their presence.
+  const [images, setImages] = useState<File[]>([]);
+
   // ---- channel selector via SelectDropdown -------------------------
   const channelOptions = useMemo(
     () => allowedChannels.map((c) => ({ value: c, label: t(`channels.${c}`) })),
@@ -124,6 +130,7 @@ const ComposeMessageModal = ({
           recipientId: values.recipientId,
           subject: values.subject || undefined,
           body: values.body,
+          img: images,
         });
       }
       if (values.channel === 'broadcastRole') {
@@ -132,12 +139,14 @@ const ComposeMessageModal = ({
           targetRole: values.targetRole as UserRoles,
           subject: values.subject || undefined,
           body: values.body,
+          img: images,
         });
       }
       return createBroadcast({
         target: 'all',
         subject: values.subject || undefined,
         body: values.body,
+        img: images,
       });
     },
     onSuccess: () => {
@@ -258,6 +267,11 @@ const ComposeMessageModal = ({
               placeholder={t('placeholders.body')}
             />
             {errors.body && <p className={css.error}>{errors.body.message}</p>}
+          </div>
+
+          <div className={css.form_item_container}>
+            <p className={css.form_label}>{t('labels.images')}</p>
+            <UploadImages value={images} onChange={setImages} />
           </div>
 
           <div className={css.btn_form_container}>

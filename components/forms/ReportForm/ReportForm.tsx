@@ -47,6 +47,7 @@ const ReportForm = () => {
     handleSubmit,
     reset,
     setValue,
+    watch,
     control,
     formState: { errors, isSubmitting },
   } = useForm<ReportFormValues>({
@@ -338,7 +339,12 @@ const ReportForm = () => {
         {/* Immagini */}
         <div className={css.form_item}>
           <h3 className={css.form_title}>{t('images')}</h3>
-          <UploadImages setValue={setValue} />
+          <UploadImages
+            value={watch('img') ?? []}
+            onChange={files =>
+              setValue('img', files, { shouldValidate: true })
+            }
+          />
           <input type="hidden" {...register('img')} />
           {errors.img && <p className={css.error}>{errors.img.message}</p>}
         </div>

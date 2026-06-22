@@ -6,6 +6,35 @@
   max-width: 720px;
 }
 
+.imageGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.imageThumb {
+  width: 96px;
+  height: 96px;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: border-color 0.15s ease;
+}
+
+.imageThumb:hover {
+  border-color: #1e40af;
+}
+
+.imageThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .title {
   font-weight: 700;
   font-size: 22px;

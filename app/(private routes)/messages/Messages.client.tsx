@@ -18,33 +18,29 @@ const MessagesClient = () => {
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
 
-  // Operators have no direct inbox (backend gates it), so default to
-  // announcements for them and hide the Direct tab entirely.
   const isOperator = user?.role === 'operator';
-  const [activeTab, setActiveTab] = useState<InboxKind>(
-    isOperator ? 'announcements' : 'direct'
-  );
+  const [activeTab, setActiveTab] = useState<InboxKind>('direct');
   const [composeOpen, setComposeOpen] = useState(false);
 
-  // BE blocks operators from sending direct messages and broadcasts
-  // are also out of their scope — hide the compose entry point
-  // entirely for them. Everyone else gets all three channels; the
-  // backend still enforces per-channel rules.
+  // Operators now have a direct inbox too (BE opened it), but they
+  // only send person-to-person — no broadcasts. Other roles get all
+  // three channels; the backend still enforces per-channel rules.
   const allowedChannels: Array<'direct' | 'broadcastAll' | 'broadcastRole'> =
-    isOperator ? [] : ['direct', 'broadcastRole', 'broadcastAll'];
+    isOperator ? ['direct'] : ['direct', 'broadcastRole', 'broadcastAll'];
   const canCompose = allowedChannels.length > 0;
 
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
   }, [setPageTitle, t]);
 
-  const tabs = useMemo<TabItem<InboxKind>[]>(() => {
-    const all: TabItem<InboxKind>[] = [
+  // Both tabs are shown to every role now — operators included.
+  const tabs = useMemo<TabItem<InboxKind>[]>(
+    () => [
       { value: 'direct', label: t('tabs.direct') },
       { value: 'announcements', label: t('tabs.announcements') },
-    ];
-    return isOperator ? all.filter(tab => tab.value !== 'direct') : all;
-  }, [t, isOperator]);
+    ],
+    [t]
+  );
 
   return (
     <div className="container">

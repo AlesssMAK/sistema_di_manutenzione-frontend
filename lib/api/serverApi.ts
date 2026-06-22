@@ -19,7 +19,6 @@ export const getServerMe = async (): Promise<User> => {
   const { data } = await nextServer.get<GetMeRespons>('/users/me', {
     headers: { Cookie: cookieStore.toString() },
   });
-  console.log('GET ME SERVER', data.user);
 
   return data.user;
 };

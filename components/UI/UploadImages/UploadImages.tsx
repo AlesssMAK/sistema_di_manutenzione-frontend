@@ -1,46 +1,38 @@
-import { useState, useEffect } from 'react';
 import css from './UploadImages.module.css';
 import toast from 'react-hot-toast';
-import { UseFormSetValue } from 'react-hook-form';
-import { ReportFormValues } from '@/types/faultType';
 import { useTranslations } from 'next-intl';
 import Button from '../Button/Button';
 
 interface UploadImagesProps {
-  setValue: UseFormSetValue<ReportFormValues>;
+  /** Controlled list of picked files. */
+  value: File[];
+  onChange: (files: File[]) => void;
+  max?: number;
 }
 
-export const UploadImages = ({ setValue }: UploadImagesProps) => {
-  const [preview, setPreview] = useState<File[]>([]);
-
+export const UploadImages = ({
+  value,
+  onChange,
+  max = 5,
+}: UploadImagesProps) => {
   const t = useTranslations('ReportForm');
 
   const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
 
-    if (preview.length + files.length > 5) {
+    if (value.length + files.length > max) {
       toast(t('maxImages'));
       return;
     }
 
-    const updated = [...preview, ...files];
-
-    setPreview(updated);
-    setValue('img', updated, { shouldValidate: true });
+    onChange([...value, ...files]);
+    // Reset so picking the same file again still fires onChange.
+    e.target.value = '';
   };
 
   const removeImage = (index: number) => {
-    const updated = preview.filter((_, i) => i !== index);
-
-    setPreview(updated);
-    setValue('img', updated, { shouldValidate: true });
+    onChange(value.filter((_, i) => i !== index));
   };
-
-  useEffect(() => {
-    return () => {
-      preview.forEach(file => URL.revokeObjectURL(file as any));
-    };
-  }, [preview]);
 
   return (
     <>
@@ -61,7 +53,7 @@ export const UploadImages = ({ setValue }: UploadImagesProps) => {
       </label>
 
       <div className={css.previewList}>
-        {preview.map((file, index) => (
+        {value.map((file, index) => (
           <div key={index} className={css.previewItem}>
             <img
               src={URL.createObjectURL(file)}
@@ -84,7 +76,7 @@ export const UploadImages = ({ setValue }: UploadImagesProps) => {
       </div>
 
       <p className={css.counter}>
-        {preview.length} / {5}
+        {value.length} / {max}
       </p>
     </>
   );

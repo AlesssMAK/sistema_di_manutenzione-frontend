@@ -404,7 +404,8 @@
       "recipient": "Destinatario",
       "targetRole": "Ruolo destinatario",
       "subject": "Oggetto",
-      "body": "Messaggio"
+      "body": "Messaggio",
+      "images": "Immagini (opzionale)"
     },
     "placeholders": {
       "recipient": "Seleziona un destinatario",
