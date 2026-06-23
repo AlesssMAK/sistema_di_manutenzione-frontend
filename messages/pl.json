@@ -224,6 +224,76 @@
         "userAgent": "User agent",
         "extra": "Dane dodatkowe"
       }
+    },
+    "Notifications": {
+      "title": "Ustawienia powiadomień",
+      "subtitle": "Zarządzaj e-mailem i wiadomościami systemu",
+      "save": "Zapisz",
+      "email": {
+        "section": "E-mail",
+        "enabled": "Powiadomienia e-mail włączone",
+        "from": "Adres nadawcy",
+        "rateLimit": "E-maile na odbiorcę / godz.",
+        "triggers": {
+          "section": "Zdarzenia wysyłające e-mail",
+          "onNewFault": "Nowe zgłoszenie",
+          "onAssignment": "Przypisanie interwencji",
+          "onReassign": "Ponowne przypisanie interwencji",
+          "onSicurezzaHse": "Zgłoszenie bezpieczeństwa (HSE)",
+          "onDirectMessage": "Wiadomość bezpośrednia",
+          "onSuspended": "Interwencja zawieszona"
+        }
+      },
+      "messaging": {
+        "section": "Wiadomości",
+        "broadcastTtl": "Czas życia ogłoszeń (dni)",
+        "directRateLimit": "Wiadomości bezpośrednie / godz."
+      },
+      "messages": {
+        "saving": "Zapisywanie...",
+        "saved": "Ustawienia zapisane",
+        "error": "Błąd podczas zapisu"
+      }
+    },
+    "SystemSettings": {
+      "title": "Ustawienia globalne",
+      "subtitle": "Strefa czasowa, godziny pracy, święta i przechowywanie danych",
+      "save": "Zapisz",
+      "schedule": {
+        "section": "Godziny i planowanie",
+        "timezone": "Strefa czasowa (IANA)",
+        "workStart": "Początek dnia",
+        "workEnd": "Koniec dnia",
+        "workDays": "Dni robocze",
+        "slotDuration": "Czas trwania slotu (minuty)"
+      },
+      "weekDays": {
+        "mon": "Pon",
+        "tue": "Wt",
+        "wed": "Śr",
+        "thu": "Czw",
+        "fri": "Pt",
+        "sat": "Sob",
+        "sun": "Niedz"
+      },
+      "holidays": {
+        "section": "Święta",
+        "pickDate": "Wybierz datę",
+        "add": "Dodaj",
+        "empty": "Brak skonfigurowanych świąt",
+        "remove": "Usuń"
+      },
+      "retention": {
+        "section": "Przechowywanie danych",
+        "auditLog": "Log audytu (dni)",
+        "archiveMonths": "Archiwum zakończonych zgłoszeń (miesiące)",
+        "archiveNever": "Nigdy"
+      },
+      "messages": {
+        "saving": "Zapisywanie...",
+        "saved": "Ustawienia zapisane",
+        "error": "Błąd podczas zapisu"
+      }
     }
   },
 

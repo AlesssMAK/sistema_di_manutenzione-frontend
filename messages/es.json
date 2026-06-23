@@ -245,6 +245,76 @@
         "userAgent": "User agent",
         "extra": "Datos adicionales"
       }
+    },
+    "Notifications": {
+      "title": "Ajustes de notificaciones",
+      "subtitle": "Gestiona el correo y la mensajería del sistema",
+      "save": "Guardar",
+      "email": {
+        "section": "Correo",
+        "enabled": "Notificaciones por correo activas",
+        "from": "Dirección del remitente",
+        "rateLimit": "Correos por destinatario / hora",
+        "triggers": {
+          "section": "Eventos que envían correo",
+          "onNewFault": "Nueva señalación",
+          "onAssignment": "Intervención asignada",
+          "onReassign": "Intervención reasignada",
+          "onSicurezzaHse": "Señalación de seguridad (HSE)",
+          "onDirectMessage": "Mensaje directo",
+          "onSuspended": "Intervención suspendida"
+        }
+      },
+      "messaging": {
+        "section": "Mensajería",
+        "broadcastTtl": "Duración de anuncios (días)",
+        "directRateLimit": "Mensajes directos / hora"
+      },
+      "messages": {
+        "saving": "Guardando...",
+        "saved": "Ajustes guardados",
+        "error": "Error al guardar"
+      }
+    },
+    "SystemSettings": {
+      "title": "Ajustes globales",
+      "subtitle": "Zona horaria, horario laboral, festivos y retención de datos",
+      "save": "Guardar",
+      "schedule": {
+        "section": "Horarios y planificación",
+        "timezone": "Zona horaria (IANA)",
+        "workStart": "Inicio de jornada",
+        "workEnd": "Fin de jornada",
+        "workDays": "Días laborables",
+        "slotDuration": "Duración de franja (minutos)"
+      },
+      "weekDays": {
+        "mon": "Lun",
+        "tue": "Mar",
+        "wed": "Mié",
+        "thu": "Jue",
+        "fri": "Vie",
+        "sat": "Sáb",
+        "sun": "Dom"
+      },
+      "holidays": {
+        "section": "Festivos",
+        "pickDate": "Elige una fecha",
+        "add": "Añadir",
+        "empty": "Sin festivos configurados",
+        "remove": "Quitar"
+      },
+      "retention": {
+        "section": "Retención de datos",
+        "auditLog": "Registro de auditoría (días)",
+        "archiveMonths": "Archivo de señalaciones completadas (meses)",
+        "archiveNever": "Nunca"
+      },
+      "messages": {
+        "saving": "Guardando...",
+        "saved": "Ajustes guardados",
+        "error": "Error al guardar"
+      }
     }
   },
 

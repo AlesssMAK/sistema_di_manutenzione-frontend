@@ -1,0 +1,171 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 240px;
+}
+
+.card {
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fieldLabel {
+  font-size: 14px;
+  color: #0a0a0a;
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.timeInput {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 14px;
+  width: 140px;
+  transition: border-color 0.15s ease;
+}
+
+.timeInput:focus {
+  outline: none;
+  border-color: #1e40af;
+  background: #ffffff;
+}
+
+/* Weekday selector — pill toggles, active = blue. */
+.dayChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dayChip {
+  min-width: 52px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  background: #fff;
+  color: #0a0a0a;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.dayChip:hover {
+  background: #eff6ff;
+}
+
+.dayChipActive {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.dayChipActive:hover {
+  background: #1e40af;
+}
+
+/* Holidays */
+.holidayAdd {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.holidayPicker {
+  width: 220px;
+}
+
+.empty {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+}
+
+.holidayList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.holidayItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #f8fafc;
+  font-size: 14px;
+  color: #0a0a0a;
+  max-width: 320px;
+}
+
+.holidayRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.holidayRemove:hover {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.holidayRemove svg {
+  fill: none;
+  stroke: currentColor;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
