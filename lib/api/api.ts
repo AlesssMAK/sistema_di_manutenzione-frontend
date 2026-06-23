@@ -32,10 +32,17 @@ nextServer.interceptors.response.use(
     }
 
     const url = original.url ?? '';
-    // Never try to refresh the auth endpoints themselves — that would
-    // recurse (a failing /auth/refresh would trigger another refresh).
+    // Never auto-refresh the auth endpoints themselves — that would
+    // recurse (a failing /auth/* triggering another refresh). This is
+    // what was looping: checkSession hits /auth/check, its 401 fell
+    // through to a refresh, which 401-ed and redirected, remounting
+    // the provider that calls checkSession again.
     const isAuthCall =
-      url.includes('/auth/refresh') || url.includes('/auth/login');
+      url.includes('/auth/refresh') ||
+      url.includes('/auth/check') ||
+      url.includes('/auth/login') ||
+      url.includes('/auth/logout') ||
+      url.includes('/auth/register');
 
     if (error.response?.status === 401 && !original._retry && !isAuthCall) {
       original._retry = true;
@@ -51,8 +58,11 @@ nextServer.interceptors.response.use(
         // Cookies were rotated by the proxy route; replay the request.
         return nextServer(original);
       } catch {
-        // Refresh genuinely failed → session is gone, bounce to login.
-        window.location.href = '/login';
+        // Refresh genuinely failed → session is gone. Bounce to login,
+        // but not if we're already there (avoids a reload loop).
+        if (!window.location.pathname.startsWith('/login')) {
+          window.location.href = '/login';
+        }
         return Promise.reject(error);
       }
     }

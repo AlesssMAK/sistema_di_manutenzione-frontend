@@ -33,6 +33,15 @@ export async function POST(req: NextRequest) {
           cookieStore.set('refreshToken', parsed.refreshToken, options);
         }
 
+        // CRITICAL: BE refreshUserSession looks the session up by
+        // Session._id === sessionId cookie. Without forwarding it,
+        // the browser never gets sessionId, so every /auth/refresh
+        // returns "Session not found" — refresh could never work
+        // from the moment of login.
+        if (parsed.sessionId) {
+          cookieStore.set('sessionId', parsed.sessionId, options);
+        }
+
         cookieStore.set('role', apiRes.data.user.role, {
           path: '/',
           httpOnly: true,

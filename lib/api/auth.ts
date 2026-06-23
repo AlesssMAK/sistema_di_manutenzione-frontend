@@ -21,6 +21,12 @@ export const logout = async (): Promise<void> => {
 };
 
 export const checkSession = async (): Promise<boolean> => {
-  await nextServer.post<CheckSessionRequest>('/auth/check');
-  return true;
+  // Returns a boolean instead of throwing so callers (AuthProvider)
+  // can branch cleanly. A 401 here just means "no valid session".
+  try {
+    await nextServer.post<CheckSessionRequest>('/auth/check');
+    return true;
+  } catch {
+    return false;
+  }
 };
