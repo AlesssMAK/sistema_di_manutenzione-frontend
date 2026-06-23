@@ -12,6 +12,7 @@ import { logout } from '@/lib/api/auth';
 import { usePageStore } from '@/lib/store/pageStore';
 import LanguageButton from '../LanguageSwitcher/LanguageSwitcher';
 import NotificationBell from './NotificationBell/NotificationBell';
+import PushToggle from './PushToggle/PushToggle';
 import CreateFaultButton from './CreateFaultButton/CreateFaultButton';
 
 const Header = () => {
@@ -90,6 +91,7 @@ const Header = () => {
                   </svg>
                   <p className={css.user_name}>{user?.fullName}</p>
                   <NotificationBell enabled={isAuthenticated} />
+                  <PushToggle />
                 </div>
                 <Button
                   className={`${css.exit_btn} button button--white`}

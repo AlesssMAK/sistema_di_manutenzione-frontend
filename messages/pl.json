@@ -40,6 +40,14 @@
     "notifications": {
       "ariaLabel": "Powiadomienia",
       "tooltip": "Przejdź do wiadomości"
+    },
+    "push": {
+      "on": "Powiadomienia push włączone",
+      "off": "Włącz powiadomienia push",
+      "enabled": "Powiadomienia push włączone",
+      "disabled": "Powiadomienia push wyłączone",
+      "blocked": "Powiadomienia zablokowane przez przeglądarkę",
+      "error": "Nie udało się włączyć powiadomień"
     }
   },
 

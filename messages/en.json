@@ -41,6 +41,14 @@
     "notifications": {
       "ariaLabel": "Notifications",
       "tooltip": "Go to messages"
+    },
+    "push": {
+      "on": "Push notifications on",
+      "off": "Enable push notifications",
+      "enabled": "Push notifications enabled",
+      "disabled": "Push notifications disabled",
+      "blocked": "Notifications blocked by the browser",
+      "error": "Could not enable notifications"
     }
   },
 
