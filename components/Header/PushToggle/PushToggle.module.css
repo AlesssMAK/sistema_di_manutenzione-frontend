@@ -1,0 +1,35 @@
+/* Mirrors the NotificationBell button so the two sit side by side
+   consistently in the header. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #45556c;
+  transition: color 0.2s ease;
+}
+
+.btn:hover:not(:disabled),
+.btn:focus-visible {
+  color: #1e40af;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.icon {
+  display: block;
+}
+
+/* Subscribed — solid blue bell to signal "notifications on". */
+.active {
+  color: #2563eb;
+}

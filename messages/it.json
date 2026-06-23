@@ -40,6 +40,14 @@
 "notifications": {
   "ariaLabel": "Notifiche",
   "tooltip": "Vai ai messaggi"
+},
+"push": {
+  "on": "Notifiche push attive",
+  "off": "Attiva notifiche push",
+  "enabled": "Notifiche push attivate",
+  "disabled": "Notifiche push disattivate",
+  "blocked": "Notifiche bloccate dal browser",
+  "error": "Impossibile attivare le notifiche"
 }
 },
 
