@@ -245,6 +245,76 @@
         "userAgent": "User agent",
         "extra": "Extra data"
       }
+    },
+    "Notifications": {
+      "title": "Notification settings",
+      "subtitle": "Manage system email and messaging",
+      "save": "Save",
+      "email": {
+        "section": "Email",
+        "enabled": "Email notifications enabled",
+        "from": "Sender address",
+        "rateLimit": "Email per recipient / hour",
+        "triggers": {
+          "section": "Events that send email",
+          "onNewFault": "New report",
+          "onAssignment": "Intervention assigned",
+          "onReassign": "Intervention reassigned",
+          "onSicurezzaHse": "Safety report (HSE)",
+          "onDirectMessage": "Direct message",
+          "onSuspended": "Intervention suspended"
+        }
+      },
+      "messaging": {
+        "section": "Messaging",
+        "broadcastTtl": "Announcement lifetime (days)",
+        "directRateLimit": "Direct messages / hour"
+      },
+      "messages": {
+        "saving": "Saving...",
+        "saved": "Settings saved",
+        "error": "Error while saving"
+      }
+    },
+    "SystemSettings": {
+      "title": "Global settings",
+      "subtitle": "Timezone, work hours, holidays and data retention",
+      "save": "Save",
+      "schedule": {
+        "section": "Hours & scheduling",
+        "timezone": "Timezone (IANA)",
+        "workStart": "Day start",
+        "workEnd": "Day end",
+        "workDays": "Work days",
+        "slotDuration": "Slot duration (minutes)"
+      },
+      "weekDays": {
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      },
+      "holidays": {
+        "section": "Holidays",
+        "pickDate": "Pick a date",
+        "add": "Add",
+        "empty": "No holidays configured",
+        "remove": "Remove"
+      },
+      "retention": {
+        "section": "Data retention",
+        "auditLog": "Audit log (days)",
+        "archiveMonths": "Completed reports archive (months)",
+        "archiveNever": "Never"
+      },
+      "messages": {
+        "saving": "Saving...",
+        "saved": "Settings saved",
+        "error": "Error while saving"
+      }
     }
   },
 

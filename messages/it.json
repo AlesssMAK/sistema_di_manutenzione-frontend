@@ -244,6 +244,76 @@
         "userAgent": "User agent",
         "extra": "Dati aggiuntivi"
       }
+    },
+    "Notifications": {
+      "title": "Impostazioni notifiche",
+      "subtitle": "Gestisci email e messaggistica del sistema",
+      "save": "Salva",
+      "email": {
+        "section": "Email",
+        "enabled": "Notifiche email attive",
+        "from": "Indirizzo mittente",
+        "rateLimit": "Limite email per destinatario / ora",
+        "triggers": {
+          "section": "Eventi che inviano email",
+          "onNewFault": "Nuova segnalazione",
+          "onAssignment": "Assegnazione intervento",
+          "onReassign": "Riassegnazione intervento",
+          "onSicurezzaHse": "Segnalazione di sicurezza (HSE)",
+          "onDirectMessage": "Messaggio diretto",
+          "onSuspended": "Intervento sospeso"
+        }
+      },
+      "messaging": {
+        "section": "Messaggistica",
+        "broadcastTtl": "Durata annunci (giorni)",
+        "directRateLimit": "Limite messaggi diretti / ora"
+      },
+      "messages": {
+        "saving": "Salvataggio...",
+        "saved": "Impostazioni salvate",
+        "error": "Errore durante il salvataggio"
+      }
+    },
+    "SystemSettings": {
+      "title": "Impostazioni globali",
+      "subtitle": "Fuso orario, orari di lavoro, festività e conservazione dati",
+      "save": "Salva",
+      "schedule": {
+        "section": "Orari e pianificazione",
+        "timezone": "Fuso orario (IANA)",
+        "workStart": "Inizio giornata",
+        "workEnd": "Fine giornata",
+        "workDays": "Giorni lavorativi",
+        "slotDuration": "Durata slot (minuti)"
+      },
+      "weekDays": {
+        "mon": "Lun",
+        "tue": "Mar",
+        "wed": "Mer",
+        "thu": "Gio",
+        "fri": "Ven",
+        "sat": "Sab",
+        "sun": "Dom"
+      },
+      "holidays": {
+        "section": "Festività",
+        "pickDate": "Seleziona data",
+        "add": "Aggiungi",
+        "empty": "Nessuna festività configurata",
+        "remove": "Rimuovi"
+      },
+      "retention": {
+        "section": "Conservazione dati",
+        "auditLog": "Log di audit (giorni)",
+        "archiveMonths": "Archivio segnalazioni completate (mesi)",
+        "archiveNever": "Mai"
+      },
+      "messages": {
+        "saving": "Salvataggio...",
+        "saved": "Impostazioni salvate",
+        "error": "Errore durante il salvataggio"
+      }
     }
   },
 
