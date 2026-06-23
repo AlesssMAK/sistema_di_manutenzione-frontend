@@ -15,9 +15,6 @@ export type RefreshedCookie = {
 export type RefreshResult = {
   ok: boolean;
   refreshed: boolean;
-  /** Cookies the caller MUST write onto the NextResponse it returns —
-   *  cookies() is read-only in middleware, so setting them here would
-   *  be silently dropped. */
   cookies: RefreshedCookie[];
 };
 
@@ -27,39 +24,49 @@ export const handleSessionRefresh = async (
   accessToken?: string | undefined,
   refreshToken?: string | undefined
 ): Promise<RefreshResult> => {
-  // Nothing to work with → not signed in.
-  if (!accessToken && !refreshToken) return EMPTY;
+  if (accessToken) return { ok: true, refreshed: false, cookies: [] };
 
-  // Always validate against the backend rather than trusting that an
-  // accessToken cookie exists — it may be present but already revoked
-  // / expired server-side. The old `if (accessToken) return ok`
-  // short-circuit hid those cases until the next protected request
-  // 401-ed.
-  try {
-    const data = await checkServerSession();
-    const setCookie = data.headers['set-cookie'];
+  if (refreshToken) {
+    try {
+      const data = await checkServerSession();
+      const setCookie = data.headers['set-cookie'];
 
-    const cookies: RefreshedCookie[] = [];
-    if (setCookie) {
-      const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
-      for (const cookieStr of cookieArray) {
-        const parsed = parse(cookieStr);
-        const options = {
-          expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
-          path: parsed.Path,
-          maxAge: Number(parsed['Max-Age']),
-          httpOnly: true,
-        };
-        if (parsed.accessToken)
-          cookies.push({ name: 'accessToken', value: parsed.accessToken, options });
-        if (parsed.refreshToken)
-          cookies.push({ name: 'refreshToken', value: parsed.refreshToken, options });
-        if (parsed.sessionId)
-          cookies.push({ name: 'sessionId', value: parsed.sessionId, options });
+      const cookies: RefreshedCookie[] = [];
+      if (setCookie) {
+        const cookieArray = Array.isArray(setCookie) ? setCookie : [setCookie];
+        for (const cookieStr of cookieArray) {
+          const parsed = parse(cookieStr);
+          const options = {
+            expires: parsed.Expires ? new Date(parsed.Expires) : undefined,
+            path: parsed.Path,
+            maxAge: Number(parsed['Max-Age']),
+            httpOnly: true,
+          };
+          if (parsed.accessToken)
+            cookies.push({
+              name: 'accessToken',
+              value: parsed.accessToken,
+              options,
+            });
+          if (parsed.refreshToken)
+            cookies.push({
+              name: 'refreshToken',
+              value: parsed.refreshToken,
+              options,
+            });
+          if (parsed.sessionId)
+            cookies.push({
+              name: 'sessionId',
+              value: parsed.sessionId,
+              options,
+            });
+        }
       }
+      return { ok: true, refreshed: true, cookies };
+    } catch {
+      return EMPTY;
     }
-    return { ok: true, refreshed: true, cookies };
-  } catch {
-    return EMPTY;
   }
+
+  return EMPTY;
 };

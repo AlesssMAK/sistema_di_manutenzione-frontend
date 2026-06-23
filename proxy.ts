@@ -41,11 +41,6 @@ export async function proxy(request: NextRequest) {
 
       return NextResponse.next();
     }
-
-    // Everything the matcher covers except /login is private — a
-    // valid session is required. The role selector at "/" is private
-    // too but isn't tied to a single role, so the role check below
-    // only fires for role-scoped sections.
     const { ok, cookies } = await handleSessionRefresh(
       accessToken,
       refreshToken
@@ -71,17 +66,13 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Public-but-session-aware (redirects to / when already signed in).
     '/login',
-    // Role selector / landing — private, any signed-in role.
     '/',
-    // Role-scoped sections.
     '/admin/:path*',
     '/manager/:path*',
     '/maintenance-worker/:path*',
     '/operator/:path*',
     '/safety/:path*',
-    // Cross-role private sections.
     '/messages/:path*',
     '/reports-and-communications/:path*',
     '/report-fault/:path*',
