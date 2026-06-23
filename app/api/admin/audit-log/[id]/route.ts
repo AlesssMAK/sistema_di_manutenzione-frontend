@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 import { logErrorResponse } from '../../../_utils/utils';
 import { api } from '../../../api';
 
-export async function POST(
+export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -12,18 +12,12 @@ export async function POST(
   const { id } = await params;
 
   try {
-    // ReplyForm with image attachments sends multipart/form-data;
-    // plain text-only sends JSON. Branch on the inbound content-type
-    // so the multer middleware on the backend gets the format it
-    // expects.
-    const isMultipart = (
-      req.headers.get('content-type') ?? ''
-    ).startsWith('multipart/form-data');
-    const body = isMultipart ? await req.formData() : await req.json();
-    const res = await api.post(`/messages/${id}/reply`, body, {
+    // BE route is /audit-log (not /admin/audit-log) — /admin is owned
+    // by the AdminJS panel.
+    const res = await api.get(`/audit-log/${id}`, {
       headers: { Cookie: cookie.toString() },
     });
-    return NextResponse.json(res.data, { status: res.status });
+    return NextResponse.json(res.data);
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);

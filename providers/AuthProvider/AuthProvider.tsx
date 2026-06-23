@@ -19,15 +19,24 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);
-
-      const isAuthenticated = await checkSession();
-      if (isAuthenticated) {
+      try {
+        const isAuthenticated = await checkSession();
+        if (!isAuthenticated) {
+          clearIsAuthenticated();
+          return;
+        }
         const user = await getMe();
-
-        if (user) setUser(user);
-      } else {
-        setLoading(false);
+        if (user) {
+          setUser(user);
+        } else {
+          clearIsAuthenticated();
+        }
+      } catch {
+        // Any failure (network, unexpected throw) = treat as no
+        // session rather than leaving an unhandled rejection.
         clearIsAuthenticated();
+      } finally {
+        setLoading(false);
       }
     };
     fetchUser();

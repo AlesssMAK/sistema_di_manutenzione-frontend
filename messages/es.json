@@ -106,6 +106,145 @@
       "location": "Ubicación",
       "status": "Estado",
       "actions": "Acciones"
+    },
+    "PlantPartsList": {
+      "title": "Gestión de piezas de máquina",
+      "subtitlePrefix": "Máquina",
+      "search": "Buscar",
+      "searchPlaceholder": "Buscar por nombre",
+      "status": "Estado",
+      "name": "Nombre Pieza",
+      "code": "Código",
+      "actions": "Acciones"
+    },
+    "CreateAndEditPlantAndPlantPartsForm": {
+      "titleNew": "Nueva Máquina",
+      "titleEdit": "Editar Máquina",
+      "subtitle": "Gestiona la información de la máquina o instalación",
+      "partsTitle": "Piezas de la máquina",
+      "partsSubtitle": "Añade las piezas que componen esta máquina",
+      "labels": {
+        "namePlant": "Nombre de Máquina",
+        "code": "Código",
+        "location": "Ubicación",
+        "status": "Estado",
+        "namePlantPart": "Nombre de la pieza",
+        "codePlantPart": "Código de la pieza"
+      },
+      "partsListTitle": "Piezas añadidas:",
+      "removePartAriaLabel": "Quitar pieza",
+      "buttons": {
+        "addPart": "Añadir",
+        "cancel": "Cancelar",
+        "create": "Crear Máquina",
+        "saveChanges": "Guardar cambios"
+      },
+      "validation": {
+        "fillBothFields": "Rellena ambos campos",
+        "codeAlreadyAdded": "Código ya añadido"
+      },
+      "errors": {
+        "unknownError": "Error desconocido",
+        "plantNameExists": "Ya existe una máquina con este nombre",
+        "plantCodeExists": "Ya existe una máquina con este código",
+        "partCodeExists": "Ya existe una pieza con este código",
+        "partCodesExistsCancellation": "Códigos de piezas ya existen. La máquina no se ha creado."
+      },
+      "messages": {
+        "plantCreated": "Máquina y piezas creadas con éxito",
+        "plantUpdated": "La máquina se actualizó correctamente",
+        "partUpdated": "La pieza de la máquina se actualizó correctamente"
+      }
+    },
+    "LogsAudit": {
+      "title": "Registros & Auditoría del Sistema",
+      "subtitle": "Consulta el historial de accesos y modificaciones del sistema",
+      "system": "Sistema",
+      "filters": {
+        "search": "Usuario",
+        "searchPlaceholder": "Buscar por nombre...",
+        "role": "Rol",
+        "allRoles": "Todos los roles",
+        "from": "Desde",
+        "to": "Hasta",
+        "clear": "Limpiar",
+        "datePlaceholder": "dd/mm/aaaa"
+      },
+      "datePicker": {
+        "prevMonth": "Mes anterior",
+        "nextMonth": "Mes siguiente",
+        "clear": "Limpiar",
+        "today": "Hoy"
+      },
+      "actions": {
+        "auth_login": "Acceso",
+        "auth_logout": "Cierre de sesión",
+        "auth_refresh": "Renovación de sesión",
+        "auth_register": "Registro de usuario",
+        "user_create": "Creación de usuario",
+        "user_update": "Modificación de usuario",
+        "user_delete": "Eliminación de usuario",
+        "user_verify": "Verificación de usuario",
+        "plant_create": "Creación de máquina",
+        "plant_update": "Modificación de máquina",
+        "plant_delete": "Desactivación de máquina",
+        "part_create": "Creación de pieza",
+        "part_update": "Modificación de pieza",
+        "part_delete": "Desactivación de pieza",
+        "fault_create": "Creación de señalación",
+        "fault_update": "Modificación de señalación",
+        "fault_delete": "Eliminación de señalación",
+        "fault_statusChange": "Cambio de estado",
+        "fault_assign": "Asignación de señalación",
+        "fault_reassign": "Reasignación de señalación",
+        "fault_verify": "Verificación de señalación",
+        "fault_auto_overdue": "Señalación atrasada (auto)",
+        "fault_auto_replanned": "Replanificación automática",
+        "comment_create": "Creación de comentario",
+        "comment_delete": "Eliminación de comentario",
+        "settings_update": "Modificación de ajustes",
+        "message_create": "Envío de mensaje",
+        "message_broadcast": "Envío de anuncio",
+        "message_reply": "Respuesta de mensaje",
+        "message_delete": "Eliminación de mensaje",
+        "cron_reschedule": "Replanificación (cron)",
+        "cron_markOverdue": "Marcado atrasado (cron)"
+      },
+      "sections": {
+        "access": {
+          "title": "Historial de Accesos",
+          "empty": "Sin accesos registrados"
+        },
+        "changes": {
+          "title": "Modificaciones del Sistema",
+          "empty": "Sin modificaciones registradas"
+        }
+      },
+      "columns": {
+        "date": "Fecha y Hora",
+        "actor": "Usuario",
+        "role": "Rol",
+        "action": "Acción",
+        "changeType": "Tipo de Modificación",
+        "target": "Objeto",
+        "summary": "Resumen",
+        "details": "Detalles",
+        "openDetail": "Abrir detalle"
+      },
+      "footer": {
+        "label": "Nota",
+        "body": "Los registros son de solo lectura y se conservan para garantizar la trazabilidad de todas las operaciones realizadas en el sistema. Los datos se almacenan conforme a la normativa vigente."
+      },
+      "detail": {
+        "title": "Detalle del evento",
+        "date": "Fecha",
+        "actor": "Actor",
+        "target": "Objeto",
+        "summary": "Resumen",
+        "ip": "IP",
+        "userAgent": "User agent",
+        "extra": "Datos adicionales"
+      }
     }
   },
 
@@ -266,7 +405,8 @@
         "recipient": "Destinatario",
         "targetRole": "Rol destinatario",
         "subject": "Asunto",
-        "body": "Mensaje"
+        "body": "Mensaje",
+        "images": "Imágenes (opcional)"
       },
       "placeholders": {
         "recipient": "Elige un destinatario",

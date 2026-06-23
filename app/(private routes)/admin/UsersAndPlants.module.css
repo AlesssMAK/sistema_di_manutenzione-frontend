@@ -35,3 +35,48 @@
   align-items: center;
   height: 50%;
 }
+
+/* Audit log date-range row sits below the main Filters block (the
+   shared Filters component only handles input/select). Same gray
+   chrome as the form inputs so it reads as part of the same group. */
+.dateRow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: -8px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    gap: 16px;
+  }
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.dateLabel {
+  font-size: 13px;
+  font-weight: 500;
+  color: #45556c;
+}
+
+.dateInput {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color 0.15s ease;
+}
+
+.dateInput:focus {
+  outline: none;
+  border-color: #1e40af;
+  background: #ffffff;
+}

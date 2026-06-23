@@ -4,20 +4,19 @@ import { cookies } from 'next/headers';
 import { logErrorResponse } from '../../_utils/utils';
 import { api } from '../../api';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   const cookie = await cookies();
+  const { searchParams } = new URL(req.url);
+
   try {
-    // Compose modal with images sends multipart/form-data; plain
-    // text-only sends JSON. Branch on the inbound content-type so the
-    // multer middleware on the backend gets the format it expects.
-    const isMultipart = (
-      req.headers.get('content-type') ?? ''
-    ).startsWith('multipart/form-data');
-    const body = isMultipart ? await req.formData() : await req.json();
-    const res = await api.post('/messages/direct', body, {
+    // BE route is /audit-log (not /admin/audit-log) — /admin is owned
+    // by the AdminJS panel. This Next proxy path stays /api/admin/...
+    // since there's no AdminJS on the Next side to collide with.
+    const res = await api.get('/audit-log', {
+      params: searchParams,
       headers: { Cookie: cookie.toString() },
     });
-    return NextResponse.json(res.data, { status: res.status });
+    return NextResponse.json(res.data);
   } catch (error) {
     if (isAxiosError(error)) {
       logErrorResponse(error.response?.data);

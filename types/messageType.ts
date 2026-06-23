@@ -29,6 +29,9 @@ export interface Message {
   subject: string;
   body: string;
 
+  /** Cloudinary secure_urls for image attachments (max 5). */
+  img?: string[];
+
   /** User IDs that have marked this message as read. */
   readBy: string[];
 
@@ -50,6 +53,8 @@ export interface CreateDirectPayload {
   recipientId: string;
   subject?: string;
   body: string;
+  /** Image attachments; sent as multipart when present. */
+  img?: File[];
 }
 
 export type BroadcastTarget = 'all' | 'role';
@@ -60,11 +65,15 @@ export interface CreateBroadcastPayload {
   targetRole?: UserRoles;
   subject?: string;
   body: string;
+  /** Image attachments; sent as multipart when present. */
+  img?: File[];
 }
 
 export interface ReplyMessagePayload {
   subject?: string;
   body: string;
+  /** Image attachments; sent as multipart when present. */
+  img?: File[];
 }
 
 // ---------------------------------------------------------------------------

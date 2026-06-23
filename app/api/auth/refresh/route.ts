@@ -16,7 +16,11 @@ export async function POST(req: NextRequest) {
     }
 
     if (refreshToken) {
-      const apiRes = await api.post('/auth/refresh', {
+      // Cookie goes in the axios config (3rd arg). Passing it as the
+      // 2nd argument sent it as the request body, so the backend's
+      // refreshUserSession saw no sessionId/refreshToken cookies and
+      // always replied "Session not found".
+      const apiRes = await api.post('/auth/refresh', null, {
         headers: { Cookie: cookieStore.toString() },
       });
 

@@ -59,5 +59,5 @@ export interface UpdatePlantRequest {
 export interface CreateAndUpdatePlantResponse {
   success: boolean;
   message: string;
-  plant: Plant;
+  data: Plant;
 }

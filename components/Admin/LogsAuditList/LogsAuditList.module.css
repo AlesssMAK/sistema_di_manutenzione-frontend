@@ -1,0 +1,46 @@
+/* Same chrome as UsersList/PlantsList: bordered rounded container
+   with a desktop-only column-header row on top. */
+.container {
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.titleList {
+  display: none;
+
+  @media screen and (min-width: 1440px) {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1.17px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+.title {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #0a0a0a;
+}
+
+/* Column widths mirror LogAuditCard cells exactly. */
+.dateCol {
+  width: 200px;
+}
+
+.actorCol {
+  width: 240px;
+}
+
+.roleCol {
+  flex: 1;
+}
+
+.actionCol {
+  width: 240px;
+}
+
+.detailsCol {
+  flex: 1;
+}

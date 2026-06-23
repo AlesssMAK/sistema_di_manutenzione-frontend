@@ -5,6 +5,7 @@ import { logErrorResponse } from '../_utils/utils';
 import { cookies } from 'next/headers';
 
 export async function GET(req: NextRequest) {
+  const cookie = await cookies();
   try {
     const search = req.nextUrl.searchParams.get('search') ?? '';
     const rawStatus = req.nextUrl.searchParams.get('status') ?? '';
@@ -18,6 +19,9 @@ export async function GET(req: NextRequest) {
         ...(status ? { status } : {}),
         page,
         perPage,
+      },
+      headers: {
+        Cookie: cookie.toString(),
       },
     });
     return NextResponse.json(res.data);

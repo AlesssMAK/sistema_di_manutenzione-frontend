@@ -16,19 +16,19 @@ const PlantsList = ({ plants }: PlantsListProps) => {
     <div className={css.plants_container}>
       <ul className={css.title_list}>
         <li className={`${css.title_list_item} ${css.name}`}>
-          <h3 className={`${css.title} ${css.name}`}>Nome Macchina</h3>
+          <h3 className={`${css.title} ${css.name}`}>{t('name')}</h3>
         </li>
         <li className={`${css.title_list_item} ${css.code}`}>
-          <h3 className={css.title}>Codice</h3>
+          <h3 className={css.title}>{t('code')}</h3>
         </li>
         <li className={`${css.title_list_item} ${css.location}`}>
-          <h3 className={css.title}>Ubicazione</h3>
+          <h3 className={css.title}>{t('location')}</h3>
         </li>
         <li className={`${css.title_list_item} ${css.status}`}>
-          <h3 className={css.title}>Stato</h3>
+          <h3 className={css.title}>{t('status')}</h3>
         </li>
         <li className={`${css.title_list_item} ${css.action}`}>
-          <h3 className={css.title}>Azioni</h3>
+          <h3 className={css.title}>{t('actions')}</h3>
         </li>
       </ul>
       {plants.map(plant => (

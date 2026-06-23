@@ -20,6 +20,7 @@ export async function POST(req: NextRequest) {
     cookieStore.delete('accessToken');
     cookieStore.delete('refreshToken');
     cookieStore.delete('role');
+    cookieStore.delete('sessionId');
 
     return NextResponse.json(
       { message: 'Logged out successfully' },

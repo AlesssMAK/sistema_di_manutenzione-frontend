@@ -19,8 +19,12 @@
 
 .badge {
   position: absolute;
+  /* Pokes above the card top-edge. Stays on the LEFT so it doesn't
+     overlap the date in the card header (top-right). The parent
+     sectionBody needs a matching padding-top so the protrusion
+     isn't clipped by its overflow-y:auto scroll context. */
   top: -8px;
-  right: 12px;
+  left: 12px;
   z-index: 1;
   padding: 2px 10px;
   border-radius: 999px;

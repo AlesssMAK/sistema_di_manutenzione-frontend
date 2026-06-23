@@ -1,0 +1,209 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+/* Trigger styled like the other gray form inputs in admin filters. */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: #0a0a0a;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.trigger:hover,
+.triggerOpen {
+  border-color: #1e40af;
+  background: #ffffff;
+}
+
+.triggerLabel {
+  line-height: 1;
+}
+
+.placeholder {
+  color: #94a3b8;
+}
+
+.calendarIcon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+/* Popover calendar — chrome lifted from the maintenance-worker
+   Calendar (white card, month header, Monday-first day grid). */
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 50;
+  width: 300px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.monthTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: #1f2937;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: #1f2937;
+  transition: background 0.2s;
+}
+
+.navButton:hover {
+  background-color: #f9fafb;
+}
+
+.daysHeader {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  margin: 12px 16px 0 16px;
+}
+
+.dayName {
+  padding: 8px 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1f2937;
+  border-right: 1px solid #e2e8f0;
+  text-transform: uppercase;
+}
+
+.dayName:last-child {
+  border-right: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border: 1px solid #e2e8f0;
+  border-radius: 0 0 8px 8px;
+  margin: 0 16px 12px 16px;
+  background-color: #fff;
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0;
+  border-right: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.cell:nth-child(7n) {
+  border-right: none;
+}
+
+.cell:nth-last-child(-n + 7) {
+  border-bottom: none;
+}
+
+.cell:hover {
+  background-color: #eff6ff;
+}
+
+.otherMonth {
+  background-color: #fafafa;
+}
+
+.otherMonth .dayNumber {
+  color: #d1d5db;
+}
+
+.selected {
+  background-color: #0070f3;
+}
+
+.dayNumber {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  color: #1f2937;
+}
+
+.today {
+  background-color: #2563eb;
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+.selectedText {
+  color: #fff;
+  font-weight: 700;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.footerBtn {
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1e40af;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.footerBtn:hover {
+  background: #eff6ff;
+}

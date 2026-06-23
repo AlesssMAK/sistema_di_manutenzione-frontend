@@ -10,6 +10,7 @@ import { markAsRead } from '@/lib/api/messages';
 import type { Message } from '@/types/messageType';
 import Modal from '@/components/UI/Modal/Modal';
 import Button from '@/components/UI/Button/Button';
+import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import ReplyForm from '../ReplyForm/ReplyForm';
 import css from './MessageDetailModal.module.css';
 
@@ -38,11 +39,21 @@ const MessageDetailModal = ({
   const tRoles = useTranslations('Roles');
   const queryClient = useQueryClient();
   const [isReplying, setIsReplying] = useState(false);
+  const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
   const authorName =
     typeof message.authorId === 'object' && message.authorId
       ? message.authorId.fullName
       : message.authorName;
+
+  // Don't offer a reply CTA when I'm the author — the backend
+  // rejects self-reply with 400, and there's no useful UX in
+  // letting someone reply to their own broadcast.
+  const authorIdStr =
+    typeof message.authorId === 'object' && message.authorId
+      ? String(message.authorId._id)
+      : String(message.authorId);
+  const isAuthor = authorIdStr === String(currentUserId);
 
   // Auto-mark on first open so the badge ticks down immediately.
   // Idempotent on the backend ($addToSet), but skip if I'm already in readBy.
@@ -72,6 +83,7 @@ const MessageDetailModal = ({
   };
 
   return (
+    <>
     <Modal onClose={onClose}>
       <div className={css.wrap}>
         <h2 className={css.title}>{t('title')}</h2>
@@ -99,6 +111,21 @@ const MessageDetailModal = ({
 
         <div className={css.body}>{message.body}</div>
 
+        {message.img && message.img.length > 0 && (
+          <div className={css.imageGrid}>
+            {message.img.map((url, i) => (
+              <button
+                key={i}
+                type="button"
+                className={css.imageThumb}
+                onClick={() => setZoomedImage(url)}
+              >
+                <img src={url} alt={`${i + 1}`} />
+              </button>
+            ))}
+          </div>
+        )}
+
         {isReplying ? (
           <div>
             <h4 className={css.replyTitle}>
@@ -123,17 +150,23 @@ const MessageDetailModal = ({
             >
               {t('close')}
             </Button>
-            <Button
-              type="button"
-              className="button button--blue"
-              onClick={() => setIsReplying(true)}
-            >
-              {t('reply')}
-            </Button>
+            {!isAuthor && (
+              <Button
+                type="button"
+                className="button button--blue"
+                onClick={() => setIsReplying(true)}
+              >
+                {t('reply')}
+              </Button>
+            )}
           </div>
         )}
       </div>
     </Modal>
+    {zoomedImage && (
+      <ImageModal imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} />
+    )}
+    </>
   );
 };
 

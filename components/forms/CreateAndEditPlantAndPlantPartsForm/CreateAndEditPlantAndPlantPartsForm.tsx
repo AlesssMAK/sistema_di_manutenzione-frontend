@@ -62,6 +62,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   const [newPartCode, setNewPartCode] = useState('');
   const [addError, setAddError] = useState<string | null>(null);
 
+  const t = useTranslations('AdminPage.CreateAndEditPlantAndPlantPartsForm');
   const tBtn = useTranslations('btn');
   const tStatus = useTranslations('Statuses');
 
@@ -124,19 +125,19 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     control: createPlantAndPlantPartsForm.control,
     name: 'parts',
   });
-  console.log(updatePlantPartForm.formState.errors);
+  console.log(createPlantAndPlantPartsForm.formState.errors);
 
   const handleAddPart = () => {
     const name = newPartName.trim();
     const code = newPartCode.trim();
 
     if (!name || !code) {
-      setAddError('Compila entrambi i campi');
+      setAddError(t('validation.fillBothFields'));
       return;
     }
 
     if (fields.some(f => f.codePlantPart === code)) {
-      setAddError('Codice già aggiunto');
+      setAddError(t('validation.codeAlreadyAdded'));
       return;
     }
 
@@ -151,6 +152,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     data: CreatePlantAndPlantPartsFormValues
   ) => {
     let createdPlantId: string | null = null;
+    console.log('DATA', data);
 
     // ━━━━━━━━━━ 1. Create Plant ━━━━━━━━━━
     try {
@@ -168,7 +170,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         const message =
           error.response?.data?.message ??
           error.response?.data?.error?.message ??
-          'Errore sconosciuto';
+          t('errors.unknownError');
 
         if (status === 409) {
           const lower = message.toLowerCase();
@@ -176,12 +178,12 @@ const CreateAndEditPlantAndPlantPartsForm = ({
           if (lower.includes('name')) {
             createPlantAndPlantPartsForm.setError('namePlant', {
               type: 'server',
-              message: `Una macchina con questo nome esiste già`,
+              message: t('errors.plantNameExists'),
             });
           } else if (lower.includes('code')) {
             createPlantAndPlantPartsForm.setError('code', {
               type: 'server',
-              message: `Una macchina con questo codice esiste già`,
+              message: t('errors.plantCodeExists'),
             });
           } else {
             toast.error(message);
@@ -193,7 +195,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         return;
       }
       toast.error(
-        error instanceof Error ? error.message : 'Errore sconosciuto'
+        error instanceof Error ? error.message : t('errors.unknownError')
       );
       return;
     }
@@ -205,6 +207,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
       });
     } catch (error) {
       if (createdPlantId) {
+        console.log('CREATED PLANT PARTS ERROR');
         try {
           await deletePlant(createdPlantId);
         } catch (e) {
@@ -217,7 +220,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         const message =
           error.response?.data?.message ??
           error.response?.data?.error?.message ??
-          'Errore sconosciuto';
+          t('errors.unknownError');
 
         if (status === 409) {
           const lower = message.toLowerCase();
@@ -225,11 +228,9 @@ const CreateAndEditPlantAndPlantPartsForm = ({
           if (lower.includes('plant parts')) {
             createPlantAndPlantPartsForm.setError('parts', {
               type: 'server',
-              message: `Parte di macchina con questo codice esiste già`,
+              message: t('errors.partCodeExists'),
             });
-            toast.error(
-              `Codici parti già esistente. La macchina non è stata creata.`
-            );
+            toast.error(t('errors.partCodesExistsCancellation'));
           } else {
             toast.error(message);
           }
@@ -241,14 +242,14 @@ const CreateAndEditPlantAndPlantPartsForm = ({
       }
 
       toast.error(
-        error instanceof Error ? error.message : 'Errore sconosciuto'
+        error instanceof Error ? error.message : t('errors.unknownError')
       );
       return;
     }
 
     queryClient.invalidateQueries({ queryKey: ['plants'] });
 
-    toast.success('Macchina e parti create con successo');
+    toast.success(t('messages.plantCreated'));
     createPlantAndPlantPartsForm.reset();
     onClose();
   };
@@ -268,7 +269,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
           status: data.status,
         },
       });
-      toast.success('La macchina è stata aggiornata con successo');
+      toast.success(t('messages.plantUpdated'));
       updatePlantForm.reset();
       onClose();
 
@@ -279,7 +280,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         const message =
           error.response?.data?.message ??
           error.response?.data?.error?.message ??
-          'Errore sconosciuto';
+          t('errors.unknownError');
 
         if (status === 409) {
           const lower = message.toLowerCase();
@@ -287,12 +288,12 @@ const CreateAndEditPlantAndPlantPartsForm = ({
           if (lower.includes('name')) {
             createPlantAndPlantPartsForm.setError('namePlant', {
               type: 'server',
-              message: `Una macchina con questo nome esiste già`,
+              message: t('errors.plantNameExists'),
             });
           } else if (lower.includes('code')) {
             createPlantAndPlantPartsForm.setError('code', {
               type: 'server',
-              message: `Una macchina con questo codice esiste già`,
+              message: t('errors.plantCodeExists'),
             });
           } else {
             toast.error(message);
@@ -322,7 +323,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         },
       });
 
-      toast.success('La parte della macchina è stata aggiornata con successo');
+      toast.success(t('messages.partUpdated'));
       updatePlantPartForm.reset();
       onClose();
 
@@ -333,14 +334,14 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         const message =
           error.response?.data?.message ??
           error.response?.data?.error?.message ??
-          'Errore sconosciuto';
+          t('errors.unknownError');
 
         if (status === 409) {
           updatePlantPartForm.setError('codePlantPart', {
             type: 'server',
-            message: `Parte di macchina con questo codice esiste già`,
+            message: t('errors.partCodeExists'),
           });
-          toast.error(`Parte di macchina con questo codice esiste già.`);
+          toast.error(t('errors.partCodeExists'));
         } else {
           toast.error(message);
         }
@@ -375,11 +376,9 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         {!isPlantPartsEditMode && (
           <div className={css.title_container}>
             <h1 className="title">
-              {isPlantEditMode ? 'Modifica Macchina' : 'Nuova Macchina'}
+              {isPlantEditMode ? t('titleEdit') : t('titleNew')}
             </h1>
-            <p className="subtitle">
-              Gestisci le informazioni della macchina o impianto
-            </p>
+            <p className="subtitle">{t('subtitle')}</p>
           </div>
         )}
         <form
@@ -392,7 +391,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
             <div className={css_form.plant_container}>
               <div className={css.form_item_container}>
                 <p className={css.form_label}>
-                  Nome Macchina
+                  {t('labels.namePlant')}
                   {isPlantEditMode ? '' : ' *'}
                 </p>
                 <Input
@@ -413,7 +412,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
               </div>
               <div className={css.form_item_container}>
                 <p className={css.form_label}>
-                  Codice
+                  {t('labels.code')}
                   {isPlantEditMode ? '' : ' *'}
                 </p>
                 <Input
@@ -434,7 +433,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
               </div>
               <div className={css.form_item_container}>
                 <p className={css.form_label}>
-                  Ubicazione
+                  {t('labels.location')}
                   {isPlantEditMode ? '' : ' *'}
                 </p>
                 <Input
@@ -455,7 +454,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
               </div>
               {isPlantEditMode && (
                 <div className={css.form_item_container}>
-                  <p className={css.form_label}>Status</p>
+                  <p className={css.form_label}>{t('labels.status')}</p>
                   <div className={css.label_container}>
                     <input
                       onChange={e =>
@@ -497,15 +496,13 @@ const CreateAndEditPlantAndPlantPartsForm = ({
               className={`${css_form.plant_part_container} ${isPlantPartsEditMode ? css_form.non_border : ''}`}
             >
               <div className={css.title_container}>
-                <h1 className={`${css_form.title} title`}>Parti di impianto</h1>
-                <p className="subtitle">
-                  Aggiungi le parti che compongono questo impianto
-                </p>
+                <h1 className={`${css_form.title} title`}>{t('partsTitle')}</h1>
+                <p className="subtitle">{t('partsSubtitle')}</p>
               </div>
               <div className={css_form.plant_part_inputs_container}>
                 <div className={css.form_item_container}>
                   <p className={css.form_label}>
-                    Nome parte
+                    {t('labels.namePlantPart')}
                     {isPlantEditMode ? '' : ' *'}
                   </p>
                   {isPlantPartsEditMode ? (
@@ -551,7 +548,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                 </div>
                 <div className={css.form_item_container}>
                   <p className={css.form_label}>
-                    Codice parte {isPlantEditMode ? '' : ' *'}
+                    {t('labels.codePlantPart')} {isPlantEditMode ? '' : ' *'}
                   </p>
                   {isPlantPartsEditMode ? (
                     <Input
@@ -607,11 +604,11 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                     <svg width="16" height="16" className={css_form.btn_icon}>
                       <use href="/sprite.svg#plus"></use>
                     </svg>
-                    Aggiungi
+                    {t('buttons.addPart')}
                   </Button>
                 ) : (
                   <div className={css.form_item_container}>
-                    <p className={css.form_label}>Status</p>
+                    <p className={css.form_label}>{t('labels.status')}</p>
                     <div className={css.label_container}>
                       <input
                         onChange={e =>
@@ -649,7 +646,9 @@ const CreateAndEditPlantAndPlantPartsForm = ({
               </div>
               {fields.length > 0 && (
                 <div className={css_form.parts}>
-                  <p className={css_form.parts_list_title}>Parti aggiunte:</p>
+                  <p className={css_form.parts_list_title}>
+                    {t('partsListTitle')}
+                  </p>
 
                   <ul className={css_form.parts_list}>
                     {fields.map((field, index) => (
@@ -665,7 +664,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                           type="button"
                           onClick={() => remove(index)}
                           className={css_form.remove_btn}
-                          aria-label="Rimuovi parte"
+                          aria-label={t('removePartAriaLabel')}
                         >
                           <svg
                             width="18"
@@ -696,12 +695,12 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                 onClose();
               }}
             >
-              Annulla
+              {t('buttons.cancel')}
             </Button>
             <Button type="submit" className="button button--blue" width="100%">
               {isPlantEditMode || isPlantPartsEditMode
-                ? 'Salva Modifiche'
-                : 'Crea Macchina'}
+                ? t('buttons.saveChanges')
+                : t('buttons.create')}
             </Button>
           </div>
         </form>
