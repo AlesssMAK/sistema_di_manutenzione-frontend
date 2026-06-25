@@ -4,6 +4,7 @@ import nextServer from './api';
 interface FetchParams {
   page?: number;
   perPage?: number;
+  search?: string;
   priority?: string;
   deadline?: string;
   dataCreated?: string;
@@ -74,6 +75,7 @@ export const fetchFaultDeadlines = async ({
 export const fetchFaultCards = async ({
   page,
   perPage,
+  search,
   priority = '',
   deadline,
   dataCreated,
@@ -88,6 +90,7 @@ export const fetchFaultCards = async ({
     params: {
       page,
       perPage,
+      ...(search ? { search } : {}),
       ...(priority ? { priority } : {}),
       deadline,
       ...(dataCreated ? { dataCreated } : {}),

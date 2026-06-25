@@ -395,12 +395,22 @@
     "tabs": {
       "received": "Received",
       "inProgress": "In progress",
-      "archive": "Completed registry"
+      "archive": "Completed"
     },
     "empty": {
       "received": "No pending reports",
       "inProgress": "No reports in progress",
       "archive": "No archived reports"
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Report ID or operator",
+      "priority": "Priority",
+      "allPriorities": "All priorities",
+      "type": "Type",
+      "allTypes": "All types",
+      "plannedDate": "Planned date",
+      "datePlaceholder": "Select date"
     }
   },
 
@@ -654,6 +664,7 @@
       "additionalMaintainers": "Maintainers to add"
     },
     "managerCommentPlaceholder": "Optional notes for the maintainer...",
+    "datePlaceholder": "Select date",
     "loadingMaintainers": "Loading...",
     "noMaintainers": "No maintainers available",
     "noMaintainersToAdd": "All maintainers are already assigned",

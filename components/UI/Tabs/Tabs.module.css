@@ -1,19 +1,42 @@
 .tabsBar {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   border-bottom: 1px solid #e2e8f0;
+  /* Phone: long labels (e.g. "Registro completate") overflow a ~360px
+     row and the last tab gets clipped — let the bar scroll
+     horizontally instead. No-op on wider screens / fewer tabs where
+     everything already fits. Scrollbar hidden; the partially-visible
+     trailing tab hints there's more to swipe. */
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+
+  @media screen and (min-width: 768px) {
+    gap: 8px;
+  }
+}
+
+.tabsBar::-webkit-scrollbar {
+  display: none;
 }
 
 .tabButton {
   position: relative;
-  padding: 10px 18px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 8px 12px;
   background: transparent;
   border: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #64748b;
   cursor: pointer;
   transition: color 0.15s ease;
+
+  @media screen and (min-width: 768px) {
+    padding: 10px 18px;
+    font-size: 15px;
+  }
 }
 
 .tabButton:hover {
@@ -29,7 +52,10 @@
   position: absolute;
   left: 12px;
   right: 12px;
-  bottom: -1px;
+  /* bottom:0 (not -1px) so the indicator stays inside the bar — once
+     overflow-x is set, overflow-y computes to auto and would clip a
+     1px-below underline (and add a stray vertical scrollbar). */
+  bottom: 0;
   height: 2px;
   background: #1e40af;
   border-radius: 2px;

@@ -33,6 +33,7 @@ interface CreateAndEditPlantAndPlantPartsFormProps {
   initialDataForPlantPart?: initialDataForPlantPart;
   isPlantEditMode?: boolean;
   isPlantPartsEditMode?: boolean;
+  isPlantPartsAddMode?: boolean;
 }
 
 interface initialDataForPlant {
@@ -57,6 +58,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   initialDataForPlantPart,
   isPlantEditMode = false,
   isPlantPartsEditMode = false,
+  isPlantPartsAddMode = false,
 }: CreateAndEditPlantAndPlantPartsFormProps) => {
   const [newPartName, setNewPartName] = useState('');
   const [newPartCode, setNewPartCode] = useState('');
@@ -207,7 +209,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
       });
     } catch (error) {
       if (createdPlantId) {
-        console.log('CREATED PLANT PARTS ERROR');
         try {
           await deletePlant(createdPlantId);
         } catch (e) {
@@ -257,8 +258,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   const plantId = initialDataForPlant?.id || '';
 
   const onUpdatePlantSubmit = async (data: UpdatePlant) => {
-    console.log('UPDATE PLANT', data);
-
     try {
       await updatePlant({
         plantId,

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type CSSProperties } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -10,6 +10,7 @@ import Modal from '@/components/UI/Modal/Modal';
 import Button from '@/components/UI/Button/Button';
 import Input from '@/components/UI/Input/Input';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
 import {
   addMaintainers,
   assignFault,
@@ -212,6 +213,19 @@ const PlanFaultForm = ({
   const priorityLabel =
     PRIORITY_OPTIONS.find(o => o.value === priority)?.label ?? '';
 
+  // Match the compact gray box of DatePickerInput's trigger so the
+  // number/time fields sit flush with the date pickers in the row.
+  // Inline (not a CSS class) to reliably win over the universal
+  // Input's default 12px-radius / tall padding — same approach as
+  // the shared Filters component.
+  const compactInputStyle: CSSProperties = {
+    height: '36px',
+    padding: '0 12px',
+    borderRadius: '6px',
+    background: '#f3f3f5',
+    border: '1px solid transparent',
+  };
+
   return (
     <Modal onClose={onClose}>
       <div className={css.formContainer}>
@@ -259,6 +273,7 @@ const PlanFaultForm = ({
               <Input
                 type="number"
                 min={1}
+                style={compactInputStyle}
                 {...register('estimatedDuration')}
               />
               {errors.estimatedDuration && (
@@ -270,7 +285,13 @@ const PlanFaultForm = ({
           <div className={css.row}>
             <div className={css.field}>
               <p className={css.label}>{t('labels.plannedDate')}</p>
-              <Input type="date" {...register('plannedDate')} />
+              <DatePickerInput
+                value={watch('plannedDate') ?? ''}
+                onChange={v =>
+                  setValue('plannedDate', v, { shouldValidate: true })
+                }
+                placeholder={t('datePlaceholder')}
+              />
               {errors.plannedDate && (
                 <p className={css.error}>{errors.plannedDate.message}</p>
               )}
@@ -278,7 +299,11 @@ const PlanFaultForm = ({
 
             <div className={css.field}>
               <p className={css.label}>{t('labels.plannedTime')}</p>
-              <Input type="time" {...register('plannedTime')} />
+              <Input
+                type="time"
+                style={compactInputStyle}
+                {...register('plannedTime')}
+              />
               {errors.plannedTime && (
                 <p className={css.error}>{errors.plannedTime.message}</p>
               )}
@@ -287,7 +312,11 @@ const PlanFaultForm = ({
 
           <div className={css.field}>
             <p className={css.label}>{t('labels.deadline')}</p>
-            <Input type="date" {...register('deadline')} />
+            <DatePickerInput
+              value={watch('deadline') ?? ''}
+              onChange={v => setValue('deadline', v, { shouldValidate: true })}
+              placeholder={t('datePlaceholder')}
+            />
             {errors.deadline && (
               <p className={css.error}>{errors.deadline.message}</p>
             )}

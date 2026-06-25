@@ -1,23 +1,42 @@
 .pageWrapper {
-  padding: 24px 0;
+  padding: 16px 0;
+
+  @media screen and (min-width: 768px) {
+    padding: 24px 0;
+  }
 }
 
 .card {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  padding: 28px;
+  gap: 18px;
+  padding: 16px;
   background: #ffffff;
   border: 1px solid #e2e8f0;
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: 0 1px 3px rgba(10, 10, 10, 0.06);
+
+  @media screen and (min-width: 768px) {
+    gap: 24px;
+    padding: 28px;
+    border-radius: 12px;
+  }
 }
 
+/* Phone: header stacks — title full width, idBadge below. On a 320px
+   viewport the title + badge row would clip otherwise. */
 .header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
 }
 
 .headerLeft {
@@ -48,19 +67,28 @@
 
 .title {
   margin: 0;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 700;
   color: #0a0a0a;
+
+  @media screen and (min-width: 768px) {
+    font-size: 22px;
+  }
 }
 
 .idBadge {
-  padding: 4px 12px;
+  padding: 4px 10px;
   border-radius: 999px;
   background: #dbeafe;
   color: #1e40af;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.4px;
+
+  @media screen and (min-width: 768px) {
+    padding: 4px 12px;
+    font-size: 14px;
+  }
 }
 
 .maintainerChips {
@@ -85,10 +113,18 @@
   font-size: 14px;
 }
 
+/* Phone: vertical stack so plant names / dates aren't squashed into a
+   ~90px column. Tablet+: regular 2-column grid. */
 .infoGrid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  @media screen and (min-width: 768px) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 24px;
+  }
 }
 
 .infoItem {
@@ -184,12 +220,19 @@
 }
 
 .commentBox {
-  padding: 12px 16px;
+  padding: 12px;
   border-radius: 8px;
   background: #f8fafc;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  /* Long operator descriptions / unbroken IDs shouldn't overflow on a
+     320px viewport. */
+  overflow-wrap: anywhere;
+
+  @media screen and (min-width: 768px) {
+    padding: 12px 16px;
+  }
 }
 
 .commentBox label {
@@ -223,8 +266,14 @@
 
 .imageGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
+  /* Phone: smaller minmax so 2 thumbnails fit on a 320px row. */
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
 }
 
 .imageWrapper {
@@ -242,11 +291,28 @@
   object-fit: cover;
 }
 
+/* Phone: actions stack and span full width — up to three buttons
+   (Pianifica / Aggiungi tecnici / Riassegna) won't fit in one right-
+   aligned row on a narrow viewport. Tablet+: standard right-aligned row. */
 .actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+  flex-direction: column;
+  gap: 8px;
   padding-top: 8px;
   border-top: 1px solid #e2e8f0;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+}
+
+.actions > :global(button) {
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    width: auto;
+  }
 }
 
