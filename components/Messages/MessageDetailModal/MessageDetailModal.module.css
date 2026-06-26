@@ -1,9 +1,18 @@
 .wrap {
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  min-width: min(560px, 90vw);
+  gap: 16px;
+  /* Phone: cap to the viewport minus the Modal chrome (8px margin +
+     20px padding each side = 56px) so the dialog never overflows
+     sideways. Tablet+: natural width between 560 and 720. */
+  width: calc(100vw - 56px);
   max-width: 720px;
+
+  @media screen and (min-width: 768px) {
+    gap: 18px;
+    width: auto;
+    min-width: 560px;
+  }
 }
 
 .imageGrid {
@@ -37,9 +46,13 @@
 
 .title {
   font-weight: 700;
-  font-size: 22px;
+  font-size: 20px;
   color: #0a0a0a;
   margin: 0;
+
+  @media screen and (min-width: 768px) {
+    font-size: 22px;
+  }
 }
 
 .subject {
@@ -51,12 +64,20 @@
 
 .meta {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 6px 16px;
+  /* Phone: narrower label gutter so the value keeps usable width on a
+     ~300px content area; long values wrap. Tablet+: roomy 120px label. */
+  grid-template-columns: 88px 1fr;
+  gap: 6px 12px;
   padding: 12px 14px;
   background: #f8fafc;
   border-radius: 8px;
   font-size: 14px;
+  overflow-wrap: anywhere;
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 120px 1fr;
+    gap: 6px 16px;
+  }
 }
 
 .metaLabel {
