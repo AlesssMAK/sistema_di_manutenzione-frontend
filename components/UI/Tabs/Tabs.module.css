@@ -2,40 +2,43 @@
   display: flex;
   gap: 4px;
   border-bottom: 1px solid #e2e8f0;
-  /* Phone: long labels (e.g. "Registro completate") overflow a ~360px
-     row and the last tab gets clipped — let the bar scroll
-     horizontally instead. No-op on wider screens / fewer tabs where
-     everything already fits. Scrollbar hidden; the partially-visible
-     trailing tab hints there's more to swipe. */
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
 
   @media screen and (min-width: 768px) {
     gap: 8px;
   }
 }
 
-.tabsBar::-webkit-scrollbar {
-  display: none;
-}
-
 .tabButton {
   position: relative;
-  flex-shrink: 0;
-  white-space: nowrap;
-  padding: 8px 12px;
+  /* Phone: tabs split the row evenly and wrap their label if needed,
+     so all three always fit — nothing is clipped and there's no
+     horizontal scroll. Tablet+: back to natural width, left-aligned. */
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: 6px;
+  row-gap: 2px;
+  text-align: center;
+  padding: 8px 6px;
   background: transparent;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+  line-height: 1.25;
   color: #64748b;
   cursor: pointer;
   transition: color 0.15s ease;
 
   @media screen and (min-width: 768px) {
+    flex: 0 0 auto;
+    display: block;
+    text-align: left;
     padding: 10px 18px;
     font-size: 15px;
+    line-height: normal;
   }
 }
 
@@ -62,13 +65,16 @@
 }
 
 .tabCount {
-  margin-left: 8px;
   padding: 2px 8px;
   border-radius: 999px;
   background: #e2e8f0;
   color: #475569;
   font-size: 12px;
   font-weight: 600;
+
+  @media screen and (min-width: 768px) {
+    margin-left: 8px;
+  }
 }
 
 .tabActive .tabCount {

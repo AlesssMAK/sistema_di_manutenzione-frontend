@@ -716,6 +716,28 @@
         "empty": "Brak komunikatów"
       }
     },
+    "tabs": {
+      "broadcasts": "Komunikaty",
+      "faults": "Zgłoszenia"
+    },
+    "filters": {
+      "search": "Szukaj",
+      "searchFaultsPlaceholder": "ID, operator lub zakład",
+      "searchBroadcastsPlaceholder": "Tekst lub autor",
+      "status": "Status",
+      "allStatuses": "Wszystkie statusy",
+      "priority": "Priorytet",
+      "allPriorities": "Wszystkie priorytety",
+      "type": "Typ",
+      "allTypes": "Wszystkie typy",
+      "date": "Data",
+      "datePlaceholder": "Wybierz datę",
+      "broadcastType": "Typ",
+      "allBroadcastTypes": "Wszystkie typy",
+      "readState": "Odczyt",
+      "allMessages": "Wszystkie",
+      "unreadOnly": "Tylko nieprzeczytane"
+    },
     "broadcastBadge": {
       "all": "Do wszystkich",
       "role": "Dla twojej roli"

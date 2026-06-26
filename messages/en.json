@@ -737,6 +737,28 @@
         "empty": "No communications"
       }
     },
+    "tabs": {
+      "broadcasts": "Communications",
+      "faults": "Reports"
+    },
+    "filters": {
+      "search": "Search",
+      "searchFaultsPlaceholder": "ID, operator or plant",
+      "searchBroadcastsPlaceholder": "Text or author",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "priority": "Priority",
+      "allPriorities": "All priorities",
+      "type": "Type",
+      "allTypes": "All types",
+      "date": "Date",
+      "datePlaceholder": "Select date",
+      "broadcastType": "Type",
+      "allBroadcastTypes": "All types",
+      "readState": "Read",
+      "allMessages": "All",
+      "unreadOnly": "Unread only"
+    },
     "broadcastBadge": {
       "all": "To everyone",
       "role": "For your role"

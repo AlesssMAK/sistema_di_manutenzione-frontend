@@ -736,6 +736,28 @@
       "empty": "Nessuna comunicazione"
     }
   },
+  "tabs": {
+    "broadcasts": "Comunicazioni",
+    "faults": "Segnalazioni"
+  },
+  "filters": {
+    "search": "Cerca",
+    "searchFaultsPlaceholder": "ID, operatore o impianto",
+    "searchBroadcastsPlaceholder": "Testo o autore",
+    "status": "Stato",
+    "allStatuses": "Tutti gli stati",
+    "priority": "Priorità",
+    "allPriorities": "Tutte le priorità",
+    "type": "Tipologia",
+    "allTypes": "Tutte le tipologie",
+    "date": "Data",
+    "datePlaceholder": "Seleziona data",
+    "broadcastType": "Tipo",
+    "allBroadcastTypes": "Tutti i tipi",
+    "readState": "Lettura",
+    "allMessages": "Tutti",
+    "unreadOnly": "Solo non letti"
+  },
   "broadcastBadge": {
     "all": "A tutti",
     "role": "Per il tuo ruolo"
