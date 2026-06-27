@@ -25,6 +25,32 @@
   }
 }
 
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Back affordance — same chrome as the fault-detail back button. */
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0a0a0a;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.backButton:hover {
+  background: #f1f5f9;
+}
+
 .title_container {
   display: flex;
   flex-direction: column;

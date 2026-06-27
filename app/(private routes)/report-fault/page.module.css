@@ -4,3 +4,25 @@
   flex-direction: column;
   gap: 8px;
 }
+
+/* Back affordance above the form — same chrome as the fault-detail
+   back button. align-self keeps it at its 36px size (the column would
+   otherwise stretch it full width). */
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0a0a0a;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.backButton:hover {
+  background: #f1f5f9;
+}

@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import css from './ReportForm.module.css';
+import { useRouter } from 'next/navigation';
 
 const ReportForm = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
@@ -41,6 +42,7 @@ const ReportForm = () => {
   const clearDraft = useFaultDraft(s => s.clearDraft);
   const now = new Date();
   const date = now.toISOString().split('T')[0];
+  const router = useRouter();
 
   const {
     register,
@@ -142,6 +144,7 @@ const ReportForm = () => {
       toast.success(t('reportCreatedSuccessfully'));
       reset();
       clearDraft();
+      router.back();
     } catch (error) {
       console.log(error);
     }
@@ -341,9 +344,7 @@ const ReportForm = () => {
           <h3 className={css.form_title}>{t('images')}</h3>
           <UploadImages
             value={watch('img') ?? []}
-            onChange={files =>
-              setValue('img', files, { shouldValidate: true })
-            }
+            onChange={files => setValue('img', files, { shouldValidate: true })}
           />
           <input type="hidden" {...register('img')} />
           {errors.img && <p className={css.error}>{errors.img.message}</p>}
