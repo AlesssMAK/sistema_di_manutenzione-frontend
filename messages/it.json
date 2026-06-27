@@ -394,12 +394,22 @@
   "tabs": {
     "received": "Ricevute",
     "inProgress": "In lavorazione",
-    "archive": "Registro completate"
+    "archive": "Completate"
   },
   "empty": {
     "received": "Nessuna segnalazione in attesa",
     "inProgress": "Nessuna segnalazione in lavorazione",
     "archive": "Nessuna segnalazione archiviata"
+  },
+  "filters": {
+    "search": "Cerca",
+    "searchPlaceholder": "ID segnalazione o operatore",
+    "priority": "Priorità",
+    "allPriorities": "Tutte le priorità",
+    "type": "Tipologia",
+    "allTypes": "Tutte le tipologie",
+    "plannedDate": "Data pianificata",
+    "datePlaceholder": "Seleziona data"
   }
 },
 
@@ -653,6 +663,7 @@
     "additionalMaintainers": "Manutentori da aggiungere"
   },
   "managerCommentPlaceholder": "Eventuali note per il manutentore...",
+  "datePlaceholder": "Seleziona data",
   "loadingMaintainers": "Caricamento...",
   "noMaintainers": "Nessun manutentore disponibile",
   "noMaintainersToAdd": "Tutti i manutentori sono già assegnati",
@@ -724,6 +735,28 @@
       "subtitle": "Annunci per tutti e per il tuo ruolo.",
       "empty": "Nessuna comunicazione"
     }
+  },
+  "tabs": {
+    "broadcasts": "Comunicazioni",
+    "faults": "Segnalazioni"
+  },
+  "filters": {
+    "search": "Cerca",
+    "searchFaultsPlaceholder": "ID, operatore o impianto",
+    "searchBroadcastsPlaceholder": "Testo o autore",
+    "status": "Stato",
+    "allStatuses": "Tutti gli stati",
+    "priority": "Priorità",
+    "allPriorities": "Tutte le priorità",
+    "type": "Tipologia",
+    "allTypes": "Tutte le tipologie",
+    "date": "Data",
+    "datePlaceholder": "Seleziona data",
+    "broadcastType": "Tipo",
+    "allBroadcastTypes": "Tutti i tipi",
+    "readState": "Lettura",
+    "allMessages": "Tutti",
+    "unreadOnly": "Solo non letti"
   },
   "broadcastBadge": {
     "all": "A tutti",

@@ -34,6 +34,15 @@ const statusClass: Record<string, string> = {
   Completed: css.statusCompleted,
 };
 
+/** Map raw backend statusFault to the StatusFault i18n key. */
+const statusKey = (status: string | undefined) => {
+  if (status === 'In progress') return 'IN_PROGRESS';
+  if (status === 'Completed') return 'COMPLETED';
+  if (status === 'Suspended') return 'SUSPENDED';
+  if (status === 'Overdue') return 'OVERDUE';
+  return 'CREATED';
+};
+
 const FaultManagerCard = ({
   fault,
   onPlan,
@@ -41,6 +50,9 @@ const FaultManagerCard = ({
 }: FaultManagerCardProps) => {
   const router = useRouter();
   const t = useTranslations('FaultCard');
+  const tStatus = useTranslations('StatusFault');
+  const tType = useTranslations('TypeFault');
+  const tPriority = useTranslations('Priority');
 
   const isPlanned = Boolean(fault.plannedDate);
   const isReadOnly = fault.statusFault === 'Completed';
@@ -71,14 +83,14 @@ const FaultManagerCard = ({
           <span
             className={`${css.statusBadge} ${statusClass[fault.statusFault] ?? ''}`}
           >
-            {fault.statusFault}
+            {tStatus(statusKey(fault.statusFault))}
           </span>
           <span
             className={`${css.typeBadge} ${
               fault.typeFault === 'Safety' ? css.typeSafety : css.typeProduction
             }`}
           >
-            {fault.typeFault}
+            {tType(fault.typeFault === 'Safety' ? 'SAFETY' : 'PRODUCTION')}
           </span>
         </div>
       </div>
@@ -129,7 +141,7 @@ const FaultManagerCard = ({
                 priorityClass[fault.priority] ?? ''
               }`}
             >
-              {fault.priority}
+              {tPriority(fault.priority)}
             </span>
           </div>
           {fault.plannedDate && (

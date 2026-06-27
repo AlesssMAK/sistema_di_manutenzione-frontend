@@ -374,12 +374,22 @@
     "tabs": {
       "received": "Otrzymane",
       "inProgress": "W trakcie",
-      "archive": "Rejestr zakończonych"
+      "archive": "Zakończone"
     },
     "empty": {
       "received": "Brak oczekujących zgłoszeń",
       "inProgress": "Brak zgłoszeń w trakcie",
       "archive": "Brak zarchiwizowanych zgłoszeń"
+    },
+    "filters": {
+      "search": "Szukaj",
+      "searchPlaceholder": "ID zgłoszenia lub operator",
+      "priority": "Priorytet",
+      "allPriorities": "Wszystkie priorytety",
+      "type": "Typ",
+      "allTypes": "Wszystkie typy",
+      "plannedDate": "Data planowana",
+      "datePlaceholder": "Wybierz datę"
     }
   },
 
@@ -633,6 +643,7 @@
       "additionalMaintainers": "Konserwatorzy do dodania"
     },
     "managerCommentPlaceholder": "Opcjonalne notatki dla konserwatora...",
+    "datePlaceholder": "Wybierz datę",
     "loadingMaintainers": "Ładowanie...",
     "noMaintainers": "Brak dostępnych konserwatorów",
     "noMaintainersToAdd": "Wszyscy konserwatorzy są już przypisani",
@@ -704,6 +715,28 @@
         "subtitle": "Ogłoszenia dla wszystkich oraz dla twojej roli.",
         "empty": "Brak komunikatów"
       }
+    },
+    "tabs": {
+      "broadcasts": "Komunikaty",
+      "faults": "Zgłoszenia"
+    },
+    "filters": {
+      "search": "Szukaj",
+      "searchFaultsPlaceholder": "ID, operator lub zakład",
+      "searchBroadcastsPlaceholder": "Tekst lub autor",
+      "status": "Status",
+      "allStatuses": "Wszystkie statusy",
+      "priority": "Priorytet",
+      "allPriorities": "Wszystkie priorytety",
+      "type": "Typ",
+      "allTypes": "Wszystkie typy",
+      "date": "Data",
+      "datePlaceholder": "Wybierz datę",
+      "broadcastType": "Typ",
+      "allBroadcastTypes": "Wszystkie typy",
+      "readState": "Odczyt",
+      "allMessages": "Wszystkie",
+      "unreadOnly": "Tylko nieprzeczytane"
     },
     "broadcastBadge": {
       "all": "Do wszystkich",

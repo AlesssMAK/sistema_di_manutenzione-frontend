@@ -1,9 +1,18 @@
 .formContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  width: min(560px, 92vw);
-  padding: 24px;
+  gap: 16px;
+  /* Phone: subtract the Modal chrome (8px margin + 20px padding each
+     side = 56px) so the form never forces horizontal overflow. The
+     Modal already supplies the side padding, so we add none here. */
+  width: min(560px, calc(100vw - 56px));
+  padding: 0;
+
+  @media screen and (min-width: 768px) {
+    gap: 20px;
+    width: min(560px, 92vw);
+    padding: 24px;
+  }
 }
 
 .titleContainer {
@@ -13,10 +22,14 @@
 }
 
 .title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: #0a0a0a;
   margin: 0;
+
+  @media screen and (min-width: 768px) {
+    font-size: 22px;
+  }
 }
 
 .subtitle {
@@ -31,10 +44,17 @@
   gap: 16px;
 }
 
+/* Phone: one field per row so the date/time pickers and the
+   priority/duration pair aren't squeezed into ~120px columns.
+   Tablet+: back to the two-column layout. */
 .row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 12px;
+
+  @media screen and (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .field {
@@ -108,7 +128,14 @@
   color: #0a0a0a;
   cursor: pointer;
   width: 100%;
-  padding: 4px 0;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.maintainerLabel:hover {
+  background: #eef2ff;
+  color: #1e40af;
 }
 
 .actions {

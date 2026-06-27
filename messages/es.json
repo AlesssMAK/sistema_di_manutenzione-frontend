@@ -395,12 +395,22 @@
     "tabs": {
       "received": "Recibidas",
       "inProgress": "En curso",
-      "archive": "Registro completadas"
+      "archive": "Completadas"
     },
     "empty": {
       "received": "No hay señalaciones pendientes",
       "inProgress": "No hay señalaciones en curso",
       "archive": "No hay señalaciones archivadas"
+    },
+    "filters": {
+      "search": "Buscar",
+      "searchPlaceholder": "ID de señalación u operador",
+      "priority": "Prioridad",
+      "allPriorities": "Todas las prioridades",
+      "type": "Tipo",
+      "allTypes": "Todos los tipos",
+      "plannedDate": "Fecha planificada",
+      "datePlaceholder": "Seleccionar fecha"
     }
   },
 
@@ -654,6 +664,7 @@
       "additionalMaintainers": "Mantenedores a añadir"
     },
     "managerCommentPlaceholder": "Notas opcionales para el mantenedor...",
+    "datePlaceholder": "Seleccionar fecha",
     "loadingMaintainers": "Cargando...",
     "noMaintainers": "No hay mantenedores disponibles",
     "noMaintainersToAdd": "Todos los mantenedores ya están asignados",
@@ -725,6 +736,28 @@
         "subtitle": "Anuncios para todos y para tu rol.",
         "empty": "Sin comunicaciones"
       }
+    },
+    "tabs": {
+      "broadcasts": "Comunicaciones",
+      "faults": "Señalaciones"
+    },
+    "filters": {
+      "search": "Buscar",
+      "searchFaultsPlaceholder": "ID, operador o planta",
+      "searchBroadcastsPlaceholder": "Texto o autor",
+      "status": "Estado",
+      "allStatuses": "Todos los estados",
+      "priority": "Prioridad",
+      "allPriorities": "Todas las prioridades",
+      "type": "Tipo",
+      "allTypes": "Todos los tipos",
+      "date": "Fecha",
+      "datePlaceholder": "Seleccionar fecha",
+      "broadcastType": "Tipo",
+      "allBroadcastTypes": "Todos los tipos",
+      "readState": "Lectura",
+      "allMessages": "Todos",
+      "unreadOnly": "Solo no leídos"
     },
     "broadcastBadge": {
       "all": "A todos",

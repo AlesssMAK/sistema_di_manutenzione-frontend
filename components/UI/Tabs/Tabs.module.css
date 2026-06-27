@@ -1,19 +1,45 @@
 .tabsBar {
   display: flex;
-  gap: 8px;
+  gap: 4px;
   border-bottom: 1px solid #e2e8f0;
+
+  @media screen and (min-width: 768px) {
+    gap: 8px;
+  }
 }
 
 .tabButton {
   position: relative;
-  padding: 10px 18px;
+  /* Phone: tabs split the row evenly and wrap their label if needed,
+     so all three always fit — nothing is clipped and there's no
+     horizontal scroll. Tablet+: back to natural width, left-aligned. */
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  column-gap: 6px;
+  row-gap: 2px;
+  text-align: center;
+  padding: 8px 6px;
   background: transparent;
   border: none;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
+  line-height: 1.25;
   color: #64748b;
   cursor: pointer;
   transition: color 0.15s ease;
+
+  @media screen and (min-width: 768px) {
+    flex: 0 0 auto;
+    display: block;
+    text-align: left;
+    padding: 10px 18px;
+    font-size: 15px;
+    line-height: normal;
+  }
 }
 
 .tabButton:hover {
@@ -29,20 +55,26 @@
   position: absolute;
   left: 12px;
   right: 12px;
-  bottom: -1px;
+  /* bottom:0 (not -1px) so the indicator stays inside the bar — once
+     overflow-x is set, overflow-y computes to auto and would clip a
+     1px-below underline (and add a stray vertical scrollbar). */
+  bottom: 0;
   height: 2px;
   background: #1e40af;
   border-radius: 2px;
 }
 
 .tabCount {
-  margin-left: 8px;
   padding: 2px 8px;
   border-radius: 999px;
   background: #e2e8f0;
   color: #475569;
   font-size: 12px;
   font-weight: 600;
+
+  @media screen and (min-width: 768px) {
+    margin-left: 8px;
+  }
 }
 
 .tabActive .tabCount {

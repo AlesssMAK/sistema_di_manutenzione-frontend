@@ -65,11 +65,13 @@ const Header = () => {
           )}
           <nav className={css.nav}>
             <ul className={css.nav_list}>
-              <li className={css.nav_list_item}>
-                <Link href="/" onClick={close}>
-                  {t('navItem1')}{' '}
-                </Link>
-              </li>
+              {!isAuthenticated && (
+                <li className={css.nav_list_item}>
+                  <Link href="/" onClick={close}>
+                    {t('navItem1')}{' '}
+                  </Link>
+                </li>
+              )}
               {isAuthenticated && (
                 <li className={css.nav_list_item}>
                   <Link href="/reports-and-communications" onClick={close}>

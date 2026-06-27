@@ -1,9 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { getAnnouncements } from '@/lib/api/messages';
 import type { Message } from '@/types/messageType';
 import { useAuthStore } from '@/lib/store/authStore';
 import Loader from '@/components/UI/Loader/Loader';
@@ -12,26 +10,19 @@ import MessageCard from '@/components/Messages/MessageCard/MessageCard';
 import MessageDetailModal from '@/components/Messages/MessageDetailModal/MessageDetailModal';
 import css from './BroadcastsList.module.css';
 
-const PER_PAGE = 20;
+interface BroadcastsListProps {
+  /** Already-fetched + filtered announcements (owned by the page). */
+  items: Message[];
+  isLoading: boolean;
+  isError: boolean;
+}
 
-const BroadcastsList = () => {
+const BroadcastsList = ({ items, isLoading, isError }: BroadcastsListProps) => {
   const t = useTranslations('reportsAndCommunicationsPage');
   const tNoFound = useTranslations('NoFound');
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
   const [openMessage, setOpenMessage] = useState<Message | null>(null);
-
-  // Pull both broadcast types in a single request — backend default when
-  // ?types= is omitted is exactly broadcast_all + broadcast_role-for-my-role.
-  // We then label each card with the right badge so the user knows whether
-  // the message went to everyone or just to their role.
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['messages', 'broadcasts-all-and-role'],
-    queryFn: () => getAnnouncements({ page: 1, perPage: PER_PAGE }),
-    placeholderData: keepPreviousData,
-  });
-
-  const items = data?.items ?? [];
 
   if (isLoading) {
     return (

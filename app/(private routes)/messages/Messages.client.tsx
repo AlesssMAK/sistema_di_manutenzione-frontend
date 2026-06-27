@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { usePageStore } from '@/lib/store/pageStore';
 import { useAuthStore } from '@/lib/store/authStore';
@@ -14,6 +15,8 @@ import css from './page.module.css';
 
 const MessagesClient = () => {
   const t = useTranslations('MessagesPage');
+  const tDetail = useTranslations('FaultDetail');
+  const router = useRouter();
   const setPageTitle = usePageStore(state => state.setPageTitle);
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
@@ -49,9 +52,22 @@ const MessagesClient = () => {
             subtitle on the left, primary action button on the right
             (drops below on phone via the head_container breakpoint). */}
         <div className={css.head_container}>
-          <div className={css.title_container}>
-            <h2 className="title">{t('title')}</h2>
-            <p className="subtitle">{t('subtitle')}</p>
+          <div className={css.headerLeft}>
+            <button
+              type="button"
+              className={css.backButton}
+              onClick={() => router.back()}
+              title={tDetail('backButton')}
+              aria-label={tDetail('backButton')}
+            >
+              <svg width="20" height="20" aria-hidden="true">
+                <use href="/sprite.svg#arrow_back_ios_new" />
+              </svg>
+            </button>
+            <div className={css.title_container}>
+              <h2 className="title">{t('title')}</h2>
+              <p className="subtitle">{t('subtitle')}</p>
+            </div>
           </div>
           {canCompose && (
             <Button

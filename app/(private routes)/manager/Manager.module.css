@@ -1,5 +1,9 @@
 .pageWrapper {
-  padding: 32px 0 48px;
+  padding: 16px 0 32px;
+
+  @media screen and (min-width: 768px) {
+    padding: 32px 0 48px;
+  }
 }
 
 .managerHeaderPage {
@@ -16,21 +20,41 @@
   color: #45556c;
 }
 
+.filtersWrap {
+  margin-top: 16px;
+
+  @media screen and (min-width: 768px) {
+    margin-top: 24px;
+  }
+}
+
 .tabsBarWrap {
-  margin-top: 24px;
+  margin-top: 16px;
+
+  @media screen and (min-width: 768px) {
+    margin-top: 24px;
+  }
 }
 
 .contentSection {
-  margin-top: 24px;
+  margin-top: 16px;
+
+  @media screen and (min-width: 768px) {
+    margin-top: 24px;
+  }
 }
 
 .cardList {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   list-style: none;
   padding: 0;
   margin: 0;
+
+  @media screen and (min-width: 768px) {
+    gap: 16px;
+  }
 }
 
 .loadingWrap {
@@ -38,7 +62,11 @@
 }
 
 .paginationWrapper {
-  margin-top: 24px;
+  margin-top: 16px;
   display: flex;
   justify-content: center;
+
+  @media screen and (min-width: 768px) {
+    margin-top: 24px;
+  }
 }

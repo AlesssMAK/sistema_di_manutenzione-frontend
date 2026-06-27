@@ -1,64 +1,31 @@
 .pageWrapper {
-  padding: 24px 0 48px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
+  padding: 16px 0 32px;
 
-.dashboard {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  margin-top: 24px;
-}
-
-.section {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  background: #f8fafc;
-  min-height: 280px;
-
-  /* From tablet up, each block aims at ~half viewport height; bodies
-     scroll internally when content overflows so the page never gets a
-     vertical thrash. On phones the whole page just scrolls naturally so
-     fault cards (taller in stacked layout) stay fully readable. */
   @media screen and (min-width: 768px) {
-    padding: 20px;
-    max-height: calc(50vh - 40px);
+    padding: 24px 0 48px;
   }
 }
 
-.sectionHeader {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex-shrink: 0;
+.tabsBarWrap {
+  margin-top: 16px;
+
+  @media screen and (min-width: 768px) {
+    margin-top: 24px;
+  }
 }
 
-.sectionTitle {
-  font-weight: 700;
-  font-size: 18px;
-  color: #0a0a0a;
-  margin: 0;
+.filtersWrap {
+  margin-top: 16px;
+
+  @media screen and (min-width: 768px) {
+    margin-top: 24px;
+  }
 }
 
-.sectionSubtitle {
-  font-size: 13px;
-  color: #45556c;
-  margin: 0;
-}
+.contentSection {
+  margin-top: 16px;
 
-.sectionBody {
-  flex: 1;
-  overflow-y: auto;
-  /* Top breathing room for the broadcast badge that pokes above the
-     first card's top edge (BroadcastsList .badge). Without it the
-     overflow-y scroll context clips the protrusion and the user
-     sees a half-cut pill above the date. */
-  padding-top: 12px;
-  padding-right: 4px;
+  @media screen and (min-width: 768px) {
+    margin-top: 24px;
+  }
 }
