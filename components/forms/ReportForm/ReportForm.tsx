@@ -9,9 +9,13 @@ import { generateId } from '@/lib/api/generate';
 import { getAllPlants } from '@/lib/api/plants';
 import { getAllPartsByPlantId } from '@/lib/api/plantsParts';
 import { useAuthStore } from '@/lib/store/authStore';
-import { useFaultDraft } from '@/lib/store/reportStore';
+import { useFaultDraft, initialDraft } from '@/lib/store/reportStore';
 import { reportSchema } from '@/lib/validation/reportFormValidation';
-import type { ReportFormValues, TypeFault } from '@/types/faultType';
+import type {
+  NewFaultContent,
+  ReportFormValues,
+  TypeFault,
+} from '@/types/faultType';
 import { PlantPart } from '@/types/plantPartType';
 import { Plant } from '@/types/plantType';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -37,9 +41,14 @@ const ReportForm = () => {
   const t = useTranslations('ReportForm');
   const tBtn = useTranslations('btn');
   const { user } = useAuthStore();
-  const draft = useFaultDraft(s => s.draft);
-  const setDraft = useFaultDraft(s => s.setDraft);
-  const clearDraft = useFaultDraft(s => s.clearDraft);
+  const userId = String(user?._id ?? '');
+  // Draft is scoped to the logged-in user — falls back to a shared
+  // empty draft (stable ref) when none is stored yet.
+  const draft = useFaultDraft(s => s.drafts[userId] ?? initialDraft);
+  const setDraftForUser = useFaultDraft(s => s.setDraft);
+  const clearDraftForUser = useFaultDraft(s => s.clearDraft);
+  const setDraft = (next: NewFaultContent) => setDraftForUser(userId, next);
+  const clearDraft = () => clearDraftForUser(userId);
   const now = new Date();
   const date = now.toISOString().split('T')[0];
   const router = useRouter();
@@ -181,8 +190,6 @@ const ReportForm = () => {
   return (
     <form onSubmit={handleSubmit(onReportSubmit)} className={css.form}>
       <div className={css.report_form_container}>
-        <h1 className="title">{t('newReport')}</h1>
-        <p className="subtitle">{t('fillForm')}</p>
         <ul className={css.info_list}>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('reportId')}</h3>

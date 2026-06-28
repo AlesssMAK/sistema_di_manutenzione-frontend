@@ -35,6 +35,7 @@
   "header": {
     "navItem1": "Roles",
     "navItem2": "Reportes",
+    "navItem3": "Home",
     "exit": "Salir",
     "login": "Acceder",
     "createFault": "Reportar avería",
@@ -770,7 +771,31 @@
   },
 
   "RolesPage": {
-    "titlePageForStore": "Roles"
+    "titlePageForStore": "Roles",
+    "title": "Sistema de Mantenimiento y Señalaciones",
+    "subtitle": "Selecciona tu rol para acceder",
+    "roles": {
+      "operator": {
+        "title": "Operador",
+        "description": "Crea nuevas señalaciones de averías y anomalías"
+      },
+      "manager": {
+        "title": "Responsable",
+        "description": "Gestiona señalaciones y planifica intervenciones"
+      },
+      "maintenanceWorker": {
+        "title": "Mantenedor",
+        "description": "Visualiza la planificación y realiza intervenciones"
+      },
+      "safety": {
+        "title": "Seguridad (HSE)",
+        "description": "Monitorea señalaciones de seguridad"
+      },
+      "admin": {
+        "title": "Admin",
+        "description": "Gestión del sistema y configuraciones"
+      }
+    }
   },
 
   "NotFound": {

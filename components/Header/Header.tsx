@@ -14,6 +14,7 @@ import LanguageButton from '../LanguageSwitcher/LanguageSwitcher';
 import NotificationBell from './NotificationBell/NotificationBell';
 import PushToggle from './PushToggle/PushToggle';
 import CreateFaultButton from './CreateFaultButton/CreateFaultButton';
+import { roleRoutes } from '@/constants/roleRoutes';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -37,11 +38,16 @@ const Header = () => {
     window.location.href = '/';
   };
 
+  if (!user) return null;
+  const routes = roleRoutes[user.role];
+
+  const route = routes[0];
+
   return (
     <header className={css.header}>
       <div className="container">
         <div className={css.header_container}>
-          <Link href="/">
+          <Link href={isAuthenticated ? `${route}` : '/'}>
             <div className={css.logo_container}>
               <div className={css.logo}>SM</div>
               <div className={css.logo_title_container}>
@@ -65,7 +71,13 @@ const Header = () => {
           )}
           <nav className={css.nav}>
             <ul className={css.nav_list}>
-              {!isAuthenticated && (
+              {isAuthenticated ? (
+                <li className={css.nav_list_item}>
+                  <Link href={`${route}`} onClick={close}>
+                    {t('navItem3')}{' '}
+                  </Link>
+                </li>
+              ) : (
                 <li className={css.nav_list_item}>
                   <Link href="/" onClick={close}>
                     {t('navItem1')}{' '}

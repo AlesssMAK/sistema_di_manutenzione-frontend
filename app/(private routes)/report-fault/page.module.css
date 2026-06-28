@@ -1,8 +1,13 @@
-.pageWrapper {
+.page_wrapper {
   padding: 32px 0 48px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.head_container {
+  display: flex;
+  gap: 12px;
 }
 
 /* Back affordance above the form — same chrome as the fault-detail
@@ -10,6 +15,7 @@
    otherwise stretch it full width). */
 .backButton {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   align-self: flex-start;

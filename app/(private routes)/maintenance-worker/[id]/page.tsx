@@ -1,23 +1,26 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
+import Button from '@/components/UI/Button/Button';
+import ImageModal from '@/components/UI/ImageModal/ImageModal';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
+import { fetchFaultById } from '@/lib/api/faults';
+import { useAuthStore } from '@/lib/store/authStore';
+import { useSocket } from '@/providers/SocketProvider/SocketProvider';
+import { FaultCard } from '@/types/faultType';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { format, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { fetchFaultById } from '@/lib/api/faults';
-import { FaultCard } from '@/types/faultType';
-import { useAuthStore } from '@/lib/store/authStore';
-import { useSocket } from '@/providers/SocketProvider/SocketProvider';
-import ImageModal from '@/components/UI/ImageModal/ImageModal';
-import Loader from '@/components/UI/Loader/Loader';
-import NoFound from '@/components/UI/NoFound/NoFound';
-import Button from '@/components/UI/Button/Button';
-import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
+import { use, useEffect, useState } from 'react';
 import css from './page.module.css';
 
-const priorityClass = (priority: string | undefined, styles: Record<string, string>) => {
+const priorityClass = (
+  priority: string | undefined,
+  styles: Record<string, string>
+) => {
   if (priority === 'Low') return styles.priorityLow;
   if (priority === 'Medium') return styles.priorityMedium;
   if (priority === 'High') return styles.priorityHigh;
@@ -34,7 +37,10 @@ const statusKey = (status: string | undefined) => {
 };
 
 /** Pick the status-badge CSS class for the given raw status. */
-const statusClass = (status: string | undefined, styles: Record<string, string>) => {
+const statusClass = (
+  status: string | undefined,
+  styles: Record<string, string>
+) => {
   if (status === 'In progress') return styles.statusInProgress;
   if (status === 'Completed') return styles.statusCompleted;
   if (status === 'Suspended') return styles.statusSuspended;
@@ -62,7 +68,9 @@ const deadlineUrgencyClass = (
 const formatDay = (value?: string) => {
   if (!value) return '—';
   const parsed = parseISO(value);
-  return isValid(parsed) ? format(parsed, 'dd MMMM yyyy', { locale: it }) : value;
+  return isValid(parsed)
+    ? format(parsed, 'dd MMMM yyyy', { locale: it })
+    : value;
 };
 
 const formatDateTime = (value?: string) => {
@@ -126,7 +134,7 @@ export default function FaultDetailPage({
   if (isLoading)
     return (
       <div className="container">
-        <div className={css.pageWrapper}>
+        <div className={css.page_wrapper}>
           <Loader />
         </div>
       </div>
@@ -134,7 +142,7 @@ export default function FaultDetailPage({
   if (isError || !fault)
     return (
       <div className="container">
-        <div className={css.pageWrapper}>
+        <div className={css.page_wrapper}>
           <NoFound
             title={tNoFound('noResultsTitle')}
             message={t('errors.interventionNotFound')}
@@ -158,7 +166,7 @@ export default function FaultDetailPage({
 
   return (
     <div className="container">
-      <div className={css.pageWrapper}>
+      <div className={css.page_wrapper}>
         <div className={css.card}>
           <header className={css.header}>
             <div className={css.headerLeft}>
@@ -180,16 +188,12 @@ export default function FaultDetailPage({
                   this fault is theirs, sitting in the pool, or
                   belongs to someone else (no badge in that case). */}
               {assignedToMe && (
-                <span
-                  className={`${css.scopeBadge} ${css.scopeBadgeMine}`}
-                >
+                <span className={`${css.scopeBadge} ${css.scopeBadgeMine}`}>
                   {t('badges.assignedToMe')}
                 </span>
               )}
               {!assignedToMe && isPool && (
-                <span
-                  className={`${css.scopeBadge} ${css.scopeBadgePool}`}
-                >
+                <span className={`${css.scopeBadge} ${css.scopeBadgePool}`}>
                   {t('badges.pool')}
                 </span>
               )}
@@ -218,7 +222,9 @@ export default function FaultDetailPage({
               </div>
               <div className={css.infoItem}>
                 <label>{t('labels.status')}</label>
-                <span className={`${css.status} ${statusClass(fault.statusFault, css)}`}>
+                <span
+                  className={`${css.status} ${statusClass(fault.statusFault, css)}`}
+                >
                   {tStatus(statusKey(fault.statusFault))}
                 </span>
               </div>
@@ -257,12 +263,16 @@ export default function FaultDetailPage({
               <div className={css.infoItem}>
                 <label>{t('labels.type')}</label>
                 <p>
-                  {tType(fault.typeFault === 'Safety' ? 'SAFETY' : 'PRODUCTION')}
+                  {tType(
+                    fault.typeFault === 'Safety' ? 'SAFETY' : 'PRODUCTION'
+                  )}
                 </p>
               </div>
               <div className={css.infoItem}>
                 <label>{t('labels.priority')}</label>
-                <p className={`${css.priority} ${priorityClass(fault.priority, css)}`}>
+                <p
+                  className={`${css.priority} ${priorityClass(fault.priority, css)}`}
+                >
                   {tPriority(fault.priority)}
                 </p>
               </div>
@@ -294,7 +304,9 @@ export default function FaultDetailPage({
               <div className={css.infoRow}>
                 <div className={css.infoItem}>
                   <label>{t('labels.actualDuration')}</label>
-                  <p>{fault.actualDuration ? `${fault.actualDuration} min` : '—'}</p>
+                  <p>
+                    {fault.actualDuration ? `${fault.actualDuration} min` : '—'}
+                  </p>
                 </div>
                 <div className={css.infoItem}>
                   <label>{t('labels.completedAt')}</label>
@@ -345,9 +357,7 @@ export default function FaultDetailPage({
 
             <div className={css.commentBox}>
               <label>{t('comments.maintainerNote')}</label>
-              <p>
-                {fault.commentMaintenanceWorker || t('comments.noNote')}
-              </p>
+              <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
             </div>
 
             {/* Nota HSE — visibile solo per i fault Safety */}

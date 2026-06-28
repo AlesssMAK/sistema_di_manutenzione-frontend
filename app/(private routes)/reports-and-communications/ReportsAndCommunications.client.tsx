@@ -1,19 +1,19 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
-import { useDebounce } from 'use-debounce';
-import { usePageStore } from '@/lib/store/pageStore';
-import { getAnnouncements } from '@/lib/api/messages';
-import { fetchFaultCards } from '@/lib/api/faults';
-import { createOptionMapper } from '@/lib/utils/translationMapper';
-import type { AnnouncementType } from '@/types/messageType';
-import type { FaultCard, PriorityFaultType, TypeFault } from '@/types/faultType';
-import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
-import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
 import BroadcastsList from '@/components/Reports/BroadcastsList/BroadcastsList';
 import RecentFaultsList from '@/components/Reports/RecentFaultsList/RecentFaultsList';
+import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
+import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+import { fetchFaultCards } from '@/lib/api/faults';
+import { getAnnouncements } from '@/lib/api/messages';
+import { usePageStore } from '@/lib/store/pageStore';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
+import type { PriorityFaultType, TypeFault } from '@/types/faultType';
+import type { AnnouncementType } from '@/types/messageType';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useEffect, useMemo, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 import css from './page.module.css';
 
 type ReportTab = 'broadcasts' | 'faults';
@@ -224,8 +224,7 @@ const ReportsAndCommunicationsClient = () => {
       type: 'select',
       label: t('filters.priority'),
       value:
-        priorityMapper.getLabelByValue(fPriority) ??
-        t('filters.allPriorities'),
+        priorityMapper.getLabelByValue(fPriority) ?? t('filters.allPriorities'),
       options: priorityMapper.labelsArray,
       onSelect: label =>
         setFPriority(priorityMapper.getValueByLabel(label) ?? ''),
@@ -274,7 +273,7 @@ const ReportsAndCommunicationsClient = () => {
 
   return (
     <div className="container">
-      <div className={css.pageWrapper}>
+      <div className={css.page_wrapper}>
         <h2 className="title">{t('title')}</h2>
         <p className="subtitle">{t('subtitle')}</p>
 
