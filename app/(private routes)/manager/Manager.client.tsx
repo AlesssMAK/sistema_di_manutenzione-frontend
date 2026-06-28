@@ -1,20 +1,20 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query';
-import { useDebounce } from 'use-debounce';
-import { usePageStore } from '@/lib/store/pageStore';
-import { fetchFaultCards } from '@/lib/api/faults';
-import { FaultCard, PriorityFaultType, TypeFault } from '@/types/faultType';
-import { createOptionMapper } from '@/lib/utils/translationMapper';
-import FaultManagerCard from '@/components/Manager/FaultManagerCard/FaultManagerCard';
 import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
+import FaultManagerCard from '@/components/Manager/FaultManagerCard/FaultManagerCard';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
-import Pagination from '@/components/UI/Pagination/Pagination';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
+import Pagination from '@/components/UI/Pagination/Pagination';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+import { fetchFaultCards } from '@/lib/api/faults';
+import { usePageStore } from '@/lib/store/pageStore';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
+import { FaultCard, PriorityFaultType, TypeFault } from '@/types/faultType';
+import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useEffect, useMemo, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 import css from './Manager.module.css';
 
 type ManagerTab = 'received' | 'inProgress' | 'archive';
@@ -188,7 +188,7 @@ const ManagerClient = () => {
 
   return (
     <div className="container">
-      <div className={css.pageWrapper}>
+      <div className={css.page_wrapper}>
         <h2 className="title">{t('headerTitle')}</h2>
         <p className="subtitle">{t('headerSubtitle')}</p>
 

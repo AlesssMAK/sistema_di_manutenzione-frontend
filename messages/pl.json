@@ -34,6 +34,7 @@
   "header": {
     "navItem1": "Role",
     "navItem2": "Raporty",
+    "navItem3": "Strona główna",
     "exit": "Wyloguj",
     "login": "Logowanie",
     "createFault": "Zgłoś usterkę",
@@ -749,7 +750,31 @@
   },
 
   "RolesPage": {
-    "titlePageForStore": "Role"
+    "titlePageForStore": "Role",
+    "title": "System konserwacji i zgłoszeń",
+    "subtitle": "Wybierz swoją rolę, aby kontynuować",
+    "roles": {
+      "operator": {
+        "title": "Operator",
+        "description": "Twórz nowe zgłoszenia usterek i anomalii"
+      },
+      "manager": {
+        "title": "Kierownik",
+        "description": "Zarządzaj zgłoszeniami i planuj interwencje"
+      },
+      "maintenanceWorker": {
+        "title": "Konserwator",
+        "description": "Przeglądaj harmonogram i wykonuj interwencje"
+      },
+      "safety": {
+        "title": "Bezpieczeństwo (HSE)",
+        "description": "Monitoruj zgłoszenia bezpieczeństwa"
+      },
+      "admin": {
+        "title": "Admin",
+        "description": "Zarządzanie systemem i konfiguracją"
+      }
+    }
   },
 
   "NotFound": {

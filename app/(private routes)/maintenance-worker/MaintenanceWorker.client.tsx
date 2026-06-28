@@ -1,28 +1,28 @@
 'use client';
 
-import { usePageStore } from '@/lib/store/pageStore';
-import { useTranslations } from 'next-intl';
-import { useEffect, useState, useCallback, useRef } from 'react';
-import css from './page.module.css';
 import FaultCardsList from '@/components/FaultCardsList/FaultCardsList';
 import LoadMoreButton from '@/components/LoadMoreButton/LoadMoreButton';
 import ScopeFilterBar, {
   type FaultScope,
 } from '@/components/MaintenanceWorker/ScopeFilterBar/ScopeFilterBar';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+import { usePageStore } from '@/lib/store/pageStore';
+import { useTranslations } from 'next-intl';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import css from './page.module.css';
 
+import { type PlannedDayBucket } from '@/components/MaintenanceWorker/Calendar/Calendar';
+import CalendarBlock from '@/components/MaintenanceWorker/CalendarBlock/CalendarBlock';
+import DateNow from '@/components/MaintenanceWorker/DateNow/DateNow';
 import DaySlotGrid from '@/components/MaintenanceWorker/DaySlotGrid/DaySlotGrid';
+import Button from '@/components/UI/Button/Button';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
-import Button from '@/components/UI/Button/Button';
-import { FaultCard } from '@/types/faultType';
 import { fetchFaultCards, fetchFaultDeadlines } from '@/lib/api/faults';
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
-import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/lib/store/authStore';
-import CalendarBlock from '@/components/MaintenanceWorker/CalendarBlock/CalendarBlock';
-import { type PlannedDayBucket } from '@/components/MaintenanceWorker/Calendar/Calendar';
-import DateNow from '@/components/MaintenanceWorker/DateNow/DateNow';
+import { FaultCard } from '@/types/faultType';
+import { useQuery } from '@tanstack/react-query';
 
 export type FaultViewMode = 'active' | 'overdue' | 'completed';
 
@@ -205,28 +205,31 @@ const MaintenanceWorkerClient = () => {
     [t]
   );
 
-  const fetchOverdueDeadlines = useCallback(async (currentPriority: string) => {
-    try {
-      // Overdue heatmap via the aggregated endpoint. Wide window so
-      // we catch deadlines that drifted past the visible month.
-      const today = new Date();
-      const from = new Date(today.getFullYear() - 1, 0, 1);
-      const to = new Date(today.getFullYear() + 1, 11, 31);
-      const data = await fetchFaultDeadlines({
-        field: 'deadline',
-        dateFrom: from.toISOString().slice(0, 10),
-        dateTo: to.toISOString().slice(0, 10),
-        statusFault: 'Overdue',
-        ...(currentPriority ? { priority: currentPriority } : {}),
-      });
+  const fetchOverdueDeadlines = useCallback(
+    async (currentPriority: string) => {
+      try {
+        // Overdue heatmap via the aggregated endpoint. Wide window so
+        // we catch deadlines that drifted past the visible month.
+        const today = new Date();
+        const from = new Date(today.getFullYear() - 1, 0, 1);
+        const to = new Date(today.getFullYear() + 1, 11, 31);
+        const data = await fetchFaultDeadlines({
+          field: 'deadline',
+          dateFrom: from.toISOString().slice(0, 10),
+          dateTo: to.toISOString().slice(0, 10),
+          statusFault: 'Overdue',
+          ...(currentPriority ? { priority: currentPriority } : {}),
+        });
 
-      const dates = data.dates.map(bucket => bucket.date);
+        const dates = data.dates.map(bucket => bucket.date);
 
-      setOverdueDeadlineDates(dates);
-    } catch (error) {
-      console.error(t('errors.loadDeadlines'), error);
-    }
-  }, [t]);
+        setOverdueDeadlineDates(dates);
+      } catch (error) {
+        console.error(t('errors.loadDeadlines'), error);
+      }
+    },
+    [t]
+  );
 
   const handlePriorityChange = (newPriority: string) => {
     const newValue = priority === newPriority ? '' : newPriority;
@@ -290,9 +293,7 @@ const MaintenanceWorkerClient = () => {
   if (isOverdueMode) {
     emptyText = t('empty.overdue');
   } else if (isCompletedMode) {
-    emptyText = selectedDate
-      ? t('empty.completedDate')
-      : t('empty.completed');
+    emptyText = selectedDate ? t('empty.completedDate') : t('empty.completed');
   } else if (selectedDate) {
     emptyText =
       scope === 'mine'
@@ -313,7 +314,7 @@ const MaintenanceWorkerClient = () => {
 
   return (
     <div className="container">
-      <div className={css.pageWrapper}>
+      <div className={css.page_wrapper}>
         <h2 className="title">{t('headerTitle')}</h2>
         <p className="subtitle">{t('headerSubtitle')}</p>
 

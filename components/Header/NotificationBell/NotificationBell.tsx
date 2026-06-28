@@ -10,9 +10,10 @@ const POLL_INTERVAL_MS = 30_000;
 
 interface NotificationBellProps {
   enabled: boolean;
+  onClose?: () => void;
 }
 
-const NotificationBell = ({ enabled }: NotificationBellProps) => {
+const NotificationBell = ({ enabled, onClose }: NotificationBellProps) => {
   const router = useRouter();
   const t = useTranslations('header.notifications');
 
@@ -32,7 +33,9 @@ const NotificationBell = ({ enabled }: NotificationBellProps) => {
     <button
       type="button"
       className={css.bell}
-      onClick={() => router.push('/messages')}
+      onClick={() => {
+        (router.push('/messages'), onClose?.());
+      }}
       aria-label={t('ariaLabel')}
       title={t('tooltip')}
     >

@@ -10,6 +10,8 @@ import Button from '@/components/UI/Button/Button';
 import LanguageButton from '@/components/LanguageSwitcher/LanguageSwitcher';
 import NotificationBell from '../NotificationBell/NotificationBell';
 import CreateFaultButton from '../CreateFaultButton/CreateFaultButton';
+import PushToggle from '../PushToggle/PushToggle';
+import { roleRoutes } from '@/constants/roleRoutes';
 
 export interface ModalMenuProps {
   onClose: () => void;
@@ -46,6 +48,11 @@ const ModalMenu = ({
     };
   }, [onClose]);
 
+  if (!user) return null;
+  const routes = roleRoutes[user.role];
+
+  const route = routes[0];
+
   return createPortal(
     <div
       onClick={handleBackdropClick}
@@ -59,7 +66,13 @@ const ModalMenu = ({
             <nav className={css.nav}>
               <LanguageButton />
               <ul className={css.nav_list}>
-                {!isAuthenticated && (
+                {isAuthenticated ? (
+                  <li className={css.nav_list_item}>
+                    <Link href={`${route}`} onClick={onClose}>
+                      {t('navItem3')}{' '}
+                    </Link>
+                  </li>
+                ) : (
                   <li className={css.nav_list_item}>
                     <Link href="/" onClick={onClose}>
                       {t('navItem1')}{' '}
@@ -87,7 +100,11 @@ const ModalMenu = ({
                         <use href="/sprite.svg#user"></use>
                       </svg>
                       <p className={css.user_name}>{user?.fullName}</p>
-                      <NotificationBell enabled={isAuthenticated} />
+                      <NotificationBell
+                        enabled={isAuthenticated}
+                        onClose={onClose}
+                      />
+                      <PushToggle />
                     </div>
                     <Button
                       className={`${css.exit_btn} button button--white`}

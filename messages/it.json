@@ -34,6 +34,7 @@
 "header": {
 "navItem1": "Ruoli",
 "navItem2": "Report",
+"navItem3": "Home",
 "exit": "Esci",
 "login": "Accede",
 "createFault": "Segnala guasto",
@@ -769,7 +770,31 @@
 },
 
 "RolesPage": {
-  "titlePageForStore": "Ruoli"
+  "titlePageForStore": "Ruoli",
+  "title": "Sistema di Manutenzione e Segnalazioni",
+  "subtitle": "Seleziona il tuo ruolo per accedere",
+  "roles": {
+    "operator": {
+      "title": "Operatore",
+      "description": "Crea nuove segnalazioni di guasti e anomalie"
+    },
+    "manager": {
+      "title": "Responsabile",
+      "description": "Gestisci segnalazioni e pianifica interventi"
+    },
+    "maintenanceWorker": {
+      "title": "Manutentore",
+      "description": "Visualizza pianificazione ed esegui interventi"
+    },
+    "safety": {
+      "title": "Sicurezza (HSE)",
+      "description": "Monitora segnalazioni di sicurezza"
+    },
+    "admin": {
+      "title": "Admin",
+      "description": "Gestione sistema e configurazioni"
+    }
+  }
 },
 
 "NotFound": {

@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { usePageStore } from '@/lib/store/pageStore';
-import { fetchFaultCards } from '@/lib/api/faults';
 import FaultManagerCard from '@/components/Manager/FaultManagerCard/FaultManagerCard';
-import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
-import Pagination from '@/components/UI/Pagination/Pagination';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
+import Pagination from '@/components/UI/Pagination/Pagination';
+import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import { fetchFaultCards } from '@/lib/api/faults';
+import { usePageStore } from '@/lib/store/pageStore';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 import css from './Safety.module.css';
 
 const PER_PAGE = 8;
@@ -58,11 +58,12 @@ const SafetyClient = () => {
   };
 
   const selectedStatusLabel =
-    STATUS_OPTIONS.find(o => o.value === statusFault)?.label ?? STATUS_OPTIONS[0].label;
+    STATUS_OPTIONS.find(o => o.value === statusFault)?.label ??
+    STATUS_OPTIONS[0].label;
 
   return (
     <div className="container">
-      <div className={css.pageWrapper}>
+      <div className={css.page_wrapper}>
         <h2 className="title">
           {t('headerTitle')}
           <span className={css.safetyBadge}>{t('badge')}</span>
@@ -91,10 +92,7 @@ const SafetyClient = () => {
               message={tNoFound('serverErrorMessage')}
             />
           ) : faults.length === 0 ? (
-            <NoFound
-              title={tNoFound('noResultsTitle')}
-              message={t('empty')}
-            />
+            <NoFound title={tNoFound('noResultsTitle')} message={t('empty')} />
           ) : (
             <ul className={css.cardList}>
               {faults.map(fault => (

@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
-import { usePageStore } from '@/lib/store/pageStore';
-import { useAuthStore } from '@/lib/store/authStore';
-import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
-import Button from '@/components/UI/Button/Button';
+import ComposeMessageModal from '@/components/Messages/ComposeMessageModal/ComposeMessageModal';
 import MessageInbox, {
   type InboxKind,
 } from '@/components/Messages/MessageInbox/MessageInbox';
-import ComposeMessageModal from '@/components/Messages/ComposeMessageModal/ComposeMessageModal';
+import Button from '@/components/UI/Button/Button';
+import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+import { useAuthStore } from '@/lib/store/authStore';
+import { usePageStore } from '@/lib/store/pageStore';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import css from './page.module.css';
 
 const MessagesClient = () => {
@@ -47,12 +47,12 @@ const MessagesClient = () => {
 
   return (
     <div className="container">
-      <div className={css.pageWrapper}>
+      <div className={css.page_wrapper}>
         {/* Header row mirrors the admin user-list pattern: title +
             subtitle on the left, primary action button on the right
             (drops below on phone via the head_container breakpoint). */}
         <div className={css.head_container}>
-          <div className={css.headerLeft}>
+          <div className={css.header_left}>
             <button
               type="button"
               className={css.backButton}

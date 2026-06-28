@@ -7,9 +7,6 @@ import {
 import { roleRoutes } from './constants/roleRoutes';
 import { isAllowed } from './lib/utils/proxy/isAllowed';
 
-// cookies() from next/headers is read-only inside middleware — any
-// .set() there is dropped. Refreshed tokens have to land on the
-// NextResponse the middleware returns so the browser persists them.
 const applyCookies = (response: NextResponse, cookies: RefreshedCookie[]) => {
   for (const { name, value, options } of cookies) {
     response.cookies.set(name, value, options);
@@ -46,6 +43,17 @@ export async function proxy(request: NextRequest) {
       refreshToken
     );
 
+    if (pathname === '/') {
+      const home = ok && role ? roleRoutes[role]?.[0] : undefined;
+      if (home) {
+        return applyCookies(
+          NextResponse.redirect(new URL(home, request.nextUrl.origin)),
+          cookies
+        );
+      }
+      return applyCookies(NextResponse.next(), cookies);
+    }
+
     if (!ok) {
       return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
     }
@@ -66,6 +74,7 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    '/',
     '/login',
     '/admin/:path*',
     '/manager/:path*',

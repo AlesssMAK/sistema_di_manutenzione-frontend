@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
-import { usePageStore } from '@/lib/store/pageStore';
-import { useAuthStore } from '@/lib/store/authStore';
-import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import MessageInbox from '@/components/Messages/MessageInbox/MessageInbox';
 import MyFaultsList from '@/components/Operator/MyFaultsList/MyFaultsList';
+import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+import { useAuthStore } from '@/lib/store/authStore';
+import { usePageStore } from '@/lib/store/pageStore';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 import css from './OperatorPage.module.css';
 
 type OperatorTab = 'messages' | 'myFaults';
@@ -30,7 +30,7 @@ const OperatorPageClient = () => {
 
   return (
     <div className="container">
-      <div className={css.pageWrapper}>
+      <div className={css.page_wrapper}>
         <h2 className="title">{t('title')}</h2>
         <p className="subtitle">{t('subtitle')}</p>
 

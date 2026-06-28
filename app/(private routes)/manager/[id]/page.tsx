@@ -1,24 +1,26 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
+import Button from '@/components/UI/Button/Button';
+import ImageModal from '@/components/UI/ImageModal/ImageModal';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
+import { fetchFaultById } from '@/lib/api/faults';
+import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { useQuery } from '@tanstack/react-query';
 import { format, isValid, parseISO } from 'date-fns';
 import { it } from 'date-fns/locale';
 import { useTranslations } from 'next-intl';
-import { fetchFaultById } from '@/lib/api/faults';
-import { useSocket } from '@/providers/SocketProvider/SocketProvider';
-import ImageModal from '@/components/UI/ImageModal/ImageModal';
-import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
-import Loader from '@/components/UI/Loader/Loader';
-import NoFound from '@/components/UI/NoFound/NoFound';
-import Button from '@/components/UI/Button/Button';
+import { useRouter } from 'next/navigation';
+import { use, useEffect, useState } from 'react';
 import css from './page.module.css';
 
 const formatDate = (value?: string) => {
   if (!value) return '—';
   const parsed = parseISO(value);
-  return isValid(parsed) ? format(parsed, 'dd MMMM yyyy', { locale: it }) : value;
+  return isValid(parsed)
+    ? format(parsed, 'dd MMMM yyyy', { locale: it })
+    : value;
 };
 
 const formatDateTime = (value?: string) => {
@@ -117,7 +119,7 @@ const ManagerFaultDetailPage = ({
   if (isLoading)
     return (
       <div className="container">
-        <div className={css.pageWrapper}>
+        <div className={css.page_wrapper}>
           <Loader />
         </div>
       </div>
@@ -125,7 +127,7 @@ const ManagerFaultDetailPage = ({
   if (isError || !fault)
     return (
       <div className="container">
-        <div className={css.pageWrapper}>
+        <div className={css.page_wrapper}>
           <NoFound
             title={tNoFound('noResultsTitle')}
             message={t('errors.faultNotFound')}
@@ -138,164 +140,174 @@ const ManagerFaultDetailPage = ({
 
   return (
     <div className="container">
-      <div className={css.pageWrapper}>
+      <div className={css.page_wrapper}>
         <div className={css.card}>
-        <header className={css.header}>
-          <div className={css.headerLeft}>
-            <button
-              type="button"
-              className={css.backButton}
-              onClick={() => router.push('/manager')}
-              title={t('backButton')}
-              aria-label={t('backButton')}
-            >
-              <svg width="20" height="20" aria-hidden="true">
-                <use href="/sprite.svg#arrow_back_ios_new" />
-              </svg>
-            </button>
-            <h2 className={css.title}>{t('title')}</h2>
-          </div>
-          <span className={css.idBadge}>{fault.faultId}</span>
-        </header>
+          <header className={css.header}>
+            <div className={css.headerLeft}>
+              <button
+                type="button"
+                className={css.backButton}
+                onClick={() => router.push('/manager')}
+                title={t('backButton')}
+                aria-label={t('backButton')}
+              >
+                <svg width="20" height="20" aria-hidden="true">
+                  <use href="/sprite.svg#arrow_back_ios_new" />
+                </svg>
+              </button>
+              <h2 className={css.title}>{t('title')}</h2>
+            </div>
+            <span className={css.idBadge}>{fault.faultId}</span>
+          </header>
 
-        <div className={css.infoGrid}>
-          <div className={css.infoItem}>
-            <label>{t('labels.operator')}</label>
-            <p>{fault.nameOperator || '—'}</p>
-          </div>
-          <div className={css.infoItem}>
-            <label>{t('labels.status')}</label>
-            <span className={`${css.status} ${statusClass(fault.statusFault, css)}`}>
-              {tStatus(statusKey(fault.statusFault))}
-            </span>
+          <div className={css.infoGrid}>
+            <div className={css.infoItem}>
+              <label>{t('labels.operator')}</label>
+              <p>{fault.nameOperator || '—'}</p>
+            </div>
+            <div className={css.infoItem}>
+              <label>{t('labels.status')}</label>
+              <span
+                className={`${css.status} ${statusClass(fault.statusFault, css)}`}
+              >
+                {tStatus(statusKey(fault.statusFault))}
+              </span>
+            </div>
+
+            <div className={css.infoItem}>
+              <label>{t('labels.dateCreated')}</label>
+              <p>
+                {formatDate(fault.dataCreated)}
+                {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
+              </p>
+            </div>
+            <div className={css.infoItem}>
+              <label>{t('labels.lastUpdated')}</label>
+              <p>{formatDateTime(fault.updatedAt)}</p>
+            </div>
+
+            <div className={css.infoItem}>
+              <label>{t('labels.plant')}</label>
+              <p>
+                {fault.plantId?.namePlant ?? '—'}
+                {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
+              </p>
+            </div>
+            <div className={css.infoItem}>
+              <label>{t('labels.plantPart')}</label>
+              <p>
+                {fault.partId?.namePlantPart ?? '—'}
+                {fault.partId?.codePlantPart
+                  ? ` (${fault.partId.codePlantPart})`
+                  : ''}
+              </p>
+            </div>
+
+            <div className={css.infoItem}>
+              <label>{t('labels.type')}</label>
+              <p>
+                {tType(fault.typeFault === 'Safety' ? 'SAFETY' : 'PRODUCTION')}
+              </p>
+            </div>
+            <div className={css.infoItem}>
+              <label>{t('labels.priority')}</label>
+              <p
+                className={`${css.priority} ${priorityClass(fault.priority, css)}`}
+              >
+                {tPriority(fault.priority)}
+              </p>
+            </div>
+
+            <div className={css.infoItem}>
+              <label>{t('labels.planned')}</label>
+              <p>
+                {fault.plannedDate ? formatDate(fault.plannedDate) : '—'}
+                {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
+              </p>
+            </div>
+            <div className={css.infoItem}>
+              <label>{t('labels.estimatedDuration')}</label>
+              <p>
+                {fault.estimatedDuration
+                  ? `${fault.estimatedDuration} min`
+                  : '—'}
+              </p>
+            </div>
+
+            <div className={css.infoItem}>
+              <label>{t('labels.deadline')}</label>
+              <p
+                className={`${css.deadline} ${deadlineUrgencyClass(fault.deadline, css)}`}
+              >
+                {formatDate(fault.deadline)}
+              </p>
+            </div>
+            <div className={css.infoItem}>
+              <label>{t('labels.assignedMaintainers')}</label>
+              {fault.assignedMaintainers?.length ? (
+                <div className={css.maintainerChips}>
+                  {fault.assignedMaintainers.map((m, i) => {
+                    const isObj = typeof m === 'object' && m !== null;
+                    const key = isObj ? m._id : String(m);
+                    const name = isObj ? m.fullName : '—';
+                    return (
+                      <span
+                        key={key ?? i}
+                        className={css.maintainerChip}
+                        title={isObj ? m.email : undefined}
+                      >
+                        {name}
+                      </span>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className={css.maintainerEmpty}>—</p>
+              )}
+            </div>
           </div>
 
-          <div className={css.infoItem}>
-            <label>{t('labels.dateCreated')}</label>
-            <p>
-              {formatDate(fault.dataCreated)}
-              {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
-            </p>
-          </div>
-          <div className={css.infoItem}>
-            <label>{t('labels.lastUpdated')}</label>
-            <p>{formatDateTime(fault.updatedAt)}</p>
-          </div>
-
-          <div className={css.infoItem}>
-            <label>{t('labels.plant')}</label>
-            <p>
-              {fault.plantId?.namePlant ?? '—'}
-              {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
-            </p>
-          </div>
-          <div className={css.infoItem}>
-            <label>{t('labels.plantPart')}</label>
-            <p>
-              {fault.partId?.namePlantPart ?? '—'}
-              {fault.partId?.codePlantPart
-                ? ` (${fault.partId.codePlantPart})`
-                : ''}
-            </p>
-          </div>
-
-          <div className={css.infoItem}>
-            <label>{t('labels.type')}</label>
-            <p>{tType(fault.typeFault === 'Safety' ? 'SAFETY' : 'PRODUCTION')}</p>
-          </div>
-          <div className={css.infoItem}>
-            <label>{t('labels.priority')}</label>
-            <p className={`${css.priority} ${priorityClass(fault.priority, css)}`}>
-              {tPriority(fault.priority)}
-            </p>
-          </div>
-
-          <div className={css.infoItem}>
-            <label>{t('labels.planned')}</label>
-            <p>
-              {fault.plannedDate ? formatDate(fault.plannedDate) : '—'}
-              {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
-            </p>
-          </div>
-          <div className={css.infoItem}>
-            <label>{t('labels.estimatedDuration')}</label>
-            <p>
-              {fault.estimatedDuration ? `${fault.estimatedDuration} min` : '—'}
-            </p>
-          </div>
-
-          <div className={css.infoItem}>
-            <label>{t('labels.deadline')}</label>
-            <p className={`${css.deadline} ${deadlineUrgencyClass(fault.deadline, css)}`}>
-              {formatDate(fault.deadline)}
-            </p>
-          </div>
-          <div className={css.infoItem}>
-            <label>{t('labels.assignedMaintainers')}</label>
-            {fault.assignedMaintainers?.length ? (
-              <div className={css.maintainerChips}>
-                {fault.assignedMaintainers.map((m, i) => {
-                  const isObj = typeof m === 'object' && m !== null;
-                  const key = isObj ? m._id : String(m);
-                  const name = isObj ? m.fullName : '—';
-                  return (
-                    <span
-                      key={key ?? i}
-                      className={css.maintainerChip}
-                      title={isObj ? m.email : undefined}
-                    >
-                      {name}
-                    </span>
-                  );
-                })}
+          <div className={css.detailsBlock}>
+            <div className={css.commentBox}>
+              <label>{t('comments.operatorDescription')}</label>
+              <p>{fault.comment || t('comments.noDescription')}</p>
+            </div>
+            <div className={css.commentBox}>
+              <label>{t('comments.managerNote')}</label>
+              <p>{fault.managerComment || t('comments.noNote')}</p>
+            </div>
+            <div className={css.commentBox}>
+              <label>{t('comments.maintainerNote')}</label>
+              <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
+            </div>
+            {fault.typeFault === 'Safety' && (
+              <div className={css.commentBox}>
+                <label>{t('comments.hseNote')}</label>
+                <p>{fault.commentSafety || t('comments.noNote')}</p>
               </div>
-            ) : (
-              <p className={css.maintainerEmpty}>—</p>
             )}
           </div>
-        </div>
 
-        <div className={css.detailsBlock}>
-          <div className={css.commentBox}>
-            <label>{t('comments.operatorDescription')}</label>
-            <p>{fault.comment || t('comments.noDescription')}</p>
-          </div>
-          <div className={css.commentBox}>
-            <label>{t('comments.managerNote')}</label>
-            <p>{fault.managerComment || t('comments.noNote')}</p>
-          </div>
-          <div className={css.commentBox}>
-            <label>{t('comments.maintainerNote')}</label>
-            <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
-          </div>
-          {fault.typeFault === 'Safety' && (
-            <div className={css.commentBox}>
-              <label>{t('comments.hseNote')}</label>
-              <p>{fault.commentSafety || t('comments.noNote')}</p>
+          {fault.img && fault.img.length > 0 && (
+            <div className={css.imageSection}>
+              <label>{t('labels.attachedPhotos')}</label>
+              <div className={css.imageGrid}>
+                {fault.img.map((url, index) => (
+                  <div
+                    key={index}
+                    className={css.imageWrapper}
+                    onClick={() => setSelectedImage(url as unknown as string)}
+                  >
+                    <img
+                      src={url as unknown as string}
+                      alt={`Foto ${index + 1}`}
+                      className={css.image}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
-        </div>
-
-        {fault.img && fault.img.length > 0 && (
-          <div className={css.imageSection}>
-            <label>{t('labels.attachedPhotos')}</label>
-            <div className={css.imageGrid}>
-              {fault.img.map((url, index) => (
-                <div
-                  key={index}
-                  className={css.imageWrapper}
-                  onClick={() => setSelectedImage(url as unknown as string)}
-                >
-                  <img
-                    src={url as unknown as string}
-                    alt={`Foto ${index + 1}`}
-                    className={css.image}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
 
           {!isReadOnly && (
             <div className={css.actions}>

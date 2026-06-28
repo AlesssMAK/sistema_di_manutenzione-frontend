@@ -35,6 +35,7 @@
   "header": {
     "navItem1": "Roles",
     "navItem2": "Reports",
+    "navItem3": "Inicio",
     "exit": "Logout",
     "login": "Login",
     "createFault": "Report fault",
@@ -770,7 +771,31 @@
   },
 
   "RolesPage": {
-    "titlePageForStore": "Roles"
+    "titlePageForStore": "Roles",
+    "title": "Maintenance & Reporting System",
+    "subtitle": "Select your role to continue",
+    "roles": {
+      "operator": {
+        "title": "Operator",
+        "description": "Create new fault and anomaly reports"
+      },
+      "manager": {
+        "title": "Manager",
+        "description": "Manage reports and plan interventions"
+      },
+      "maintenanceWorker": {
+        "title": "Maintenance technician",
+        "description": "View the schedule and carry out interventions"
+      },
+      "safety": {
+        "title": "Safety (HSE)",
+        "description": "Monitor safety reports"
+      },
+      "admin": {
+        "title": "Admin",
+        "description": "System management and configuration"
+      }
+    }
   },
 
   "NotFound": {

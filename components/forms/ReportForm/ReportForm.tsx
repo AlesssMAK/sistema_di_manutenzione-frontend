@@ -190,8 +190,6 @@ const ReportForm = () => {
   return (
     <form onSubmit={handleSubmit(onReportSubmit)} className={css.form}>
       <div className={css.report_form_container}>
-        <h1 className="title">{t('newReport')}</h1>
-        <p className="subtitle">{t('fillForm')}</p>
         <ul className={css.info_list}>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('reportId')}</h3>
