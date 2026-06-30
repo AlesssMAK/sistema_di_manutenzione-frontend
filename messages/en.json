@@ -320,10 +320,11 @@
         "archiveNever": "Never"
       },
       "permissions": {
+        "roleFilter": "Role",
         "announcements": {
           "section": "Who can post announcements",
           "subtitle": "Grant or revoke the right to publish on the public board.",
-          "searchPlaceholder": "Search user by name",
+          "selectUser": "Select user",
           "empty": "No authorized users",
           "revoke": "Revoke",
           "granted": "Permission granted",
@@ -333,7 +334,7 @@
         "messages": {
           "section": "Who can send messages",
           "subtitle": "Unlock direct messaging for specific operators.",
-          "searchPlaceholder": "Search operator by name",
+          "selectUser": "Select operator",
           "empty": "No enabled operators",
           "revoke": "Revoke",
           "granted": "Permission granted",

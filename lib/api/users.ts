@@ -13,13 +13,14 @@ export const getAllUsers = async ({
   role,
   status,
   page,
+  perPage,
 }: UserRequest) => {
   const params = {
     search,
     role,
     status,
     page,
-    perPage: 10,
+    perPage: perPage ?? 10,
   };
   const { data } = await nextServer.get<UsersResponse>('/users', { params });
   return data;

@@ -39,7 +39,17 @@ const AdminSystemSettingsClientPage = () => {
   const t = useTranslations('AdminPage.SystemSettings');
   const tPage = useTranslations('AdminPage');
   const tNoFound = useTranslations('NoFound');
+  const tRoles = useTranslations('Roles');
   const setPageTitle = usePageStore((s) => s.setPageTitle);
+
+  // Role filter options for the announcements grant section (admins are
+  // excluded — they can always publish).
+  const grantRoleOptions = [
+    { value: 'manager' as const, label: tRoles('manager') },
+    { value: 'maintenanceWorker' as const, label: tRoles('maintenanceWorker') },
+    { value: 'operator' as const, label: tRoles('operator') },
+    { value: 'safety' as const, label: tRoles('safety') },
+  ];
   const queryClient = useQueryClient();
 
   const [timezone, setTimezone] = useState('');
@@ -349,7 +359,7 @@ const AdminSystemSettingsClientPage = () => {
         <GrantUsersSection
           title={t('permissions.announcements.section')}
           subtitle={t('permissions.announcements.subtitle')}
-          searchPlaceholder={t('permissions.announcements.searchPlaceholder')}
+          selectUserPlaceholder={t('permissions.announcements.selectUser')}
           emptyText={t('permissions.announcements.empty')}
           revokeLabel={t('permissions.announcements.revoke')}
           successGranted={t('permissions.announcements.granted')}
@@ -358,6 +368,9 @@ const AdminSystemSettingsClientPage = () => {
           permissionKey="canCreateAnnouncements"
           grantedQueryKey={['announcements', 'authors']}
           fetchGranted={getAnnouncementAuthors}
+          roleFilterLabel={t('permissions.roleFilter')}
+          allRolesLabel={tRoles('all')}
+          roleOptions={grantRoleOptions}
         />
       </div>
 
@@ -366,7 +379,7 @@ const AdminSystemSettingsClientPage = () => {
         <GrantUsersSection
           title={t('permissions.messages.section')}
           subtitle={t('permissions.messages.subtitle')}
-          searchPlaceholder={t('permissions.messages.searchPlaceholder')}
+          selectUserPlaceholder={t('permissions.messages.selectUser')}
           emptyText={t('permissions.messages.empty')}
           revokeLabel={t('permissions.messages.revoke')}
           successGranted={t('permissions.messages.granted')}
@@ -375,7 +388,7 @@ const AdminSystemSettingsClientPage = () => {
           permissionKey="canSendMessages"
           grantedQueryKey={['messages', 'allowed-senders']}
           fetchGranted={getMessageSenders}
-          roleFilter="operator"
+          fixedRole="operator"
         />
       </div>
 

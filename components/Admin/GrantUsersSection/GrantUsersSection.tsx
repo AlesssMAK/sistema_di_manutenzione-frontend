@@ -1,39 +1,48 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useDebounce } from 'use-debounce';
 import toast from 'react-hot-toast';
 import { getAllUsers, updateUser } from '@/lib/api/users';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
 import type {
   GrantedUser,
   UserPermissions,
   UserRoles,
 } from '@/types/userTypes';
-import Input from '@/components/UI/Input/Input';
+import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import css from './GrantUsersSection.module.css';
+
+interface RoleOption {
+  value: UserRoles;
+  label: string;
+}
 
 interface GrantUsersSectionProps {
   title: string;
   subtitle: string;
-  searchPlaceholder: string;
+  selectUserPlaceholder: string;
   emptyText: string;
   revokeLabel: string;
   successGranted: string;
   successRevoked: string;
   errorText: string;
   permissionKey: keyof UserPermissions;
-  /** React Query key for the "granted users" list. */
   grantedQueryKey: readonly string[];
   fetchGranted: () => Promise<GrantedUser[]>;
-  /** Limit the searchable pool (e.g. 'operator' for messaging). */
-  roleFilter?: UserRoles;
+  /** Lock the pool to one role (e.g. 'operator' for messaging) — the
+   *  role filter is hidden. */
+  fixedRole?: UserRoles;
+  /** When set (no fixedRole), render a role filter above the picker. */
+  roleFilterLabel?: string;
+  allRolesLabel?: string;
+  roleOptions?: RoleOption[];
 }
 
 const GrantUsersSection = ({
   title,
   subtitle,
-  searchPlaceholder,
+  selectUserPlaceholder,
   emptyText,
   revokeLabel,
   successGranted,
@@ -42,22 +51,38 @@ const GrantUsersSection = ({
   permissionKey,
   grantedQueryKey,
   fetchGranted,
-  roleFilter,
+  fixedRole,
+  roleFilterLabel,
+  allRolesLabel,
+  roleOptions,
 }: GrantUsersSectionProps) => {
   const queryClient = useQueryClient();
-  const [search, setSearch] = useState('');
-  const [debounced] = useDebounce(search.trim(), 300);
+  const [roleSel, setRoleSel] = useState<UserRoles | ''>('');
+
+  const showRoleFilter =
+    !fixedRole && !!roleOptions && !!allRolesLabel && !!roleFilterLabel;
+  const effectiveRole = fixedRole ?? (roleSel || undefined);
+
+  const roleMapper = useMemo(
+    () =>
+      createOptionMapper<UserRoles | ''>([
+        { value: '', label: allRolesLabel ?? '' },
+        ...(roleOptions ?? []),
+      ]),
+    [allRolesLabel, roleOptions]
+  );
 
   const grantedQuery = useQuery({
     queryKey: grantedQueryKey,
     queryFn: fetchGranted,
   });
 
-  const searchQuery = useQuery({
-    queryKey: ['users', 'grant-search', permissionKey, debounced, roleFilter],
+  // Active users only — the grant pool. perPage is generous so the
+  // dropdown holds the whole roster without paging.
+  const usersQuery = useQuery({
+    queryKey: ['users', 'grant-pool', permissionKey, effectiveRole ?? 'all'],
     queryFn: () =>
-      getAllUsers({ search: debounced, role: roleFilter, page: 1 }),
-    enabled: debounced.length > 0,
+      getAllUsers({ status: 'active', role: effectiveRole, perPage: 200 }),
   });
 
   const setPermission = useMutation({
@@ -77,15 +102,14 @@ const GrantUsersSection = ({
   const granted = grantedQuery.data ?? [];
   const grantedIds = new Set(granted.map(u => u._id));
 
-  // Admins always have the right, so they never need granting; hide
-  // anyone already in the granted list too.
-  const results = (searchQuery.data?.users ?? []).filter(
+  // Admins always have the right; hide them and anyone already granted.
+  const candidates = (usersQuery.data?.users ?? []).filter(
     u => u.role !== 'admin' && !grantedIds.has(u._id)
   );
 
-  const grant = (userId: string) => {
-    setPermission.mutate({ userId, value: true });
-    setSearch('');
+  const onPickUser = (label: string) => {
+    const picked = candidates.find(u => u.fullName === label);
+    if (picked) setPermission.mutate({ userId: picked._id, value: true });
   };
 
   return (
@@ -95,36 +119,29 @@ const GrantUsersSection = ({
         <p className={css.subtitle}>{subtitle}</p>
       </div>
 
-      <div className={css.searchWrap}>
-        <Input
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder={searchPlaceholder}
-          icon="search"
-          style={{
-            height: '36px',
-            borderRadius: '6px',
-            background: '#f3f3f5',
-            border: 'none',
-          }}
-        />
-        {debounced.length > 0 && results.length > 0 && (
-          <ul className={css.results}>
-            {results.map(u => (
-              <li key={u._id}>
-                <button
-                  type="button"
-                  className={css.resultItem}
-                  onClick={() => grant(u._id)}
-                  disabled={setPermission.isPending}
-                >
-                  <span className={css.resultName}>{u.fullName}</span>
-                  <span className={css.resultRole}>{u.role}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+      <div className={css.controls}>
+        {showRoleFilter && (
+          <div className={css.control}>
+            <label className={css.controlLabel}>{roleFilterLabel}</label>
+            <SelectDropdown
+              options={roleMapper.labelsArray}
+              selectedValue={
+                roleMapper.getLabelByValue(roleSel) ?? allRolesLabel ?? ''
+              }
+              onSelect={label =>
+                setRoleSel(roleMapper.getValueByLabel(label) ?? '')
+              }
+            />
+          </div>
         )}
+        <div className={css.control}>
+          <SelectDropdown
+            options={candidates.map(u => u.fullName)}
+            selectedValue={''}
+            placeholder={selectUserPlaceholder}
+            onSelect={onPickUser}
+          />
+        </div>
       </div>
 
       {granted.length === 0 ? (

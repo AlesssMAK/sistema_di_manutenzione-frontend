@@ -23,56 +23,34 @@
   margin: 0;
 }
 
-.searchWrap {
-  position: relative;
-  max-width: 360px;
-}
-
-.results {
-  position: absolute;
-  z-index: 20;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  list-style: none;
-  margin: 0;
-  padding: 4px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  max-height: 220px;
-  overflow-y: auto;
-}
-
-.resultItem {
+.controls {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 12px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   width: 100%;
-  padding: 8px 10px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.15s ease;
+
+  @media screen and (min-width: 768px) {
+    max-width: 260px;
+  }
 }
 
-.resultItem:hover {
-  background: #eef2ff;
-}
-
-.resultName {
-  font-size: 14px;
-  color: #0a0a0a;
-}
-
-.resultRole {
+.controlLabel {
   font-size: 12px;
-  color: #64748b;
-  text-transform: capitalize;
+  font-weight: 600;
+  color: #45556c;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
 }
 
 .empty {

@@ -320,10 +320,11 @@
         "archiveNever": "Nunca"
       },
       "permissions": {
+        "roleFilter": "Rol",
         "announcements": {
           "section": "Quién puede crear anuncios",
           "subtitle": "Concede o revoca el permiso de publicar en el tablón público.",
-          "searchPlaceholder": "Buscar usuario por nombre",
+          "selectUser": "Seleccionar usuario",
           "empty": "Ningún usuario autorizado",
           "revoke": "Revocar",
           "granted": "Permiso concedido",
@@ -333,7 +334,7 @@
         "messages": {
           "section": "Quién puede enviar mensajes",
           "subtitle": "Habilita la mensajería directa para operadores específicos.",
-          "searchPlaceholder": "Buscar operador por nombre",
+          "selectUser": "Seleccionar operador",
           "empty": "Ningún operador habilitado",
           "revoke": "Revocar",
           "granted": "Permiso concedido",

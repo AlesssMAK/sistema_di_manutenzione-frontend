@@ -299,10 +299,11 @@
         "archiveNever": "Nigdy"
       },
       "permissions": {
+        "roleFilter": "Rola",
         "announcements": {
           "section": "Kto może tworzyć ogłoszenia",
           "subtitle": "Przyznaj lub cofnij prawo do publikowania na tablicy publicznej.",
-          "searchPlaceholder": "Szukaj użytkownika po nazwisku",
+          "selectUser": "Wybierz użytkownika",
           "empty": "Brak uprawnionych użytkowników",
           "revoke": "Cofnij",
           "granted": "Uprawnienie przyznane",
@@ -312,7 +313,7 @@
         "messages": {
           "section": "Kto może wysyłać wiadomości",
           "subtitle": "Odblokuj wiadomości bezpośrednie dla wybranych operatorów.",
-          "searchPlaceholder": "Szukaj operatora po nazwisku",
+          "selectUser": "Wybierz operatora",
           "empty": "Brak włączonych operatorów",
           "revoke": "Cofnij",
           "granted": "Uprawnienie przyznane",

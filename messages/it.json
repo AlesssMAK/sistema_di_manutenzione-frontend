@@ -319,10 +319,11 @@
         "archiveNever": "Mai"
       },
       "permissions": {
+        "roleFilter": "Ruolo",
         "announcements": {
           "section": "Chi può creare avvisi",
           "subtitle": "Concedi o revoca il permesso di pubblicare avvisi sulla bacheca pubblica.",
-          "searchPlaceholder": "Cerca utente per nome",
+          "selectUser": "Seleziona utente",
           "empty": "Nessun utente autorizzato",
           "revoke": "Revoca",
           "granted": "Permesso concesso",
@@ -332,7 +333,7 @@
         "messages": {
           "section": "Chi può inviare messaggi",
           "subtitle": "Sblocca la messaggistica diretta per operatori specifici.",
-          "searchPlaceholder": "Cerca operatore per nome",
+          "selectUser": "Seleziona operatore",
           "empty": "Nessun operatore abilitato",
           "revoke": "Revoca",
           "granted": "Permesso concesso",
