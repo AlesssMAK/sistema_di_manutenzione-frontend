@@ -319,6 +319,28 @@
         "archiveMonths": "Archivo de señalaciones completadas (meses)",
         "archiveNever": "Nunca"
       },
+      "permissions": {
+        "announcements": {
+          "section": "Quién puede crear anuncios",
+          "subtitle": "Concede o revoca el permiso de publicar en el tablón público.",
+          "searchPlaceholder": "Buscar usuario por nombre",
+          "empty": "Ningún usuario autorizado",
+          "revoke": "Revocar",
+          "granted": "Permiso concedido",
+          "revoked": "Permiso revocado",
+          "error": "Error al guardar"
+        },
+        "messages": {
+          "section": "Quién puede enviar mensajes",
+          "subtitle": "Habilita la mensajería directa para operadores específicos.",
+          "searchPlaceholder": "Buscar operador por nombre",
+          "empty": "Ningún operador habilitado",
+          "revoke": "Revocar",
+          "granted": "Permiso concedido",
+          "revoked": "Permiso revocado",
+          "error": "Error al guardar"
+        }
+      },
       "messages": {
         "saving": "Guardando...",
         "saved": "Ajustes guardados",
@@ -767,6 +789,28 @@
     "errors": {
       "loadFaults": "Error al cargar averías",
       "loadBroadcasts": "Error al cargar comunicaciones"
+    }
+  },
+
+  "BachecaPage": {
+    "titlePageForStore": "Tablón",
+    "title": "Tablón",
+    "subtitle": "Anuncios públicos",
+    "empty": "No hay anuncios por ahora",
+    "loginCta": "Acceder",
+    "myAreaCta": "Ir a tu área",
+    "createCta": "Nuevo anuncio",
+    "delete": "Eliminar",
+    "errorLoad": "Error al cargar los anuncios",
+    "created": "Anuncio publicado",
+    "deleted": "Anuncio eliminado",
+    "saveError": "Error al guardar",
+    "form": {
+      "titlePlaceholder": "Título del anuncio",
+      "bodyPlaceholder": "Escribe el anuncio...",
+      "submit": "Publicar",
+      "submitting": "Publicando...",
+      "cancel": "Cancelar"
     }
   },
 

@@ -43,17 +43,6 @@ export async function proxy(request: NextRequest) {
       refreshToken
     );
 
-    if (pathname === '/') {
-      const home = ok && role ? roleRoutes[role]?.[0] : undefined;
-      if (home) {
-        return applyCookies(
-          NextResponse.redirect(new URL(home, request.nextUrl.origin)),
-          cookies
-        );
-      }
-      return applyCookies(NextResponse.next(), cookies);
-    }
-
     if (!ok) {
       return NextResponse.redirect(new URL('/login', request.nextUrl.origin));
     }
@@ -74,7 +63,6 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/',
     '/login',
     '/admin/:path*',
     '/manager/:path*',

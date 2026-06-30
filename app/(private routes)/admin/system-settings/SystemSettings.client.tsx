@@ -18,6 +18,9 @@ import Button from '@/components/UI/Button/Button';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
+import GrantUsersSection from '@/components/Admin/GrantUsersSection/GrantUsersSection';
+import { getAnnouncementAuthors } from '@/lib/api/announcements';
+import { getMessageSenders } from '@/lib/api/messages';
 import css from './SystemSettings.module.css';
 
 // Monday-first weekday order; values are JS getDay() codes
@@ -339,6 +342,41 @@ const AdminSystemSettingsClientPage = () => {
             }}
           />
         </div>
+      </div>
+
+      {/* ── Permissions — who can publish announcements ────────── */}
+      <div className={css.card}>
+        <GrantUsersSection
+          title={t('permissions.announcements.section')}
+          subtitle={t('permissions.announcements.subtitle')}
+          searchPlaceholder={t('permissions.announcements.searchPlaceholder')}
+          emptyText={t('permissions.announcements.empty')}
+          revokeLabel={t('permissions.announcements.revoke')}
+          successGranted={t('permissions.announcements.granted')}
+          successRevoked={t('permissions.announcements.revoked')}
+          errorText={t('permissions.announcements.error')}
+          permissionKey="canCreateAnnouncements"
+          grantedQueryKey={['announcements', 'authors']}
+          fetchGranted={getAnnouncementAuthors}
+        />
+      </div>
+
+      {/* ── Permissions — which operators can send direct messages ─ */}
+      <div className={css.card}>
+        <GrantUsersSection
+          title={t('permissions.messages.section')}
+          subtitle={t('permissions.messages.subtitle')}
+          searchPlaceholder={t('permissions.messages.searchPlaceholder')}
+          emptyText={t('permissions.messages.empty')}
+          revokeLabel={t('permissions.messages.revoke')}
+          successGranted={t('permissions.messages.granted')}
+          successRevoked={t('permissions.messages.revoked')}
+          errorText={t('permissions.messages.error')}
+          permissionKey="canSendMessages"
+          grantedQueryKey={['messages', 'allowed-senders']}
+          fetchGranted={getMessageSenders}
+          roleFilter="operator"
+        />
       </div>
 
       <div className={css.actions}>

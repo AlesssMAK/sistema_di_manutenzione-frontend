@@ -318,6 +318,28 @@
         "archiveMonths": "Archivio segnalazioni completate (mesi)",
         "archiveNever": "Mai"
       },
+      "permissions": {
+        "announcements": {
+          "section": "Chi può creare avvisi",
+          "subtitle": "Concedi o revoca il permesso di pubblicare avvisi sulla bacheca pubblica.",
+          "searchPlaceholder": "Cerca utente per nome",
+          "empty": "Nessun utente autorizzato",
+          "revoke": "Revoca",
+          "granted": "Permesso concesso",
+          "revoked": "Permesso revocato",
+          "error": "Errore durante il salvataggio"
+        },
+        "messages": {
+          "section": "Chi può inviare messaggi",
+          "subtitle": "Sblocca la messaggistica diretta per operatori specifici.",
+          "searchPlaceholder": "Cerca operatore per nome",
+          "empty": "Nessun operatore abilitato",
+          "revoke": "Revoca",
+          "granted": "Permesso concesso",
+          "revoked": "Permesso revocato",
+          "error": "Errore durante il salvataggio"
+        }
+      },
       "messages": {
         "saving": "Salvataggio...",
         "saved": "Impostazioni salvate",
@@ -766,6 +788,28 @@
   "errors": {
     "loadFaults": "Errore caricamento segnalazioni",
     "loadBroadcasts": "Errore caricamento comunicazioni"
+  }
+},
+
+"BachecaPage": {
+  "titlePageForStore": "Bacheca",
+  "title": "Bacheca",
+  "subtitle": "Avvisi e comunicazioni pubbliche",
+  "empty": "Nessun avviso al momento",
+  "loginCta": "Accedi",
+  "myAreaCta": "Vai alla tua area",
+  "createCta": "Crea avviso",
+  "delete": "Elimina",
+  "errorLoad": "Errore nel caricamento degli avvisi",
+  "created": "Avviso pubblicato",
+  "deleted": "Avviso eliminato",
+  "saveError": "Errore durante il salvataggio",
+  "form": {
+    "titlePlaceholder": "Titolo dell'avviso",
+    "bodyPlaceholder": "Scrivi l'avviso...",
+    "submit": "Pubblica",
+    "submitting": "Pubblicazione...",
+    "cancel": "Annulla"
   }
 },
 

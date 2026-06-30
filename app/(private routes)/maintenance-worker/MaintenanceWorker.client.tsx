@@ -390,18 +390,23 @@ const MaintenanceWorkerClient = () => {
               </>
             ) : (
               <div className={css.noResults}>
-                <NoFound
-                  title={tNoFound('noResultsTitle')}
-                  message={emptyText}
-                />
+                <div className={css.no_found_container}>
+                  <NoFound
+                    title={tNoFound('noResultsTitle')}
+                    message={emptyText}
+                  />
+                </div>
                 {showResetButton && (
-                  <Button
-                    type="button"
-                    className="button button--blue"
-                    onClick={handleResetFilters}
-                  >
-                    {t('empty.resetButton')}
-                  </Button>
+                  <div className={css.no_found_btn}>
+                    <Button
+                      type="button"
+                      className="button button--blue"
+                      onClick={handleResetFilters}
+                      width={153}
+                    >
+                      {t('empty.resetButton')}
+                    </Button>
+                  </div>
                 )}
               </div>
             )}

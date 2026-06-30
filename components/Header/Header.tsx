@@ -38,10 +38,7 @@ const Header = () => {
     window.location.href = '/';
   };
 
-  if (!user) return null;
-  const routes = roleRoutes[user.role];
-
-  const route = routes[0];
+  const route = user ? roleRoutes[user.role]?.[0] : undefined;
 
   return (
     <header className={css.header}>

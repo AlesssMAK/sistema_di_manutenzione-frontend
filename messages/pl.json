@@ -298,6 +298,28 @@
         "archiveMonths": "Archiwum zakończonych zgłoszeń (miesiące)",
         "archiveNever": "Nigdy"
       },
+      "permissions": {
+        "announcements": {
+          "section": "Kto może tworzyć ogłoszenia",
+          "subtitle": "Przyznaj lub cofnij prawo do publikowania na tablicy publicznej.",
+          "searchPlaceholder": "Szukaj użytkownika po nazwisku",
+          "empty": "Brak uprawnionych użytkowników",
+          "revoke": "Cofnij",
+          "granted": "Uprawnienie przyznane",
+          "revoked": "Uprawnienie cofnięte",
+          "error": "Błąd podczas zapisywania"
+        },
+        "messages": {
+          "section": "Kto może wysyłać wiadomości",
+          "subtitle": "Odblokuj wiadomości bezpośrednie dla wybranych operatorów.",
+          "searchPlaceholder": "Szukaj operatora po nazwisku",
+          "empty": "Brak włączonych operatorów",
+          "revoke": "Cofnij",
+          "granted": "Uprawnienie przyznane",
+          "revoked": "Uprawnienie cofnięte",
+          "error": "Błąd podczas zapisywania"
+        }
+      },
       "messages": {
         "saving": "Zapisywanie...",
         "saved": "Ustawienia zapisane",
@@ -746,6 +768,28 @@
     "errors": {
       "loadFaults": "Błąd ładowania usterek",
       "loadBroadcasts": "Błąd ładowania komunikatów"
+    }
+  },
+
+  "BachecaPage": {
+    "titlePageForStore": "Tablica",
+    "title": "Tablica",
+    "subtitle": "Ogłoszenia publiczne",
+    "empty": "Brak ogłoszeń",
+    "loginCta": "Zaloguj się",
+    "myAreaCta": "Przejdź do swojej strefy",
+    "createCta": "Nowe ogłoszenie",
+    "delete": "Usuń",
+    "errorLoad": "Błąd ładowania ogłoszeń",
+    "created": "Ogłoszenie opublikowane",
+    "deleted": "Ogłoszenie usunięte",
+    "saveError": "Błąd podczas zapisywania",
+    "form": {
+      "titlePlaceholder": "Tytuł ogłoszenia",
+      "bodyPlaceholder": "Napisz ogłoszenie...",
+      "submit": "Opublikuj",
+      "submitting": "Publikowanie...",
+      "cancel": "Anuluj"
     }
   },
 
