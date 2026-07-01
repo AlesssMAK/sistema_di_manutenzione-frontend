@@ -5,11 +5,29 @@ export interface WorkHours {
   end: string; // 'HH:mm'
 }
 
+export interface DaySchedule {
+  enabled: boolean;
+  start: string; // 'HH:mm'
+  end: string; // 'HH:mm'
+}
+
+export type WeekDayKey =
+  | 'mon'
+  | 'tue'
+  | 'wed'
+  | 'thu'
+  | 'fri'
+  | 'sat'
+  | 'sun';
+
+export type WeekSchedule = Record<WeekDayKey, DaySchedule>;
+
 export interface PublicSystemSettings {
   _id: string;
   timezone: string;
   workHours: WorkHours;
   workDays: number[];
+  weekSchedule: WeekSchedule;
   slotDurationMinutes: number;
   holidays: string[];
   updatedAt?: string;
@@ -53,6 +71,7 @@ export type UpdateSystemSettingsPayload = Partial<{
   timezone: string;
   workHours: WorkHours;
   workDays: number[];
+  weekSchedule: WeekSchedule;
   slotDurationMinutes: number;
   holidays: string[];
   email: Partial<EmailSettings>;

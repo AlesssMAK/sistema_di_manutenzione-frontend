@@ -295,7 +295,14 @@
         "workStart": "Inicio de jornada",
         "workEnd": "Fin de jornada",
         "workDays": "Días laborables",
-        "slotDuration": "Duración de franja (minutos)"
+        "slotDuration": "Duración de franja (minutos)",
+        "continuous": "Actividad continua (24h)",
+        "weekTitle": "Horario semanal",
+        "mode": {
+          "off": "Cerrado",
+          "full": "24h",
+          "hours": "Horario"
+        }
       },
       "weekDays": {
         "mon": "Lun",

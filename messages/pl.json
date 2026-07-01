@@ -274,7 +274,14 @@
         "workStart": "Początek dnia",
         "workEnd": "Koniec dnia",
         "workDays": "Dni robocze",
-        "slotDuration": "Czas trwania slotu (minuty)"
+        "slotDuration": "Czas trwania slotu (minuty)",
+        "continuous": "Praca ciągła (24h)",
+        "weekTitle": "Harmonogram tygodniowy",
+        "mode": {
+          "off": "Zamknięte",
+          "full": "24h",
+          "hours": "Godziny"
+        }
       },
       "weekDays": {
         "mon": "Pon",

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import toast from 'react-hot-toast';
 import { markAsRead } from '@/lib/api/messages';
 import type { Message } from '@/types/messageType';
@@ -20,11 +20,14 @@ interface MessageDetailModalProps {
   onClose: () => void;
 }
 
-const formatFull = (value?: string) => {
+const formatFull = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
   return isValid(parsed)
-    ? format(parsed, "dd MMMM yyyy 'alle' HH:mm", { locale: it })
+    ? format(parsed, "dd MMMM yyyy 'alle' HH:mm", { locale })
     : value;
 };
 
@@ -37,6 +40,7 @@ const MessageDetailModal = ({
   const tReply = useTranslations('MessagesPage.reply');
   const tMessages = useTranslations('MessagesPage.messages');
   const tRoles = useTranslations('Roles');
+  const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
   const [isReplying, setIsReplying] = useState(false);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
@@ -106,7 +110,9 @@ const MessageDetailModal = ({
           )}
 
           <span className={css.metaLabel}>{t('sent')}</span>
-          <span className={css.metaValue}>{formatFull(message.createdAt)}</span>
+          <span className={css.metaValue}>
+            {formatFull(message.createdAt, locale)}
+          </span>
         </div>
 
         <div className={css.body}>{message.body}</div>

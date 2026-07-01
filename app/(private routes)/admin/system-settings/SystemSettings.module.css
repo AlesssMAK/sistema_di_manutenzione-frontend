@@ -36,6 +36,19 @@
   gap: 6px;
 }
 
+.selectWrap {
+  max-width: 280px;
+}
+
+.toggleLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #0a0a0a;
+}
+
 .fieldLabel {
   font-size: 14px;
   color: #0a0a0a;
@@ -100,6 +113,77 @@
 
 .dayChipActive:hover {
   background: #1e40af;
+}
+
+/* Per-day weekly schedule */
+.week {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.weekRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.weekRow:last-child {
+  border-bottom: none;
+}
+
+.weekDayName {
+  min-width: 48px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0a0a0a;
+}
+
+.modeGroup {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.modeBtn {
+  height: 32px;
+  padding: 0 12px;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  background: #fff;
+  color: #0a0a0a;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.modeBtn:hover {
+  background: #eff6ff;
+}
+
+.modeBtnActive {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.modeBtnActive:hover {
+  background: #1e40af;
+}
+
+.weekTimes {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weekDash {
+  color: #64748b;
 }
 
 /* Holidays */

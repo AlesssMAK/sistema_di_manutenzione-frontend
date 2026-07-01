@@ -294,7 +294,14 @@
         "workStart": "Inizio giornata",
         "workEnd": "Fine giornata",
         "workDays": "Giorni lavorativi",
-        "slotDuration": "Durata slot (minuti)"
+        "slotDuration": "Durata slot (minuti)",
+        "continuous": "Attività continua (24h)",
+        "weekTitle": "Orario settimanale",
+        "mode": {
+          "off": "Chiuso",
+          "full": "24h",
+          "hours": "Orario"
+        }
       },
       "weekDays": {
         "mon": "Lun",

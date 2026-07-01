@@ -295,7 +295,14 @@
         "workStart": "Day start",
         "workEnd": "Day end",
         "workDays": "Work days",
-        "slotDuration": "Slot duration (minutes)"
+        "slotDuration": "Slot duration (minutes)",
+        "continuous": "Continuous operation (24h)",
+        "weekTitle": "Weekly schedule",
+        "mode": {
+          "off": "Closed",
+          "full": "24h",
+          "hours": "Hours"
+        }
       },
       "weekDays": {
         "mon": "Mon",
