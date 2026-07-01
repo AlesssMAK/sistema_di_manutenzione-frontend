@@ -1,11 +1,11 @@
 import Header from '@/components/Header/Header';
-import RolesClient from './Roles.client';
+import BachecaClient from './Bacheca.client';
 
-export default function RolesPage() {
+export default function HomePage() {
   return (
     <>
       <Header />
-      <RolesClient />
+      <BachecaClient />
     </>
   );
 }

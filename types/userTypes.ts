@@ -1,5 +1,17 @@
 import { STATUS } from '@/constants/status';
 
+export interface UserPermissions {
+  canCreateAnnouncements?: boolean;
+  canSendMessages?: boolean;
+}
+
+/** Trimmed user shape returned by the "who is granted X" admin lists. */
+export interface GrantedUser {
+  _id: string;
+  fullName: string;
+  role: UserRoles;
+}
+
 export interface User {
   _id: string;
   role: UserRoles;
@@ -8,6 +20,7 @@ export interface User {
   avatar: string;
   status: STATUS;
   isFirstLogin: boolean;
+  permissions?: UserPermissions;
 }
 
 export type UserRoles =
@@ -65,4 +78,5 @@ export interface UpdateUserValues {
   password?: string | undefined;
   avatar?: string | null;
   personalCode?: string | undefined;
+  permissions?: UserPermissions;
 }

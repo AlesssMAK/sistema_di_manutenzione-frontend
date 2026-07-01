@@ -294,7 +294,14 @@
         "workStart": "Inizio giornata",
         "workEnd": "Fine giornata",
         "workDays": "Giorni lavorativi",
-        "slotDuration": "Durata slot (minuti)"
+        "slotDuration": "Durata slot (minuti)",
+        "continuous": "Attività continua (24h)",
+        "weekTitle": "Orario settimanale",
+        "mode": {
+          "off": "Chiuso",
+          "full": "24h",
+          "hours": "Orario"
+        }
       },
       "weekDays": {
         "mon": "Lun",
@@ -317,6 +324,29 @@
         "auditLog": "Log di audit (giorni)",
         "archiveMonths": "Archivio segnalazioni completate (mesi)",
         "archiveNever": "Mai"
+      },
+      "permissions": {
+        "roleFilter": "Ruolo",
+        "announcements": {
+          "section": "Chi può creare avvisi",
+          "subtitle": "Concedi o revoca il permesso di pubblicare avvisi sulla bacheca pubblica.",
+          "selectUser": "Seleziona utente",
+          "empty": "Nessun utente autorizzato",
+          "revoke": "Revoca",
+          "granted": "Permesso concesso",
+          "revoked": "Permesso revocato",
+          "error": "Errore durante il salvataggio"
+        },
+        "messages": {
+          "section": "Chi può inviare messaggi",
+          "subtitle": "Sblocca la messaggistica diretta per operatori specifici.",
+          "selectUser": "Seleziona operatore",
+          "empty": "Nessun operatore abilitato",
+          "revoke": "Revoca",
+          "granted": "Permesso concesso",
+          "revoked": "Permesso revocato",
+          "error": "Errore durante il salvataggio"
+        }
       },
       "messages": {
         "saving": "Salvataggio...",
@@ -766,6 +796,28 @@
   "errors": {
     "loadFaults": "Errore caricamento segnalazioni",
     "loadBroadcasts": "Errore caricamento comunicazioni"
+  }
+},
+
+"BachecaPage": {
+  "titlePageForStore": "Bacheca",
+  "title": "Bacheca",
+  "subtitle": "Avvisi e comunicazioni pubbliche",
+  "empty": "Nessun avviso al momento",
+  "loginCta": "Accedi",
+  "myAreaCta": "Vai alla tua area",
+  "createCta": "Crea avviso",
+  "delete": "Elimina",
+  "errorLoad": "Errore nel caricamento degli avvisi",
+  "created": "Avviso pubblicato",
+  "deleted": "Avviso eliminato",
+  "saveError": "Errore durante il salvataggio",
+  "form": {
+    "titlePlaceholder": "Titolo dell'avviso",
+    "bodyPlaceholder": "Scrivi l'avviso...",
+    "submit": "Pubblica",
+    "submitting": "Pubblicazione...",
+    "cancel": "Annulla"
   }
 },
 

@@ -295,7 +295,14 @@
         "workStart": "Day start",
         "workEnd": "Day end",
         "workDays": "Work days",
-        "slotDuration": "Slot duration (minutes)"
+        "slotDuration": "Slot duration (minutes)",
+        "continuous": "Continuous operation (24h)",
+        "weekTitle": "Weekly schedule",
+        "mode": {
+          "off": "Closed",
+          "full": "24h",
+          "hours": "Hours"
+        }
       },
       "weekDays": {
         "mon": "Mon",
@@ -318,6 +325,29 @@
         "auditLog": "Audit log (days)",
         "archiveMonths": "Completed reports archive (months)",
         "archiveNever": "Never"
+      },
+      "permissions": {
+        "roleFilter": "Role",
+        "announcements": {
+          "section": "Who can post announcements",
+          "subtitle": "Grant or revoke the right to publish on the public board.",
+          "selectUser": "Select user",
+          "empty": "No authorized users",
+          "revoke": "Revoke",
+          "granted": "Permission granted",
+          "revoked": "Permission revoked",
+          "error": "Error while saving"
+        },
+        "messages": {
+          "section": "Who can send messages",
+          "subtitle": "Unlock direct messaging for specific operators.",
+          "selectUser": "Select operator",
+          "empty": "No enabled operators",
+          "revoke": "Revoke",
+          "granted": "Permission granted",
+          "revoked": "Permission revoked",
+          "error": "Error while saving"
+        }
       },
       "messages": {
         "saving": "Saving...",
@@ -767,6 +797,28 @@
     "errors": {
       "loadFaults": "Error loading faults",
       "loadBroadcasts": "Error loading communications"
+    }
+  },
+
+  "BachecaPage": {
+    "titlePageForStore": "Board",
+    "title": "Board",
+    "subtitle": "Public announcements",
+    "empty": "No announcements yet",
+    "loginCta": "Log in",
+    "myAreaCta": "Go to your area",
+    "createCta": "New announcement",
+    "delete": "Delete",
+    "errorLoad": "Failed to load announcements",
+    "created": "Announcement published",
+    "deleted": "Announcement deleted",
+    "saveError": "Error while saving",
+    "form": {
+      "titlePlaceholder": "Announcement title",
+      "bodyPlaceholder": "Write the announcement...",
+      "submit": "Publish",
+      "submitting": "Publishing...",
+      "cancel": "Cancel"
     }
   },
 

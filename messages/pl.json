@@ -274,7 +274,14 @@
         "workStart": "Początek dnia",
         "workEnd": "Koniec dnia",
         "workDays": "Dni robocze",
-        "slotDuration": "Czas trwania slotu (minuty)"
+        "slotDuration": "Czas trwania slotu (minuty)",
+        "continuous": "Praca ciągła (24h)",
+        "weekTitle": "Harmonogram tygodniowy",
+        "mode": {
+          "off": "Zamknięte",
+          "full": "24h",
+          "hours": "Godziny"
+        }
       },
       "weekDays": {
         "mon": "Pon",
@@ -297,6 +304,29 @@
         "auditLog": "Log audytu (dni)",
         "archiveMonths": "Archiwum zakończonych zgłoszeń (miesiące)",
         "archiveNever": "Nigdy"
+      },
+      "permissions": {
+        "roleFilter": "Rola",
+        "announcements": {
+          "section": "Kto może tworzyć ogłoszenia",
+          "subtitle": "Przyznaj lub cofnij prawo do publikowania na tablicy publicznej.",
+          "selectUser": "Wybierz użytkownika",
+          "empty": "Brak uprawnionych użytkowników",
+          "revoke": "Cofnij",
+          "granted": "Uprawnienie przyznane",
+          "revoked": "Uprawnienie cofnięte",
+          "error": "Błąd podczas zapisywania"
+        },
+        "messages": {
+          "section": "Kto może wysyłać wiadomości",
+          "subtitle": "Odblokuj wiadomości bezpośrednie dla wybranych operatorów.",
+          "selectUser": "Wybierz operatora",
+          "empty": "Brak włączonych operatorów",
+          "revoke": "Cofnij",
+          "granted": "Uprawnienie przyznane",
+          "revoked": "Uprawnienie cofnięte",
+          "error": "Błąd podczas zapisywania"
+        }
       },
       "messages": {
         "saving": "Zapisywanie...",
@@ -746,6 +776,28 @@
     "errors": {
       "loadFaults": "Błąd ładowania usterek",
       "loadBroadcasts": "Błąd ładowania komunikatów"
+    }
+  },
+
+  "BachecaPage": {
+    "titlePageForStore": "Tablica",
+    "title": "Tablica",
+    "subtitle": "Ogłoszenia publiczne",
+    "empty": "Brak ogłoszeń",
+    "loginCta": "Zaloguj się",
+    "myAreaCta": "Przejdź do swojej strefy",
+    "createCta": "Nowe ogłoszenie",
+    "delete": "Usuń",
+    "errorLoad": "Błąd ładowania ogłoszeń",
+    "created": "Ogłoszenie opublikowane",
+    "deleted": "Ogłoszenie usunięte",
+    "saveError": "Błąd podczas zapisywania",
+    "form": {
+      "titlePlaceholder": "Tytuł ogłoszenia",
+      "bodyPlaceholder": "Napisz ogłoszenie...",
+      "submit": "Opublikuj",
+      "submitting": "Publikowanie...",
+      "cancel": "Anuluj"
     }
   },
 

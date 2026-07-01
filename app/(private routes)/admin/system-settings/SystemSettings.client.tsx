@@ -2,22 +2,29 @@
 
 import { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import toast from 'react-hot-toast';
 import { usePageStore } from '@/lib/store/pageStore';
 import {
   fetchFullSystemSettings,
   updateSystemSettings,
-  type WorkHours,
   type RetentionSettings,
+  type WeekSchedule,
+  type WeekDayKey,
+  type DaySchedule,
 } from '@/lib/api/systemSettings';
 import Input from '@/components/UI/Input/Input';
 import Button from '@/components/UI/Button/Button';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
+import GrantUsersSection from '@/components/Admin/GrantUsersSection/GrantUsersSection';
+import { getAnnouncementAuthors } from '@/lib/api/announcements';
+import { getMessageSenders } from '@/lib/api/messages';
+import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import { TIMEZONES } from '@/constants/timezones';
 import css from './SystemSettings.module.css';
 
 // Monday-first weekday order; values are JS getDay() codes
@@ -36,15 +43,22 @@ const AdminSystemSettingsClientPage = () => {
   const t = useTranslations('AdminPage.SystemSettings');
   const tPage = useTranslations('AdminPage');
   const tNoFound = useTranslations('NoFound');
+  const tRoles = useTranslations('Roles');
+  const locale = getDateFnsLocale(useLocale());
   const setPageTitle = usePageStore((s) => s.setPageTitle);
+
+  // Role filter options for the announcements grant section (admins are
+  // excluded — they can always publish).
+  const grantRoleOptions = [
+    { value: 'manager' as const, label: tRoles('manager') },
+    { value: 'maintenanceWorker' as const, label: tRoles('maintenanceWorker') },
+    { value: 'operator' as const, label: tRoles('operator') },
+    { value: 'safety' as const, label: tRoles('safety') },
+  ];
   const queryClient = useQueryClient();
 
   const [timezone, setTimezone] = useState('');
-  const [workHours, setWorkHours] = useState<WorkHours>({
-    start: '',
-    end: '',
-  });
-  const [workDays, setWorkDays] = useState<number[]>([]);
+  const [weekSchedule, setWeekSchedule] = useState<WeekSchedule | null>(null);
   const [slotDuration, setSlotDuration] = useState(30);
   const [holidays, setHolidays] = useState<string[]>([]);
   const [newHoliday, setNewHoliday] = useState('');
@@ -66,8 +80,7 @@ const AdminSystemSettingsClientPage = () => {
   useEffect(() => {
     if (data) {
       setTimezone(data.timezone);
-      setWorkHours(data.workHours);
-      setWorkDays(data.workDays);
+      setWeekSchedule(data.weekSchedule);
       setSlotDuration(data.slotDurationMinutes);
       setHolidays(
         (data.holidays ?? []).map((h) => String(h).slice(0, 10))
@@ -112,11 +125,38 @@ const AdminSystemSettingsClientPage = () => {
     );
   }
 
-  const toggleDay = (value: number) => {
-    setWorkDays((prev) =>
-      prev.includes(value)
-        ? prev.filter((d) => d !== value)
-        : [...prev, value].sort()
+  // Off / 24h (00:00–23:59) / custom hours — the three per-day modes.
+  const dayMode = (d: DaySchedule): 'off' | 'full' | 'hours' => {
+    if (!d.enabled) return 'off';
+    if (d.start === '00:00' && d.end === '23:59') return 'full';
+    return 'hours';
+  };
+
+  const setDayMode = (key: WeekDayKey, mode: 'off' | 'full' | 'hours') => {
+    setWeekSchedule((prev) => {
+      if (!prev) return prev;
+      const cur = prev[key];
+      let next: DaySchedule;
+      if (mode === 'off') next = { ...cur, enabled: false };
+      else if (mode === 'full')
+        next = { enabled: true, start: '00:00', end: '23:59' };
+      else
+        next = {
+          enabled: true,
+          start: cur.start && cur.start !== '00:00' ? cur.start : '08:00',
+          end: cur.end && cur.end !== '23:59' ? cur.end : '17:00',
+        };
+      return { ...prev, [key]: next };
+    });
+  };
+
+  const setDayTime = (
+    key: WeekDayKey,
+    field: 'start' | 'end',
+    value: string
+  ) => {
+    setWeekSchedule((prev) =>
+      prev ? { ...prev, [key]: { ...prev[key], [field]: value } } : prev
     );
   };
 
@@ -133,15 +173,14 @@ const AdminSystemSettingsClientPage = () => {
   const formatHoliday = (iso: string) => {
     const parsed = parseISO(iso);
     return isValid(parsed)
-      ? format(parsed, 'dd MMMM yyyy', { locale: it })
+      ? format(parsed, 'dd MMMM yyyy', { locale })
       : iso;
   };
 
   const onSave = () => {
     mutation.mutate({
       timezone,
-      workHours,
-      workDays,
+      ...(weekSchedule ? { weekSchedule } : {}),
       slotDurationMinutes: slotDuration,
       holidays,
       retention,
@@ -161,61 +200,66 @@ const AdminSystemSettingsClientPage = () => {
 
         <div className={css.field}>
           <label className={css.fieldLabel}>{t('schedule.timezone')}</label>
-          <Input
-            type="text"
-            value={timezone}
-            onChange={(e) => setTimezone(e.target.value)}
-            placeholder="Europe/Rome"
-            style={{
-              height: '36px',
-              borderRadius: '6px',
-              background: '#f3f3f5',
-              border: 'none',
-              maxWidth: '280px',
-            }}
-          />
-        </div>
-
-        <div className={css.row}>
-          <div className={css.field}>
-            <label className={css.fieldLabel}>{t('schedule.workStart')}</label>
-            <input
-              type="time"
-              className={css.timeInput}
-              value={workHours.start}
-              onChange={(e) =>
-                setWorkHours({ ...workHours, start: e.target.value })
-              }
-            />
-          </div>
-          <div className={css.field}>
-            <label className={css.fieldLabel}>{t('schedule.workEnd')}</label>
-            <input
-              type="time"
-              className={css.timeInput}
-              value={workHours.end}
-              onChange={(e) =>
-                setWorkHours({ ...workHours, end: e.target.value })
-              }
+          <div className={css.selectWrap}>
+            <SelectDropdown
+              options={TIMEZONES}
+              selectedValue={timezone}
+              onSelect={setTimezone}
             />
           </div>
         </div>
 
         <div className={css.field}>
-          <label className={css.fieldLabel}>{t('schedule.workDays')}</label>
-          <div className={css.dayChips}>
-            {WEEK_DAYS.map((d) => (
-              <button
-                key={d.value}
-                type="button"
-                className={`${css.dayChip} ${
-                  workDays.includes(d.value) ? css.dayChipActive : ''
-                }`}
-                onClick={() => toggleDay(d.value)}
-              >
-                {t(`weekDays.${d.key}`)}
-              </button>
-            ))}
+          <label className={css.fieldLabel}>{t('schedule.weekTitle')}</label>
+          <div className={css.week}>
+            {weekSchedule &&
+              WEEK_DAYS.map((d) => {
+                const key = d.key as WeekDayKey;
+                const day = weekSchedule[key];
+                const mode = dayMode(day);
+                return (
+                  <div key={key} className={css.weekRow}>
+                    <span className={css.weekDayName}>
+                      {t(`weekDays.${d.key}`)}
+                    </span>
+                    <div className={css.modeGroup}>
+                      {(['off', 'full', 'hours'] as const).map((m) => (
+                        <button
+                          key={m}
+                          type="button"
+                          className={`${css.modeBtn} ${
+                            mode === m ? css.modeBtnActive : ''
+                          }`}
+                          onClick={() => setDayMode(key, m)}
+                        >
+                          {t(`schedule.mode.${m}`)}
+                        </button>
+                      ))}
+                    </div>
+                    {mode === 'hours' && (
+                      <div className={css.weekTimes}>
+                        <input
+                          type="time"
+                          className={css.timeInput}
+                          value={day.start}
+                          onChange={(e) =>
+                            setDayTime(key, 'start', e.target.value)
+                          }
+                        />
+                        <span className={css.weekDash}>–</span>
+                        <input
+                          type="time"
+                          className={css.timeInput}
+                          value={day.end}
+                          onChange={(e) =>
+                            setDayTime(key, 'end', e.target.value)
+                          }
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
           </div>
         </div>
 
@@ -339,6 +383,44 @@ const AdminSystemSettingsClientPage = () => {
             }}
           />
         </div>
+      </div>
+
+      {/* ── Permissions — who can publish announcements ────────── */}
+      <div className={css.card}>
+        <GrantUsersSection
+          title={t('permissions.announcements.section')}
+          subtitle={t('permissions.announcements.subtitle')}
+          selectUserPlaceholder={t('permissions.announcements.selectUser')}
+          emptyText={t('permissions.announcements.empty')}
+          revokeLabel={t('permissions.announcements.revoke')}
+          successGranted={t('permissions.announcements.granted')}
+          successRevoked={t('permissions.announcements.revoked')}
+          errorText={t('permissions.announcements.error')}
+          permissionKey="canCreateAnnouncements"
+          grantedQueryKey={['announcements', 'authors']}
+          fetchGranted={getAnnouncementAuthors}
+          roleFilterLabel={t('permissions.roleFilter')}
+          allRolesLabel={tRoles('all')}
+          roleOptions={grantRoleOptions}
+        />
+      </div>
+
+      {/* ── Permissions — which operators can send direct messages ─ */}
+      <div className={css.card}>
+        <GrantUsersSection
+          title={t('permissions.messages.section')}
+          subtitle={t('permissions.messages.subtitle')}
+          selectUserPlaceholder={t('permissions.messages.selectUser')}
+          emptyText={t('permissions.messages.empty')}
+          revokeLabel={t('permissions.messages.revoke')}
+          successGranted={t('permissions.messages.granted')}
+          successRevoked={t('permissions.messages.revoked')}
+          errorText={t('permissions.messages.error')}
+          permissionKey="canSendMessages"
+          grantedQueryKey={['messages', 'allowed-senders']}
+          fetchGranted={getMessageSenders}
+          fixedRole="operator"
+        />
       </div>
 
       <div className={css.actions}>

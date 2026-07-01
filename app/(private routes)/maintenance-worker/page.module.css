@@ -76,3 +76,12 @@
     margin-top: 32px;
   }
 }
+
+.no_found_container {
+  margin-bottom: 24px;
+}
+
+.no_found_btn {
+  display: flex;
+  justify-content: center;
+}

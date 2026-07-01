@@ -1,4 +1,5 @@
 import nextServer from './api';
+import type { GrantedUser } from '@/types/userTypes';
 import type {
   CreateBroadcastPayload,
   CreateDirectPayload,
@@ -103,6 +104,14 @@ export const getAnnouncements = async (
     }
   );
   return data;
+};
+
+// Admin-only — operators explicitly granted direct messaging.
+export const getMessageSenders = async (): Promise<GrantedUser[]> => {
+  const { data } = await nextServer.get<{ users: GrantedUser[] }>(
+    '/messages/allowed-senders'
+  );
+  return data.users;
 };
 
 export const getUnreadCount = async (): Promise<UnreadCountResponse> => {
