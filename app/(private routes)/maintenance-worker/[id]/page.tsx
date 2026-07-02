@@ -11,8 +11,8 @@ import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { FaultCard } from '@/types/faultType';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import { useRouter } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
 import css from './page.module.css';
@@ -65,19 +65,25 @@ const deadlineUrgencyClass = (
   return styles.deadlineFar;
 };
 
-const formatDay = (value?: string) => {
+const formatDay = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
   return isValid(parsed)
-    ? format(parsed, 'dd MMMM yyyy', { locale: it })
+    ? format(parsed, 'dd MMMM yyyy', { locale })
     : value;
 };
 
-const formatDateTime = (value?: string) => {
+const formatDateTime = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
   return isValid(parsed)
-    ? format(parsed, 'dd MMMM yyyy HH:mm', { locale: it })
+    ? format(parsed, 'dd MMMM yyyy HH:mm', { locale })
     : value;
 };
 
@@ -92,6 +98,7 @@ export default function FaultDetailPage({
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
   const tPriority = useTranslations('Priority');
+  const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
   const { subscribeToFault, unsubscribeFromFault } = useSocket();
   const { user } = useAuthStore();
@@ -234,13 +241,13 @@ export default function FaultDetailPage({
             <div className={css.infoItem}>
               <label>{t('labels.dateCreated')}</label>
               <p>
-                {formatDay(fault.dataCreated)}
+                {formatDay(fault.dataCreated, locale)}
                 {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
               </p>
             </div>
             <div className={css.infoItem}>
               <label>{t('labels.lastUpdated')}</label>
-              <p>{formatDateTime(fault.updatedAt)}</p>
+              <p>{formatDateTime(fault.updatedAt, locale)}</p>
             </div>
 
             {/* Full-width on phone: plant/part names with codes are
@@ -286,7 +293,7 @@ export default function FaultDetailPage({
                   className={`${css.deadline} ${deadlineUrgencyClass(fault.deadline, css)}`}
                 >
                   {fault.deadline
-                    ? formatDay(fault.deadline)
+                    ? formatDay(fault.deadline, locale)
                     : t('labels.deadlineNotSet')}
                 </p>
               </div>
@@ -310,7 +317,7 @@ export default function FaultDetailPage({
                 </div>
                 <div className={css.infoItem}>
                   <label>{t('labels.completedAt')}</label>
-                  <p>{formatDateTime(fault.completedAt)}</p>
+                  <p>{formatDateTime(fault.completedAt, locale)}</p>
                 </div>
               </div>
             )}
@@ -336,7 +343,7 @@ export default function FaultDetailPage({
             {fault.claimedAt && (
               <div className={css.infoItem}>
                 <label>{t('labels.claimedAt')}</label>
-                <p>{formatDateTime(fault.claimedAt)}</p>
+                <p>{formatDateTime(fault.claimedAt, locale)}</p>
               </div>
             )}
           </div>

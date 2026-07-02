@@ -26,6 +26,7 @@ const ModalMenu = ({
 }: ModalMenuProps) => {
   const { user, isAuthenticated } = useAuthStore();
   const t = useTranslations('header');
+  const tBacheca = useTranslations('BachecaPage');
   const handleBackdropClick = (ev: React.MouseEvent<HTMLDivElement>) => {
     if (ev.target === ev.currentTarget) {
       onClose();
@@ -66,25 +67,24 @@ const ModalMenu = ({
             <nav className={css.nav}>
               <LanguageButton />
               <ul className={css.nav_list}>
-                {isAuthenticated ? (
-                  <li className={css.nav_list_item}>
-                    <Link href={`${route}`} onClick={onClose}>
-                      {t('navItem3')}{' '}
-                    </Link>
-                  </li>
-                ) : (
-                  <li className={css.nav_list_item}>
-                    <Link href="/" onClick={onClose}>
-                      {t('navItem1')}{' '}
-                    </Link>
-                  </li>
-                )}
+                <li className={css.nav_list_item}>
+                  <Link href="/" onClick={close}>
+                    {tBacheca('title')}{' '}
+                  </Link>
+                </li>
                 {isAuthenticated && (
-                  <li className={css.nav_list_item}>
-                    <Link href="/reports-and-communications" onClick={onClose}>
-                      {t('navItem2')}
-                    </Link>
-                  </li>
+                  <>
+                    <li className={css.nav_list_item}>
+                      <Link href={`${route}`} onClick={close}>
+                        {t('navItem3')}{' '}
+                      </Link>
+                    </li>
+                    <li className={css.nav_list_item}>
+                      <Link href="/reports-and-communications" onClick={close}>
+                        {t('navItem2')}
+                      </Link>
+                    </li>
+                  </>
                 )}
               </ul>
             </nav>

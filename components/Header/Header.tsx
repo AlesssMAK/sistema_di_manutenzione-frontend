@@ -19,6 +19,7 @@ import { roleRoutes } from '@/constants/roleRoutes';
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const t = useTranslations('header');
+  const tBacheca = useTranslations('BachecaPage');
   const { pageTitle } = usePageStore();
 
   const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
@@ -68,25 +69,24 @@ const Header = () => {
           )}
           <nav className={css.nav}>
             <ul className={css.nav_list}>
-              {isAuthenticated ? (
-                <li className={css.nav_list_item}>
-                  <Link href={`${route}`} onClick={close}>
-                    {t('navItem3')}{' '}
-                  </Link>
-                </li>
-              ) : (
-                <li className={css.nav_list_item}>
-                  <Link href="/" onClick={close}>
-                    {t('navItem1')}{' '}
-                  </Link>
-                </li>
-              )}
+              <li className={css.nav_list_item}>
+                <Link href="/" onClick={close}>
+                  {tBacheca('title')}{' '}
+                </Link>
+              </li>
               {isAuthenticated && (
-                <li className={css.nav_list_item}>
-                  <Link href="/reports-and-communications" onClick={close}>
-                    {t('navItem2')}
-                  </Link>
-                </li>
+                <>
+                  <li className={css.nav_list_item}>
+                    <Link href={`${route}`} onClick={close}>
+                      {t('navItem3')}{' '}
+                    </Link>
+                  </li>
+                  <li className={css.nav_list_item}>
+                    <Link href="/reports-and-communications" onClick={close}>
+                      {t('navItem2')}
+                    </Link>
+                  </li>
+                </>
               )}
             </ul>
           </nav>

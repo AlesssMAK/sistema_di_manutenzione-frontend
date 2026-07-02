@@ -22,13 +22,15 @@ interface MessageDetailModalProps {
 
 const formatFull = (
   value: string | undefined,
-  locale: ReturnType<typeof getDateFnsLocale>
+  locale: ReturnType<typeof getDateFnsLocale>,
+  separator: string
 ) => {
   if (!value) return '—';
   const parsed = parseISO(value);
-  return isValid(parsed)
-    ? format(parsed, "dd MMMM yyyy 'alle' HH:mm", { locale })
-    : value;
+  if (!isValid(parsed)) return value;
+  const datePart = format(parsed, 'dd MMMM yyyy', { locale });
+  const timePart = format(parsed, 'HH:mm', { locale });
+  return `${datePart} ${separator} ${timePart}`;
 };
 
 const MessageDetailModal = ({
@@ -111,7 +113,7 @@ const MessageDetailModal = ({
 
           <span className={css.metaLabel}>{t('sent')}</span>
           <span className={css.metaValue}>
-            {formatFull(message.createdAt, locale)}
+            {formatFull(message.createdAt, locale, t('dateSeparator'))}
           </span>
         </div>
 

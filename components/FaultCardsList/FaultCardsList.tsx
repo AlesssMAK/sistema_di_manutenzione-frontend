@@ -1,14 +1,14 @@
 'use client';
 
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
 import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { AssignedMaintainer, FaultCard } from '@/types/faultType';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { claimFault } from '@/lib/api/faults';
 import { useState } from 'react';
@@ -22,10 +22,13 @@ const statusKey = (status: string | undefined) => {
   return 'CREATED';
 };
 
-const formatDay = (value?: string) => {
+const formatDay = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
-  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale: it }) : value;
+  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale }) : value;
 };
 
 /**
@@ -52,6 +55,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
   const t = useTranslations('FaultCard');
   const tStatus = useTranslations('StatusFault');
   const tPriority = useTranslations('Priority');
+  const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
@@ -198,7 +202,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
                     <span className={css.label}>{t('labels.plannedTime')}</span>
                     <p className={css.value}>{fault.plannedTime}</p>
                     <span className={css.label}>{t('labels.deadline')}</span>
-                    <p className={css.value}>{formatDay(fault.deadline)}</p>
+                    <p className={css.value}>{formatDay(fault.deadline, locale)}</p>
                   </div>
 
                   {/* Colonna destra */}

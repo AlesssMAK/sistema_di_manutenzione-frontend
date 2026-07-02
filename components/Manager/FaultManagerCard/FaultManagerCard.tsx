@@ -1,9 +1,9 @@
 'use client';
 
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import type { FaultCard } from '@/types/faultType';
 import Button from '@/components/UI/Button/Button';
 import css from './FaultManagerCard.module.css';
@@ -14,10 +14,13 @@ interface FaultManagerCardProps {
   detailHref?: (fault: FaultCard) => string;
 }
 
-const formatDate = (value?: string) => {
+const formatDate = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
-  return isValid(parsed) ? format(parsed, 'dd/MM/yyyy', { locale: it }) : value;
+  return isValid(parsed) ? format(parsed, 'dd/MM/yyyy', { locale }) : value;
 };
 
 const priorityClass: Record<string, string> = {
@@ -53,6 +56,7 @@ const FaultManagerCard = ({
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
   const tPriority = useTranslations('Priority');
+  const locale = getDateFnsLocale(useLocale());
 
   const isPlanned = Boolean(fault.plannedDate);
   const isReadOnly = fault.statusFault === 'Completed';
@@ -103,7 +107,7 @@ const FaultManagerCard = ({
         <div className={css.row}>
           <span className={css.label}>{t('labels.dateCreated')}</span>
           <span className={css.value}>
-            {formatDate(fault.dataCreated)}
+            {formatDate(fault.dataCreated, locale)}
             {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
           </span>
         </div>
@@ -148,7 +152,7 @@ const FaultManagerCard = ({
             <div className={css.row}>
               <span className={css.label}>{t('labels.planned')}</span>
               <span className={css.value}>
-                {formatDate(fault.plannedDate)}
+                {formatDate(fault.plannedDate, locale)}
                 {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
                 {fault.estimatedDuration
                   ? ` · ${fault.estimatedDuration} min`
@@ -159,7 +163,7 @@ const FaultManagerCard = ({
           {fault.deadline && (
             <div className={css.row}>
               <span className={css.label}>{t('labels.deadline')}</span>
-              <span className={css.value}>{formatDate(fault.deadline)}</span>
+              <span className={css.value}>{formatDate(fault.deadline, locale)}</span>
             </div>
           )}
           {(fault.assignedMaintainers?.length ?? 0) > 0 && (

@@ -35,7 +35,7 @@
   "header": {
     "navItem1": "Roles",
     "navItem2": "Reports",
-    "navItem3": "Inicio",
+    "navItem3": "Home",
     "exit": "Logout",
     "login": "Login",
     "createFault": "Report fault",
@@ -252,7 +252,8 @@
         "summary": "Summary",
         "ip": "IP",
         "userAgent": "User agent",
-        "extra": "Extra data"
+        "extra": "Extra data",
+        "dateSeparator": "at"
       }
     },
     "Notifications": {
@@ -498,7 +499,8 @@
       "broadcastRole": "Role: {role}",
       "sent": "Sent at",
       "reply": "Reply",
-      "close": "Close"
+      "close": "Close",
+      "dateSeparator": "at"
     },
     "reply": {
       "title": "Reply to {author}",

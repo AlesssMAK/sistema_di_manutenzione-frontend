@@ -34,7 +34,7 @@
   "header": {
     "navItem1": "Role",
     "navItem2": "Raporty",
-    "navItem3": "Strona główna",
+    "navItem3": "Home",
     "exit": "Wyloguj",
     "login": "Logowanie",
     "createFault": "Zgłoś usterkę",
@@ -231,7 +231,8 @@
         "summary": "Opis",
         "ip": "IP",
         "userAgent": "User agent",
-        "extra": "Dane dodatkowe"
+        "extra": "Dane dodatkowe",
+        "dateSeparator": "o"
       }
     },
     "Notifications": {
@@ -477,7 +478,8 @@
       "broadcastRole": "Rola: {role}",
       "sent": "Wysłano",
       "reply": "Odpowiedz",
-      "close": "Zamknij"
+      "close": "Zamknij",
+      "dateSeparator": "o"
     },
     "reply": {
       "title": "Odpowiedz do {author}",

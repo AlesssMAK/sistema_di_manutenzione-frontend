@@ -2,8 +2,8 @@
 
 import { useRouter } from 'next/navigation';
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import type { FaultCard } from '@/types/faultType';
 import css from './DaySlotGrid.module.css';
 
@@ -20,10 +20,13 @@ const priorityClass: Record<string, string> = {
   High: css.priorityHigh,
 };
 
-const formatDayTitle = (date: string) => {
+const formatDayTitle = (
+  date: string,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   const parsed = parseISO(date);
   return isValid(parsed)
-    ? format(parsed, 'EEEE, d MMMM yyyy', { locale: it })
+    ? format(parsed, 'EEEE, d MMMM yyyy', { locale })
     : date;
 };
 
@@ -35,6 +38,7 @@ const DaySlotGrid = ({
 }: DaySlotGridProps) => {
   const router = useRouter();
   const t = useTranslations('maintenanceWorkerPage.dayView');
+  const locale = getDateFnsLocale(useLocale());
   const hours = Array.from(
     { length: endHour - startHour + 1 },
     (_, i) => i + startHour
@@ -45,7 +49,7 @@ const DaySlotGrid = ({
   return (
     <div className={css.container}>
       <h3 className={css.title}>
-        {t('title')} · {formatDayTitle(selectedDate)}
+        {t('title')} · {formatDayTitle(selectedDate, locale)}
       </h3>
 
       <div className={css.grid}>

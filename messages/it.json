@@ -251,7 +251,8 @@
         "summary": "Descrizione",
         "ip": "IP",
         "userAgent": "User agent",
-        "extra": "Dati aggiuntivi"
+        "extra": "Dati aggiuntivi",
+        "dateSeparator": "alle"
       }
     },
     "Notifications": {
@@ -497,7 +498,8 @@
     "broadcastRole": "Ruolo: {role}",
     "sent": "Inviato il",
     "reply": "Rispondi",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "dateSeparator": "alle"
   },
   "reply": {
     "title": "Rispondi a {author}",
