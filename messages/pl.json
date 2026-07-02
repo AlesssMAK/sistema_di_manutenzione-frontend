@@ -677,6 +677,7 @@
     },
     "managerCommentPlaceholder": "Opcjonalne notatki dla konserwatora...",
     "datePlaceholder": "Wybierz datę",
+    "timePlaceholder": "Wybierz godzinę",
     "loadingMaintainers": "Ładowanie...",
     "noMaintainers": "Brak dostępnych konserwatorów",
     "noMaintainersToAdd": "Wszyscy konserwatorzy są już przypisani",

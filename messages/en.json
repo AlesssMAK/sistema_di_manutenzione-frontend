@@ -698,6 +698,7 @@
     },
     "managerCommentPlaceholder": "Optional notes for the maintainer...",
     "datePlaceholder": "Select date",
+    "timePlaceholder": "Select time",
     "loadingMaintainers": "Loading...",
     "noMaintainers": "No maintainers available",
     "noMaintainersToAdd": "All maintainers are already assigned",

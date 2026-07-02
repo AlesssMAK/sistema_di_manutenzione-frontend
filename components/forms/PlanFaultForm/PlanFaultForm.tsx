@@ -11,6 +11,7 @@ import Button from '@/components/UI/Button/Button';
 import Input from '@/components/UI/Input/Input';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
+import TimePickerInput from '@/components/UI/TimePickerInput/TimePickerInput';
 import {
   addMaintainers,
   assignFault,
@@ -299,10 +300,12 @@ const PlanFaultForm = ({
 
             <div className={css.field}>
               <p className={css.label}>{t('labels.plannedTime')}</p>
-              <Input
-                type="time"
-                style={compactInputStyle}
-                {...register('plannedTime')}
+              <TimePickerInput
+                value={watch('plannedTime') ?? ''}
+                onChange={v =>
+                  setValue('plannedTime', v, { shouldValidate: true })
+                }
+                placeholder={t('timePlaceholder')}
               />
               {errors.plannedTime && (
                 <p className={css.error}>{errors.plannedTime.message}</p>

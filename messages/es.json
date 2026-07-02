@@ -698,6 +698,7 @@
     },
     "managerCommentPlaceholder": "Notas opcionales para el mantenedor...",
     "datePlaceholder": "Seleccionar fecha",
+    "timePlaceholder": "Seleccionar hora",
     "loadingMaintainers": "Cargando...",
     "noMaintainers": "No hay mantenedores disponibles",
     "noMaintainersToAdd": "Todos los mantenedores ya están asignados",

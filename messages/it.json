@@ -697,6 +697,7 @@
   },
   "managerCommentPlaceholder": "Eventuali note per il manutentore...",
   "datePlaceholder": "Seleziona data",
+  "timePlaceholder": "Seleziona ora",
   "loadingMaintainers": "Caricamento...",
   "noMaintainers": "Nessun manutentore disponibile",
   "noMaintainersToAdd": "Tutti i manutentori sono già assegnati",
