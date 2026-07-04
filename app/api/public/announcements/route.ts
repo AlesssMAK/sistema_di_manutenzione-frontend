@@ -8,11 +8,13 @@ export async function GET(req: NextRequest) {
   try {
     const page = req.nextUrl.searchParams.get('page') ?? undefined;
     const perPage = req.nextUrl.searchParams.get('perPage') ?? undefined;
+    const category = req.nextUrl.searchParams.get('category') ?? undefined;
 
     const res = await api.get('/public/announcements', {
       params: {
         ...(page ? { page } : {}),
         ...(perPage ? { perPage } : {}),
+        ...(category ? { category } : {}),
       },
     });
     return NextResponse.json(res.data, { status: res.status });

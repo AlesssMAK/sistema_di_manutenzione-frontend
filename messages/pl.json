@@ -795,9 +795,37 @@
     "created": "Ogłoszenie opublikowane",
     "deleted": "Ogłoszenie usunięte",
     "saveError": "Błąd podczas zapisywania",
+    "severity": {
+      "normal": "Zwykły",
+      "communication": "Komunikat",
+      "note": "Do rozważenia",
+      "important": "Ważne",
+      "attention": "Uwaga"
+    },
+    "sections": {
+      "handover": {
+        "title": "Przekazanie zmiany",
+        "subtitle": "Notatki przekazania między zmianami",
+        "createCta": "Nowe przekazanie",
+        "empty": "Brak przekazań"
+      },
+      "announcement": {
+        "title": "Ogłoszenia",
+        "subtitle": "Ogłoszenia publiczne",
+        "createCta": "Nowe ogłoszenie",
+        "empty": "Brak ogłoszeń"
+      }
+    },
     "form": {
       "titlePlaceholder": "Tytuł ogłoszenia",
       "bodyPlaceholder": "Napisz ogłoszenie...",
+      "bodyPlaceholderConsegna": "Opisz, co zrobić z maszyną...",
+      "machineLabel": "Maszyna (opcjonalnie)",
+      "severityLabel": "Wyróżnienie",
+      "photosLabel": "Zdjęcia (opcjonalnie)",
+      "machinePlaceholder": "Wybierz maszynę",
+      "machineLoading": "Ładowanie...",
+      "machineNone": "— Brak maszyny —",
       "submit": "Opublikuj",
       "submitting": "Publikowanie...",
       "cancel": "Anuluj"

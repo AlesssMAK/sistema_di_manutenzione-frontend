@@ -815,9 +815,37 @@
   "created": "Avviso pubblicato",
   "deleted": "Avviso eliminato",
   "saveError": "Errore durante il salvataggio",
+  "severity": {
+    "normal": "Normale",
+    "communication": "Comunicazione",
+    "note": "Da tenere presente",
+    "important": "Importante",
+    "attention": "Attenzione"
+  },
+  "sections": {
+    "handover": {
+      "title": "Cambio consegne",
+      "subtitle": "Passaggio di consegne tra turni",
+      "createCta": "Nuova consegna",
+      "empty": "Nessuna consegna al momento"
+    },
+    "announcement": {
+      "title": "Annunci",
+      "subtitle": "Avvisi e comunicazioni pubbliche",
+      "createCta": "Nuovo annuncio",
+      "empty": "Nessun avviso al momento"
+    }
+  },
   "form": {
     "titlePlaceholder": "Titolo dell'avviso",
     "bodyPlaceholder": "Scrivi l'avviso...",
+    "bodyPlaceholderConsegna": "Descrivi cosa fare con la macchina...",
+    "machineLabel": "Macchina (opzionale)",
+    "severityLabel": "Evidenza",
+    "photosLabel": "Foto (opzionale)",
+    "machinePlaceholder": "Seleziona una macchina",
+    "machineLoading": "Caricamento...",
+    "machineNone": "— Nessuna macchina —",
     "submit": "Pubblica",
     "submitting": "Pubblicazione...",
     "cancel": "Annulla"

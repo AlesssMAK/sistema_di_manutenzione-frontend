@@ -74,6 +74,11 @@ const Header = () => {
                   {tBacheca('title')}{' '}
                 </Link>
               </li>
+              <li className={css.nav_list_item}>
+                <Link href="/handover" onClick={close}>
+                  {tBacheca('sections.handover.title')}
+                </Link>
+              </li>
               {isAuthenticated && (
                 <>
                   <li className={css.nav_list_item}>

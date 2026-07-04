@@ -816,9 +816,37 @@
     "created": "Anuncio publicado",
     "deleted": "Anuncio eliminado",
     "saveError": "Error al guardar",
+    "severity": {
+      "normal": "Normal",
+      "communication": "Comunicación",
+      "note": "A tener en cuenta",
+      "important": "Importante",
+      "attention": "Atención"
+    },
+    "sections": {
+      "handover": {
+        "title": "Cambio de turno",
+        "subtitle": "Notas de entrega entre turnos",
+        "createCta": "Nueva entrega",
+        "empty": "No hay entregas por ahora"
+      },
+      "announcement": {
+        "title": "Anuncios",
+        "subtitle": "Anuncios públicos",
+        "createCta": "Nuevo anuncio",
+        "empty": "No hay anuncios por ahora"
+      }
+    },
     "form": {
       "titlePlaceholder": "Título del anuncio",
       "bodyPlaceholder": "Escribe el anuncio...",
+      "bodyPlaceholderConsegna": "Describe qué hacer con la máquina...",
+      "machineLabel": "Máquina (opcional)",
+      "severityLabel": "Énfasis",
+      "photosLabel": "Fotos (opcional)",
+      "machinePlaceholder": "Selecciona una máquina",
+      "machineLoading": "Cargando...",
+      "machineNone": "— Ninguna máquina —",
       "submit": "Publicar",
       "submitting": "Publicando...",
       "cancel": "Cancelar"

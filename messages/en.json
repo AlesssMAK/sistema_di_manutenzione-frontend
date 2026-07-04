@@ -816,9 +816,37 @@
     "created": "Announcement published",
     "deleted": "Announcement deleted",
     "saveError": "Error while saving",
+    "severity": {
+      "normal": "Normal",
+      "communication": "Communication",
+      "note": "Take note",
+      "important": "Important",
+      "attention": "Attention"
+    },
+    "sections": {
+      "handover": {
+        "title": "Shift handover",
+        "subtitle": "Handover notes between shifts",
+        "createCta": "New handover",
+        "empty": "No handovers yet"
+      },
+      "announcement": {
+        "title": "Announcements",
+        "subtitle": "Public announcements",
+        "createCta": "New announcement",
+        "empty": "No announcements yet"
+      }
+    },
     "form": {
       "titlePlaceholder": "Announcement title",
       "bodyPlaceholder": "Write the announcement...",
+      "bodyPlaceholderConsegna": "Describe what to do with the machine...",
+      "machineLabel": "Machine (optional)",
+      "severityLabel": "Emphasis",
+      "photosLabel": "Photos (optional)",
+      "machinePlaceholder": "Select a machine",
+      "machineLoading": "Loading...",
+      "machineNone": "— No machine —",
       "submit": "Publish",
       "submitting": "Publishing...",
       "cancel": "Cancel"

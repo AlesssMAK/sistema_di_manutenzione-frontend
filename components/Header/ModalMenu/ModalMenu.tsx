@@ -72,6 +72,11 @@ const ModalMenu = ({
                     {tBacheca('title')}{' '}
                   </Link>
                 </li>
+                <li className={css.nav_list_item}>
+                  <Link href="/handover" onClick={onClose}>
+                    {tBacheca('sections.handover.title')}
+                  </Link>
+                </li>
                 {isAuthenticated && (
                   <>
                     <li className={css.nav_list_item}>
