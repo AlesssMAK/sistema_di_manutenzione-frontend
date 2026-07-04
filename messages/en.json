@@ -825,7 +825,7 @@
     },
     "sections": {
       "handover": {
-        "title": "Shift handover",
+        "title": "Handover",
         "subtitle": "Handover notes between shifts",
         "createCta": "New handover",
         "empty": "No handovers yet"

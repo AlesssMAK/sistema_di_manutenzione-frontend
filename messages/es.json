@@ -825,7 +825,7 @@
     },
     "sections": {
       "handover": {
-        "title": "Cambio de turno",
+        "title": "Relevo",
         "subtitle": "Notas de entrega entre turnos",
         "createCta": "Nueva entrega",
         "empty": "No hay entregas por ahora"

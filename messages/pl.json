@@ -804,7 +804,7 @@
     },
     "sections": {
       "handover": {
-        "title": "Przekazanie zmiany",
+        "title": "Przekazanie",
         "subtitle": "Notatki przekazania między zmianami",
         "createCta": "Nowe przekazanie",
         "empty": "Brak przekazań"

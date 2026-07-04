@@ -49,10 +49,9 @@ const ModalMenu = ({
     };
   }, [onClose]);
 
-  if (!user) return null;
-  const routes = roleRoutes[user.role];
-
-  const route = routes[0];
+  // Role-home route only exists for logged-in users; guests still get
+  // the public nav (Annunci / Consegne) + Login below.
+  const route = user ? roleRoutes[user.role]?.[0] : undefined;
 
   return createPortal(
     <div
@@ -68,7 +67,7 @@ const ModalMenu = ({
               <LanguageButton />
               <ul className={css.nav_list}>
                 <li className={css.nav_list_item}>
-                  <Link href="/" onClick={close}>
+                  <Link href="/" onClick={onClose}>
                     {tBacheca('title')}{' '}
                   </Link>
                 </li>
@@ -80,12 +79,12 @@ const ModalMenu = ({
                 {isAuthenticated && (
                   <>
                     <li className={css.nav_list_item}>
-                      <Link href={`${route}`} onClick={close}>
+                      <Link href={`${route}`} onClick={onClose}>
                         {t('navItem3')}{' '}
                       </Link>
                     </li>
                     <li className={css.nav_list_item}>
-                      <Link href="/reports-and-communications" onClick={close}>
+                      <Link href="/reports-and-communications" onClick={onClose}>
                         {t('navItem2')}
                       </Link>
                     </li>
