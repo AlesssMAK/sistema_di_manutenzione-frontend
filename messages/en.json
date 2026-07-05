@@ -29,6 +29,26 @@
       "required": "Field is required",
       "invalidIdentifier": "Invalid format (email or full name)",
       "invalidSecret": "Invalid format (password or personal code)"
+    },
+    "forgotLink": "Forgot password?",
+    "passwordReset": {
+      "forgotTitle": "Reset your password",
+      "forgotSubtitle": "Enter your email and we'll send you a link to reset it.",
+      "emailPlaceholder": "Enter your email",
+      "sendLink": "Send link",
+      "sent": "If an account with this email exists, we've sent a reset link. Check your inbox.",
+      "backToLogin": "Back to login",
+      "resetTitle": "Choose a new password",
+      "resetSubtitle": "Enter and confirm your new password.",
+      "newPasswordPlaceholder": "New password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "policy": "At least 8 characters, with an uppercase, a lowercase and a special character.",
+      "mismatch": "Passwords do not match",
+      "submit": "Reset password",
+      "success": "Password reset. You can now log in.",
+      "invalidToken": "Invalid or expired link. Request a new one.",
+      "missingToken": "Missing token in the link.",
+      "genericError": "Something went wrong. Please try again."
     }
   },
 
@@ -190,6 +210,8 @@
         "auth_logout": "Logout",
         "auth_refresh": "Session refresh",
         "auth_register": "User registration",
+        "auth_passwordResetRequested": "Password reset requested",
+        "auth_passwordReset": "Password reset",
         "user_create": "User created",
         "user_update": "User updated",
         "user_delete": "User deleted",

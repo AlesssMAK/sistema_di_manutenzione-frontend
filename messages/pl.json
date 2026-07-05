@@ -28,6 +28,26 @@
       "required": "Pole jest wymagane",
       "invalidIdentifier": "Nieprawidłowy format (e-mail lub pełne imię i nazwisko)",
       "invalidSecret": "Nieprawidłowy format (hasło lub kod osobisty)"
+    },
+    "forgotLink": "Nie pamiętasz hasła?",
+    "passwordReset": {
+      "forgotTitle": "Zresetuj hasło",
+      "forgotSubtitle": "Podaj swój email, a wyślemy link do zresetowania hasła.",
+      "emailPlaceholder": "Podaj swój email",
+      "sendLink": "Wyślij link",
+      "sent": "Jeśli konto z tym adresem istnieje, wysłaliśmy link. Sprawdź skrzynkę.",
+      "backToLogin": "Powrót do logowania",
+      "resetTitle": "Wybierz nowe hasło",
+      "resetSubtitle": "Wpisz i potwierdź nowe hasło.",
+      "newPasswordPlaceholder": "Nowe hasło",
+      "confirmPasswordPlaceholder": "Potwierdź hasło",
+      "policy": "Co najmniej 8 znaków, z wielką i małą literą oraz znakiem specjalnym.",
+      "mismatch": "Hasła nie są zgodne",
+      "submit": "Zresetuj hasło",
+      "success": "Hasło zresetowane. Możesz się teraz zalogować.",
+      "invalidToken": "Nieprawidłowy lub wygasły link. Poproś o nowy.",
+      "missingToken": "Brak tokenu w linku.",
+      "genericError": "Coś poszło nie tak. Spróbuj ponownie."
     }
   },
 
@@ -169,6 +189,8 @@
         "auth_logout": "Wylogowanie",
         "auth_refresh": "Odnowienie sesji",
         "auth_register": "Rejestracja użytkownika",
+        "auth_passwordResetRequested": "Prośba o reset hasła",
+        "auth_passwordReset": "Reset hasła",
         "user_create": "Utworzenie użytkownika",
         "user_update": "Modyfikacja użytkownika",
         "user_delete": "Usunięcie użytkownika",

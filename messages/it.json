@@ -28,6 +28,26 @@
       "required": "Campo obbligatorio",
       "invalidIdentifier": "Formato non valido (email o nome completo)",
       "invalidSecret": "Formato non valido (password o codice personale)"
+    },
+    "forgotLink": "Password dimenticata?",
+    "passwordReset": {
+      "forgotTitle": "Reimposta la password",
+      "forgotSubtitle": "Inserisci la tua email: ti invieremo un link per reimpostarla.",
+      "emailPlaceholder": "Inserisci la tua email",
+      "sendLink": "Invia il link",
+      "sent": "Se esiste un account con questa email, ti abbiamo inviato un link. Controlla la posta.",
+      "backToLogin": "Torna al login",
+      "resetTitle": "Scegli una nuova password",
+      "resetSubtitle": "Inserisci e conferma la tua nuova password.",
+      "newPasswordPlaceholder": "Nuova password",
+      "confirmPasswordPlaceholder": "Conferma password",
+      "policy": "Almeno 8 caratteri, con una maiuscola, una minuscola e un carattere speciale.",
+      "mismatch": "Le password non coincidono",
+      "submit": "Reimposta password",
+      "success": "Password reimpostata. Ora puoi accedere.",
+      "invalidToken": "Link non valido o scaduto. Richiedi un nuovo link.",
+      "missingToken": "Token mancante nel link.",
+      "genericError": "Qualcosa è andato storto. Riprova."
     }
 },
 
@@ -189,6 +209,8 @@
         "auth_logout": "Disconnessione",
         "auth_refresh": "Rinnovo sessione",
         "auth_register": "Registrazione utente",
+        "auth_passwordResetRequested": "Richiesta reset password",
+        "auth_passwordReset": "Reset password",
         "user_create": "Creazione utente",
         "user_update": "Modifica utente",
         "user_delete": "Eliminazione utente",

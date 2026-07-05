@@ -74,3 +74,23 @@
   bottom: -16px;
   left: 8px;
 }
+
+/* Forgot-password link under the login form. */
+.forgot_link {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: 14px;
+  color: #1e40af;
+}
+
+.forgot_link:hover {
+  text-decoration: underline;
+}
+
+/* Block-level form error (reset form) — the .error above is absolutely
+   positioned for inline field errors and won't work standalone. */
+.form_error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 13px;
+}

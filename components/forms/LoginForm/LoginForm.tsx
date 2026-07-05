@@ -15,6 +15,7 @@ import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import css from './LoginForm.module.css';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { roleRoutes } from '@/constants/roleRoutes';
 import { ApiError } from '@/app/api/api';
 import toast from 'react-hot-toast';
@@ -124,6 +125,9 @@ const LoginForm = () => {
           </Button>
         </div>
       </form>
+      <Link href="/forgot-password" className={css.forgot_link}>
+        {t('forgotLink')}
+      </Link>
     </div>
   );
 };
