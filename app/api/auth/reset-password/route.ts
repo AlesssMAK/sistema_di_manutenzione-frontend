@@ -3,20 +3,11 @@ import { isAxiosError } from 'axios';
 import { logErrorResponse } from '../../_utils/utils';
 import { api } from '../../api';
 
-// Public board — no cookie/auth forwarded; anyone can read.
-export async function GET(req: NextRequest) {
+// Public — no cookies. Forwards { token, password } to the backend.
+export async function POST(req: NextRequest) {
   try {
-    const page = req.nextUrl.searchParams.get('page') ?? undefined;
-    const perPage = req.nextUrl.searchParams.get('perPage') ?? undefined;
-    const category = req.nextUrl.searchParams.get('category') ?? undefined;
-
-    const res = await api.get('/public/announcements', {
-      params: {
-        ...(page ? { page } : {}),
-        ...(perPage ? { perPage } : {}),
-        ...(category ? { category } : {}),
-      },
-    });
+    const body = await req.json();
+    const res = await api.post('/auth/reset-password', body);
     return NextResponse.json(res.data, { status: res.status });
   } catch (error) {
     if (isAxiosError(error)) {

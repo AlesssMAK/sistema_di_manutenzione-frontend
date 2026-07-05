@@ -9,25 +9,31 @@ import { fetchFaultById } from '@/lib/api/faults';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { useQuery } from '@tanstack/react-query';
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import { useRouter } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
 import css from './page.module.css';
 
-const formatDate = (value?: string) => {
+const formatDate = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
   return isValid(parsed)
-    ? format(parsed, 'dd MMMM yyyy', { locale: it })
+    ? format(parsed, 'dd MMMM yyyy', { locale })
     : value;
 };
 
-const formatDateTime = (value?: string) => {
+const formatDateTime = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
   return isValid(parsed)
-    ? format(parsed, 'dd MMMM yyyy HH:mm', { locale: it })
+    ? format(parsed, 'dd MMMM yyyy HH:mm', { locale })
     : value;
 };
 
@@ -91,6 +97,7 @@ const ManagerFaultDetailPage = ({
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
   const tPriority = useTranslations('Priority');
+  const locale = getDateFnsLocale(useLocale());
   const resolvedParams = use(params);
   const id = resolvedParams.id;
 
@@ -177,13 +184,13 @@ const ManagerFaultDetailPage = ({
             <div className={css.infoItem}>
               <label>{t('labels.dateCreated')}</label>
               <p>
-                {formatDate(fault.dataCreated)}
+                {formatDate(fault.dataCreated, locale)}
                 {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
               </p>
             </div>
             <div className={css.infoItem}>
               <label>{t('labels.lastUpdated')}</label>
-              <p>{formatDateTime(fault.updatedAt)}</p>
+              <p>{formatDateTime(fault.updatedAt, locale)}</p>
             </div>
 
             <div className={css.infoItem}>
@@ -221,7 +228,7 @@ const ManagerFaultDetailPage = ({
             <div className={css.infoItem}>
               <label>{t('labels.planned')}</label>
               <p>
-                {fault.plannedDate ? formatDate(fault.plannedDate) : '—'}
+                {fault.plannedDate ? formatDate(fault.plannedDate, locale) : '—'}
                 {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
               </p>
             </div>
@@ -239,7 +246,7 @@ const ManagerFaultDetailPage = ({
               <p
                 className={`${css.deadline} ${deadlineUrgencyClass(fault.deadline, css)}`}
               >
-                {formatDate(fault.deadline)}
+                {formatDate(fault.deadline, locale)}
               </p>
             </div>
             <div className={css.infoItem}>

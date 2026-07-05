@@ -26,6 +26,7 @@ const ModalMenu = ({
 }: ModalMenuProps) => {
   const { user, isAuthenticated } = useAuthStore();
   const t = useTranslations('header');
+  const tBacheca = useTranslations('BachecaPage');
   const handleBackdropClick = (ev: React.MouseEvent<HTMLDivElement>) => {
     if (ev.target === ev.currentTarget) {
       onClose();
@@ -48,10 +49,9 @@ const ModalMenu = ({
     };
   }, [onClose]);
 
-  if (!user) return null;
-  const routes = roleRoutes[user.role];
-
-  const route = routes[0];
+  // Role-home route only exists for logged-in users; guests still get
+  // the public nav (Annunci / Consegne) + Login below.
+  const route = user ? roleRoutes[user.role]?.[0] : undefined;
 
   return createPortal(
     <div
@@ -66,25 +66,29 @@ const ModalMenu = ({
             <nav className={css.nav}>
               <LanguageButton />
               <ul className={css.nav_list}>
-                {isAuthenticated ? (
-                  <li className={css.nav_list_item}>
-                    <Link href={`${route}`} onClick={onClose}>
-                      {t('navItem3')}{' '}
-                    </Link>
-                  </li>
-                ) : (
-                  <li className={css.nav_list_item}>
-                    <Link href="/" onClick={onClose}>
-                      {t('navItem1')}{' '}
-                    </Link>
-                  </li>
-                )}
+                <li className={css.nav_list_item}>
+                  <Link href="/" onClick={onClose}>
+                    {tBacheca('title')}{' '}
+                  </Link>
+                </li>
+                <li className={css.nav_list_item}>
+                  <Link href="/handover" onClick={onClose}>
+                    {tBacheca('sections.handover.title')}
+                  </Link>
+                </li>
                 {isAuthenticated && (
-                  <li className={css.nav_list_item}>
-                    <Link href="/reports-and-communications" onClick={onClose}>
-                      {t('navItem2')}
-                    </Link>
-                  </li>
+                  <>
+                    <li className={css.nav_list_item}>
+                      <Link href={`${route}`} onClick={onClose}>
+                        {t('navItem3')}{' '}
+                      </Link>
+                    </li>
+                    <li className={css.nav_list_item}>
+                      <Link href="/reports-and-communications" onClick={onClose}>
+                        {t('navItem2')}
+                      </Link>
+                    </li>
+                  </>
                 )}
               </ul>
             </nav>

@@ -29,6 +29,26 @@
       "required": "Campo obligatorio",
       "invalidIdentifier": "Formato no válido (correo electrónico o nombre completo)",
       "invalidSecret": "Formato no válido (contraseña o código personal)"
+    },
+    "forgotLink": "¿Olvidaste la contraseña?",
+    "passwordReset": {
+      "forgotTitle": "Restablecer la contraseña",
+      "forgotSubtitle": "Introduce tu email y te enviaremos un enlace para restablecerla.",
+      "emailPlaceholder": "Introduce tu email",
+      "sendLink": "Enviar enlace",
+      "sent": "Si existe una cuenta con este email, te hemos enviado un enlace. Revisa tu bandeja.",
+      "backToLogin": "Volver al inicio de sesión",
+      "resetTitle": "Elige una nueva contraseña",
+      "resetSubtitle": "Introduce y confirma tu nueva contraseña.",
+      "newPasswordPlaceholder": "Nueva contraseña",
+      "confirmPasswordPlaceholder": "Confirmar contraseña",
+      "policy": "Al menos 8 caracteres, con una mayúscula, una minúscula y un carácter especial.",
+      "mismatch": "Las contraseñas no coinciden",
+      "submit": "Restablecer contraseña",
+      "success": "Contraseña restablecida. Ya puedes iniciar sesión.",
+      "invalidToken": "Enlace no válido o caducado. Solicita uno nuevo.",
+      "missingToken": "Falta el token en el enlace.",
+      "genericError": "Algo salió mal. Inténtalo de nuevo."
     }
   },
 
@@ -190,6 +210,8 @@
         "auth_logout": "Cierre de sesión",
         "auth_refresh": "Renovación de sesión",
         "auth_register": "Registro de usuario",
+        "auth_passwordResetRequested": "Solicitud de restablecimiento",
+        "auth_passwordReset": "Restablecimiento de contraseña",
         "user_create": "Creación de usuario",
         "user_update": "Modificación de usuario",
         "user_delete": "Eliminación de usuario",
@@ -252,7 +274,8 @@
         "summary": "Resumen",
         "ip": "IP",
         "userAgent": "User agent",
-        "extra": "Datos adicionales"
+        "extra": "Datos adicionales",
+        "dateSeparator": "a las"
       }
     },
     "Notifications": {
@@ -498,7 +521,8 @@
       "broadcastRole": "Rol: {role}",
       "sent": "Enviado el",
       "reply": "Responder",
-      "close": "Cerrar"
+      "close": "Cerrar",
+      "dateSeparator": "a las"
     },
     "reply": {
       "title": "Responder a {author}",
@@ -696,6 +720,7 @@
     },
     "managerCommentPlaceholder": "Notas opcionales para el mantenedor...",
     "datePlaceholder": "Seleccionar fecha",
+    "timePlaceholder": "Seleccionar hora",
     "loadingMaintainers": "Cargando...",
     "noMaintainers": "No hay mantenedores disponibles",
     "noMaintainersToAdd": "Todos los mantenedores ya están asignados",
@@ -813,9 +838,37 @@
     "created": "Anuncio publicado",
     "deleted": "Anuncio eliminado",
     "saveError": "Error al guardar",
+    "severity": {
+      "normal": "Normal",
+      "communication": "Comunicación",
+      "note": "A tener en cuenta",
+      "important": "Importante",
+      "attention": "Atención"
+    },
+    "sections": {
+      "handover": {
+        "title": "Relevo",
+        "subtitle": "Notas de entrega entre turnos",
+        "createCta": "Nueva entrega",
+        "empty": "No hay entregas por ahora"
+      },
+      "announcement": {
+        "title": "Anuncios",
+        "subtitle": "Anuncios públicos",
+        "createCta": "Nuevo anuncio",
+        "empty": "No hay anuncios por ahora"
+      }
+    },
     "form": {
       "titlePlaceholder": "Título del anuncio",
       "bodyPlaceholder": "Escribe el anuncio...",
+      "bodyPlaceholderConsegna": "Describe qué hacer con la máquina...",
+      "machineLabel": "Máquina (opcional)",
+      "severityLabel": "Énfasis",
+      "photosLabel": "Fotos (opcional)",
+      "machinePlaceholder": "Selecciona una máquina",
+      "machineLoading": "Cargando...",
+      "machineNone": "— Ninguna máquina —",
       "submit": "Publicar",
       "submitting": "Publicando...",
       "cancel": "Cancelar"

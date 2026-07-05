@@ -1,8 +1,8 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import Modal from '@/components/UI/Modal/Modal';
 import type { AuditLogEntry } from '@/types/auditLogType';
 import css from './LogAuditDetailModal.module.css';
@@ -43,12 +43,17 @@ interface LogAuditDetailModalProps {
   onClose: () => void;
 }
 
-const formatFull = (value?: string) => {
+const formatFull = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>,
+  separator: string
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
-  return isValid(parsed)
-    ? format(parsed, "dd MMMM yyyy 'alle' HH:mm:ss", { locale: it })
-    : value;
+  if (!isValid(parsed)) return value;
+  const datePart = format(parsed, 'dd MMMM yyyy', { locale });
+  const timePart = format(parsed, 'HH:mm:ss', { locale });
+  return `${datePart} ${separator} ${timePart}`;
 };
 
 const actorLabel = (entry: AuditLogEntry) => {
@@ -66,6 +71,7 @@ const LogAuditDetailModal = ({ entry, onClose }: LogAuditDetailModalProps) => {
   const t = useTranslations('AdminPage.LogsAudit.detail');
   const tLog = useTranslations('AdminPage.LogsAudit');
   const tRoles = useTranslations('Roles');
+  const locale = getDateFnsLocale(useLocale());
 
   // next-intl treats dots as nesting, so the flat enum key
   // `auth.login` is stored as `auth_login`; fall back to the raw
@@ -83,7 +89,9 @@ const LogAuditDetailModal = ({ entry, onClose }: LogAuditDetailModalProps) => {
 
         <dl className={css.meta}>
           <dt className={css.metaLabel}>{t('date')}</dt>
-          <dd className={css.metaValue}>{formatFull(entry.createdAt)}</dd>
+          <dd className={css.metaValue}>
+            {formatFull(entry.createdAt, locale, t('dateSeparator'))}
+          </dd>
 
           <dt className={css.metaLabel}>{t('actor')}</dt>
           <dd className={css.metaValue}>

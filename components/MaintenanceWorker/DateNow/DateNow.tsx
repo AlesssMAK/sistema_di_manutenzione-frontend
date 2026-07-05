@@ -1,7 +1,7 @@
 import React from 'react';
 import { format, isToday, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import css from './DateNow.module.css';
 
 type DateNowMode = 'default' | 'overdue' | 'completed';
@@ -19,6 +19,7 @@ const DateNow = ({
 }: DateNowProps) => {
   const t = useTranslations('maintenanceWorkerPage.dateNow');
   const tPriority = useTranslations('Priority');
+  const locale = getDateFnsLocale(useLocale());
 
   const prioritySuffix = priority
     ? t('prioritySuffix', {
@@ -50,7 +51,7 @@ const DateNow = ({
   if (selectedDate) {
     const parsed = parseISO(selectedDate);
     if (isValid(parsed)) {
-      const formatted = format(parsed, 'EEEE, d MMMM yyyy', { locale: it });
+      const formatted = format(parsed, 'EEEE, d MMMM yyyy', { locale });
       const prefix =
         mode === 'completed'
           ? t('completedOf')

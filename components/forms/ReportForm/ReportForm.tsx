@@ -19,7 +19,7 @@ import type {
 import { PlantPart } from '@/types/plantPartType';
 import { Plant } from '@/types/plantType';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -40,6 +40,7 @@ const ReportForm = () => {
 
   const t = useTranslations('ReportForm');
   const tBtn = useTranslations('btn');
+  const locale = useLocale();
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
   // Draft is scoped to the logged-in user — falls back to a shared
@@ -104,14 +105,14 @@ const ReportForm = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
-      const time = now.toLocaleTimeString('it-IT', {
+      const time = now.toLocaleTimeString(locale, {
         hour: '2-digit',
         minute: '2-digit',
       });
       setCurrentTime(time);
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [locale]);
 
   const selectedPlantId = useWatch({ control, name: 'plantId' });
   const plantOptions = isPlants.map(p => `${p.namePlant} - ${p.code}`);
@@ -205,7 +206,7 @@ const ReportForm = () => {
           </li>
           <li className={css.info_list_item}>
             <h3 className={css.info_title}>{t('date')}</h3>
-            <p className={css.info_text}>{now.toLocaleDateString('it-IT')}</p>
+            <p className={css.info_text}>{now.toLocaleDateString(locale)}</p>
             <Input type="hidden" {...register('dataCreated')} />
             {errors.dataCreated && (
               <p className={css.error}>{errors.dataCreated.message}</p>

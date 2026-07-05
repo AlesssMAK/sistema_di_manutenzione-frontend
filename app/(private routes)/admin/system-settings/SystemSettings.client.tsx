@@ -20,6 +20,7 @@ import Button from '@/components/UI/Button/Button';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
+import TimePickerInput from '@/components/UI/TimePickerInput/TimePickerInput';
 import GrantUsersSection from '@/components/Admin/GrantUsersSection/GrantUsersSection';
 import { getAnnouncementAuthors } from '@/lib/api/announcements';
 import { getMessageSenders } from '@/lib/api/messages';
@@ -238,23 +239,19 @@ const AdminSystemSettingsClientPage = () => {
                     </div>
                     {mode === 'hours' && (
                       <div className={css.weekTimes}>
-                        <input
-                          type="time"
-                          className={css.timeInput}
-                          value={day.start}
-                          onChange={(e) =>
-                            setDayTime(key, 'start', e.target.value)
-                          }
-                        />
+                        <div className={css.timePickerBox}>
+                          <TimePickerInput
+                            value={day.start}
+                            onChange={(v) => setDayTime(key, 'start', v)}
+                          />
+                        </div>
                         <span className={css.weekDash}>–</span>
-                        <input
-                          type="time"
-                          className={css.timeInput}
-                          value={day.end}
-                          onChange={(e) =>
-                            setDayTime(key, 'end', e.target.value)
-                          }
-                        />
+                        <div className={css.timePickerBox}>
+                          <TimePickerInput
+                            value={day.end}
+                            onChange={(v) => setDayTime(key, 'end', v)}
+                          />
+                        </div>
                       </div>
                     )}
                   </div>

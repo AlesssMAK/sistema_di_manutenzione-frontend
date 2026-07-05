@@ -1,0 +1,93 @@
+.container {
+  position: relative;
+  width: 100%;
+}
+
+/* Trigger styled identically to DatePickerInput so date + time fields
+   read as one row of matching gray boxes. */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: #0a0a0a;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.trigger:hover,
+.triggerOpen {
+  border-color: #1e40af;
+  background: #ffffff;
+}
+
+.triggerLabel {
+  line-height: 1;
+}
+
+.placeholder {
+  color: #94a3b8;
+}
+
+.clockIcon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+/* Popover — same white card chrome as the calendar, but a scrollable
+   list of fixed time slots instead of a month grid. */
+.popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 50;
+  width: 100%;
+  min-width: 120px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.slot {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1f2937;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.slot:hover {
+  background-color: #eff6ff;
+}
+
+.slotSelected,
+.slotSelected:hover {
+  background-color: #2563eb;
+  color: #fff;
+  font-weight: 700;
+}

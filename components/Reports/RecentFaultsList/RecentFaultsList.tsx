@@ -1,8 +1,8 @@
 'use client';
 
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import type { FaultCard } from '@/types/faultType';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
@@ -15,10 +15,13 @@ interface RecentFaultsListProps {
   isError: boolean;
 }
 
-const formatDay = (value?: string) => {
+const formatDay = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
-  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale: it }) : value;
+  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale }) : value;
 };
 
 const statusClass: Record<string, string> = {
@@ -41,6 +44,7 @@ const RecentFaultsList = ({ items, isLoading, isError }: RecentFaultsListProps) 
   const t = useTranslations('reportsAndCommunicationsPage');
   const tNoFound = useTranslations('NoFound');
   const tStatus = useTranslations('StatusFault');
+  const locale = getDateFnsLocale(useLocale());
 
   if (isLoading) {
     return (
@@ -79,7 +83,7 @@ const RecentFaultsList = ({ items, isLoading, isError }: RecentFaultsListProps) 
             </div>
             <div className={css.item_date}>
               <h3 className={css.title}>{t('sections.recentFaults.labels.date')}</h3>
-              <p className={css.date}>{formatDay(fault.dataCreated)}</p>
+              <p className={css.date}>{formatDay(fault.dataCreated, locale)}</p>
             </div>
           </div>
 

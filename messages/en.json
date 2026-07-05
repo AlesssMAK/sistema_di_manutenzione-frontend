@@ -29,13 +29,33 @@
       "required": "Field is required",
       "invalidIdentifier": "Invalid format (email or full name)",
       "invalidSecret": "Invalid format (password or personal code)"
+    },
+    "forgotLink": "Forgot password?",
+    "passwordReset": {
+      "forgotTitle": "Reset your password",
+      "forgotSubtitle": "Enter your email and we'll send you a link to reset it.",
+      "emailPlaceholder": "Enter your email",
+      "sendLink": "Send link",
+      "sent": "If an account with this email exists, we've sent a reset link. Check your inbox.",
+      "backToLogin": "Back to login",
+      "resetTitle": "Choose a new password",
+      "resetSubtitle": "Enter and confirm your new password.",
+      "newPasswordPlaceholder": "New password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "policy": "At least 8 characters, with an uppercase, a lowercase and a special character.",
+      "mismatch": "Passwords do not match",
+      "submit": "Reset password",
+      "success": "Password reset. You can now log in.",
+      "invalidToken": "Invalid or expired link. Request a new one.",
+      "missingToken": "Missing token in the link.",
+      "genericError": "Something went wrong. Please try again."
     }
   },
 
   "header": {
     "navItem1": "Roles",
     "navItem2": "Reports",
-    "navItem3": "Inicio",
+    "navItem3": "Home",
     "exit": "Logout",
     "login": "Login",
     "createFault": "Report fault",
@@ -190,6 +210,8 @@
         "auth_logout": "Logout",
         "auth_refresh": "Session refresh",
         "auth_register": "User registration",
+        "auth_passwordResetRequested": "Password reset requested",
+        "auth_passwordReset": "Password reset",
         "user_create": "User created",
         "user_update": "User updated",
         "user_delete": "User deleted",
@@ -252,7 +274,8 @@
         "summary": "Summary",
         "ip": "IP",
         "userAgent": "User agent",
-        "extra": "Extra data"
+        "extra": "Extra data",
+        "dateSeparator": "at"
       }
     },
     "Notifications": {
@@ -498,7 +521,8 @@
       "broadcastRole": "Role: {role}",
       "sent": "Sent at",
       "reply": "Reply",
-      "close": "Close"
+      "close": "Close",
+      "dateSeparator": "at"
     },
     "reply": {
       "title": "Reply to {author}",
@@ -696,6 +720,7 @@
     },
     "managerCommentPlaceholder": "Optional notes for the maintainer...",
     "datePlaceholder": "Select date",
+    "timePlaceholder": "Select time",
     "loadingMaintainers": "Loading...",
     "noMaintainers": "No maintainers available",
     "noMaintainersToAdd": "All maintainers are already assigned",
@@ -813,9 +838,37 @@
     "created": "Announcement published",
     "deleted": "Announcement deleted",
     "saveError": "Error while saving",
+    "severity": {
+      "normal": "Normal",
+      "communication": "Communication",
+      "note": "Take note",
+      "important": "Important",
+      "attention": "Attention"
+    },
+    "sections": {
+      "handover": {
+        "title": "Handover",
+        "subtitle": "Handover notes between shifts",
+        "createCta": "New handover",
+        "empty": "No handovers yet"
+      },
+      "announcement": {
+        "title": "Announcements",
+        "subtitle": "Public announcements",
+        "createCta": "New announcement",
+        "empty": "No announcements yet"
+      }
+    },
     "form": {
       "titlePlaceholder": "Announcement title",
       "bodyPlaceholder": "Write the announcement...",
+      "bodyPlaceholderConsegna": "Describe what to do with the machine...",
+      "machineLabel": "Machine (optional)",
+      "severityLabel": "Emphasis",
+      "photosLabel": "Photos (optional)",
+      "machinePlaceholder": "Select a machine",
+      "machineLoading": "Loading...",
+      "machineNone": "— No machine —",
       "submit": "Publish",
       "submitting": "Publishing...",
       "cancel": "Cancel"

@@ -7,6 +7,7 @@ import { useAuthStore } from '@/lib/store/authStore';
 import {
   createLoginSchema,
   isEmail,
+  isFullName,
   isPersonalCode,
   LoginFormData,
 } from '@/lib/validation/loginValidation';
@@ -15,6 +16,7 @@ import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import css from './LoginForm.module.css';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { roleRoutes } from '@/constants/roleRoutes';
 import { ApiError } from '@/app/api/api';
 import toast from 'react-hot-toast';
@@ -29,8 +31,15 @@ const LoginForm = () => {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: yupResolver(schema) });
+
+  // Reuse the login identifier detection: the reset-password link is
+  // only relevant to email+password users. Hide it once the input is a
+  // full name (operator login — operators have no password).
+  const identifier = watch('identifier') ?? '';
+  const showForgotLink = !isFullName(identifier);
 
   const onLoginSubmit = async (value: LoginFormData) => {
     try {
@@ -124,6 +133,11 @@ const LoginForm = () => {
           </Button>
         </div>
       </form>
+      {showForgotLink && (
+        <Link href="/forgot-password" className={css.forgot_link}>
+          {t('forgotLink')}
+        </Link>
+      )}
     </div>
   );
 };

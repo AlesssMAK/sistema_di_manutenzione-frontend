@@ -14,8 +14,8 @@ import {
   subMonths,
   parseISO,
 } from 'date-fns';
-import { it } from 'date-fns/locale';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import styles from './Calendar.module.css';
 
 export type PlannedDayPriority = 'Low' | 'Medium' | 'High';
@@ -42,6 +42,7 @@ const Calendar = ({
   plannedDays = {},
 }: FilterDataCreatedBarProps) => {
   const t = useTranslations('maintenanceWorkerPage.calendar');
+  const locale = getDateFnsLocale(useLocale());
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const monthStart = startOfMonth(currentDate);
@@ -76,7 +77,7 @@ const Calendar = ({
           ‹
         </button>
         <h2 className={styles.monthTitle}>
-          {format(currentDate, 'MMMM yyyy', { locale: it })}
+          {format(currentDate, 'MMMM yyyy', { locale })}
         </h2>
         <button
           className={styles.navButton}

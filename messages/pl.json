@@ -28,13 +28,33 @@
       "required": "Pole jest wymagane",
       "invalidIdentifier": "Nieprawidłowy format (e-mail lub pełne imię i nazwisko)",
       "invalidSecret": "Nieprawidłowy format (hasło lub kod osobisty)"
+    },
+    "forgotLink": "Nie pamiętasz hasła?",
+    "passwordReset": {
+      "forgotTitle": "Zresetuj hasło",
+      "forgotSubtitle": "Podaj swój email, a wyślemy link do zresetowania hasła.",
+      "emailPlaceholder": "Podaj swój email",
+      "sendLink": "Wyślij link",
+      "sent": "Jeśli konto z tym adresem istnieje, wysłaliśmy link. Sprawdź skrzynkę.",
+      "backToLogin": "Powrót do logowania",
+      "resetTitle": "Wybierz nowe hasło",
+      "resetSubtitle": "Wpisz i potwierdź nowe hasło.",
+      "newPasswordPlaceholder": "Nowe hasło",
+      "confirmPasswordPlaceholder": "Potwierdź hasło",
+      "policy": "Co najmniej 8 znaków, z wielką i małą literą oraz znakiem specjalnym.",
+      "mismatch": "Hasła nie są zgodne",
+      "submit": "Zresetuj hasło",
+      "success": "Hasło zresetowane. Możesz się teraz zalogować.",
+      "invalidToken": "Nieprawidłowy lub wygasły link. Poproś o nowy.",
+      "missingToken": "Brak tokenu w linku.",
+      "genericError": "Coś poszło nie tak. Spróbuj ponownie."
     }
   },
 
   "header": {
     "navItem1": "Role",
     "navItem2": "Raporty",
-    "navItem3": "Strona główna",
+    "navItem3": "Home",
     "exit": "Wyloguj",
     "login": "Logowanie",
     "createFault": "Zgłoś usterkę",
@@ -169,6 +189,8 @@
         "auth_logout": "Wylogowanie",
         "auth_refresh": "Odnowienie sesji",
         "auth_register": "Rejestracja użytkownika",
+        "auth_passwordResetRequested": "Prośba o reset hasła",
+        "auth_passwordReset": "Reset hasła",
         "user_create": "Utworzenie użytkownika",
         "user_update": "Modyfikacja użytkownika",
         "user_delete": "Usunięcie użytkownika",
@@ -231,7 +253,8 @@
         "summary": "Opis",
         "ip": "IP",
         "userAgent": "User agent",
-        "extra": "Dane dodatkowe"
+        "extra": "Dane dodatkowe",
+        "dateSeparator": "o"
       }
     },
     "Notifications": {
@@ -477,7 +500,8 @@
       "broadcastRole": "Rola: {role}",
       "sent": "Wysłano",
       "reply": "Odpowiedz",
-      "close": "Zamknij"
+      "close": "Zamknij",
+      "dateSeparator": "o"
     },
     "reply": {
       "title": "Odpowiedz do {author}",
@@ -675,6 +699,7 @@
     },
     "managerCommentPlaceholder": "Opcjonalne notatki dla konserwatora...",
     "datePlaceholder": "Wybierz datę",
+    "timePlaceholder": "Wybierz godzinę",
     "loadingMaintainers": "Ładowanie...",
     "noMaintainers": "Brak dostępnych konserwatorów",
     "noMaintainersToAdd": "Wszyscy konserwatorzy są już przypisani",
@@ -792,9 +817,37 @@
     "created": "Ogłoszenie opublikowane",
     "deleted": "Ogłoszenie usunięte",
     "saveError": "Błąd podczas zapisywania",
+    "severity": {
+      "normal": "Zwykły",
+      "communication": "Komunikat",
+      "note": "Do rozważenia",
+      "important": "Ważne",
+      "attention": "Uwaga"
+    },
+    "sections": {
+      "handover": {
+        "title": "Przekazanie",
+        "subtitle": "Notatki przekazania między zmianami",
+        "createCta": "Nowe przekazanie",
+        "empty": "Brak przekazań"
+      },
+      "announcement": {
+        "title": "Ogłoszenia",
+        "subtitle": "Ogłoszenia publiczne",
+        "createCta": "Nowe ogłoszenie",
+        "empty": "Brak ogłoszeń"
+      }
+    },
     "form": {
       "titlePlaceholder": "Tytuł ogłoszenia",
       "bodyPlaceholder": "Napisz ogłoszenie...",
+      "bodyPlaceholderConsegna": "Opisz, co zrobić z maszyną...",
+      "machineLabel": "Maszyna (opcjonalnie)",
+      "severityLabel": "Wyróżnienie",
+      "photosLabel": "Zdjęcia (opcjonalnie)",
+      "machinePlaceholder": "Wybierz maszynę",
+      "machineLoading": "Ładowanie...",
+      "machineNone": "— Brak maszyny —",
       "submit": "Opublikuj",
       "submitting": "Publikowanie...",
       "cancel": "Anuluj"

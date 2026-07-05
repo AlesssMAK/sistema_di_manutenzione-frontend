@@ -60,22 +60,11 @@
   flex-wrap: wrap;
 }
 
-.timeInput {
-  height: 36px;
-  padding: 0 12px;
-  border-radius: 6px;
-  background: #f3f3f5;
-  border: 1px solid transparent;
-  font-family: inherit;
-  font-size: 14px;
+/* Fixed-width wrapper for the shared TimePickerInput (container is
+   width:100%, so it fills this box) — keeps the start/end pickers the
+   same 140px the native time inputs used. */
+.timePickerBox {
   width: 140px;
-  transition: border-color 0.15s ease;
-}
-
-.timeInput:focus {
-  outline: none;
-  border-color: #1e40af;
-  background: #ffffff;
 }
 
 /* Weekday selector — pill toggles, active = blue. */

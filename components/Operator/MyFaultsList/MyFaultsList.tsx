@@ -2,9 +2,9 @@
 
 import { useMemo, useState } from 'react';
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import { fetchFaultCards } from '@/lib/api/faults';
 import type { FaultCard } from '@/types/faultType';
 import { useAuthStore } from '@/lib/store/authStore';
@@ -18,10 +18,13 @@ type Period = '7d' | '30d' | '3m' | 'all';
 
 const PER_PAGE = 20;
 
-const formatDay = (value?: string) => {
+const formatDay = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
-  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale: it }) : value;
+  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale }) : value;
 };
 
 const statusClass: Record<string, string> = {
@@ -45,6 +48,7 @@ const MyFaultsList = () => {
   const t = useTranslations('OperatorPage.myFaults');
   const tStatus = useTranslations('StatusFault');
   const tNoFound = useTranslations('NoFound');
+  const locale = getDateFnsLocale(useLocale());
 
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
@@ -142,7 +146,7 @@ const MyFaultsList = () => {
                   · {fault.partId?.namePlantPart ?? '—'}
                 </span>
               </span>
-              <span className={css.date}>{formatDay(fault.dataCreated)}</span>
+              <span className={css.date}>{formatDay(fault.dataCreated, locale)}</span>
               <span
                 className={`${css.status} ${
                   statusClass[fault.statusFault] ?? ''

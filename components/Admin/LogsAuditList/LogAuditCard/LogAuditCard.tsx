@@ -1,8 +1,8 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { format, isValid, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
+import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import type { AuditAction, AuditLogEntry } from '@/types/auditLogType';
 import css from './LogAuditCard.module.css';
 
@@ -48,17 +48,21 @@ const actorLabel = (entry: AuditLogEntry) => {
   return '—';
 };
 
-const formatDateTime = (value?: string) => {
+const formatDateTime = (
+  value: string | undefined,
+  locale: ReturnType<typeof getDateFnsLocale>
+) => {
   if (!value) return '—';
   const parsed = parseISO(value);
   return isValid(parsed)
-    ? format(parsed, 'dd/MM/yyyy HH:mm:ss', { locale: it })
+    ? format(parsed, 'dd/MM/yyyy HH:mm:ss', { locale })
     : value;
 };
 
 const LogAuditCard = ({ entry, variant, onClick }: LogAuditCardProps) => {
   const t = useTranslations('AdminPage.LogsAudit');
   const tRoles = useTranslations('Roles');
+  const locale = getDateFnsLocale(useLocale());
 
   // next-intl treats dots as nesting, so the flat enum key
   // `part.create` is stored as `part_create`.
@@ -85,7 +89,7 @@ const LogAuditCard = ({ entry, variant, onClick }: LogAuditCardProps) => {
     >
       <div className={`${css.cell} ${css.dateCell}`}>
         <h3 className={css.label}>{t('columns.date')}</h3>
-        <p className={css.date}>{formatDateTime(entry.createdAt)}</p>
+        <p className={css.date}>{formatDateTime(entry.createdAt, locale)}</p>
       </div>
 
       <div className={`${css.cell} ${css.actorCell}`}>

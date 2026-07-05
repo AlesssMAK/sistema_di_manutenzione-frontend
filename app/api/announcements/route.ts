@@ -7,8 +7,10 @@ import { api } from '../api';
 export async function POST(req: NextRequest) {
   const cookie = await cookies();
   try {
-    const body = await req.json();
-    const res = await api.post('/announcements', body, {
+    // Multipart (text fields + photo files) — forward as-is so the
+    // backend's multer picks up the images.
+    const formData = await req.formData();
+    const res = await api.post('/announcements', formData, {
       headers: { Cookie: cookie.toString() },
     });
     return NextResponse.json(res.data, { status: res.status });

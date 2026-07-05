@@ -28,6 +28,26 @@
       "required": "Campo obbligatorio",
       "invalidIdentifier": "Formato non valido (email o nome completo)",
       "invalidSecret": "Formato non valido (password o codice personale)"
+    },
+    "forgotLink": "Password dimenticata?",
+    "passwordReset": {
+      "forgotTitle": "Reimposta la password",
+      "forgotSubtitle": "Inserisci la tua email: ti invieremo un link per reimpostarla.",
+      "emailPlaceholder": "Inserisci la tua email",
+      "sendLink": "Invia il link",
+      "sent": "Se esiste un account con questa email, ti abbiamo inviato un link. Controlla la posta.",
+      "backToLogin": "Torna al login",
+      "resetTitle": "Scegli una nuova password",
+      "resetSubtitle": "Inserisci e conferma la tua nuova password.",
+      "newPasswordPlaceholder": "Nuova password",
+      "confirmPasswordPlaceholder": "Conferma password",
+      "policy": "Almeno 8 caratteri, con una maiuscola, una minuscola e un carattere speciale.",
+      "mismatch": "Le password non coincidono",
+      "submit": "Reimposta password",
+      "success": "Password reimpostata. Ora puoi accedere.",
+      "invalidToken": "Link non valido o scaduto. Richiedi un nuovo link.",
+      "missingToken": "Token mancante nel link.",
+      "genericError": "Qualcosa è andato storto. Riprova."
     }
 },
 
@@ -189,6 +209,8 @@
         "auth_logout": "Disconnessione",
         "auth_refresh": "Rinnovo sessione",
         "auth_register": "Registrazione utente",
+        "auth_passwordResetRequested": "Richiesta reset password",
+        "auth_passwordReset": "Reset password",
         "user_create": "Creazione utente",
         "user_update": "Modifica utente",
         "user_delete": "Eliminazione utente",
@@ -251,7 +273,8 @@
         "summary": "Descrizione",
         "ip": "IP",
         "userAgent": "User agent",
-        "extra": "Dati aggiuntivi"
+        "extra": "Dati aggiuntivi",
+        "dateSeparator": "alle"
       }
     },
     "Notifications": {
@@ -497,7 +520,8 @@
     "broadcastRole": "Ruolo: {role}",
     "sent": "Inviato il",
     "reply": "Rispondi",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "dateSeparator": "alle"
   },
   "reply": {
     "title": "Rispondi a {author}",
@@ -695,6 +719,7 @@
   },
   "managerCommentPlaceholder": "Eventuali note per il manutentore...",
   "datePlaceholder": "Seleziona data",
+  "timePlaceholder": "Seleziona ora",
   "loadingMaintainers": "Caricamento...",
   "noMaintainers": "Nessun manutentore disponibile",
   "noMaintainersToAdd": "Tutti i manutentori sono già assegnati",
@@ -812,9 +837,37 @@
   "created": "Avviso pubblicato",
   "deleted": "Avviso eliminato",
   "saveError": "Errore durante il salvataggio",
+  "severity": {
+    "normal": "Normale",
+    "communication": "Comunicazione",
+    "note": "Da tenere presente",
+    "important": "Importante",
+    "attention": "Attenzione"
+  },
+  "sections": {
+    "handover": {
+      "title": "Consegne",
+      "subtitle": "Passaggio di consegne tra turni",
+      "createCta": "Nuova consegna",
+      "empty": "Nessuna consegna al momento"
+    },
+    "announcement": {
+      "title": "Annunci",
+      "subtitle": "Avvisi e comunicazioni pubbliche",
+      "createCta": "Nuovo annuncio",
+      "empty": "Nessun avviso al momento"
+    }
+  },
   "form": {
     "titlePlaceholder": "Titolo dell'avviso",
     "bodyPlaceholder": "Scrivi l'avviso...",
+    "bodyPlaceholderConsegna": "Descrivi cosa fare con la macchina...",
+    "machineLabel": "Macchina (opzionale)",
+    "severityLabel": "Evidenza",
+    "photosLabel": "Foto (opzionale)",
+    "machinePlaceholder": "Seleziona una macchina",
+    "machineLoading": "Caricamento...",
+    "machineNone": "— Nessuna macchina —",
     "submit": "Pubblica",
     "submitting": "Pubblicazione...",
     "cancel": "Annulla"
