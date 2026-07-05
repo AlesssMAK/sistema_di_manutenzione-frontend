@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import Input from '@/components/UI/Input/Input';
