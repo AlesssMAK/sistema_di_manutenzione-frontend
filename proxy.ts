@@ -70,7 +70,6 @@ export const config = {
     '/operator/:path*',
     '/safety/:path*',
     '/messages/:path*',
-    '/reports-and-communications/:path*',
     '/report-fault/:path*',
   ],
 };

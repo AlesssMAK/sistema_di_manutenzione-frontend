@@ -21,6 +21,7 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import { fetchFaultCards, fetchFaultDeadlines } from '@/lib/api/faults';
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { useAuthStore } from '@/lib/store/authStore';
+import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { FaultCard } from '@/types/faultType';
 import { useQuery } from '@tanstack/react-query';
 
@@ -50,6 +51,14 @@ const MaintenanceWorkerClient = () => {
   const [totalPage, setTotalPage] = useState(0);
   const [viewMode, setViewMode] = useState<FaultViewMode>('active');
   const [scope, setScope] = useState<FaultScope>('mine');
+  // The landing scope is picked from data on first load: 'mine' when
+  // the worker has any active assigned fault, otherwise 'pool' (free
+  // faults). Once resolved (or on manual change) the auto-select stops.
+  const [scopeResolved, setScopeResolved] = useState(false);
+  // Live count of faults created (via socket) since the current list
+  // was last loaded — surfaced as a "N new" refresh pill.
+  const [newFaultCount, setNewFaultCount] = useState(0);
+  const { socket } = useSocket();
   const [overdueDeadlineDates, setOverdueDeadlineDates] = useState<string[]>(
     []
   );
@@ -102,13 +111,6 @@ const MaintenanceWorkerClient = () => {
       setIsLoading(true);
 
       try {
-        const scopeParams =
-          currentScope === 'mine' && currentUserId
-            ? { assignedTo: currentUserId }
-            : currentScope === 'pool'
-              ? { assignedToEmpty: true }
-              : {};
-
         const statusFault =
           currentMode === 'overdue'
             ? 'Overdue'
@@ -116,9 +118,7 @@ const MaintenanceWorkerClient = () => {
               ? 'Completed'
               : ACTIVE_STATUSES;
 
-        const data = await fetchFaultCards({
-          page: pageNum,
-          perPage: PER_PAGE,
+        const baseParams = {
           priority: currentPriority,
           statusFault,
           // Date filter applied in active/completed modes only — overdue
@@ -126,6 +126,22 @@ const MaintenanceWorkerClient = () => {
           ...(currentMode !== 'overdue' && currentDate
             ? { plannedDate: currentDate }
             : {}),
+        };
+
+        const scopeParams =
+          currentScope === 'mine' && currentUserId
+            ? { assignedTo: currentUserId }
+            : currentScope === 'pool'
+              ? { assignedToEmpty: true }
+              : {};
+
+        const data = await fetchFaultCards({
+          ...baseParams,
+          page: pageNum,
+          perPage: PER_PAGE,
+          // My assigned interventions are listed oldest-first (creation
+          // order); pool/all keep the default newest-first ordering.
+          ...(currentScope === 'mine' ? { sort: 'asc' as const } : {}),
           ...scopeParams,
         });
 
@@ -270,10 +286,44 @@ const MaintenanceWorkerClient = () => {
     }
   };
 
+  // One-shot landing-scope auto-select: 'mine' if the worker has any
+  // active assigned fault, otherwise 'pool'. Runs once the userId is
+  // known; the main load below waits for it so there's no flash.
+  useEffect(() => {
+    if (!userId || scopeResolved) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const mine = await fetchFaultCards({
+          page: 1,
+          perPage: 1,
+          statusFault: ACTIVE_STATUSES,
+          assignedTo: userId,
+        });
+        if (cancelled) return;
+        setScope((mine.totalFault ?? 0) > 0 ? 'mine' : 'pool');
+      } catch {
+        if (!cancelled) setScope('mine');
+      } finally {
+        if (!cancelled) setScopeResolved(true);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, scopeResolved]);
+
   useEffect(() => {
     setPageTitle(t('titlePageForStore'));
+    // Wait for the landing scope to be resolved before the first load
+    // so we don't fetch 'mine' then immediately re-fetch 'pool'.
+    if (!scopeResolved) return;
+    // A fresh load reflects current state, so the "new since load"
+    // counter starts over.
+    setNewFaultCount(0);
     loadData(1, priority, selectedDate, viewMode, scope, userId);
   }, [
+    scopeResolved,
     setPageTitle,
     t,
     loadData,
@@ -287,6 +337,25 @@ const MaintenanceWorkerClient = () => {
   useEffect(() => {
     fetchPlannedCounts(scope, userId, viewMode);
   }, [scope, userId, viewMode, fetchPlannedCounts]);
+
+  // Live "new fault" signal — the SocketProvider already broadcasts
+  // fault:created globally (toast + query invalidation); here we also
+  // count them so the worker gets an explicit, page-level refresh cue
+  // (the list is manually fetched, so it doesn't auto-refresh).
+  useEffect(() => {
+    if (!socket) return;
+    const onCreated = () => setNewFaultCount(c => c + 1);
+    socket.on('fault:created', onCreated);
+    return () => {
+      socket.off('fault:created', onCreated);
+    };
+  }, [socket]);
+
+  const handleRefreshNew = () => {
+    setNewFaultCount(0);
+    setPage(1);
+    loadData(1, priority, selectedDate, viewMode, scope, userId);
+  };
 
   // ---------- empty-state copy -----------------------------------------
   let emptyText = t('empty.default');
@@ -359,6 +428,21 @@ const MaintenanceWorkerClient = () => {
                 onScopeChange={handleScopeChange}
               />
             </div>
+
+            {newFaultCount > 0 && (
+              <button
+                type="button"
+                className={css.newFaultsPill}
+                onClick={handleRefreshNew}
+                aria-label={t('newFaults.ariaLabel')}
+              >
+                <span className={css.newFaultsDot} aria-hidden="true" />
+                <span>{t('newFaults.label', { count: newFaultCount })}</span>
+                <span className={css.newFaultsAction}>
+                  {t('newFaults.action')}
+                </span>
+              </button>
+            )}
 
             {isLoading && page === 1 ? (
               <div className={css.loadingWrap}>

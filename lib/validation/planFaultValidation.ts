@@ -8,7 +8,23 @@ export const planFaultSchema = yup.object({
   plannedDate: yup
     .string()
     .matches(/^\d{4}-\d{2}-\d{2}$/, 'Formato data: YYYY-MM-DD')
-    .required('Data pianificata obbligatoria'),
+    .required('Data pianificata obbligatoria')
+    // Mirror the backend guard (addedByManagerSchema): a plan can't be
+    // dated in the past. Surfacing it here shows an inline message on
+    // the field instead of the raw 400 the API would otherwise return.
+    .test(
+      'not-past',
+      'La data pianificata non può essere nel passato',
+      (value) => {
+        if (!value) return true;
+        const now = new Date();
+        const today = `${now.getFullYear()}-${String(
+          now.getMonth() + 1
+        ).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        // Both strings are YYYY-MM-DD, so lexical >= is a date compare.
+        return value >= today;
+      }
+    ),
   plannedTime: yup
     .string()
     .matches(/^\d{2}:\d{2}$/, 'Formato ora: HH:mm')

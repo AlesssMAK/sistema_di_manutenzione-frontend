@@ -55,6 +55,7 @@
     "navItem1": "Role",
     "navItem2": "Raporty",
     "navItem3": "Home",
+    "myArea": "Mój Obszar",
     "exit": "Wyloguj",
     "login": "Logowanie",
     "createFault": "Zgłoś usterkę",
@@ -376,6 +377,11 @@
       "poolHint": "Interwencje nieprzypisane (pool)",
       "allHint": "Wszystkie interwencje",
       "ariaLabel": "Zakres zgłoszeń"
+    },
+    "newFaults": {
+      "label": "{count, plural, one {# nowe zgłoszenie} other {# nowych zgłoszeń}}",
+      "action": "Odśwież",
+      "ariaLabel": "Odśwież, aby zobaczyć nowe zgłoszenia"
     },
     "empty": {
       "overdue": "Brak opóźnionych zgłoszeń",

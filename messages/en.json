@@ -56,6 +56,7 @@
     "navItem1": "Roles",
     "navItem2": "Reports",
     "navItem3": "Home",
+    "myArea": "My Area",
     "exit": "Logout",
     "login": "Login",
     "createFault": "Report fault",
@@ -397,6 +398,11 @@
       "poolHint": "Unassigned interventions (pool)",
       "allHint": "All interventions",
       "ariaLabel": "Scope of reports"
+    },
+    "newFaults": {
+      "label": "{count, plural, one {# new report} other {# new reports}}",
+      "action": "Refresh",
+      "ariaLabel": "Reload to see the new reports"
     },
     "empty": {
       "overdue": "No overdue reports",

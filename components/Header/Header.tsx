@@ -68,30 +68,22 @@ const Header = () => {
             </Button>
           )}
           <nav className={css.nav}>
+            {/* Board sections (Annunci, Consegne, Comunicazioni,
+                Segnalazioni) are now tabs on the home page, so the nav
+                keeps just the board link + the role dashboard shortcut
+                for authenticated users. */}
             <ul className={css.nav_list}>
               <li className={css.nav_list_item}>
                 <Link href="/" onClick={close}>
-                  {tBacheca('title')}{' '}
+                  {tBacheca('title')}
                 </Link>
               </li>
-              <li className={css.nav_list_item}>
-                <Link href="/handover" onClick={close}>
-                  {tBacheca('sections.handover.title')}
-                </Link>
-              </li>
-              {isAuthenticated && (
-                <>
-                  <li className={css.nav_list_item}>
-                    <Link href={`${route}`} onClick={close}>
-                      {t('navItem3')}{' '}
-                    </Link>
-                  </li>
-                  <li className={css.nav_list_item}>
-                    <Link href="/reports-and-communications" onClick={close}>
-                      {t('navItem2')}
-                    </Link>
-                  </li>
-                </>
+              {isAuthenticated && route && (
+                <li className={css.nav_list_item}>
+                  <Link href={`${route}`} onClick={close}>
+                    {t('myArea')}
+                  </Link>
+                </li>
               )}
             </ul>
           </nav>

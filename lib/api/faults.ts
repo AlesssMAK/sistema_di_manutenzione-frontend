@@ -14,6 +14,8 @@ interface FetchParams {
   assignedTo?: string;
   assignedToEmpty?: boolean;
   createdById?: string;
+  /** Direction of the createdAt sort. 'asc' = oldest first. */
+  sort?: 'asc' | 'desc';
 }
 export interface FetchFaultCardsParams {
   fault: FaultCard[];
@@ -85,6 +87,7 @@ export const fetchFaultCards = async ({
   assignedTo,
   assignedToEmpty,
   createdById,
+  sort,
 }: FetchParams): Promise<FetchFaultCardsParams> => {
   const res = await nextServer.get('/faults', {
     params: {
@@ -100,6 +103,7 @@ export const fetchFaultCards = async ({
       ...(assignedTo ? { assignedTo } : {}),
       ...(assignedToEmpty ? { assignedToEmpty: 'true' } : {}),
       ...(createdById ? { createdById } : {}),
+      ...(sort ? { sort } : {}),
     },
   });
 

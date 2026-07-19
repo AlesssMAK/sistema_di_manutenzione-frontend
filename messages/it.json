@@ -55,6 +55,7 @@
 "navItem1": "Ruoli",
 "navItem2": "Report",
 "navItem3": "Home",
+"myArea": "La Mia Area",
 "exit": "Esci",
 "login": "Accede",
 "createFault": "Segnala guasto",
@@ -396,6 +397,11 @@
     "poolHint": "Interventi non assegnati (pool)",
     "allHint": "Tutti gli interventi",
     "ariaLabel": "Ambito segnalazioni"
+  },
+  "newFaults": {
+    "label": "{count, plural, one {# nuova segnalazione} other {# nuove segnalazioni}}",
+    "action": "Aggiorna",
+    "ariaLabel": "Ricarica per vedere le nuove segnalazioni"
   },
   "empty": {
     "overdue": "Nessuna segnalazione in ritardo",
