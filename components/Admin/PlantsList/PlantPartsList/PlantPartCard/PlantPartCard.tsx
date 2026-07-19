@@ -6,7 +6,7 @@ import { useState } from 'react';
 import CreateAndEditPlantAndPlantPartsForm from '@/components/forms/CreateAndEditPlantAndPlantPartsForm/CreateAndEditPlantAndPlantPartsForm';
 import { updatePlantParts } from '@/lib/api/plantsParts';
 import { PlantPart, UpdatePlantPartRequest } from '@/types/plantPartType';
-import { getStatusOptions, STATUS } from '@/constants/status';
+import { useStatusOptions, STATUS } from '@/constants/status';
 
 interface PlantPartCardProps {
   plantId: string;
@@ -37,7 +37,7 @@ const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
     },
   });
 
-  const statuses = getStatusOptions();
+  const statuses = useStatusOptions();
   const status = statuses.find(status => status.value === plantPart.status);
 
   const InitialData = {

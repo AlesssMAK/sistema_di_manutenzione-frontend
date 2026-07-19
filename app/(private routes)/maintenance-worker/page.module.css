@@ -77,6 +77,56 @@
   }
 }
 
+/* Live "new faults arrived" refresh cue — sits above the list and
+   only appears once the socket reports created faults since load. */
+.newFaultsPill {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+  color: #1e40af;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.newFaultsPill:hover {
+  background: #dbeafe;
+  border-color: #1e40af;
+}
+
+.newFaultsDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2563eb;
+  animation: newFaultsPulse 1.4s ease-in-out infinite;
+}
+
+.newFaultsAction {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+@keyframes newFaultsPulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.7);
+  }
+}
+
 .no_found_container {
   margin-bottom: 24px;
 }

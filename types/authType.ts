@@ -25,6 +25,15 @@ export interface LoginRequest {
   password: string;
 }
 
+// The login form collapses both flows into one identifier/secret pair, so the
+// payload sent to the API carries whichever combination was detected.
+export interface LoginCredentials {
+  email?: string;
+  fullName?: string;
+  password?: string;
+  personalCode?: string;
+}
+
 export interface CheckSessionRequest {
   success: boolean;
 }

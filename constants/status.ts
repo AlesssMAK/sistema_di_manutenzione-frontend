@@ -4,7 +4,7 @@ export type STATUS = 'active' | 'deactivated';
 
 export const STATUS_OPTIONS: STATUS[] = ['active', 'deactivated'];
 
-export const getStatusOptions = () => {
+export const useStatusOptions = () => {
   const t = useTranslations('Statuses');
 
   return [

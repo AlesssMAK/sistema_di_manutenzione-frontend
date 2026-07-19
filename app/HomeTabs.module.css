@@ -1,4 +1,4 @@
-.page_wrapper {
+.main {
   padding: 16px 0 32px;
 
   @media screen and (min-width: 768px) {
@@ -7,10 +7,10 @@
 }
 
 .tabsBarWrap {
-  margin-top: 16px;
+  margin-top: 8px;
 
   @media screen and (min-width: 768px) {
-    margin-top: 24px;
+    margin-top: 12px;
   }
 }
 

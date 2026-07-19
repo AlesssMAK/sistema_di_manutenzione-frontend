@@ -4,7 +4,7 @@ import Button from '@/components/UI/Button/Button';
 import Input from '@/components/UI/Input/Input';
 import Modal from '@/components/UI/Modal/Modal';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
-import { getRoleOptions } from '@/constants/roleType';
+import { useRoleOptions } from '@/constants/roleType';
 import { registerUser } from '@/lib/api/auth';
 import { generatePassword, generatePersonalCode } from '@/lib/api/generate';
 import { updateUser } from '@/lib/api/users';
@@ -22,7 +22,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { Resolver, useForm, UseFormRegister } from 'react-hook-form';
+import {
+  FieldValues,
+  Resolver,
+  useForm,
+  UseFormRegister,
+} from 'react-hook-form';
 import toast from 'react-hot-toast';
 import css from './CreateAndEditUserForm.module.css';
 import { STATUS } from '@/constants/status';
@@ -57,7 +62,7 @@ const CreateAndEditUserForm = ({
 
   const queryClient = useQueryClient();
 
-  const roleOptions = getRoleOptions().slice(1);
+  const roleOptions = useRoleOptions().slice(1);
   const roleMapper = createOptionMapper(roleOptions);
 
   const operator = role === 'operator';
@@ -159,8 +164,8 @@ const CreateAndEditUserForm = ({
   };
 
   const register = isEditMode
-    ? (updateUserForm.register as UseFormRegister<any>)
-    : (createUserForm.register as UseFormRegister<any>);
+    ? (updateUserForm.register as unknown as UseFormRegister<FieldValues>)
+    : (createUserForm.register as unknown as UseFormRegister<FieldValues>);
 
   const activeForm = isEditMode ? updateUserForm : createUserForm;
 

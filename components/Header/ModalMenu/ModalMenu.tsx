@@ -1,7 +1,7 @@
 'use client';
 
 import { createPortal } from 'react-dom';
-import { useEffect, useTransition } from 'react';
+import { useEffect } from 'react';
 import css from './ModalMenu.module.css';
 import Link from 'next/link';
 import { useTranslations } from 'use-intl';
@@ -33,6 +33,9 @@ const ModalMenu = ({
     }
   };
 
+  // Role dashboard shortcut — only for logged-in users.
+  const route = user ? roleRoutes[user.role]?.[0] : undefined;
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -49,10 +52,6 @@ const ModalMenu = ({
     };
   }, [onClose]);
 
-  // Role-home route only exists for logged-in users; guests still get
-  // the public nav (Annunci / Consegne) + Login below.
-  const route = user ? roleRoutes[user.role]?.[0] : undefined;
-
   return createPortal(
     <div
       onClick={handleBackdropClick}
@@ -65,30 +64,21 @@ const ModalMenu = ({
           <div className={css.header_modal_menu_container}>
             <nav className={css.nav}>
               <LanguageButton />
+              {/* Board sections are tabs on the home page; the nav keeps
+                  the board link + the role dashboard shortcut for
+                  authenticated users. */}
               <ul className={css.nav_list}>
                 <li className={css.nav_list_item}>
                   <Link href="/" onClick={onClose}>
-                    {tBacheca('title')}{' '}
+                    {tBacheca('title')}
                   </Link>
                 </li>
-                <li className={css.nav_list_item}>
-                  <Link href="/handover" onClick={onClose}>
-                    {tBacheca('sections.handover.title')}
-                  </Link>
-                </li>
-                {isAuthenticated && (
-                  <>
-                    <li className={css.nav_list_item}>
-                      <Link href={`${route}`} onClick={onClose}>
-                        {t('navItem3')}{' '}
-                      </Link>
-                    </li>
-                    <li className={css.nav_list_item}>
-                      <Link href="/reports-and-communications" onClick={onClose}>
-                        {t('navItem2')}
-                      </Link>
-                    </li>
-                  </>
+                {isAuthenticated && route && (
+                  <li className={css.nav_list_item}>
+                    <Link href={`${route}`} onClick={onClose}>
+                      {t('myArea')}
+                    </Link>
+                  </li>
                 )}
               </ul>
             </nav>

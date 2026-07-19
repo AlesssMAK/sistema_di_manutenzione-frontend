@@ -111,12 +111,17 @@ const SafetyFaultDetailPage = ({
     return () => unsubscribeFromFault(id);
   }, [id, subscribeToFault, unsubscribeFromFault]);
 
-  // Sync draft with server value when fault loads / updates via socket
-  useEffect(() => {
+  // Sync draft with server value when fault loads / updates via socket.
+  // Adjusted during render rather than in an effect so the draft is already
+  // correct on the pass that first renders the new server value.
+  const serverCommentKey = `${fault?._id ?? ''}:${fault?.commentSafety ?? ''}`;
+  const [prevCommentKey, setPrevCommentKey] = useState(serverCommentKey);
+  if (prevCommentKey !== serverCommentKey) {
+    setPrevCommentKey(serverCommentKey);
     if (fault?.commentSafety !== undefined) {
       setCommentDraft(fault.commentSafety ?? '');
     }
-  }, [fault?._id, fault?.commentSafety]);
+  }
 
   const mutation = useMutation({
     mutationFn: (text: string) => updateSafetyComment(id, text),

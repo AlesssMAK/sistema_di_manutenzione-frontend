@@ -21,6 +21,7 @@ import {
   useFieldArray,
   useForm,
   UseFormRegister,
+  type FieldValues,
 } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import css from '../CreateAndUpdateUserForm/CreateAndEditUserForm.module.css';
@@ -350,8 +351,8 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   };
 
   const registerPlant = isPlantEditMode
-    ? (updatePlantForm.register as UseFormRegister<any>)
-    : (createPlantAndPlantPartsForm.register as UseFormRegister<any>);
+    ? (updatePlantForm.register as unknown as UseFormRegister<FieldValues>)
+    : (createPlantAndPlantPartsForm.register as unknown as UseFormRegister<FieldValues>);
 
   const activeForm = isPlantEditMode
     ? updatePlantForm

@@ -19,6 +19,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { roleRoutes } from '@/constants/roleRoutes';
 import { ApiError } from '@/app/api/api';
+import { LoginCredentials } from '@/types/authType';
 import toast from 'react-hot-toast';
 
 const LoginForm = () => {
@@ -45,7 +46,7 @@ const LoginForm = () => {
     try {
       const { identifier, secret } = value;
 
-      const payload: any = {};
+      const payload: LoginCredentials = {};
 
       if (isEmail(identifier)) {
         payload.email = identifier;

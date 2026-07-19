@@ -2,15 +2,26 @@
 
 import { createPortal } from 'react-dom';
 import css from './Modal.module.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 
 export interface ModalProps {
   onClose: () => void;
   children: React.ReactNode;
 }
 
+// Client-only gate for the portal: the server snapshot is false, the client
+// snapshot is true, so the first client render already knows `document` exists
+// without going through a setState-in-effect round trip.
+const subscribeToNothing = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 const Modal = ({ onClose, children }: ModalProps) => {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(
+    subscribeToNothing,
+    getClientSnapshot,
+    getServerSnapshot
+  );
   const handleBackdropClick = (ev: React.MouseEvent<HTMLDivElement>) => {
     if (ev.target === ev.currentTarget) {
       onClose();
@@ -18,7 +29,6 @@ const Modal = ({ onClose, children }: ModalProps) => {
   };
 
   useEffect(() => {
-    setMounted(true);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         onClose();

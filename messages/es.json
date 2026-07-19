@@ -56,6 +56,7 @@
     "navItem1": "Roles",
     "navItem2": "Reportes",
     "navItem3": "Home",
+    "myArea": "Mi Área",
     "exit": "Salir",
     "login": "Acceder",
     "createFault": "Reportar avería",
@@ -397,6 +398,11 @@
       "poolHint": "Intervenciones sin asignar (pool)",
       "allHint": "Todas las intervenciones",
       "ariaLabel": "Ámbito de señalaciones"
+    },
+    "newFaults": {
+      "label": "{count, plural, one {# nueva señalación} other {# nuevas señalaciones}}",
+      "action": "Actualizar",
+      "ariaLabel": "Recargar para ver las nuevas señalaciones"
     },
     "empty": {
       "overdue": "No hay señalaciones en retraso",

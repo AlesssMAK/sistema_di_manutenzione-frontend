@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import css from './LanguageSwitcher.module.css';
 
 type LocaleCode = 'it' | 'en' | 'es' | 'pl';
@@ -22,16 +22,38 @@ const LOCALES: LocaleOption[] = [
   { code: 'pl', label: 'PL' },
 ];
 
+// Kept outside the component: writing to `document.cookie` is a mutation of a
+// global that React Compiler flags inside a component body.
+const persistLocale = (code: LocaleCode) => {
+  localStorage.setItem('locale', code);
+  document.cookie = `locale=${code}; path=/;`;
+  window.dispatchEvent(new Event('localeChange'));
+};
+
+// The stored locale is external state, so it is read through a store
+// subscription instead of being copied into React state inside an effect.
+// `persistLocale` fires `localeChange`, which is what re-renders the trigger.
+const subscribeToLocale = (onChange: () => void) => {
+  window.addEventListener('localeChange', onChange);
+  window.addEventListener('storage', onChange);
+  return () => {
+    window.removeEventListener('localeChange', onChange);
+    window.removeEventListener('storage', onChange);
+  };
+};
+const getStoredLocale = (): LocaleCode =>
+  (localStorage.getItem('locale') as LocaleCode) || 'it';
+const getServerLocale = (): LocaleCode => 'it';
+
 const LanguageButton = () => {
   const router = useRouter();
-  const [select, setSelect] = useState<LocaleCode>('it');
+  const select = useSyncExternalStore(
+    subscribeToLocale,
+    getStoredLocale,
+    getServerLocale
+  );
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const stored = (localStorage.getItem('locale') as LocaleCode) || 'it';
-    setSelect(stored);
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -44,12 +66,7 @@ const LanguageButton = () => {
   }, []);
 
   const localeSelect = (code: LocaleCode) => {
-    localStorage.setItem('locale', code);
-    document.cookie = `locale=${code}; path=/;`;
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new Event('localeChange'));
-    }
-    setSelect(code);
+    persistLocale(code);
     setOpen(false);
     router.refresh();
   };

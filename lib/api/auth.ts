@@ -1,6 +1,6 @@
-import { LoginFormData } from '@/lib/validation/loginValidation';
 import {
   CheckSessionRequest,
+  LoginCredentials,
   RegisterRequest,
   RegisterResponse,
 } from '@/types/authType';
@@ -11,7 +11,7 @@ export const registerUser = async (data: RegisterRequest) => {
   return res.data.data;
 };
 
-export const login = async (data: LoginFormData) => {
+export const login = async (data: LoginCredentials) => {
   const res = await nextServer.post('/auth/login', data);
   return res.data;
 };

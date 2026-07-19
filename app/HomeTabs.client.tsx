@@ -1,22 +1,30 @@
 'use client';
 
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useDebounce } from 'use-debounce';
+
+import BachecaColumn from '@/components/Bacheca/BachecaColumn/BachecaColumn';
 import BroadcastsList from '@/components/Reports/BroadcastsList/BroadcastsList';
 import RecentFaultsList from '@/components/Reports/RecentFaultsList/RecentFaultsList';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import { fetchFaultCards } from '@/lib/api/faults';
 import { getAnnouncements } from '@/lib/api/messages';
+import { getAllPlants } from '@/lib/api/plants';
+import { useAuthStore } from '@/lib/store/authStore';
 import { usePageStore } from '@/lib/store/pageStore';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import type { PriorityFaultType, TypeFault } from '@/types/faultType';
 import type { AnnouncementType } from '@/types/messageType';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
-import { useDebounce } from 'use-debounce';
-import css from './page.module.css';
+import css from './HomeTabs.module.css';
 
-type ReportTab = 'broadcasts' | 'faults';
+// Public tabs are shown to everyone; the report tabs (broadcasts +
+// faults) only appear once a session is present. Tab identity lives in
+// the `?tab=` query so the header can deep-link a specific board.
+type HomeTab = 'annunci' | 'handover' | 'comunicazioni' | 'segnalazioni';
 type FaultStatus =
   | 'Created'
   | 'In progress'
@@ -24,19 +32,46 @@ type FaultStatus =
   | 'Overdue'
   | 'Completed';
 
+const PUBLIC_TABS: HomeTab[] = ['annunci', 'handover'];
+const AUTH_TABS: HomeTab[] = ['comunicazioni', 'segnalazioni'];
+
 const PER_PAGE_BROADCASTS = 20;
 // Generous cap so a single fetch covers ~a month of activity; the page
 // then trims to the last 30 days and filters client-side.
 const PER_PAGE_FAULTS = 100;
 
-const ReportsAndCommunicationsClient = () => {
+const HomeTabsClient = () => {
   const t = useTranslations('reportsAndCommunicationsPage');
+  const tBacheca = useTranslations('BachecaPage');
   const tStatus = useTranslations('StatusFault');
   const tPriority = useTranslations('Priority');
   const tType = useTranslations('TypeFault');
   const setPageTitle = usePageStore(state => state.setPageTitle);
 
-  const [activeTab, setActiveTab] = useState<ReportTab>('broadcasts');
+  const { user, isAuthenticated } = useAuthStore();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const canCreate =
+    user?.role === 'admin' ||
+    user?.permissions?.canCreateAnnouncements === true;
+
+  const availableTabs = useMemo<HomeTab[]>(
+    () => (isAuthenticated ? [...PUBLIC_TABS, ...AUTH_TABS] : [...PUBLIC_TABS]),
+    [isAuthenticated]
+  );
+
+  const tabParam = searchParams.get('tab') as HomeTab | null;
+  // Derive the active tab straight from the URL (the source of truth):
+  // a guest never lands on an auth-only tab, and an authed deep-link
+  // like /?tab=segnalazioni settles on its own once the session
+  // hydrates and availableTabs grows — no state, no sync effect.
+  const activeTab: HomeTab =
+    tabParam && availableTabs.includes(tabParam) ? tabParam : 'annunci';
+
+  const changeTab = (tab: HomeTab) => {
+    router.replace(tab === 'annunci' ? '/' : `/?tab=${tab}`, { scroll: false });
+  };
 
   // ── Broadcasts filters (type + read-state hit the API; search is client) ──
   const [bType, setBType] = useState<AnnouncementType | ''>('');
@@ -53,9 +88,40 @@ const ReportsAndCommunicationsClient = () => {
   const [fDate, setFDate] = useState('');
 
   useEffect(() => {
-    setPageTitle(t('titlePageForStore'));
-  }, [setPageTitle, t]);
+    const titleByTab: Record<HomeTab, string> = {
+      annunci: tBacheca('sections.announcement.title'),
+      handover: tBacheca('sections.handover.title'),
+      comunicazioni: t('tabs.broadcasts'),
+      segnalazioni: t('tabs.faults'),
+    };
+    setPageTitle(titleByTab[activeTab]);
+  }, [activeTab, setPageTitle, t, tBacheca]);
 
+  // Machines for the handover picker (active only). Only fetched when
+  // the user can create — readers don't need it.
+  const { data: plantsData, isLoading: plantsLoading } = useQuery({
+    queryKey: ['plants', 'active'],
+    queryFn: () => getAllPlants({ perPage: 200 }),
+    placeholderData: keepPreviousData,
+    enabled: canCreate,
+  });
+
+  const { plantLabels, labelToId } = useMemo(() => {
+    const active = (plantsData?.plants ?? []).filter(
+      p => p.status === 'active'
+    );
+    const labels: string[] = [];
+    const map = new Map<string, string>();
+    for (const p of active) {
+      const label = `${p.namePlant} - ${p.code}`;
+      labels.push(label);
+      map.set(label, p._id);
+    }
+    return { plantLabels: labels, labelToId: map };
+  }, [plantsData]);
+
+  // Report data only makes sense with a session — gated so the public
+  // home never fires the auth-only endpoints (would 401).
   const broadcastsQuery = useQuery({
     queryKey: ['messages', 'announcements-report', bType, bRead],
     queryFn: () =>
@@ -66,12 +132,14 @@ const ReportsAndCommunicationsClient = () => {
         ...(bRead === 'unread' ? { unreadOnly: true } : {}),
       }),
     placeholderData: keepPreviousData,
+    enabled: isAuthenticated,
   });
 
   const faultsQuery = useQuery({
     queryKey: ['faults', 'recent-30d-report'],
     queryFn: () => fetchFaultCards({ page: 1, perPage: PER_PAGE_FAULTS }),
     placeholderData: keepPreviousData,
+    enabled: isAuthenticated,
   });
 
   // dataCreated is YYYY-MM-DD; lexicographic compare matches chronological.
@@ -248,7 +316,7 @@ const ReportsAndCommunicationsClient = () => {
   ];
 
   const onClearFilters = () => {
-    if (activeTab === 'broadcasts') {
+    if (activeTab === 'comunicazioni') {
       setBSearch('');
       setBType('');
       setBRead('all');
@@ -261,50 +329,78 @@ const ReportsAndCommunicationsClient = () => {
     }
   };
 
-  const TABS: TabItem<ReportTab>[] = [
-    { value: 'broadcasts', label: t('tabs.broadcasts') },
-    { value: 'faults', label: t('tabs.faults') },
-  ];
-
-  const counts: Partial<Record<ReportTab, number>> = {
-    broadcasts: broadcasts.length,
-    faults: faults.length,
+  const tabLabels: Record<HomeTab, string> = {
+    annunci: tBacheca('sections.announcement.title'),
+    handover: tBacheca('sections.handover.title'),
+    comunicazioni: t('tabs.broadcasts'),
+    segnalazioni: t('tabs.faults'),
   };
 
-  return (
-    <div className="container">
-      <div className={css.page_wrapper}>
-        <h2 className="title">{t('title')}</h2>
-        <p className="subtitle">{t('subtitle')}</p>
+  const TABS: TabItem<HomeTab>[] = availableTabs.map(value => ({
+    value,
+    label: tabLabels[value],
+  }));
 
+  const counts: Partial<Record<HomeTab, number>> = {
+    comunicazioni: broadcasts.length,
+    segnalazioni: faults.length,
+  };
+
+  const showFilters =
+    activeTab === 'comunicazioni' || activeTab === 'segnalazioni';
+
+  return (
+    <main className={css.main}>
+      <div className="container">
         <div className={css.tabsBarWrap}>
-          <Tabs<ReportTab>
+          <Tabs<HomeTab>
             tabs={TABS}
             activeTab={activeTab}
-            onTabChange={setActiveTab}
+            onTabChange={changeTab}
             counts={counts}
           />
         </div>
 
-        <div className={css.filtersWrap}>
-          <Filters
-            items={
-              activeTab === 'broadcasts'
-                ? broadcastFilterItems
-                : faultFilterItems
-            }
-            onClear={onClearFilters}
-          />
-        </div>
+        {showFilters && (
+          <div className={css.filtersWrap}>
+            <Filters
+              items={
+                activeTab === 'comunicazioni'
+                  ? broadcastFilterItems
+                  : faultFilterItems
+              }
+              onClear={onClearFilters}
+            />
+          </div>
+        )}
 
         <div className={css.contentSection}>
-          {activeTab === 'broadcasts' ? (
+          {activeTab === 'annunci' && (
+            <BachecaColumn
+              category="announcement"
+              canCreate={canCreate}
+              withSeverity
+              gridLayout
+            />
+          )}
+          {activeTab === 'handover' && (
+            <BachecaColumn
+              category="handover"
+              canCreate={canCreate}
+              withMachine
+              plantLabels={plantLabels}
+              resolvePlantId={label => labelToId.get(label) ?? ''}
+              plantsLoading={plantsLoading}
+            />
+          )}
+          {activeTab === 'comunicazioni' && (
             <BroadcastsList
               items={broadcasts}
               isLoading={broadcastsQuery.isLoading}
               isError={broadcastsQuery.isError}
             />
-          ) : (
+          )}
+          {activeTab === 'segnalazioni' && (
             <RecentFaultsList
               items={faults}
               isLoading={faultsQuery.isLoading}
@@ -313,8 +409,8 @@ const ReportsAndCommunicationsClient = () => {
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
-export default ReportsAndCommunicationsClient;
+export default HomeTabsClient;

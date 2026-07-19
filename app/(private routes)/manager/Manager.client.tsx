@@ -58,10 +58,15 @@ const ManagerClient = () => {
     setPageTitle(t('titlePageForStore'));
   }, [setPageTitle, t]);
 
-  // Any filter change resets pagination back to the first page.
-  useEffect(() => {
+  // Any filter change resets pagination back to the first page. Adjusted
+  // during render rather than in an effect so the reset lands in the same
+  // pass as the filter change (no cascading render).
+  const filterKey = `${debouncedSearch}|${priority}|${typeFault}|${plannedDate}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (prevFilterKey !== filterKey) {
+    setPrevFilterKey(filterKey);
     setPage(1);
-  }, [debouncedSearch, priority, typeFault, plannedDate]);
+  }
 
   const priorityMapper = useMemo(
     () =>

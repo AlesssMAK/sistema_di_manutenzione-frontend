@@ -6,8 +6,8 @@ import Button from '@/components/UI/Button/Button';
 import Filters, { FiltersItem } from '@/components/UI/Filters/Filters';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
-import { getRoleOptions } from '@/constants/roleType';
-import { getStatusOptions, STATUS } from '@/constants/status';
+import { useRoleOptions } from '@/constants/roleType';
+import { useStatusOptions, STATUS } from '@/constants/status';
 import { getAllUsers } from '@/lib/api/users';
 import { usePageStore } from '@/lib/store/pageStore';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
@@ -38,10 +38,10 @@ const AdminUsersClientPage = () => {
     setPageTitle(tPage('titlePageForStore'));
   }, []);
 
-  const roleOptions = getRoleOptions();
+  const roleOptions = useRoleOptions();
   const roleMapper = createOptionMapper(roleOptions);
 
-  const statusOptions = getStatusOptions();
+  const statusOptions = useStatusOptions();
   const statusMapper = createOptionMapper(statusOptions);
 
   const filters: FiltersItem[] = [
