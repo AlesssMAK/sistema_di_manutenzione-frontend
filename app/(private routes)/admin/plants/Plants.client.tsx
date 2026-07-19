@@ -12,7 +12,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import css from '../UsersAndPlants.module.css';
-import { getStatusOptions, STATUS } from '@/constants/status';
+import { useStatusOptions, STATUS } from '@/constants/status';
 import PlantsList from '@/components/Admin/PlantsList/PalntsList';
 import CreateAndEditPlantForm from '@/components/forms/CreateAndEditPlantAndPlantPartsForm/CreateAndEditPlantAndPlantPartsForm';
 import Pagination from '@/components/UI/Pagination/Pagination';
@@ -34,7 +34,7 @@ const AdminPlantsClientPage = () => {
     setPageTitle(tPage('titlePageForStore'));
   }, []);
 
-  const statusOptions = getStatusOptions();
+  const statusOptions = useStatusOptions();
   const statusMapper = createOptionMapper(statusOptions);
 
   const filters: FiltersItem[] = [

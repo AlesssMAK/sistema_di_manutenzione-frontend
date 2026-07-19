@@ -1,7 +1,7 @@
 'use client';
 
 import Button from '@/components/UI/Button/Button';
-import { getStatusOptions, STATUS } from '@/constants/status';
+import { useStatusOptions, STATUS } from '@/constants/status';
 import { Plant, UpdatePlantRequest } from '@/types/plantType';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
@@ -34,7 +34,7 @@ const PlantCard = ({ plant }: PlantCardProps) => {
     },
   });
 
-  const statuses = getStatusOptions();
+  const statuses = useStatusOptions();
   const status = statuses.find(status => status.value === plant.status);
 
   const InitialData = {

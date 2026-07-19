@@ -9,7 +9,7 @@ export const USER_ROLES: UserRoles[] = [
   'safety',
 ];
 
-export const getRoleOptions = () => {
+export const useRoleOptions = () => {
   const t = useTranslations('Roles');
 
   return [

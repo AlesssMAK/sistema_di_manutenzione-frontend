@@ -78,17 +78,18 @@ const AdminSystemSettingsClientPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  useEffect(() => {
-    if (data) {
-      setTimezone(data.timezone);
-      setWeekSchedule(data.weekSchedule);
-      setSlotDuration(data.slotDurationMinutes);
-      setHolidays(
-        (data.holidays ?? []).map((h) => String(h).slice(0, 10))
-      );
-      setRetention(data.retention);
-    }
-  }, [data]);
+  // Seed local editable state once the settings arrive. Done during render
+  // instead of in an effect: the reset belongs to the same pass that first
+  // sees the new data, so React never commits the stale form.
+  const [seededData, setSeededData] = useState<typeof data>(undefined);
+  if (data && data !== seededData) {
+    setSeededData(data);
+    setTimezone(data.timezone);
+    setWeekSchedule(data.weekSchedule);
+    setSlotDuration(data.slotDurationMinutes);
+    setHolidays((data.holidays ?? []).map((h) => String(h).slice(0, 10)));
+    setRetention(data.retention);
+  }
 
   const mutation = useMutation({
     mutationFn: updateSystemSettings,

@@ -6,7 +6,9 @@ import prettierConfig from 'eslint-config-prettier';
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
-  ...prettierConfig,
+  // eslint-config-prettier v10 ships a single flat-config object
+  // ({ rules }), not an array — spreading it throws "not iterable".
+  prettierConfig,
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

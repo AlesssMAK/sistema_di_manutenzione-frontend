@@ -39,17 +39,16 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
   const queryClient = useQueryClient();
 
   const [isConnected, setIsConnected] = useState(false);
+  // The socket lives in state so consumers re-render once it connects; the ref
+  // mirrors it for cleanup and for the emit helpers, which must not re-create
+  // themselves on every connection change.
+  const [socket, setSocket] = useState<Socket | null>(null);
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    if (!isAuthenticated || !user) {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-        setIsConnected(false);
-      }
-      return;
-    }
+    // Logging out just re-runs this effect, and the previous run's cleanup
+    // has already torn the socket down by the time we get here.
+    if (!isAuthenticated || !user) return;
 
     let cancelled = false;
 
@@ -144,6 +143,7 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
         });
 
         socketRef.current = socket;
+        setSocket(socket);
       } catch (err) {
         console.warn('[socket] failed to bootstrap:', err);
       }
@@ -156,6 +156,7 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
       if (socketRef.current) {
         socketRef.current.disconnect();
         socketRef.current = null;
+        setSocket(null);
         setIsConnected(false);
       }
     };
@@ -172,7 +173,7 @@ const SocketProvider = ({ children }: SocketProviderProps) => {
   return (
     <SocketContext.Provider
       value={{
-        socket: socketRef.current,
+        socket,
         isConnected,
         subscribeToFault,
         unsubscribeFromFault,

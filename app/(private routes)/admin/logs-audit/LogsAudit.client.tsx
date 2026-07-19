@@ -58,11 +58,16 @@ const AdminLogsAuditClientPage = () => {
     setPageTitle(tPage('titlePageForStore'));
   }, [setPageTitle, tPage]);
 
-  // Any filter change invalidates the current page on both tabs.
-  useEffect(() => {
+  // Any filter change invalidates the current page on both tabs. Adjusted
+  // during render rather than in an effect so the reset lands in the same
+  // pass as the filter change (no cascading render).
+  const filterKey = `${debouncedSearch}|${actorRole}|${from}|${to}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (prevFilterKey !== filterKey) {
+    setPrevFilterKey(filterKey);
     setAccessPage(1);
     setChangesPage(1);
-  }, [debouncedSearch, actorRole, from, to]);
+  }
 
   const roleMapper = useMemo(
     () =>

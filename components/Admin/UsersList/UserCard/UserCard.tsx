@@ -2,8 +2,8 @@
 
 import CreateAndEditUserForm from '@/components/forms/CreateAndUpdateUserForm/CreateAndEditUserForm';
 import Button from '@/components/UI/Button/Button';
-import { getRoleOptions } from '@/constants/roleType';
-import { getStatusOptions, STATUS } from '@/constants/status';
+import { useRoleOptions } from '@/constants/roleType';
+import { useStatusOptions, STATUS } from '@/constants/status';
 import { updateUser } from '@/lib/api/users';
 import { UpdateUserRequest, User } from '@/types/userTypes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -41,10 +41,10 @@ const UserCard = ({ user }: UserCardProps) => {
     status: user.status || '',
   };
 
-  const roles = getRoleOptions();
+  const roles = useRoleOptions();
   const role = roles.find(role => role.value === user.role);
 
-  const statuses = getStatusOptions();
+  const statuses = useStatusOptions();
   const status = statuses.find(status => status.value === user.status);
 
   const handleStatusUpdate = async ({ userId, status }: UpdateStatus) => {

@@ -3,7 +3,7 @@ import css from './PlantPartsList.module.css';
 import { Plant } from '@/types/plantType';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { getAllPartsByPlantId } from '@/lib/api/plantsParts';
-import { getStatusOptions, STATUS } from '@/constants/status';
+import { useStatusOptions, STATUS } from '@/constants/status';
 import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import Filters, { FiltersItem } from '@/components/UI/Filters/Filters';
@@ -29,7 +29,7 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
   const tStatuses = useTranslations('Statuses');
   const tNoFound = useTranslations('NoFound');
 
-  const statusOptions = getStatusOptions();
+  const statusOptions = useStatusOptions();
   const statusMapper = createOptionMapper(statusOptions);
 
   const filters: FiltersItem[] = [

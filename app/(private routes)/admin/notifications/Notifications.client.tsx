@@ -47,13 +47,15 @@ const AdminNotificationsClientPage = () => {
     refetchOnWindowFocus: false,
   });
 
-  // Seed local editable state once the settings arrive.
-  useEffect(() => {
-    if (data) {
-      setEmail(data.email);
-      setMessaging(data.messaging);
-    }
-  }, [data]);
+  // Seed local editable state once the settings arrive. Done during render
+  // instead of in an effect: the reset belongs to the same pass that first
+  // sees the new data, so React never commits the stale form.
+  const [seededData, setSeededData] = useState<typeof data>(undefined);
+  if (data && data !== seededData) {
+    setSeededData(data);
+    setEmail(data.email);
+    setMessaging(data.messaging);
+  }
 
   const mutation = useMutation({
     mutationFn: updateSystemSettings,

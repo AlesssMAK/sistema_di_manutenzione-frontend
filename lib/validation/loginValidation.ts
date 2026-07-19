@@ -1,4 +1,7 @@
+import type { useTranslations } from 'next-intl';
 import * as yup from 'yup';
+
+type LoginTranslate = ReturnType<typeof useTranslations<'login'>>;
 
 export const isEmail = (value: string) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -10,7 +13,7 @@ export const isPassword = (value: string) => value.length >= 8;
 
 export const isPersonalCode = (value: string) => /^[A-Z]{2}\d{5}$/.test(value);
 
-export const createLoginSchema = (t: any) =>
+export const createLoginSchema = (t: LoginTranslate) =>
   yup.object({
     identifier: yup
       .string()

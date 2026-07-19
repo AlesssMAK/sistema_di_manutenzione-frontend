@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 import Input from '@/components/UI/Input/Input';
 import Button from '@/components/UI/Button/Button';
@@ -71,8 +72,11 @@ const MaintenanceWorkerForm = () => {
       });
       toast.success('Intervento aggiornato con successo');
       router.refresh();
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Errore durante l'invio");
+    } catch (error) {
+      const message = axios.isAxiosError<{ message?: string }>(error)
+        ? error.response?.data?.message
+        : undefined;
+      toast.error(message || "Errore durante l'invio");
     }
   };
 
