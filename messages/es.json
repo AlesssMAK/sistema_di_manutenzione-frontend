@@ -434,6 +434,10 @@
         "sun": "DOM"
       }
     },
+    "priorityLegend": {
+      "title": "Leyenda de prioridad",
+      "reset": "Restablecer filtro"
+    },
     "dayView": {
       "title": "Vista diaria"
     },

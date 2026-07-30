@@ -1,4 +1,4 @@
-.headersFilter {
+.header {
   font-weight: 700;
   font-size: 14px;
   line-height: 1.42857;
@@ -7,115 +7,89 @@
   color: #45556c;
   padding-bottom: 12px;
 }
-.listPriority {
+
+.list {
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
   flex-direction: column;
   gap: 7px;
 }
-.buttonBassa {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border-left: 2.35px solid #00c950;
-  border-radius: 4px;
-  padding: 0 12px;
-  width: 349px;
-  height: 35px;
-  background: #f0fdf4;
-}
 
-.bassa {
+/* Full-width rows so the legend fills its column on every viewport
+   (the old fixed 349px width overflowed a 320px phone). */
+.row {
   display: flex;
   align-items: center;
   gap: 8px;
+  width: 100%;
+  padding: 0 12px;
+  height: 35px;
+  border: 1px solid transparent;
+  border-left-width: 2.35px;
+  border-radius: 4px;
   background: none;
-  border: none;
-  padding: 0;
   cursor: pointer;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.42857;
   color: #0a0a0a;
+  text-align: left;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
 }
 
-.bassaSpan {
+.dot {
   display: block;
   flex-shrink: 0;
-  border-radius: 2px;
   width: 11px;
   height: 11px;
-  background: #00c950;
+  border-radius: 2px;
 }
-.buttonMedia {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border-left: 2.35px solid #f0b100;
-  border-radius: 4px;
-  padding: 0 12px;
-  width: 349px;
-  height: 35px;
+
+/* Priority accents — canonical palette shared with the detail page and
+   calendar badges (#15803d / #d97706 / #dc2626). */
+.rowLow {
+  border-left-color: #15803d;
   background: #f0fdf4;
 }
-
-.media {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.42857;
-  color: #0a0a0a;
+.rowLow .dot {
+  background: #15803d;
 }
 
-.mediaSpan {
-  display: block;
-  flex-shrink: 0;
-  border-radius: 2px;
-  width: 11px;
-  height: 11px;
-  background: #f0b100;
+.rowMedium {
+  border-left-color: #d97706;
+  background: #fffbeb;
 }
-.buttonAlta {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border-left: 2.35px solid #fb2c36;
-  border-radius: 4px;
-  padding: 0 12px;
-  width: 349px;
-  height: 35px;
-  background: #f0fdf4;
+.rowMedium .dot {
+  background: #d97706;
 }
 
-.alta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 1.42857;
-  color: #c10007;
+.rowHigh {
+  border-left-color: #dc2626;
+  background: #fef2f2;
+}
+.rowHigh .dot {
+  background: #dc2626;
 }
 
-.altaSpan {
-  display: block;
-  flex-shrink: 0;
-  border-radius: 2px;
-  width: 11px;
-  height: 11px;
-  background: #fb2c36;
+/* Active filter — solid perimeter ring in the row's own accent so the
+   selected priority reads clearly (the previous version had no active
+   style at all). Only the perimeter border changes; the accented
+   border-left stays put. */
+.rowLow.active {
+  border-color: #15803d;
 }
+.rowMedium.active {
+  border-color: #d97706;
+}
+.rowHigh.active {
+  border-color: #dc2626;
+}
+
+.row.active {
+  font-weight: 600;
+}
+
 .btn {
   margin-top: 20px;
 }
