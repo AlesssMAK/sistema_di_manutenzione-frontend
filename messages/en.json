@@ -434,6 +434,10 @@
         "sun": "SUN"
       }
     },
+    "priorityLegend": {
+      "title": "Priority legend",
+      "reset": "Reset filter"
+    },
     "dayView": {
       "title": "Day view"
     },

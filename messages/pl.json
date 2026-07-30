@@ -413,6 +413,10 @@
         "sun": "ND"
       }
     },
+    "priorityLegend": {
+      "title": "Legenda priorytetów",
+      "reset": "Resetuj filtr"
+    },
     "dayView": {
       "title": "Widok dnia"
     },

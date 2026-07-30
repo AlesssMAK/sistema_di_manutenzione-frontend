@@ -12,7 +12,6 @@ import {
   isSameDay,
   addMonths,
   subMonths,
-  parseISO,
 } from 'date-fns';
 import { useLocale, useTranslations } from 'next-intl';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
@@ -102,19 +101,11 @@ const Calendar = ({
           const isToday = isSameDay(day, new Date());
           const isCurrentMonth = isSameMonth(day, monthStart);
           const isSelected = activeDataCreated === formattedDay;
-          // const isSelected =
-          //   activeDataCreated && isSameDay(day, parseISO(activeDataCreated));
           const cellClasses = `
-            ${styles.cell} 
+            ${styles.cell}
             ${!isCurrentMonth ? styles.otherMonth : ''}
             ${isSelected ? styles.selected : ''}
             ${isDeadlineMode && hasDeadline ? styles.deadlineCell : ''}
-          `;
-
-          const dayClasses = `
-            ${styles.dayNumber} 
-            ${isToday ? styles.today : ''}
-            ${isSelected ? styles.selectedText : ''}
           `;
 
           const bucket = plannedDays[formattedDay];
@@ -139,7 +130,7 @@ const Calendar = ({
               onClick={() => handleDayClick(day)}
             >
               <span
-                className={`${styles.dayNumber} ${isSameDay(day, new Date()) ? styles.today : ''}`}
+                className={`${styles.dayNumber} ${isToday ? styles.today : ''}`}
               >
                 {format(day, 'd')}
               </span>

@@ -433,6 +433,10 @@
       "sun": "DOM"
     }
   },
+  "priorityLegend": {
+    "title": "Legenda Priorità",
+    "reset": "Reimposta filtro"
+  },
   "dayView": {
     "title": "Vista giornaliera"
   },

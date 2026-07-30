@@ -79,11 +79,11 @@
 }
 
 .slotCard.priorityLow {
-  border-left: 4px solid #16a34a;
+  border-left: 4px solid #15803d;
 }
 
 .slotCard.priorityMedium {
-  border-left: 4px solid #f59e0b;
+  border-left: 4px solid #d97706;
 }
 
 .slotCard.priorityHigh {

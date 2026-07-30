@@ -123,22 +123,24 @@
   font-weight: 700;
 }
 
-.selected {
-  background-color: #0070f3 !important;
+/* Double-class selectors bump specificity above `.cell:hover` (0,2,0)
+   so the selected/deadline state wins without !important — the same
+   trick the detail page uses (.priority.priorityHigh). */
+.cell.selected,
+.cell.selected:hover {
+  background-color: #2563eb;
   border-radius: 4px;
+  color: #ffffff;
 }
-
-.selectedText {
-  color: white !important;
-}
-.deadlineCell {
-  background-color: #ffeeee !important;
-  border: 1px solid #ff4d4f !important;
+.cell.deadlineCell,
+.cell.deadlineCell:hover {
+  background-color: #fee2e2;
+  border: 1px solid #dc2626;
 }
 .deadlineDot {
   width: 6px;
   height: 6px;
-  background-color: #ff4d4f;
+  background-color: #dc2626;
   border-radius: 50%;
   position: absolute;
   bottom: 4px;
@@ -146,7 +148,7 @@
   transform: translateX(-50%);
 }
 .deadlineCell .dayNumber {
-  color: #d32f2f;
+  color: #b91c1c;
   font-weight: bold;
 }
 
@@ -154,15 +156,15 @@
   margin-bottom: 15px;
   padding: 8px 16px;
   border-radius: 6px;
-  border: 1px solid #ff4d4f;
+  border: 1px solid #dc2626;
   background: white;
-  color: #ff4d4f;
+  color: #dc2626;
   cursor: pointer;
   transition: all 0.3s;
 }
 
 .deadlineToggle.active {
-  background: #ff4d4f;
+  background: #dc2626;
   color: white;
 }
 
@@ -201,5 +203,5 @@
 
 .selected .plannedBadge {
   background: #ffffff;
-  color: #0070f3;
+  color: #2563eb;
 }
