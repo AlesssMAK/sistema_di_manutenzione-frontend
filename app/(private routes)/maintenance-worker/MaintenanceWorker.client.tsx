@@ -357,6 +357,16 @@ const MaintenanceWorkerClient = () => {
     loadData(1, priority, selectedDate, viewMode, scope, userId);
   };
 
+  // After a claim the backend returns the updated fault (now In progress
+  // and assigned to the worker). Replace it in place so the card reflects
+  // the new state and the "take over" button drops out immediately —
+  // without this the list only refreshed on a full page reload.
+  const handleClaimed = (updated: FaultCard) => {
+    setItems(prev =>
+      prev.map(f => (f._id === updated._id ? updated : f))
+    );
+  };
+
   // ---------- empty-state copy -----------------------------------------
   let emptyText = t('empty.default');
   if (isOverdueMode) {
@@ -450,7 +460,7 @@ const MaintenanceWorkerClient = () => {
               </div>
             ) : items.length > 0 ? (
               <>
-                <FaultCardsList faults={items} />
+                <FaultCardsList faults={items} onClaimed={handleClaimed} />
 
                 <div className={css.loadMoreButton}>
                   <LoadMoreButton

@@ -330,21 +330,24 @@
   padding-top: 16px;
   border-top: 1px solid #eee;
   display: flex;
-  justify-content: stretch;
+  flex-direction: column;
+  gap: 12px;
 
   @media screen and (min-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
     margin-top: 30px;
     padding-top: 20px;
-    justify-content: center;
   }
 }
 
-/* Force the action button to span the row on phones so the italian
-   label ("Aggiungi commento e cambia stato") never gets clipped. */
+/* Phone: each action button spans the row (stacked) so labels never get
+   clipped on a 320px viewport. Tablet+: sit side by side, centered. */
 .actions > :global(button) {
   width: 100%;
 
   @media screen and (min-width: 768px) {
     width: auto;
+    min-width: 160px;
   }
 }

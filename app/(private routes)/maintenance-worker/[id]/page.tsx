@@ -1,6 +1,7 @@
 'use client';
 
 import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
+import { ALLOWED_TRANSITIONS } from '@/lib/validation/maintenanceWorkerUpdateValidation';
 import Button from '@/components/UI/Button/Button';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
@@ -105,7 +106,9 @@ export default function FaultDetailPage({
   const resolvedParams = use(params);
   const id = resolvedParams.id;
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  // Which transition the update modal is opened for (null = closed). Each
+  // action button locks the modal to its target status.
+  const [modalStatus, setModalStatus] = useState<string | null>(null);
 
   const {
     data: fault,
@@ -135,7 +138,7 @@ export default function FaultDetailPage({
       prev ? { ...updatedData, faultId: prev.faultId } : updatedData
     );
     queryClient.invalidateQueries({ queryKey: ['faults'] });
-    setIsUpdateModalOpen(false);
+    setModalStatus(null);
   };
 
   if (isLoading)
@@ -161,6 +164,15 @@ export default function FaultDetailPage({
   const isCompleted = fault.statusFault === 'Completed';
   const isSuspended = fault.statusFault === 'Suspended';
   const wasRescheduled = Boolean(fault.autoRescheduledFrom?.plannedDate);
+
+  // Action buttons are driven by the same state machine the backend
+  // enforces: Finalizza (→Completed), Sospendi (→Suspended) and
+  // Riprendi (→In progress) each appear only when that transition is
+  // allowed from the current status.
+  const allowedTransitions = ALLOWED_TRANSITIONS[fault.statusFault] ?? [];
+  const canFinalize = allowedTransitions.includes('Completed');
+  const canSuspend = allowedTransitions.includes('Suspended');
+  const canResume = allowedTransitions.includes('In progress');
 
   // Assignment scope from the current user's point of view — mirrors
   // the FaultCardsList color coding (mine / pool / other) so the
@@ -322,6 +334,14 @@ export default function FaultDetailPage({
               </div>
             )}
 
+            {/* Material used, captured on completion. */}
+            {isCompleted && fault.materialRequest && (
+              <div className={css.infoItem}>
+                <label>{t('labels.materialUsed')}</label>
+                <p>{fault.materialRequest}</p>
+              </div>
+            )}
+
             {/* Phase C: when suspended, surface the reason + material
                 request so whoever picks the fault back up knows
                 what's needed to resume. */}
@@ -397,29 +417,49 @@ export default function FaultDetailPage({
               </div>
             </div>
           )}
-          {/* Completed faults are terminal — the modal's state machine
-              already blocks any transition, so don't tempt the user
-              with a button that can't do anything. */}
-          {!isCompleted && (
+          {/* One dedicated button per allowed transition. Completed and
+              Created expose none (terminal / needs claim first). */}
+          {(canFinalize || canSuspend || canResume) && (
             <div className={css.actions}>
-              <Button
-                type="button"
-                className="button button--blue"
-                onClick={() => setIsUpdateModalOpen(true)}
-              >
-                {t('actions.addCommentAndChangeStatus')}
-              </Button>
+              {canFinalize && (
+                <Button
+                  type="button"
+                  className="button button--blue"
+                  onClick={() => setModalStatus('Completed')}
+                >
+                  {t('actions.finalize')}
+                </Button>
+              )}
+              {canSuspend && (
+                <Button
+                  type="button"
+                  className="button button--white"
+                  onClick={() => setModalStatus('Suspended')}
+                >
+                  {t('actions.suspend')}
+                </Button>
+              )}
+              {canResume && (
+                <Button
+                  type="button"
+                  className="button button--white"
+                  onClick={() => setModalStatus('In progress')}
+                >
+                  {t('actions.resume')}
+                </Button>
+              )}
             </div>
           )}
         </div>
       </div>
       {/* Modal di aggiornamento */}
-      {isUpdateModalOpen && fault && (
+      {modalStatus && fault && (
         <MaintenanceUpdateModal
           faultId={fault._id}
           displayId={fault.faultId}
           currentStatus={fault.statusFault}
-          onClose={() => setIsUpdateModalOpen(false)}
+          lockedStatus={modalStatus}
+          onClose={() => setModalStatus(null)}
           onSuccess={handleUpdateSuccess}
         />
       )}

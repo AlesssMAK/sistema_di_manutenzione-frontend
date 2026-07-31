@@ -632,6 +632,7 @@
       "completedAt": "Completed at",
       "suspensionReason": "Suspension reason",
       "materialRequest": "Material requested",
+      "materialUsed": "Material used",
       "claimedAt": "Taken in charge at"
     },
     "badges": {
@@ -651,7 +652,10 @@
     "actions": {
       "planIntervention": "Plan intervention",
       "modifyPlanning": "Modify planning",
-      "addCommentAndChangeStatus": "Add comment and change status"
+      "addCommentAndChangeStatus": "Add comment and change status",
+      "finalize": "Finalize",
+      "suspend": "Suspend",
+      "resume": "Resume"
     },
     "errors": {
       "faultNotFound": "Report not found",
@@ -749,12 +753,18 @@
 
   "MaintenanceUpdateModal": {
     "title": "Update intervention",
+    "titles": {
+      "complete": "Finalize intervention",
+      "suspend": "Suspend intervention",
+      "resume": "Resume intervention"
+    },
     "labels": {
       "newStatus": "New status *",
       "maintainerComment": "Maintainer comment",
       "actualDuration": "Actual duration (minutes) *",
       "suspensionReason": "Reason for suspension *",
-      "materialRequest": "Material or support requested"
+      "materialRequest": "Material or support requested",
+      "materialUsed": "Material used"
     },
     "statusOptions": {
       "inProgress": "In progress",
@@ -765,7 +775,8 @@
       "statusSelect": "Select status",
       "maintainerComment": "Details of work performed...",
       "suspensionReason": "Why are you suspending? (e.g. waiting for a part, safety issue...)",
-      "materialRequest": "What's needed to resume? (optional)"
+      "materialRequest": "What's needed to resume? (optional)",
+      "materialUsed": "Material used for the intervention (optional)"
     },
     "buttons": {
       "cancel": "Cancel",
