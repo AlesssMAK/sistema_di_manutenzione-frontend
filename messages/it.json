@@ -631,6 +631,7 @@
     "completedAt": "Completato il",
     "suspensionReason": "Motivo della sospensione",
     "materialRequest": "Materiale richiesto",
+    "materialUsed": "Materiale utilizzato",
     "claimedAt": "Preso in carico il"
   },
   "badges": {
@@ -650,7 +651,10 @@
   "actions": {
     "planIntervention": "Pianifica intervento",
     "modifyPlanning": "Modifica pianificazione",
-    "addCommentAndChangeStatus": "Aggiungi commento e cambia stato"
+    "addCommentAndChangeStatus": "Aggiungi commento e cambia stato",
+    "finalize": "Finalizza",
+    "suspend": "Sospendi",
+    "resume": "Riprendi"
   },
   "errors": {
     "faultNotFound": "Segnalazione non trovata",
@@ -748,12 +752,18 @@
 
 "MaintenanceUpdateModal": {
   "title": "Aggiorna intervento",
+  "titles": {
+    "complete": "Finalizza intervento",
+    "suspend": "Sospendi intervento",
+    "resume": "Riprendi intervento"
+  },
   "labels": {
     "newStatus": "Nuovo stato *",
     "maintainerComment": "Commento manutentore",
     "actualDuration": "Durata effettiva (minuti) *",
     "suspensionReason": "Motivo della sospensione *",
-    "materialRequest": "Materiale o supporto richiesto"
+    "materialRequest": "Materiale o supporto richiesto",
+    "materialUsed": "Materiale utilizzato"
   },
   "statusOptions": {
     "inProgress": "In corso",
@@ -764,7 +774,8 @@
     "statusSelect": "Seleziona stato",
     "maintainerComment": "Dettagli del lavoro svolto...",
     "suspensionReason": "Perché stai sospendendo? (es. attesa di un pezzo, problema di sicurezza...)",
-    "materialRequest": "Cosa serve per riprendere? (opzionale)"
+    "materialRequest": "Cosa serve per riprendere? (opzionale)",
+    "materialUsed": "Materiale utilizzato per l'intervento (opzionale)"
   },
   "buttons": {
     "cancel": "Annulla",

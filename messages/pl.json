@@ -611,6 +611,7 @@
       "completedAt": "Ukończono",
       "suspensionReason": "Powód zawieszenia",
       "materialRequest": "Żądany materiał",
+      "materialUsed": "Zużyty materiał",
       "claimedAt": "Przyjęto do realizacji"
     },
     "badges": {
@@ -630,7 +631,10 @@
     "actions": {
       "planIntervention": "Zaplanuj interwencję",
       "modifyPlanning": "Modyfikuj planowanie",
-      "addCommentAndChangeStatus": "Dodaj komentarz i zmień status"
+      "addCommentAndChangeStatus": "Dodaj komentarz i zmień status",
+      "finalize": "Zakończ",
+      "suspend": "Wstrzymaj",
+      "resume": "Wznów"
     },
     "errors": {
       "faultNotFound": "Zgłoszenie nie znalezione",
@@ -728,12 +732,18 @@
 
   "MaintenanceUpdateModal": {
     "title": "Aktualizuj interwencję",
+    "titles": {
+      "complete": "Zakończ interwencję",
+      "suspend": "Wstrzymaj interwencję",
+      "resume": "Wznów interwencję"
+    },
     "labels": {
       "newStatus": "Nowy status *",
       "maintainerComment": "Komentarz konserwatora",
       "actualDuration": "Rzeczywisty czas (minuty) *",
       "suspensionReason": "Powód zawieszenia *",
-      "materialRequest": "Wymagany materiał lub wsparcie"
+      "materialRequest": "Wymagany materiał lub wsparcie",
+      "materialUsed": "Zużyty materiał"
     },
     "statusOptions": {
       "inProgress": "W toku",
@@ -744,7 +754,8 @@
       "statusSelect": "Wybierz status",
       "maintainerComment": "Szczegóły wykonanej pracy...",
       "suspensionReason": "Dlaczego zawieszasz? (np. oczekiwanie na część, problem z bezpieczeństwem...)",
-      "materialRequest": "Co jest potrzebne do wznowienia? (opcjonalne)"
+      "materialRequest": "Co jest potrzebne do wznowienia? (opcjonalne)",
+      "materialUsed": "Materiał zużyty do interwencji (opcjonalne)"
     },
     "buttons": {
       "cancel": "Anuluj",

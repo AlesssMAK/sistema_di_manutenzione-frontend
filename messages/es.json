@@ -632,6 +632,7 @@
       "completedAt": "Completado el",
       "suspensionReason": "Motivo de suspensión",
       "materialRequest": "Material solicitado",
+      "materialUsed": "Material utilizado",
       "claimedAt": "Tomado a cargo el"
     },
     "badges": {
@@ -651,7 +652,10 @@
     "actions": {
       "planIntervention": "Planificar intervención",
       "modifyPlanning": "Modificar planificación",
-      "addCommentAndChangeStatus": "Añadir comentario y cambiar estado"
+      "addCommentAndChangeStatus": "Añadir comentario y cambiar estado",
+      "finalize": "Finalizar",
+      "suspend": "Suspender",
+      "resume": "Reanudar"
     },
     "errors": {
       "faultNotFound": "Señalación no encontrada",
@@ -749,12 +753,18 @@
 
   "MaintenanceUpdateModal": {
     "title": "Actualizar intervención",
+    "titles": {
+      "complete": "Finalizar intervención",
+      "suspend": "Suspender intervención",
+      "resume": "Reanudar intervención"
+    },
     "labels": {
       "newStatus": "Nuevo estado *",
       "maintainerComment": "Comentario del mantenedor",
       "actualDuration": "Duración efectiva (minutos) *",
       "suspensionReason": "Motivo de la suspensión *",
-      "materialRequest": "Material o soporte solicitado"
+      "materialRequest": "Material o soporte solicitado",
+      "materialUsed": "Material utilizado"
     },
     "statusOptions": {
       "inProgress": "En curso",
@@ -765,7 +775,8 @@
       "statusSelect": "Seleccionar estado",
       "maintainerComment": "Detalles del trabajo realizado...",
       "suspensionReason": "¿Por qué estás suspendiendo? (p.ej. esperando una pieza, problema de seguridad...)",
-      "materialRequest": "¿Qué se necesita para retomar? (opcional)"
+      "materialRequest": "¿Qué se necesita para retomar? (opcional)",
+      "materialUsed": "Material utilizado para la intervención (opcional)"
     },
     "buttons": {
       "cancel": "Cancelar",

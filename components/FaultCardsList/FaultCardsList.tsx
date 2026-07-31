@@ -47,9 +47,14 @@ const toName = (m: AssignedMaintainer): string | null =>
 
 interface FaultCardsListProps {
   faults: FaultCard[];
+  /** Called with the server's updated fault after a successful claim so
+   *  the owner of the list (which manages `faults` itself) can refresh
+   *  the card in place. Without it the claimed card stays stale until a
+   *  full page reload. */
+  onClaimed?: (updated: FaultCard) => void;
 }
 
-const FaultCardsList = ({ faults }: FaultCardsListProps) => {
+const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations('FaultCard');
@@ -62,9 +67,13 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
 
   const claimMutation = useMutation({
     mutationFn: (id: string) => claimFault(id),
-    onSuccess: () => {
+    onSuccess: updated => {
       queryClient.invalidateQueries({ queryKey: ['faults'] });
       toast.success(t('messages.claimed'));
+      // The maintenance-worker list owns its data in local state (not a
+      // React Query cache), so invalidateQueries above is a no-op there.
+      // Hand the fresh fault back so the owner can update the card.
+      onClaimed?.(updated);
     },
     onError: (err: unknown) => {
       const message =
@@ -124,7 +133,7 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
             assigned.length > 0 && populatedNames.length === assigned.length;
           const assigneeLabel =
             scope === 'mine'
-              ? user?.fullName ?? ''
+              ? (user?.fullName ?? '')
               : scope === 'pool'
                 ? t('labels.pool')
                 : allPopulated
@@ -133,131 +142,133 @@ const FaultCardsList = ({ faults }: FaultCardsListProps) => {
           const assigneeIcon = scope === 'mine' ? 'user' : 'users';
 
           return (
-          <li
-            key={fault._id}
-            className={`${css.faultCard} ${scopeClassName[scope]}`}
-            role="button"
-            tabIndex={0}
-            onClick={() => handleDetailClick(fault._id)}
-            onKeyDown={e => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                handleDetailClick(fault._id);
-              }
-            }}
-          >
-            <div className={css.content}>
-              <div>
-                <div className={css.header}>
-                  <span className={css.faultId}>{fault.faultId}</span>
-                  {fault.autoRescheduledFrom?.plannedDate && (
-                    <span
-                      className={css.riprogrammatBadge}
-                      title={`${t('badges.originalLabel')} ${fault.autoRescheduledFrom.plannedDate}${
-                        fault.autoRescheduledFrom.plannedTime
-                          ? ' ' + fault.autoRescheduledFrom.plannedTime
-                          : ''
-                      }`}
-                    >
-                      {t('badges.rescheduled')}
-                    </span>
-                  )}
-                  <div className={css.headerButton}>
-                    <span
-                      className={`${css.statusBadge} ${
-                        css[
-                          `statusBadge_${fault.statusFault.replace(' ', '')}`
-                        ] ?? ''
-                      }`}
-                    >
-                      {tStatus(statusKey(fault.statusFault))}
-                    </span>
+            <li
+              key={fault._id}
+              className={`${css.faultCard} ${scopeClassName[scope]}`}
+              role="button"
+              tabIndex={0}
+              onClick={() => handleDetailClick(fault._id)}
+              onKeyDown={e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleDetailClick(fault._id);
+                }
+              }}
+            >
+              <div className={css.content}>
+                <div>
+                  <div className={css.header}>
+                    <span className={css.faultId}>{fault.faultId}</span>
+                    {fault.autoRescheduledFrom?.plannedDate && (
+                      <span
+                        className={css.riprogrammatBadge}
+                        title={`${t('badges.originalLabel')} ${fault.autoRescheduledFrom.plannedDate}${
+                          fault.autoRescheduledFrom.plannedTime
+                            ? ' ' + fault.autoRescheduledFrom.plannedTime
+                            : ''
+                        }`}
+                      >
+                        {t('badges.rescheduled')}
+                      </span>
+                    )}
+                    <div className={css.headerButton}>
+                      <span
+                        className={`${css.statusBadge} ${
+                          css[
+                            `statusBadge_${fault.statusFault.replace(' ', '')}`
+                          ] ?? ''
+                        }`}
+                      >
+                        {tStatus(statusKey(fault.statusFault))}
+                      </span>
+                    </div>
                   </div>
-                </div>
 
-                {/* Manutentore row (assignee) — takes the position
+                  {/* Manutentore row (assignee) — takes the position
                     previously held by Macchina; Macchina moved into
                     the grid below. */}
-                <div className={css.assigneeRow}>
-                  <strong className={css.assigneeLabel}>
-                    {t('labels.technician')}:
-                  </strong>
-                  <div className={css.user}>
-                    <svg className={css.user_icon} width="12" height="12">
-                      <use href={`/sprite.svg#${assigneeIcon}`}></use>
-                    </svg>
-                    <p className={css.user_name}>{assigneeLabel}</p>
+                  <div className={css.assigneeRow}>
+                    <strong className={css.assigneeLabel}>
+                      {t('labels.technician')}:
+                    </strong>
+                    <div className={css.user}>
+                      <svg className={css.user_icon} width="12" height="12">
+                        <use href={`/sprite.svg#${assigneeIcon}`}></use>
+                      </svg>
+                      <p className={css.user_name}>{assigneeLabel}</p>
+                    </div>
                   </div>
-                </div>
-                <div className={css.detailsGrid}>
-                  {/* Colonna sinistra */}
-                  <div className={css.detailItem}>
-                    <span className={css.label}>{t('labels.machine')}</span>
-                    <p className={css.value}>
-                      {fault.plantId?.namePlant}
-                      {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
-                    </p>
-                    <span className={css.label}>{t('labels.plantPart')}</span>
-                    <p className={css.value}>{fault.partId?.namePlantPart}</p>
-                    <span className={css.label}>{t('labels.plannedTime')}</span>
-                    <p className={css.value}>{fault.plannedTime}</p>
-                    <span className={css.label}>{t('labels.deadline')}</span>
-                    <p className={css.value}>{formatDay(fault.deadline, locale)}</p>
-                  </div>
+                  <div className={css.detailsGrid}>
+                    {/* Colonna sinistra */}
+                    <div className={css.detailItem}>
+                      <span className={css.label}>{t('labels.machine')}</span>
+                      <p className={css.value}>
+                        {fault.plantId?.namePlant}
+                        {fault.plantId?.code ? ` (${fault.plantId.code})` : ''}
+                      </p>
+                      <span className={css.label}>{t('labels.plantPart')}</span>
+                      <p className={css.value}>{fault.partId?.namePlantPart}</p>
+                      <span className={css.label}>
+                        {t('labels.plannedTime')}
+                      </span>
+                      <p className={css.value}>{fault.plannedTime}</p>
+                      <span className={css.label}>{t('labels.deadline')}</span>
+                      <p className={css.value}>
+                        {formatDay(fault.deadline, locale)}
+                      </p>
+                    </div>
 
-                  {/* Colonna destra */}
-                  <div className={css.detailItem}>
-                    <span className={css.label}>{t('labels.priority')}</span>
-                    <p className={`${css.value} ${css.priorityValue}`}>
-                      {tPriority(fault.priority)}
-                    </p>
-                    <span className={css.label}>
-                      {t('labels.estimatedDuration')}
-                    </span>
-                    <p className={css.value}>
-                      {fault.estimatedDuration
-                        ? `${fault.estimatedDuration} min`
-                        : '—'}
-                    </p>
+                    {/* Colonna destra */}
+                    <div className={css.detailItem}>
+                      <span className={css.label}>{t('labels.priority')}</span>
+                      <p className={`${css.value} ${css.priorityValue}`}>
+                        {tPriority(fault.priority)}
+                      </p>
+                      <span className={css.label}>
+                        {t('labels.estimatedDuration')}
+                      </span>
+                      <p className={css.value}>
+                        {fault.estimatedDuration
+                          ? `${fault.estimatedDuration} min`
+                          : '—'}
+                      </p>
+                    </div>
                   </div>
                 </div>
+
+                {fault.comment && (
+                  <div className={css.commentContainer}>
+                    <h4 className={css.commentLabel}>{t('labels.comment')}:</h4>
+                    <p className={css.commentText}>{fault.comment}</p>
+                  </div>
+                )}
               </div>
-
-              {fault.comment && (
-                <div className={css.commentContainer}>
-                  <h4 className={css.commentLabel}>{t('labels.comment')}:</h4>
-                  <p className={css.commentText}>{fault.comment}</p>
-                </div>
-              )}
-            </div>
-            {/* Buttons stop click propagation so they don't double-fire
+              {/* Buttons stop click propagation so they don't double-fire
                 the card-level onClick (which also navigates to the
                 detail page). */}
-            <div className={css.shmorebtn} onClick={e => e.stopPropagation()}>
-              {canClaim(fault) && (
+              <div className={css.shmorebtn} onClick={e => e.stopPropagation()}>
+                {canClaim(fault) && (
+                  <Button
+                    type="button"
+                    className="button button--blue"
+                    onClick={() => claimMutation.mutate(fault._id)}
+                    disabled={claimMutation.isPending}
+                  >
+                    {claimMutation.isPending
+                      ? t('buttons.takingOver')
+                      : t('buttons.takeOver')}
+                  </Button>
+                )}
                 <Button
                   type="button"
                   className="button button--blue"
-                  onClick={() => claimMutation.mutate(fault._id)}
-                  disabled={claimMutation.isPending}
+                  onClick={() => handleDetailClick(fault._id)}
+                  disabled={isLoading}
                 >
-                  {claimMutation.isPending
-                    ? t('buttons.takingOver')
-                    : t('buttons.takeOver')}
+                  {isLoading ? t('buttons.loading') : t('buttons.viewDetails')}
                 </Button>
-              )}
-              <Button
-                type="button"
-                className="button button--blue"
-                width={200}
-                height={40}
-                onClick={() => handleDetailClick(fault._id)}
-                disabled={isLoading}
-              >
-                {isLoading ? t('buttons.loading') : t('buttons.viewDetails')}
-              </Button>
-            </div>
-          </li>
+              </div>
+            </li>
           );
         })}
       </ul>

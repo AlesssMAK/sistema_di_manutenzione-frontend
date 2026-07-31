@@ -21,6 +21,11 @@ interface MaintenanceUpdateModalProps {
   faultId: string;
   displayId: string;
   currentStatus: string;
+  /** When set, the modal targets exactly this status: the status
+   *  dropdown is hidden and only that transition's fields are shown.
+   *  Driven by the dedicated Finalizza / Sospendi / Riprendi buttons
+   *  on the detail page. */
+  lockedStatus?: string;
   onClose: () => void;
   onSuccess: (updatedFault: FaultCard) => void;
 }
@@ -29,11 +34,13 @@ const MaintenanceUpdateModal = ({
   faultId,
   displayId,
   currentStatus,
+  lockedStatus,
   onClose,
   onSuccess,
 }: MaintenanceUpdateModalProps) => {
   const t = useTranslations('MaintenanceUpdateModal');
   const queryClient = useQueryClient();
+  const isLocked = Boolean(lockedStatus);
   const availableStatuses = ALLOWED_TRANSITIONS[currentStatus] ?? [];
 
   const STATUS_LABELS: Record<string, string> = {
@@ -41,6 +48,18 @@ const MaintenanceUpdateModal = ({
     Completed: t('statusOptions.completed'),
     Suspended: t('statusOptions.suspended'),
   };
+
+  // Per-action title when a status is locked; falls back to the generic
+  // title for the (unlocked) dropdown flow.
+  const LOCKED_TITLES: Record<string, string> = {
+    Completed: t('titles.complete'),
+    Suspended: t('titles.suspend'),
+    'In progress': t('titles.resume'),
+  };
+  const modalTitle =
+    isLocked && lockedStatus
+      ? (LOCKED_TITLES[lockedStatus] ?? t('title'))
+      : t('title');
 
   const {
     register,
@@ -54,7 +73,7 @@ const MaintenanceUpdateModal = ({
     ) as Resolver<MaintainerUpdateValues>,
     mode: 'onSubmit',
     defaultValues: {
-      statusFault: availableStatuses[0] ?? '',
+      statusFault: lockedStatus ?? availableStatuses[0] ?? '',
       commentMaintenanceWorker: '',
       actualDuration: undefined,
       suspensionReason: '',
@@ -78,6 +97,7 @@ const MaintenanceUpdateModal = ({
         }),
         ...(values.statusFault === 'Completed' && {
           actualDuration: values.actualDuration as number,
+          materialRequest: values.materialRequest || undefined,
         }),
         ...(values.statusFault === 'Suspended' && {
           suspensionReason: values.suspensionReason,
@@ -109,7 +129,7 @@ const MaintenanceUpdateModal = ({
       <Modal onClose={onClose}>
         <div className={css.formContainer}>
           <div className={css.titleContainer}>
-            <h1 className={css.title}>{t('title')}</h1>
+            <h1 className={css.title}>{modalTitle}</h1>
             <p className={css.subtitle}>{displayId}</p>
           </div>
           <p className={css.emptyMessage}>
@@ -134,29 +154,35 @@ const MaintenanceUpdateModal = ({
     <Modal onClose={onClose}>
       <div className={css.formContainer}>
         <div className={css.titleContainer}>
-          <h1 className={css.title}>{t('title')}</h1>
+          <h1 className={css.title}>{modalTitle}</h1>
           <p className={css.subtitle}>{displayId}</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
-          <div className={css.field}>
-            <p className={css.label}>{t('labels.newStatus')}</p>
-            <SelectDropdown
-              options={availableStatuses.map(s => STATUS_LABELS[s] ?? s)}
-              selectedValue={STATUS_LABELS[selectedStatus] ?? selectedStatus}
-              onSelect={label => {
-                const value =
-                  availableStatuses.find(s => STATUS_LABELS[s] === label) ??
-                  label;
-                setValue('statusFault', value, { shouldValidate: false });
-              }}
-              placeholder={t('placeholders.statusSelect')}
-            />
-            <input type="hidden" {...register('statusFault')} />
-            {errors.statusFault && (
-              <p className={css.error}>{errors.statusFault.message}</p>
-            )}
-          </div>
+          {/* Status is fixed when the modal is opened from a dedicated
+              action button; only the dropdown flow needs the picker. */}
+          {!isLocked && (
+            <div className={css.field}>
+              <p className={css.label}>{t('labels.newStatus')}</p>
+              <SelectDropdown
+                options={availableStatuses.map(s => STATUS_LABELS[s] ?? s)}
+                selectedValue={STATUS_LABELS[selectedStatus] ?? selectedStatus}
+                onSelect={label => {
+                  const value =
+                    availableStatuses.find(s => STATUS_LABELS[s] === label) ??
+                    label;
+                  setValue('statusFault', value, { shouldValidate: false });
+                }}
+                placeholder={t('placeholders.statusSelect')}
+              />
+              {errors.statusFault && (
+                <p className={css.error}>{errors.statusFault.message}</p>
+              )}
+            </div>
+          )}
+          {/* statusFault is always registered (hidden) so the locked
+              value is submitted even without the dropdown above. */}
+          <input type="hidden" {...register('statusFault')} />
 
           {/* Hide the generic maintainer comment when suspending —
               the suspensionReason field below captures the same
@@ -185,6 +211,18 @@ const MaintenanceUpdateModal = ({
               {errors.actualDuration && (
                 <p className={css.error}>{errors.actualDuration.message}</p>
               )}
+            </div>
+          )}
+
+          {selectedStatus === 'Completed' && (
+            <div className={css.field}>
+              <p className={css.label}>{t('labels.materialUsed')}</p>
+              <textarea
+                {...register('materialRequest')}
+                placeholder={t('placeholders.materialUsed')}
+                className={css.textarea}
+                rows={2}
+              />
             </div>
           )}
 
