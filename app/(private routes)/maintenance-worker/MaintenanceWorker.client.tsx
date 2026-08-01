@@ -162,7 +162,7 @@ const MaintenanceWorkerClient = () => {
         }
       }
     },
-    []
+    [t]
   );
 
   const fetchPlannedCounts = useCallback(
@@ -362,9 +362,7 @@ const MaintenanceWorkerClient = () => {
   // the new state and the "take over" button drops out immediately —
   // without this the list only refreshed on a full page reload.
   const handleClaimed = (updated: FaultCard) => {
-    setItems(prev =>
-      prev.map(f => (f._id === updated._id ? updated : f))
-    );
+    setItems(prev => prev.map(f => (f._id === updated._id ? updated : f)));
   };
 
   // ---------- empty-state copy -----------------------------------------

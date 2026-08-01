@@ -90,7 +90,7 @@
   border: 1px solid transparent;
   font-family: inherit;
   font-size: 14px;
-  resize: vertical;
+  resize: none;
   transition: border-color 0.15s ease;
 }
 

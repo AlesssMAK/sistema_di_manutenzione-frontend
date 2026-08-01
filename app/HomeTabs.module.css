@@ -29,3 +29,13 @@
     margin-top: 24px;
   }
 }
+
+.paginationWrap {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+
+  @media screen and (min-width: 768px) {
+    margin-top: 24px;
+  }
+}

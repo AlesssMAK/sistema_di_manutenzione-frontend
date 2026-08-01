@@ -37,7 +37,7 @@
 }
 
 .textarea {
-  resize: vertical;
+  resize: none;
   min-height: 120px;
   line-height: 1.5;
 }

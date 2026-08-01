@@ -329,6 +329,11 @@
         "archiveMonths": "Archiwum zakończonych zgłoszeń (miesiące)",
         "archiveNever": "Nigdy"
       },
+      "bacheca": {
+        "section": "Tablica",
+        "showAll": "Pokaż wszystkie zgłoszenia",
+        "recentDays": "Ostatnie zgłoszenia (dni)"
+      },
       "permissions": {
         "roleFilter": "Rola",
         "announcements": {

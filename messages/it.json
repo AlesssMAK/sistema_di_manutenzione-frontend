@@ -349,6 +349,11 @@
         "archiveMonths": "Archivio segnalazioni completate (mesi)",
         "archiveNever": "Mai"
       },
+      "bacheca": {
+        "section": "Bacheca",
+        "showAll": "Mostra tutte le segnalazioni",
+        "recentDays": "Segnalazioni recenti (giorni)"
+      },
       "permissions": {
         "roleFilter": "Ruolo",
         "announcements": {

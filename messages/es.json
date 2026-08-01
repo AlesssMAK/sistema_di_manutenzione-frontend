@@ -350,6 +350,11 @@
         "archiveMonths": "Archivo de señalaciones completadas (meses)",
         "archiveNever": "Nunca"
       },
+      "bacheca": {
+        "section": "Tablón",
+        "showAll": "Mostrar todas las señalaciones",
+        "recentDays": "Señalaciones recientes (días)"
+      },
       "permissions": {
         "roleFilter": "Rol",
         "announcements": {
