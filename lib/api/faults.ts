@@ -8,6 +8,8 @@ interface FetchParams {
   priority?: string;
   deadline?: string;
   dataCreated?: string;
+  /** Lower bound 'created since' window (YYYY-MM-DD). */
+  dataCreatedFrom?: string;
   plannedDate?: string;
   statusFault?: string;
   typeFault?: string;
@@ -81,6 +83,7 @@ export const fetchFaultCards = async ({
   priority = '',
   deadline,
   dataCreated,
+  dataCreatedFrom,
   plannedDate,
   statusFault,
   typeFault,
@@ -97,6 +100,7 @@ export const fetchFaultCards = async ({
       ...(priority ? { priority } : {}),
       deadline,
       ...(dataCreated ? { dataCreated } : {}),
+      ...(dataCreatedFrom ? { dataCreatedFrom } : {}),
       ...(plannedDate ? { plannedDate } : {}),
       ...(statusFault ? { statusFault } : {}),
       ...(typeFault ? { typeFault } : {}),

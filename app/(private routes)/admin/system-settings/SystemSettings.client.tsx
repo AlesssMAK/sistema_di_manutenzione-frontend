@@ -11,6 +11,7 @@ import {
   fetchFullSystemSettings,
   updateSystemSettings,
   type RetentionSettings,
+  type BachecaSettings,
   type WeekSchedule,
   type WeekDayKey,
   type DaySchedule,
@@ -25,6 +26,7 @@ import GrantUsersSection from '@/components/Admin/GrantUsersSection/GrantUsersSe
 import { getAnnouncementAuthors } from '@/lib/api/announcements';
 import { getMessageSenders } from '@/lib/api/messages';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import Toggle from '@/components/UI/Toggle/Toggle';
 import { TIMEZONES } from '@/constants/timezones';
 import css from './SystemSettings.module.css';
 
@@ -67,6 +69,10 @@ const AdminSystemSettingsClientPage = () => {
     auditLogDays: 90,
     completedFaultsArchiveMonths: null,
   });
+  const [bacheca, setBacheca] = useState<BachecaSettings>({
+    showAllFaults: false,
+    recentFaultsDays: 30,
+  });
 
   useEffect(() => {
     setPageTitle(tPage('titlePageForStore'));
@@ -89,6 +95,9 @@ const AdminSystemSettingsClientPage = () => {
     setSlotDuration(data.slotDurationMinutes);
     setHolidays((data.holidays ?? []).map((h) => String(h).slice(0, 10)));
     setRetention(data.retention);
+    setBacheca(
+      data.bacheca ?? { showAllFaults: false, recentFaultsDays: 30 }
+    );
   }
 
   const mutation = useMutation({
@@ -186,6 +195,7 @@ const AdminSystemSettingsClientPage = () => {
       slotDurationMinutes: slotDuration,
       holidays,
       retention,
+      bacheca,
     });
   };
 
@@ -370,6 +380,46 @@ const AdminSystemSettingsClientPage = () => {
                 completedFaultsArchiveMonths: e.target.value
                   ? Number(e.target.value)
                   : null,
+              })
+            }
+            style={{
+              height: '36px',
+              borderRadius: '6px',
+              background: '#f3f3f5',
+              border: 'none',
+              maxWidth: '160px',
+            }}
+          />
+        </div>
+      </div>
+
+      {/* ── Bacheca — recent-faults window on the public board ──── */}
+      <div className={css.card}>
+        <h2 className={css.cardTitle}>{t('bacheca.section')}</h2>
+
+        <div className={css.field}>
+          <Toggle
+            id="bacheca-show-all"
+            checked={bacheca.showAllFaults}
+            onChange={(checked) =>
+              setBacheca({ ...bacheca, showAllFaults: checked })
+            }
+            label={t('bacheca.showAll')}
+          />
+        </div>
+
+        <div className={css.field}>
+          <label className={css.fieldLabel}>{t('bacheca.recentDays')}</label>
+          <Input
+            type="number"
+            min={1}
+            max={3650}
+            value={bacheca.recentFaultsDays}
+            disabled={bacheca.showAllFaults}
+            onChange={(e) =>
+              setBacheca({
+                ...bacheca,
+                recentFaultsDays: Number(e.target.value),
               })
             }
             style={{

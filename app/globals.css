@@ -40,6 +40,12 @@ button {
   cursor: pointer;
 }
 
+/* Textareas must never be user-resizable — project-wide rule. Per-field
+   CSS also sets resize:none; this covers any textarea that doesn't. */
+textarea {
+  resize: none;
+}
+
 h1,
 h2,
 h3,

@@ -350,6 +350,11 @@
         "archiveMonths": "Completed reports archive (months)",
         "archiveNever": "Never"
       },
+      "bacheca": {
+        "section": "Board",
+        "showAll": "Show all faults",
+        "recentDays": "Recent faults (days)"
+      },
       "permissions": {
         "roleFilter": "Role",
         "announcements": {

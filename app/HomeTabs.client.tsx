@@ -10,8 +10,10 @@ import BachecaColumn from '@/components/Bacheca/BachecaColumn/BachecaColumn';
 import BroadcastsList from '@/components/Reports/BroadcastsList/BroadcastsList';
 import RecentFaultsList from '@/components/Reports/RecentFaultsList/RecentFaultsList';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
+import Pagination from '@/components/UI/Pagination/Pagination';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import { fetchFaultCards } from '@/lib/api/faults';
+import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { getAnnouncements } from '@/lib/api/messages';
 import { getAllPlants } from '@/lib/api/plants';
 import { useAuthStore } from '@/lib/store/authStore';
@@ -36,9 +38,10 @@ const PUBLIC_TABS: HomeTab[] = ['annunci', 'handover'];
 const AUTH_TABS: HomeTab[] = ['comunicazioni', 'segnalazioni'];
 
 const PER_PAGE_BROADCASTS = 20;
-// Generous cap so a single fetch covers ~a month of activity; the page
-// then trims to the last 30 days and filters client-side.
-const PER_PAGE_FAULTS = 100;
+// Faults are paginated + filtered server-side, so this is a real page
+// size (not a fetch-everything cap).
+const PER_PAGE_FAULTS = 10;
+const DEFAULT_RECENT_FAULTS_DAYS = 30;
 
 const HomeTabsClient = () => {
   const t = useTranslations('reportsAndCommunicationsPage');
@@ -79,13 +82,14 @@ const HomeTabsClient = () => {
   const [bSearch, setBSearch] = useState('');
   const [bSearchD] = useDebounce(bSearch, 300);
 
-  // ── Faults filters (all client-side over the 30-day window) ──
+  // ── Faults filters (applied server-side, paginated) ──
   const [fSearch, setFSearch] = useState('');
   const [fSearchD] = useDebounce(fSearch, 300);
   const [fStatus, setFStatus] = useState<FaultStatus | ''>('');
   const [fPriority, setFPriority] = useState<PriorityFaultType | ''>('');
   const [fType, setFType] = useState<TypeFault | ''>('');
   const [fDate, setFDate] = useState('');
+  const [fPage, setFPage] = useState(1);
 
   useEffect(() => {
     const titleByTab: Record<HomeTab, string> = {
@@ -135,19 +139,50 @@ const HomeTabsClient = () => {
     enabled: isAuthenticated,
   });
 
-  const faultsQuery = useQuery({
-    queryKey: ['faults', 'recent-30d-report'],
-    queryFn: () => fetchFaultCards({ page: 1, perPage: PER_PAGE_FAULTS }),
-    placeholderData: keepPreviousData,
+  // Admin-controlled window for the Segnalazioni tab. Cached singleton
+  // (shared with the maintenance-worker page's query key).
+  const { data: settings } = useQuery({
+    queryKey: ['systemSettings'],
+    queryFn: fetchSystemSettings,
+    staleTime: 60 * 60 * 1000,
     enabled: isAuthenticated,
   });
 
-  // dataCreated is YYYY-MM-DD; lexicographic compare matches chronological.
-  const cutoff = useMemo(() => {
+  // Lower bound sent to the API. Undefined = no window (show all). While
+  // settings load we fall back to the default window rather than briefly
+  // fetching the whole history.
+  const dataCreatedFrom = useMemo(() => {
+    if (settings?.bacheca?.showAllFaults) return undefined;
+    const days = settings?.bacheca?.recentFaultsDays ?? DEFAULT_RECENT_FAULTS_DAYS;
     const d = new Date();
-    d.setDate(d.getDate() - 30);
+    d.setDate(d.getDate() - days);
     return d.toISOString().slice(0, 10);
-  }, []);
+  }, [settings]);
+
+  // Reset to the first page whenever a filter or the window changes.
+  const faultFilterKey = `${fSearchD}|${fStatus}|${fPriority}|${fType}|${fDate}|${dataCreatedFrom ?? 'all'}`;
+  const [prevFaultFilterKey, setPrevFaultFilterKey] = useState(faultFilterKey);
+  if (prevFaultFilterKey !== faultFilterKey) {
+    setPrevFaultFilterKey(faultFilterKey);
+    setFPage(1);
+  }
+
+  const faultsQuery = useQuery({
+    queryKey: ['faults', 'bacheca', fPage, faultFilterKey],
+    queryFn: () =>
+      fetchFaultCards({
+        page: fPage,
+        perPage: PER_PAGE_FAULTS,
+        ...(fSearchD ? { search: fSearchD } : {}),
+        ...(fStatus ? { statusFault: fStatus } : {}),
+        ...(fPriority ? { priority: fPriority } : {}),
+        ...(fType ? { typeFault: fType } : {}),
+        ...(fDate ? { dataCreated: fDate } : {}),
+        ...(dataCreatedFrom ? { dataCreatedFrom } : {}),
+      }),
+    placeholderData: keepPreviousData,
+    enabled: isAuthenticated,
+  });
 
   const broadcasts = useMemo(() => {
     const items = broadcastsQuery.data?.items ?? [];
@@ -164,24 +199,10 @@ const HomeTabsClient = () => {
     });
   }, [broadcastsQuery.data, bSearchD]);
 
-  const faults = useMemo(() => {
-    let list = (faultsQuery.data?.fault ?? []).filter(
-      f => (f.dataCreated ?? '') >= cutoff
-    );
-    const q = fSearchD.trim().toLowerCase();
-    if (q) {
-      list = list.filter(f =>
-        [f.faultId, f.nameOperator, f.plantId?.namePlant].some(v =>
-          (v ?? '').toLowerCase().includes(q)
-        )
-      );
-    }
-    if (fStatus) list = list.filter(f => f.statusFault === fStatus);
-    if (fPriority) list = list.filter(f => f.priority === fPriority);
-    if (fType) list = list.filter(f => f.typeFault === fType);
-    if (fDate) list = list.filter(f => f.dataCreated === fDate);
-    return list;
-  }, [faultsQuery.data, cutoff, fSearchD, fStatus, fPriority, fType, fDate]);
+  // Server-side now — one page as returned.
+  const faults = faultsQuery.data?.fault ?? [];
+  const faultsTotalPage = faultsQuery.data?.totalPage ?? 0;
+  const faultsTotal = faultsQuery.data?.totalFault ?? 0;
 
   // ── Select option mappers (label ⇄ value) ──
   const broadcastTypeMapper = useMemo(
@@ -343,7 +364,7 @@ const HomeTabsClient = () => {
 
   const counts: Partial<Record<HomeTab, number>> = {
     comunicazioni: broadcasts.length,
-    segnalazioni: faults.length,
+    segnalazioni: faultsTotal,
   };
 
   const showFilters =
@@ -401,11 +422,22 @@ const HomeTabsClient = () => {
             />
           )}
           {activeTab === 'segnalazioni' && (
-            <RecentFaultsList
-              items={faults}
-              isLoading={faultsQuery.isLoading}
-              isError={faultsQuery.isError}
-            />
+            <>
+              <RecentFaultsList
+                items={faults}
+                isLoading={faultsQuery.isLoading}
+                isError={faultsQuery.isError}
+              />
+              {faultsTotalPage > 1 && (
+                <div className={css.paginationWrap}>
+                  <Pagination
+                    totalPages={faultsTotalPage}
+                    page={fPage}
+                    onPageChange={setFPage}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

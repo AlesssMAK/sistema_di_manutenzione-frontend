@@ -22,6 +22,13 @@ export type WeekDayKey =
 
 export type WeekSchedule = Record<WeekDayKey, DaySchedule>;
 
+export interface BachecaSettings {
+  // When true the Segnalazioni tab shows all faults (paginated);
+  // otherwise only those created within recentFaultsDays.
+  showAllFaults: boolean;
+  recentFaultsDays: number;
+}
+
 export interface PublicSystemSettings {
   _id: string;
   timezone: string;
@@ -30,6 +37,7 @@ export interface PublicSystemSettings {
   weekSchedule: WeekSchedule;
   slotDurationMinutes: number;
   holidays: string[];
+  bacheca?: BachecaSettings;
   updatedAt?: string;
 }
 
@@ -77,6 +85,7 @@ export type UpdateSystemSettingsPayload = Partial<{
   email: Partial<EmailSettings>;
   messaging: Partial<MessagingSettings>;
   retention: Partial<RetentionSettings>;
+  bacheca: Partial<BachecaSettings>;
 }>;
 
 export const fetchSystemSettings = async (): Promise<PublicSystemSettings> => {

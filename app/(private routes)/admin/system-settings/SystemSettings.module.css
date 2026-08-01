@@ -64,7 +64,14 @@
    width:100%, so it fills this box) — keeps the start/end pickers the
    same 140px the native time inputs used. */
 .timePickerBox {
-  width: 140px;
+  /* Phone: fill the row so the start/end pickers never overflow the
+     card. Tablet+: back to the fixed 140px the native inputs used. */
+  width: 100%;
+  max-width: 100%;
+
+  @media screen and (min-width: 768px) {
+    width: 140px;
+  }
 }
 
 /* Weekday selector — pill toggles, active = blue. */
@@ -165,14 +172,30 @@
   background: #1e40af;
 }
 
+/* Phone: the start/end pickers take their own full-width line and stack
+   vertically so nothing spills past the card. Tablet+: inline row. */
 .weekTimes {
-  display: inline-flex;
-  align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   gap: 8px;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+  }
 }
 
 .weekDash {
+  display: none;
   color: #64748b;
+
+  @media screen and (min-width: 768px) {
+    display: inline;
+  }
 }
 
 /* Holidays */
