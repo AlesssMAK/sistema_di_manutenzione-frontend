@@ -18,6 +18,7 @@
   gap: 6px;
   height: 28px;
   min-width: 54px;
+  width: 100%;
   padding: 0 10px;
   background: #fff;
   border: 1.17px solid rgba(0, 0, 0, 0.1);

@@ -1,18 +1,19 @@
+/* Contextual caption next to the scope bar — styled like the project's
+   .subtitle (muted, medium weight) rather than a bold black heading.
+   No lowercase transform: it mangled the i18n capitalization and dates. */
 .dateDisplay {
   display: block;
   margin: 0;
-  text-transform: lowercase;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.4;
-  color: #0a0a0a;
+  color: #45556c;
 
   /* Phone & tablet: no left margin (sits inside a stacked column).
-     Desktop (1440+): scales up and aligns next to the scope bar in
-     the same row. */
-  font-size: 15px;
+     Desktop (1440+): aligns next to the scope bar in the same row. */
+  font-size: 14px;
 
   @media screen and (min-width: 1440px) {
     margin-left: 24px;
-    font-size: 20px;
+    font-size: 16px;
   }
 }
