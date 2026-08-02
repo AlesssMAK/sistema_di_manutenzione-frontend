@@ -1,20 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { logErrorResponse } from '../../_utils/utils';
 import { isAxiosError } from 'axios';
 import { cookies } from 'next/headers';
 import { api } from '../../api';
 import { parse } from 'cookie';
 
-export async function POST(req: NextRequest) {
+export async function POST() {
   try {
     const cookieStore = await cookies();
-    const accessToken = cookieStore.get('accessToken')?.value;
     const refreshToken = cookieStore.get('refreshToken')?.value;
 
-    if (accessToken) {
-      return NextResponse.json({ success: true });
-    }
-
+    // No short-circuit on a present accessToken: this route is called by
+    // the axios 401-interceptor precisely when the access token is stale,
+    // so trusting its presence returned a false "success" and blocked the
+    // real refresh (and the redirect-to-login on genuine failure). Always
+    // rotate via the refresh token; the backend is the source of truth.
     if (refreshToken) {
       // Cookie goes in the axios config (3rd arg). Passing it as the
       // 2nd argument sent it as the request body, so the backend's

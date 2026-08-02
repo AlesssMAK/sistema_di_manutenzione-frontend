@@ -10,9 +10,17 @@ export async function POST() {
   const accessToken = cookieStore.get('accessToken')?.value;
   const refreshToken = cookieStore.get('refreshToken')?.value;
 
-  // Access cookie still present (browser drops it at maxAge) → valid.
+  // Validate the access token against the backend rather than trusting
+  // its presence — a stale cookie (e.g. session killed by a login
+  // elsewhere) must not read as "authenticated". On 401 we fall through
+  // to the refresh path below.
   if (accessToken) {
-    return NextResponse.json({ authenticated: true });
+    try {
+      await api.get('users/me', { headers: { Cookie: cookieStore.toString() } });
+      return NextResponse.json({ authenticated: true });
+    } catch {
+      // Access token no longer valid — try to refresh below.
+    }
   }
 
   // No refresh token either → genuinely signed out.
