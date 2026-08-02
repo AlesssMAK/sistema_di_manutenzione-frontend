@@ -15,6 +15,23 @@ export const checkServerSession = async () => {
   return res;
 };
 
+// Validate an access token against the backend instead of trusting the
+// cookie's mere presence. `/users/me` runs the backend `authenticate`
+// middleware, so a stale/killed session returns 401 and we report the
+// token as invalid rather than letting it masquerade as a live session.
+export const validateServerSession = async (): Promise<boolean> => {
+  const cookieStore = await cookies();
+
+  try {
+    await nextServer.get('/users/me', {
+      headers: { Cookie: cookieStore.toString() },
+    });
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 export const getServerMe = async (): Promise<User> => {
   const cookieStore = await cookies();
 

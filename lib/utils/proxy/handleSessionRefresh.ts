@@ -1,4 +1,4 @@
-import { checkServerSession } from '@/lib/api/serverApi';
+import { checkServerSession, validateServerSession } from '@/lib/api/serverApi';
 import { parse } from 'cookie';
 
 export type RefreshedCookie = {
@@ -24,7 +24,14 @@ export const handleSessionRefresh = async (
   accessToken?: string | undefined,
   refreshToken?: string | undefined
 ): Promise<RefreshResult> => {
-  if (accessToken) return { ok: true, refreshed: false, cookies: [] };
+  // Only trust an access token that the backend still recognises.
+  // Trusting mere presence let a stale cookie read as a live session,
+  // which bounced the user off /login (proxy redirected to /) and
+  // masked a dead session on protected routes. If it's invalid we fall
+  // through to the refresh-token path below.
+  if (accessToken && (await validateServerSession())) {
+    return { ok: true, refreshed: false, cookies: [] };
+  }
 
   if (refreshToken) {
     try {
