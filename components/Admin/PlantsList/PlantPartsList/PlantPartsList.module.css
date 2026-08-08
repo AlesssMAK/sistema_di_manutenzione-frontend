@@ -1,3 +1,20 @@
+.head_container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  @media screen and (min-width: 768px) {
+    gap: 32px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    gap: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
 .plan_parts_list_container {
   display: flex;
   flex-direction: column;
@@ -42,4 +59,18 @@
   @media screen and (min-width: 1440px) {
     width: 278px;
   }
+}
+
+.btn {
+  gap: 6px;
+}
+
+.btn_icon {
+  stroke: #fff;
+  transition: stroke 0.2s ease;
+}
+
+.btn:hover .btn_icon,
+.btn:focus-visible .btn_icon {
+  stroke: #0a0a0a;
 }
