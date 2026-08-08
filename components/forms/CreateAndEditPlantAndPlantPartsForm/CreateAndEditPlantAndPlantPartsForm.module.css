@@ -119,3 +119,7 @@
 .remove_btn:active .btn_close_icon {
   transform: scale(0.95);
 }
+
+.plant_part_form_container {
+  margin-bottom: 20px;
+}

@@ -13,6 +13,8 @@ import Pagination from '@/components/UI/Pagination/Pagination';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import PlantPartCard from './PlantPartCard/PlantPartCard';
+import Button from '@/components/UI/Button/Button';
+import CreateAndEditPlantPartsForm from '@/components/forms/CreateAndEditPlantAndPlantPartsForm/CreateAndEditPlantPartsForm';
 
 interface PlantPartsListProps {
   onClose: () => void;
@@ -24,6 +26,7 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState<STATUS | string>('');
   const [debouncedSearch] = useDebounce(search, 500);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   const t = useTranslations('AdminPage.PlantPartsList');
   const tStatuses = useTranslations('Statuses');
@@ -84,11 +87,25 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
     <div>
       <Modal onClose={onClose}>
         <div className={css.plan_parts_list_container}>
-          <div className={css.title_container}>
-            <h1 className="title">{t('title')}</h1>
-            <p className="subtitle">
-              {t('subtitlePrefix')}: {plant.namePlant} {plant.code}
-            </p>
+          <div className={css.head_container}>
+            <div className={css.title_container}>
+              <h1 className="title">{t('title')}</h1>
+              <p className="subtitle">
+                {t('subtitlePrefix')}: {plant.namePlant} {plant.code}
+              </p>
+            </div>
+            <Button
+              type="button"
+              className={`${css.btn} button button--blue`}
+              onClick={() => {
+                setIsOpenModal(true);
+              }}
+            >
+              <svg width="16" height="16" className={css.btn_icon}>
+                <use href="/sprite.svg#plus"></use>
+              </svg>
+              {t('button')}
+            </Button>
           </div>
           <Filters items={filters} onClear={onClear} />
           {data?.plantParts.length === 0 && (
@@ -141,6 +158,12 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
             </div>
           )}
         </div>
+        {isOpenModal && (
+          <CreateAndEditPlantPartsForm
+            plantId={plant._id}
+            onClose={() => setIsOpenModal(false)}
+          />
+        )}
       </Modal>
     </div>
   );

@@ -41,6 +41,11 @@ export interface CreatePlantPartsRequest {
   parts: { namePlantPart: string; codePlantPart: string }[];
 }
 
+export interface CreatePlantPart {
+  namePlantPart: string;
+  codePlantPart: string;
+}
+
 export interface UpdatePlantPart {
   namePlantPart?: string;
   codePlantPart?: string;

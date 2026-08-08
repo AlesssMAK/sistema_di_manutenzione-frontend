@@ -96,7 +96,7 @@ const CreateAndEditUserForm = ({
       setPersonalCode('');
       setPassword('');
     }
-  }, [initialData, isEditMode, updateUserForm.reset]);
+  }, [initialData, isEditMode, updateUserForm.reset, updateUserForm]);
 
   const handleGeneratePersonalCode = async () => {
     const personalCode = await generatePersonalCode();

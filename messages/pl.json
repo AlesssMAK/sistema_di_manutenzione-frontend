@@ -117,36 +117,41 @@
       "actions": "Akcje"
     },
     "PlantPartsList": {
-      "title": "Zarządzanie częściami maszyny",
+      "title": "Zarządzanie Częściami Maszyny",
       "subtitlePrefix": "Maszyna",
       "search": "Szukaj",
       "searchPlaceholder": "Szukaj po nazwie",
       "status": "Status",
       "name": "Nazwa części",
       "code": "Kod",
-      "actions": "Akcje"
+      "actions": "Akcje",
+      "button": "Nowa Część"
     },
     "CreateAndEditPlantAndPlantPartsForm": {
       "titleNew": "Nowa maszyna",
       "titleEdit": "Edytuj maszynę",
       "subtitle": "Zarządzaj informacjami o maszynie lub zakładzie",
-      "partsTitle": "Części maszyny",
+      "partTitleNew": "Utwórz część maszyny",
+      "partTitleEdit": "Edytuj część maszyny",
+      "partSubtitle": "Zarządzaj informacjami o części maszyny",
+      "partsTitle": "Części Maszyny",
       "partsSubtitle": "Dodaj części, z których składa się ta maszyna",
       "labels": {
         "namePlant": "Nazwa maszyny",
         "code": "Kod",
         "location": "Lokalizacja",
         "status": "Status",
-        "namePlantPart": "Nazwa części",
-        "codePlantPart": "Kod części"
+        "namePlantPart": "Nazwa Części",
+        "codePlantPart": "Kod Części"
       },
-      "partsListTitle": "Dodane części:",
-      "removePartAriaLabel": "Usuń część",
+      "partsListTitle": "Dodane Części:",
+      "removePartAriaLabel": "Usuń Część",
       "buttons": {
         "addPart": "Dodaj",
         "cancel": "Anuluj",
-        "create": "Utwórz maszynę",
-        "saveChanges": "Zapisz zmiany"
+        "create": "Utwórz Maszynę",
+        "createPart": "Utwórz Część",
+        "saveChanges": "Zapisz Zmiany"
       },
       "validation": {
         "fillBothFields": "Wypełnij oba pola",
@@ -162,6 +167,7 @@
       "messages": {
         "plantCreated": "Maszyna i części utworzone pomyślnie",
         "plantUpdated": "Maszyna została zaktualizowana pomyślnie",
+        "partCreated": "Część maszyny została utworzona pomyślnie",
         "partUpdated": "Część maszyny została zaktualizowana pomyślnie"
       }
     },
@@ -882,7 +888,7 @@
 
   "RolesPage": {
     "titlePageForStore": "Role",
-    "title": "System konserwacji i zgłoszeń",
+    "title": "System zarządzania konserwacją i komunikacją",
     "subtitle": "Wybierz swoją rolę, aby kontynuować",
     "roles": {
       "operator": {

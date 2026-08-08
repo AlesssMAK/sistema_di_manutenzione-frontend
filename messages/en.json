@@ -138,20 +138,24 @@
       "actions": "Actions"
     },
     "PlantPartsList": {
-      "title": "Machine parts management",
+      "title": "Machine Parts Management",
       "subtitlePrefix": "Plant",
       "search": "Search",
       "searchPlaceholder": "Search by name",
       "status": "Status",
       "name": "Part Name",
       "code": "Code",
-      "actions": "Actions"
+      "actions": "Actions",
+      "button": "New Part"
     },
     "CreateAndEditPlantAndPlantPartsForm": {
       "titleNew": "New Machine",
       "titleEdit": "Edit Machine",
       "subtitle": "Manage the machine or plant information",
-      "partsTitle": "Plant parts",
+      "partTitleNew": "Create Machine Part",
+      "partTitleEdit": "Edit Machine Part",
+      "partSubtitle": "Manage the machine part information",
+      "partsTitle": "Plant Parts",
       "partsSubtitle": "Add the parts that make up this plant",
       "labels": {
         "namePlant": "Machine Name",
@@ -161,12 +165,13 @@
         "namePlantPart": "Part Name",
         "codePlantPart": "Part Code"
       },
-      "partsListTitle": "Added parts:",
-      "removePartAriaLabel": "Remove part",
+      "partsListTitle": "Added Parts:",
+      "removePartAriaLabel": "Remove Part",
       "buttons": {
         "addPart": "Add",
         "cancel": "Cancel",
         "create": "Create Machine",
+        "createPart": "Create Part",
         "saveChanges": "Save Changes"
       },
       "validation": {
@@ -183,6 +188,7 @@
       "messages": {
         "plantCreated": "Machine and parts created successfully",
         "plantUpdated": "The machine was updated successfully",
+        "partCreated": "The machine part was created successfully",
         "partUpdated": "The machine part was updated successfully"
       }
     },
@@ -903,7 +909,7 @@
 
   "RolesPage": {
     "titlePageForStore": "Roles",
-    "title": "Maintenance & Reporting System",
+    "title": "Maintenance Management & Communications System",
     "subtitle": "Select your role to continue",
     "roles": {
       "operator": {

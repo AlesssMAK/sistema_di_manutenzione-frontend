@@ -3,10 +3,10 @@ import css from './PlantPartCard.module.css';
 import { useTranslations } from 'next-intl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import CreateAndEditPlantAndPlantPartsForm from '@/components/forms/CreateAndEditPlantAndPlantPartsForm/CreateAndEditPlantAndPlantPartsForm';
 import { updatePlantParts } from '@/lib/api/plantsParts';
 import { PlantPart, UpdatePlantPartRequest } from '@/types/plantPartType';
 import { useStatusOptions, STATUS } from '@/constants/status';
+import CreateAndEditPlantPartsForm from '@/components/forms/CreateAndEditPlantAndPlantPartsForm/CreateAndEditPlantPartsForm';
 
 interface PlantPartCardProps {
   plantId: string;
@@ -144,7 +144,8 @@ const PlantPartCard = ({ plantPart, plantId }: PlantPartCardProps) => {
           </div>
         </div>
         {openUpdatePlantPartModal && (
-          <CreateAndEditPlantAndPlantPartsForm
+          <CreateAndEditPlantPartsForm
+            plantId={plantId}
             onClose={() => setOpenUpdatePlantPartModal(false)}
             isPlantPartsEditMode={true}
             initialDataForPlantPart={InitialData}

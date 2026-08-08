@@ -32,7 +32,7 @@ const AdminPlantsClientPage = () => {
 
   useEffect(() => {
     setPageTitle(tPage('titlePageForStore'));
-  }, []);
+  }, [setPageTitle, tPage]);
 
   const statusOptions = useStatusOptions();
   const statusMapper = createOptionMapper(statusOptions);

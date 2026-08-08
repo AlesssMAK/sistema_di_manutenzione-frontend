@@ -34,7 +34,6 @@ interface CreateAndEditPlantAndPlantPartsFormProps {
   initialDataForPlantPart?: initialDataForPlantPart;
   isPlantEditMode?: boolean;
   isPlantPartsEditMode?: boolean;
-  isPlantPartsAddMode?: boolean;
 }
 
 interface initialDataForPlant {
@@ -59,14 +58,12 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   initialDataForPlantPart,
   isPlantEditMode = false,
   isPlantPartsEditMode = false,
-  isPlantPartsAddMode = false,
 }: CreateAndEditPlantAndPlantPartsFormProps) => {
   const [newPartName, setNewPartName] = useState('');
   const [newPartCode, setNewPartCode] = useState('');
   const [addError, setAddError] = useState<string | null>(null);
 
   const t = useTranslations('AdminPage.CreateAndEditPlantAndPlantPartsForm');
-  const tBtn = useTranslations('btn');
   const tStatus = useTranslations('Statuses');
 
   const queryClient = useQueryClient();
@@ -109,6 +106,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     initialDataForPlantPart,
     isPlantPartsEditMode,
     updatePlantPartForm.reset,
+    updatePlantPartForm,
   ]);
   useEffect(() => {
     if (isPlantEditMode && initialDataForPlant) {
@@ -119,7 +117,12 @@ const CreateAndEditPlantAndPlantPartsForm = ({
         status: initialDataForPlant.status as STATUS,
       });
     }
-  }, [initialDataForPlant, isPlantEditMode, updatePlantForm.reset]);
+  }, [
+    initialDataForPlant,
+    isPlantEditMode,
+    updatePlantForm.reset,
+    updatePlantForm,
+  ]);
 
   const statusPlantPart = updatePlantPartForm.watch('status');
   const isActivePlantPart = statusPlantPart === 'active';
@@ -128,7 +131,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     control: createPlantAndPlantPartsForm.control,
     name: 'parts',
   });
-  console.log(createPlantAndPlantPartsForm.formState.errors);
 
   const handleAddPart = () => {
     const name = newPartName.trim();
@@ -155,7 +157,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     data: CreatePlantAndPlantPartsFormValues
   ) => {
     let createdPlantId: string | null = null;
-    console.log('DATA', data);
 
     // ━━━━━━━━━━ 1. Create Plant ━━━━━━━━━━
     try {
@@ -518,7 +519,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                     />
                   ) : (
                     <Input
-                      // {...updatePlantPartForm.register('namePlantPart')}
                       type="text"
                       value={newPartName}
                       onChange={e => setNewPartName(e.target.value)}
@@ -563,7 +563,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                     />
                   ) : (
                     <Input
-                      // {...updatePlantPartForm.register('codePlantPart')}
                       type="text"
                       value={newPartCode}
                       onChange={e => setNewPartCode(e.target.value)}

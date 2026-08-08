@@ -42,3 +42,8 @@ export const updatePlantPartSchema = yup.object({
   codePlantPart: yup.string().trim().optional(),
   status: yup.string().oneOf<STATUS>(STATUS_OPTIONS).optional(),
 });
+
+export const createPlantPartSchema = yup.object({
+  namePlantPart: yup.string().trim().required('Name plant part is required'),
+  codePlantPart: yup.string().trim().required('Code plant part is required'),
+});
