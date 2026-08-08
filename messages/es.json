@@ -60,6 +60,7 @@
     "exit": "Salir",
     "login": "Acceder",
     "createFault": "Reportar avería",
+    "switchRole": "Cambiar rol",
     "notifications": {
       "ariaLabel": "Notificaciones",
       "tooltip": "Ir a los mensajes"
@@ -907,10 +908,17 @@
     }
   },
 
+  "Demo": {
+    "banner": "Versión demo — los datos se restablecen periódicamente",
+    "welcomeTitle": "Bienvenido a la demo",
+    "welcomeBody": "Esta es una demo pública del Sistema de Gestión de Mantenimiento y Comunicaciones. Elige un rol para explorar todas las funcionalidades. Los datos son compartidos entre visitantes y se restablecen periódicamente.",
+    "welcomeCta": "Empezar"
+  },
   "RolesPage": {
     "titlePageForStore": "Roles",
     "title": "Sistema de Gestión de Mantenimiento y Comunicaciones",
     "subtitle": "Selecciona tu rol para acceder",
+    "errorGeneric": "No se pudo iniciar la demo. Inténtalo de nuevo.",
     "roles": {
       "operator": {
         "title": "Operador",

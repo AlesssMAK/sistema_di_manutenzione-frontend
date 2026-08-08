@@ -16,6 +16,13 @@ export const login = async (data: LoginCredentials) => {
   return res.data;
 };
 
+// Demo-only password-less login by role. Hits the Next proxy route,
+// which forwards to the backend's DEMO_MODE-gated /auth/demo-login.
+export const demoLogin = async (role: string) => {
+  const res = await nextServer.post('/auth/demo-login', { role });
+  return res.data;
+};
+
 export const logout = async (): Promise<void> => {
   await nextServer.post('/auth/logout');
 };

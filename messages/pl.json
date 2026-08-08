@@ -59,6 +59,7 @@
     "exit": "Wyloguj",
     "login": "Logowanie",
     "createFault": "Zgłoś usterkę",
+    "switchRole": "Zmień rolę",
     "notifications": {
       "ariaLabel": "Powiadomienia",
       "tooltip": "Przejdź do wiadomości"
@@ -886,10 +887,17 @@
     }
   },
 
+  "Demo": {
+    "banner": "Wersja demo — dane są okresowo resetowane",
+    "welcomeTitle": "Witamy w wersji demo",
+    "welcomeBody": "To jest publiczne demo Systemu zarządzania konserwacją i komunikacją. Wybierz rolę, aby poznać wszystkie funkcje. Dane są współdzielone między odwiedzającymi i okresowo resetowane.",
+    "welcomeCta": "Rozpocznij"
+  },
   "RolesPage": {
     "titlePageForStore": "Role",
     "title": "System zarządzania konserwacją i komunikacją",
     "subtitle": "Wybierz swoją rolę, aby kontynuować",
+    "errorGeneric": "Nie udało się uruchomić demo. Spróbuj ponownie.",
     "roles": {
       "operator": {
         "title": "Operator",

@@ -1,0 +1,138 @@
+.main {
+  padding: 48px 0;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 111%;
+  text-align: center;
+  color: #0f172b;
+  margin-bottom: 16px;
+}
+
+.text {
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 156%;
+  text-align: center;
+  color: #45556c;
+  margin-bottom: 48px;
+}
+
+/* Was a CSS grid (auto-fit, minmax): 4 cards filled a row and the 5th
+   (admin) wrapped alone and stretched — the "flew out of the row" bug.
+   Flex-wrap + center + a max-width that fits 3 columns lays the five
+   cards out as a balanced, centered 3 + 2 with uniform card size. */
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  max-width: 1008px;
+  margin: 0 auto 48px;
+}
+
+.card {
+  flex: 1 1 280px;
+  max-width: 320px;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  font: inherit;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.card:hover,
+.card:focus-visible {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card:disabled {
+  opacity: 0.6;
+  cursor: default;
+  transform: none;
+  box-shadow: none;
+}
+
+.list_item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  width: 100%;
+  height: 222px;
+  padding: 25px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.list_title {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  color: #0f172b;
+  margin-bottom: 8px;
+}
+
+.list_text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 143%;
+  text-align: center;
+  color: #45556c;
+}
+
+.icon {
+  stroke: #fff;
+  fill: transparent;
+  transition: transform 0.2s ease;
+}
+
+.icon_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 9999px;
+  width: 79px;
+  height: 79px;
+  margin-bottom: 16px;
+  transition: transform 0.2s ease;
+}
+
+.card:hover .icon,
+.card:focus-visible .icon,
+.card:hover .icon_container,
+.card:focus-visible .icon_container {
+  transform: scale(1.1);
+}
+
+.icon_color_operator {
+  background: linear-gradient(135deg, #2b7fff 0%, #155dfc 100%);
+}
+
+.icon_color_manager {
+  background: linear-gradient(135deg, #00c950 0%, #00a63e 100%);
+}
+
+.icon_color_maintenance {
+  background: linear-gradient(135deg, #ff6900 0%, #f54900 100%);
+}
+
+.icon_color_safety {
+  background: linear-gradient(135deg, #fb2c36 0%, #e7000b 100%);
+}
+
+.icon_color_admin {
+  background: linear-gradient(135deg, #3a3f52 0%, #444650 100%);
+}
