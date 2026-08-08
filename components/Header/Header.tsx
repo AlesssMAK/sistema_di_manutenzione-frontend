@@ -15,6 +15,8 @@ import NotificationBell from './NotificationBell/NotificationBell';
 import PushToggle from './PushToggle/PushToggle';
 import CreateFaultButton from './CreateFaultButton/CreateFaultButton';
 import { roleRoutes } from '@/constants/roleRoutes';
+import { IS_DEMO } from '@/lib/config/demo';
+import DemoRoleSwitcher from './DemoRoleSwitcher/DemoRoleSwitcher';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -89,7 +91,7 @@ const Header = () => {
           </nav>
           <div className={css.user_container}>
             <LanguageButton />
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <>
                 <CreateFaultButton />
 
@@ -101,17 +103,21 @@ const Header = () => {
                   <NotificationBell enabled={isAuthenticated} />
                   <PushToggle />
                 </div>
-                <Button
-                  className={`${css.exit_btn} button button--white`}
-                  width={121}
-                  onClick={handleLogout}
-                >
-                  <svg className={css.exit_icon} width="16" height="16">
-                    <use href="/sprite.svg#exit"></use>
-                  </svg>
-                  <span className={css.btn_text}>{t('exit')}</span>
-                </Button>
               </>
+            )}
+            {IS_DEMO ? (
+              <DemoRoleSwitcher />
+            ) : isAuthenticated ? (
+              <Button
+                className={`${css.exit_btn} button button--white`}
+                width={121}
+                onClick={handleLogout}
+              >
+                <svg className={css.exit_icon} width="16" height="16">
+                  <use href="/sprite.svg#exit"></use>
+                </svg>
+                <span className={css.btn_text}>{t('exit')}</span>
+              </Button>
             ) : (
               <Button
                 type="button"
