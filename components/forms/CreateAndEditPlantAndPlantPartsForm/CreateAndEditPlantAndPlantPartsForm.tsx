@@ -2,7 +2,7 @@ import Button from '@/components/UI/Button/Button';
 import Input from '@/components/UI/Input/Input';
 import Modal from '@/components/UI/Modal/Modal';
 import { createPlant, deletePlant, updatePlant } from '@/lib/api/plants';
-import { createPlantParts, updatePlantParts } from '@/lib/api/plantsParts';
+import { createPlantParts } from '@/lib/api/plantsParts';
 import {
   CreatePlantAndPlantPartsFormValues,
   createPlantAndPlantPartsSchema,
@@ -31,9 +31,7 @@ import { STATUS } from '@/constants/status';
 interface CreateAndEditPlantAndPlantPartsFormProps {
   onClose: () => void;
   initialDataForPlant?: initialDataForPlant;
-  initialDataForPlantPart?: initialDataForPlantPart;
   isPlantEditMode?: boolean;
-  isPlantPartsEditMode?: boolean;
 }
 
 interface initialDataForPlant {
@@ -44,20 +42,10 @@ interface initialDataForPlant {
   status: string;
 }
 
-interface initialDataForPlantPart {
-  plantId: string;
-  plantPartId: string;
-  namePlantPart: string;
-  codePlantPart: string;
-  status: string;
-}
-
 const CreateAndEditPlantAndPlantPartsForm = ({
   onClose,
   initialDataForPlant,
-  initialDataForPlantPart,
   isPlantEditMode = false,
-  isPlantPartsEditMode = false,
 }: CreateAndEditPlantAndPlantPartsFormProps) => {
   const [newPartName, setNewPartName] = useState('');
   const [newPartCode, setNewPartCode] = useState('');
@@ -95,20 +83,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
   const isActivePlant = statusPlant === 'active';
 
   useEffect(() => {
-    if (isPlantPartsEditMode && initialDataForPlantPart) {
-      updatePlantPartForm.reset({
-        namePlantPart: initialDataForPlantPart.namePlantPart,
-        codePlantPart: initialDataForPlantPart.codePlantPart,
-        status: initialDataForPlantPart.status as STATUS,
-      });
-    }
-  }, [
-    initialDataForPlantPart,
-    isPlantPartsEditMode,
-    updatePlantPartForm.reset,
-    updatePlantPartForm,
-  ]);
-  useEffect(() => {
     if (isPlantEditMode && initialDataForPlant) {
       updatePlantForm.reset({
         namePlant: initialDataForPlant.namePlant,
@@ -123,9 +97,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     updatePlantForm.reset,
     updatePlantForm,
   ]);
-
-  const statusPlantPart = updatePlantPartForm.watch('status');
-  const isActivePlantPart = statusPlantPart === 'active';
 
   const { fields, append, remove } = useFieldArray({
     control: createPlantAndPlantPartsForm.control,
@@ -308,49 +279,6 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     }
   };
 
-  const plantIdForPart = initialDataForPlantPart?.plantId || '';
-  const plantPartId = initialDataForPlantPart?.plantPartId || '';
-
-  const onUpdatePlantPartSubmit = async (data: UpdatePlantPart) => {
-    console.log('UPDATE PLANT PART', data);
-    try {
-      await updatePlantParts({
-        plantIdForPart,
-        plantPartId,
-        data: {
-          namePlantPart: data.namePlantPart,
-          codePlantPart: data.codePlantPart,
-          status: data.status,
-        },
-      });
-
-      toast.success(t('messages.partUpdated'));
-      updatePlantPartForm.reset();
-      onClose();
-
-      queryClient.invalidateQueries({ queryKey: ['plantParts'] });
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const status = error.response?.status;
-        const message =
-          error.response?.data?.message ??
-          error.response?.data?.error?.message ??
-          t('errors.unknownError');
-
-        if (status === 409) {
-          updatePlantPartForm.setError('codePlantPart', {
-            type: 'server',
-            message: t('errors.partCodeExists'),
-          });
-          toast.error(t('errors.partCodeExists'));
-        } else {
-          toast.error(message);
-        }
-        return;
-      }
-    }
-  };
-
   const registerPlant = isPlantEditMode
     ? (updatePlantForm.register as unknown as UseFormRegister<FieldValues>)
     : (createPlantAndPlantPartsForm.register as unknown as UseFormRegister<FieldValues>);
@@ -359,143 +287,124 @@ const CreateAndEditPlantAndPlantPartsForm = ({
     ? updatePlantForm
     : createPlantAndPlantPartsForm;
 
-  const activePlantSubmit = isPlantEditMode
-    ? updatePlantForm.handleSubmit(onUpdatePlantSubmit)
-    : createPlantAndPlantPartsForm.handleSubmit(
-        onCreatePlantAndPlantPartsSubmit
-      );
-
-  const activePlantPartsSubmit = isPlantPartsEditMode
-    ? updatePlantPartForm.handleSubmit(onUpdatePlantPartSubmit)
-    : createPlantAndPlantPartsForm.handleSubmit(
-        onCreatePlantAndPlantPartsSubmit
-      );
-
   return (
     <Modal onClose={onClose}>
       <div className={css.form_container}>
-        {!isPlantPartsEditMode && (
-          <div className={css.title_container}>
-            <h1 className="title">
-              {isPlantEditMode ? t('titleEdit') : t('titleNew')}
-            </h1>
-            <p className="subtitle">{t('subtitle')}</p>
-          </div>
-        )}
+        <div className={css.title_container}>
+          <h1 className="title">
+            {isPlantEditMode ? t('titleEdit') : t('titleNew')}
+          </h1>
+          <p className="subtitle">{t('subtitle')}</p>
+        </div>
         <form
           className={css.form}
           onSubmit={
-            isPlantEditMode ? activePlantSubmit : activePlantPartsSubmit
+            isPlantEditMode
+              ? updatePlantForm.handleSubmit(onUpdatePlantSubmit)
+              : createPlantAndPlantPartsForm.handleSubmit(
+                  onCreatePlantAndPlantPartsSubmit
+                )
           }
         >
-          {!isPlantPartsEditMode && (
-            <div className={css_form.plant_container}>
-              <div className={css.form_item_container}>
-                <p className={css.form_label}>
-                  {t('labels.namePlant')}
-                  {isPlantEditMode ? '' : ' *'}
+          <div className={css_form.plant_container}>
+            <div className={css.form_item_container}>
+              <p className={css.form_label}>
+                {t('labels.namePlant')}
+                {isPlantEditMode ? '' : ' *'}
+              </p>
+              <Input
+                {...registerPlant('namePlant')}
+                type="text"
+                style={{
+                  height: '36px',
+                  borderRadius: '6px',
+                  background: '#f3f3f5',
+                  border: 'none',
+                }}
+              />
+              {activeForm.formState.errors.namePlant && (
+                <p className={css.error}>
+                  {activeForm.formState.errors.namePlant.message}
                 </p>
-                <Input
-                  {...registerPlant('namePlant')}
-                  type="text"
-                  style={{
-                    height: '36px',
-                    borderRadius: '6px',
-                    background: '#f3f3f5',
-                    border: 'none',
-                  }}
-                />
-                {activeForm.formState.errors.namePlant && (
-                  <p className={css.error}>
-                    {activeForm.formState.errors.namePlant.message}
-                  </p>
-                )}
-              </div>
-              <div className={css.form_item_container}>
-                <p className={css.form_label}>
-                  {t('labels.code')}
-                  {isPlantEditMode ? '' : ' *'}
-                </p>
-                <Input
-                  {...registerPlant('code')}
-                  type="text"
-                  style={{
-                    height: '36px',
-                    borderRadius: '6px',
-                    background: '#f3f3f5',
-                    border: 'none',
-                  }}
-                />
-                {activeForm.formState.errors.code && (
-                  <p className={css.error}>
-                    {activeForm.formState.errors.code.message}
-                  </p>
-                )}
-              </div>
-              <div className={css.form_item_container}>
-                <p className={css.form_label}>
-                  {t('labels.location')}
-                  {isPlantEditMode ? '' : ' *'}
-                </p>
-                <Input
-                  {...registerPlant('location')}
-                  type="text"
-                  style={{
-                    height: '36px',
-                    borderRadius: '6px',
-                    background: '#f3f3f5',
-                    border: 'none',
-                  }}
-                />
-                {activeForm.formState.errors.location && (
-                  <p className={css.error}>
-                    {activeForm.formState.errors.location.message}
-                  </p>
-                )}
-              </div>
-              {isPlantEditMode && (
-                <div className={css.form_item_container}>
-                  <p className={css.form_label}>{t('labels.status')}</p>
-                  <div className={css.label_container}>
-                    <input
-                      onChange={e =>
-                        updatePlantForm.setValue(
-                          'status',
-                          e.target.checked ? 'active' : 'deactivated',
-                          {
-                            shouldValidate: true,
-                            shouldDirty: true,
-                          }
-                        )
-                      }
-                      type="checkbox"
-                      className={css.status_input}
-                      checked={isActivePlant}
-                      id="plant-status"
-                    />
-                    <label
-                      htmlFor="plant-status"
-                      className={css.status_label}
-                    />
-                    <p className={css.status_label_text}>
-                      {isActivePlant
-                        ? tStatus('active')
-                        : tStatus('deactivated')}
-                    </p>
-                  </div>
-                  {updatePlantForm.formState.errors.status && (
-                    <p className={css.error}>
-                      {updatePlantForm.formState.errors.status.message}
-                    </p>
-                  )}
-                </div>
               )}
             </div>
-          )}
+            <div className={css.form_item_container}>
+              <p className={css.form_label}>
+                {t('labels.code')}
+                {isPlantEditMode ? '' : ' *'}
+              </p>
+              <Input
+                {...registerPlant('code')}
+                type="text"
+                style={{
+                  height: '36px',
+                  borderRadius: '6px',
+                  background: '#f3f3f5',
+                  border: 'none',
+                }}
+              />
+              {activeForm.formState.errors.code && (
+                <p className={css.error}>
+                  {activeForm.formState.errors.code.message}
+                </p>
+              )}
+            </div>
+            <div className={css.form_item_container}>
+              <p className={css.form_label}>
+                {t('labels.location')}
+                {isPlantEditMode ? '' : ' *'}
+              </p>
+              <Input
+                {...registerPlant('location')}
+                type="text"
+                style={{
+                  height: '36px',
+                  borderRadius: '6px',
+                  background: '#f3f3f5',
+                  border: 'none',
+                }}
+              />
+              {activeForm.formState.errors.location && (
+                <p className={css.error}>
+                  {activeForm.formState.errors.location.message}
+                </p>
+              )}
+            </div>
+            {isPlantEditMode && (
+              <div className={css.form_item_container}>
+                <p className={css.form_label}>{t('labels.status')}</p>
+                <div className={css.label_container}>
+                  <input
+                    onChange={e =>
+                      updatePlantForm.setValue(
+                        'status',
+                        e.target.checked ? 'active' : 'deactivated',
+                        {
+                          shouldValidate: true,
+                          shouldDirty: true,
+                        }
+                      )
+                    }
+                    type="checkbox"
+                    className={css.status_input}
+                    checked={isActivePlant}
+                    id="plant-status"
+                  />
+                  <label htmlFor="plant-status" className={css.status_label} />
+                  <p className={css.status_label_text}>
+                    {isActivePlant ? tStatus('active') : tStatus('deactivated')}
+                  </p>
+                </div>
+                {updatePlantForm.formState.errors.status && (
+                  <p className={css.error}>
+                    {updatePlantForm.formState.errors.status.message}
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
           {!isPlantEditMode && (
-            <div
-              className={`${css_form.plant_part_container} ${isPlantPartsEditMode ? css_form.non_border : ''}`}
-            >
+            <div className={css_form.plant_part_container}>
               <div className={css.title_container}>
                 <h1 className={`${css_form.title} title`}>{t('partsTitle')}</h1>
                 <p className="subtitle">{t('partsSubtitle')}</p>
@@ -506,36 +415,23 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                     {t('labels.namePlantPart')}
                     {isPlantEditMode ? '' : ' *'}
                   </p>
-                  {isPlantPartsEditMode ? (
-                    <Input
-                      {...updatePlantPartForm.register('namePlantPart')}
-                      type="text"
-                      style={{
-                        height: '36px',
-                        borderRadius: '6px',
-                        background: '#f3f3f5',
-                        border: 'none',
-                      }}
-                    />
-                  ) : (
-                    <Input
-                      type="text"
-                      value={newPartName}
-                      onChange={e => setNewPartName(e.target.value)}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddPart();
-                        }
-                      }}
-                      style={{
-                        height: '36px',
-                        borderRadius: '6px',
-                        background: '#f3f3f5',
-                        border: 'none',
-                      }}
-                    />
-                  )}
+                  <Input
+                    type="text"
+                    value={newPartName}
+                    onChange={e => setNewPartName(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddPart();
+                      }
+                    }}
+                    style={{
+                      height: '36px',
+                      borderRadius: '6px',
+                      background: '#f3f3f5',
+                      border: 'none',
+                    }}
+                  />
                   {updatePlantPartForm.formState.errors.namePlantPart && (
                     <p className={css.error}>
                       {
@@ -550,36 +446,23 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                   <p className={css.form_label}>
                     {t('labels.codePlantPart')} {isPlantEditMode ? '' : ' *'}
                   </p>
-                  {isPlantPartsEditMode ? (
-                    <Input
-                      {...updatePlantPartForm.register('codePlantPart')}
-                      type="text"
-                      style={{
-                        height: '36px',
-                        borderRadius: '6px',
-                        background: '#f3f3f5',
-                        border: 'none',
-                      }}
-                    />
-                  ) : (
-                    <Input
-                      type="text"
-                      value={newPartCode}
-                      onChange={e => setNewPartCode(e.target.value)}
-                      onKeyDown={e => {
-                        if (e.key === 'Enter') {
-                          e.preventDefault();
-                          handleAddPart();
-                        }
-                      }}
-                      style={{
-                        height: '36px',
-                        borderRadius: '6px',
-                        background: '#f3f3f5',
-                        border: 'none',
-                      }}
-                    />
-                  )}
+                  <Input
+                    type="text"
+                    value={newPartCode}
+                    onChange={e => setNewPartCode(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        handleAddPart();
+                      }
+                    }}
+                    style={{
+                      height: '36px',
+                      borderRadius: '6px',
+                      background: '#f3f3f5',
+                      border: 'none',
+                    }}
+                  />
                   {updatePlantPartForm.formState.errors.codePlantPart && (
                     <p className={css.error}>
                       {
@@ -591,57 +474,17 @@ const CreateAndEditPlantAndPlantPartsForm = ({
                   {addError && <p className={css.error}>{addError}</p>}
                 </div>
               </div>
-              <div
-                className={`${css_form.add_btn_container} ${isPlantPartsEditMode ? css_form.status_plant_btn_container : ''}`}
-              >
-                {!isPlantPartsEditMode ? (
-                  <Button
-                    type="button"
-                    className={`${css_form.btn} button button--blue`}
-                    onClick={handleAddPart}
-                  >
-                    <svg width="16" height="16" className={css_form.btn_icon}>
-                      <use href="/sprite.svg#plus"></use>
-                    </svg>
-                    {t('buttons.addPart')}
-                  </Button>
-                ) : (
-                  <div className={css.form_item_container}>
-                    <p className={css.form_label}>{t('labels.status')}</p>
-                    <div className={css.label_container}>
-                      <input
-                        onChange={e =>
-                          updatePlantPartForm.setValue(
-                            'status',
-                            e.target.checked ? 'active' : 'deactivated',
-                            {
-                              shouldValidate: true,
-                              shouldDirty: true,
-                            }
-                          )
-                        }
-                        type="checkbox"
-                        className={css.status_input}
-                        checked={isActivePlantPart}
-                        id="plant-part-status"
-                      />
-                      <label
-                        htmlFor="plant-part-status"
-                        className={css.status_label}
-                      />
-                      <p className={css.status_label_text}>
-                        {isActivePlantPart
-                          ? tStatus('active')
-                          : tStatus('deactivated')}
-                      </p>
-                    </div>
-                    {updatePlantForm.formState.errors.status && (
-                      <p className={css.error}>
-                        {updatePlantForm.formState.errors.status.message}
-                      </p>
-                    )}
-                  </div>
-                )}
+              <div className={css_form.add_btn_container}>
+                <Button
+                  type="button"
+                  className={`${css_form.btn} button button--blue`}
+                  onClick={handleAddPart}
+                >
+                  <svg width="16" height="16" className={css_form.btn_icon}>
+                    <use href="/sprite.svg#plus"></use>
+                  </svg>
+                  {t('buttons.addPart')}
+                </Button>
               </div>
               {fields.length > 0 && (
                 <div className={css_form.parts}>
@@ -697,9 +540,7 @@ const CreateAndEditPlantAndPlantPartsForm = ({
               {t('buttons.cancel')}
             </Button>
             <Button type="submit" className="button button--blue" width="100%">
-              {isPlantEditMode || isPlantPartsEditMode
-                ? t('buttons.saveChanges')
-                : t('buttons.create')}
+              {isPlantEditMode ? t('buttons.saveChanges') : t('buttons.create')}
             </Button>
           </div>
         </form>
