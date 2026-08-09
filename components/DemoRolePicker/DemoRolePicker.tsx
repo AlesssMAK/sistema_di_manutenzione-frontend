@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { demoLogin } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/authStore';
@@ -30,6 +31,7 @@ const DemoRolePicker = () => {
   const t = useTranslations('RolesPage');
   const setUser = useAuthStore(state => state.setUser);
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [pending, setPending] = useState<string | null>(null);
 
   const handlePick = async (role: string) => {
@@ -38,6 +40,9 @@ const DemoRolePicker = () => {
     try {
       const { user } = await demoLogin(role);
       setUser(user);
+      // Drop all cached queries so nothing from the previous role
+      // leaks into the new one (e.g. a stale unread-message badge).
+      queryClient.clear();
       const route = roleRoutes[role]?.[0] ?? '/';
       router.push(route);
     } catch {
