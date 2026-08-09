@@ -36,13 +36,18 @@
 
 .row {
   display: grid;
-  grid-template-columns: 110px 1fr auto auto;
-  align-items: center;
-  gap: 12px;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
   padding: 10px 14px;
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   background: #fff;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 110px 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+  }
 }
 
 .faultId {
@@ -78,11 +83,26 @@
   white-space: nowrap;
 }
 
-.statusCreated { background: #dbeafe; color: #1e40af; }
-.statusInProgress { background: #fef3c7; color: #92400e; }
-.statusSuspended { background: #f3e8ff; color: #6b21a8; }
-.statusOverdue { background: #fee2e2; color: #991b1b; }
-.statusCompleted { background: #d1fae5; color: #065f46; }
+.statusCreated {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.statusInProgress {
+  background: #fef3c7;
+  color: #92400e;
+}
+.statusSuspended {
+  background: #f3e8ff;
+  color: #6b21a8;
+}
+.statusOverdue {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.statusCompleted {
+  background: #d1fae5;
+  color: #065f46;
+}
 
 .loadingWrap {
   display: flex;

@@ -1,0 +1,19 @@
+.banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #155dfc;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.icon {
+  flex-shrink: 0;
+  stroke: #fff;
+  fill: none;
+}

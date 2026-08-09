@@ -1,0 +1,27 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 440px;
+  padding: 8px 4px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.body {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #45556c;
+  margin: 0;
+}
+
+.cta {
+  align-self: flex-start;
+  margin-top: 8px;
+}

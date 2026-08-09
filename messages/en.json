@@ -60,6 +60,7 @@
     "exit": "Logout",
     "login": "Login",
     "createFault": "Report fault",
+    "switchRole": "Switch role",
     "notifications": {
       "ariaLabel": "Notifications",
       "tooltip": "Go to messages"
@@ -907,10 +908,17 @@
     }
   },
 
+  "Demo": {
+    "banner": "Demo version — data is reset periodically",
+    "welcomeTitle": "Welcome to the demo",
+    "welcomeBody": "This is a public demo of the Maintenance Management & Communications System. Pick a role to explore every feature. Data is shared between visitors and is reset periodically.",
+    "welcomeCta": "Get started"
+  },
   "RolesPage": {
     "titlePageForStore": "Roles",
     "title": "Maintenance Management & Communications System",
     "subtitle": "Select your role to continue",
+    "errorGeneric": "Couldn't start the demo. Please try again.",
     "roles": {
       "operator": {
         "title": "Operator",
