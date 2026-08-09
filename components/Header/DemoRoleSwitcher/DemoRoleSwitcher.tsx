@@ -3,6 +3,7 @@
 import { useState, type ChangeEvent } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { demoLogin } from '@/lib/api/auth';
 import { useAuthStore } from '@/lib/store/authStore';
@@ -20,6 +21,7 @@ const DemoRoleSwitcher = () => {
   const setUser = useAuthStore(state => state.setUser);
   const currentRole = useAuthStore(state => state.user?.role);
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [pending, setPending] = useState(false);
 
   const handleChange = async (event: ChangeEvent<HTMLSelectElement>) => {
@@ -30,6 +32,9 @@ const DemoRoleSwitcher = () => {
     try {
       const { user } = await demoLogin(role);
       setUser(user);
+      // Drop cached queries so the new role never shows the previous
+      // role's data (e.g. a stale unread-message badge).
+      queryClient.clear();
       router.push(roleRoutes[role]?.[0] ?? '/');
     } catch {
       toast.error(tRolesPage('errorGeneric'));
