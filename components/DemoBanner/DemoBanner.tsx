@@ -10,10 +10,14 @@ const DemoBanner = () => {
 
   return (
     <div className={css.banner} role="status">
-      <svg className={css.icon} width="16" height="16" aria-hidden="true">
-        <use href="/sprite.svg#exclamation-circle" />
-      </svg>
-      <span>{t('banner')}</span>
+      <div className="container">
+        <div className={css.banner_container}>
+          <svg className={css.icon} width="16" height="16" aria-hidden="true">
+            <use href="/sprite.svg#exclamation-circle" />
+          </svg>
+          <span>{t('banner')}</span>
+        </div>
+      </div>
     </div>
   );
 };

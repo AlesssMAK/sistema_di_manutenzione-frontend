@@ -12,6 +12,7 @@ import NotificationBell from '../NotificationBell/NotificationBell';
 import CreateFaultButton from '../CreateFaultButton/CreateFaultButton';
 import PushToggle from '../PushToggle/PushToggle';
 import { roleRoutes } from '@/constants/roleRoutes';
+import { IS_DEMO } from '@/lib/config/demo';
 
 export interface ModalMenuProps {
   onClose: () => void;
@@ -55,7 +56,7 @@ const ModalMenu = ({
   return createPortal(
     <div
       onClick={handleBackdropClick}
-      className={css.backdrop}
+      className={`${css.backdrop} ${IS_DEMO ? css.demo_backdrop : ''}`}
       role="dialog"
       aria-modal="true"
     >

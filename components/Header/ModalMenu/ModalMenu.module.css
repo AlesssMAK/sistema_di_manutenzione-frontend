@@ -10,6 +10,13 @@
   z-index: 110;
 }
 
+.demo_backdrop {
+  top: 115px;
+  @media (min-width: 768px) {
+    top: 98px;
+  }
+}
+
 .modal {
   background-color: #fff;
   height: 100%;
