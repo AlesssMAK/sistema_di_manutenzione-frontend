@@ -84,7 +84,7 @@
   },
 
   "AdminPage": {
-    "titlePageForStore": "Administrador: Panel de control",
+    "titlePageForStore": "Administrador",
     "Users": {
       "title": "Gestión de Usuarios",
       "subtitle": "Gestiona cuentas de usuario, roles y permisos",

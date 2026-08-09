@@ -83,7 +83,7 @@
 },
 
 "AdminPage": {
-  "titlePageForStore": "Amministratore: Pannello di controllo",
+  "titlePageForStore": "Amministratore",
     "Users": {
       "title": "Gestione Utenti",
       "subtitle": "Gestisci account utente, ruoli e permessi",
