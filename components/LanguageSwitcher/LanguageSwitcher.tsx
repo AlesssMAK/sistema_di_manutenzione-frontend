@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import css from './LanguageSwitcher.module.css';
 
@@ -46,7 +45,6 @@ const getStoredLocale = (): LocaleCode =>
 const getServerLocale = (): LocaleCode => 'it';
 
 const LanguageButton = () => {
-  const router = useRouter();
   const select = useSyncExternalStore(
     subscribeToLocale,
     getStoredLocale,
@@ -68,7 +66,12 @@ const LanguageButton = () => {
   const localeSelect = (code: LocaleCode) => {
     persistLocale(code);
     setOpen(false);
-    router.refresh();
+    // Full reload (not router.refresh): router.refresh only revalidates
+    // the current route, so other client-cached routes stay in the old
+    // locale — e.g. the page you return to via router.back() after
+    // creating a fault would render in the previous (default) language.
+    // A reload re-fetches every route with the new locale cookie.
+    window.location.reload();
   };
 
   const currentLabel =
