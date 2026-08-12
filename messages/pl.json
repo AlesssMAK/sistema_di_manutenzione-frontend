@@ -24,6 +24,7 @@
     "submit": "Zaloguj",
     "cancel": "Anuluj",
     "formError": "Sprawdź wprowadzone dane",
+    "accountDeactivated": "Twoje konto jest dezaktywowane",
     "errors": {
       "required": "Pole jest wymagane",
       "invalidIdentifier": "Nieprawidłowy format (e-mail lub pełne imię i nazwisko)",
@@ -103,11 +104,31 @@
     },
     "UsersList": {
       "name": "Imię i nazwisko użytkownika",
-      "namePlantPart": "Nazwa części",
       "role": "Rola",
       "email": "Powiązany e-mail",
       "status": "Status",
       "actions": "Akcje"
+    },
+    "CreateAndEditUserForm": {
+      "user": "Użytkownik",
+      "title": "Nowy użytkownik",
+      "subtitle": "Wypełnij wszystkie pola i wygeneruj kod dostępu dla nowego użytkownika",
+      "role": "Rola",
+      "fullName": "Imię i nazwisko",
+      "email": "E-mail",
+      "password": "Hasło",
+      "accessCode": "Kod dostępu",
+      "generateAutomatically": "Wygeneruj automatycznie",
+      "setManually": "Ustaw ręcznie",
+      "cancel": "Anuluj",
+      "createUser": "Utwórz użytkownika",
+      "userCreatedSuccess": "Użytkownik został utworzony pomyślnie",
+      "userUpdatedSuccess": "Użytkownik został zaktualizowany pomyślnie",
+      "status": "Status",
+      "editTitle": "Edytuj użytkownika",
+      "editSubtitle": "Zarządzaj informacjami o koncie użytkownika i kodzie dostępu",
+      "roleChangeDescription": "Aby dokończyć zmianę roli, należy wprowadzić wymagane dane: hasło przy rezygnacji z roli operatora lub kod dostępu przy jej przyjęciu.",
+      "saveChanges": "Zapisz zmiany"
     },
     "PlantsList": {
       "name": "Nazwa maszyny",
@@ -979,7 +1000,6 @@
     "cancel": "Anuluj",
     "sendReport": "Wyślij raport",
     "reportCreatedSuccessfully": "Raport został pomyślnie utworzony",
-    "loading": "ładowanie...",
     "maxImages": "Maksymalnie 5 zdjęć"
   },
 
