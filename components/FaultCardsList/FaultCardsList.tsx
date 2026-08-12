@@ -45,6 +45,23 @@ const toId = (m: AssignedMaintainer): string =>
 const toName = (m: AssignedMaintainer): string | null =>
   typeof m === 'object' && m !== null && 'fullName' in m ? m.fullName : null;
 
+/** Priority → badge colour class, same palette as FaultManagerCard so
+ *  the value stands out (High=red / Medium=amber / Low=green) instead of
+ *  rendering as plain text like it used to. */
+const priorityClass: Record<string, string> = {
+  Low: css.priorityLow,
+  Medium: css.priorityMedium,
+  High: css.priorityHigh,
+};
+
+/** Priority → card perimeter-border colour (same canonical palette).
+ *  The scope modifier keeps the 4px left strip; this tints the rest. */
+const cardPriorityClass: Record<string, string> = {
+  Low: css.cardPriorityLow,
+  Medium: css.cardPriorityMedium,
+  High: css.cardPriorityHigh,
+};
+
 interface FaultCardsListProps {
   faults: FaultCard[];
   /** Called with the server's updated fault after a successful claim so
@@ -100,12 +117,6 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
     return 'other';
   };
 
-  const scopeClassName: Record<'mine' | 'pool' | 'other', string> = {
-    mine: css.faultCard_mine,
-    pool: css.faultCard_pool,
-    other: css.faultCard_other,
-  };
-
   const handleDetailClick = (id: string) => {
     setIsLoading(true);
     router.push(`/maintenance-worker/${id}`);
@@ -144,7 +155,9 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
           return (
             <li
               key={fault._id}
-              className={`${css.faultCard} ${scopeClassName[scope]}`}
+              className={`${css.faultCard} ${
+                cardPriorityClass[fault.priority] ?? ''
+              }`}
               role="button"
               tabIndex={0}
               onClick={() => handleDetailClick(fault._id)}
@@ -221,7 +234,11 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                     {/* Colonna destra */}
                     <div className={css.detailItem}>
                       <span className={css.label}>{t('labels.priority')}</span>
-                      <p className={`${css.value} ${css.priorityValue}`}>
+                      <p
+                        className={`${css.priorityBadge} ${
+                          priorityClass[fault.priority] ?? ''
+                        }`}
+                      >
                         {tPriority(fault.priority)}
                       </p>
                       <span className={css.label}>
