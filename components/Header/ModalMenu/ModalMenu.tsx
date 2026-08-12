@@ -13,6 +13,7 @@ import CreateFaultButton from '../CreateFaultButton/CreateFaultButton';
 import PushToggle from '../PushToggle/PushToggle';
 import { roleRoutes } from '@/constants/roleRoutes';
 import { IS_DEMO } from '@/lib/config/demo';
+import DemoRoleSwitcher from '../DemoRoleSwitcher/DemoRoleSwitcher';
 
 export interface ModalMenuProps {
   onClose: () => void;
@@ -84,7 +85,7 @@ const ModalMenu = ({
               </ul>
             </nav>
             <div className={css.user_container}>
-              {isAuthenticated ? (
+              {isAuthenticated && (
                 <>
                   <div className={css.btn_container}>
                     <CreateFaultButton onAfterClick={onClose} />
@@ -101,27 +102,36 @@ const ModalMenu = ({
                       />
                       <PushToggle />
                     </div>
-                    <Button
-                      className={`${css.exit_btn} button button--white`}
-                      width={121}
-                      onClick={handleLogout}
-                    >
-                      <svg className={css.exit_icon} width="16" height="16">
-                        <use href="/sprite.svg#exit"></use>
-                      </svg>
-                      <span className={css.btn_text}>{t('exit')}</span>
-                    </Button>
+                    {/* In demo there is no real session to end — the role
+                        switcher below takes the logout button's place. */}
+                    {!IS_DEMO && (
+                      <Button
+                        className={`${css.exit_btn} button button--white`}
+                        width={121}
+                        onClick={handleLogout}
+                      >
+                        <svg className={css.exit_icon} width="16" height="16">
+                          <use href="/sprite.svg#exit"></use>
+                        </svg>
+                        <span className={css.btn_text}>{t('exit')}</span>
+                      </Button>
+                    )}
                   </div>
                 </>
+              )}
+              {IS_DEMO ? (
+                <DemoRoleSwitcher onAfterSelect={onClose} />
               ) : (
-                <Button
-                  type="button"
-                  className="button button--white"
-                  onClick={handleLoginClick}
-                  width={121}
-                >
-                  {t('login')}
-                </Button>
+                !isAuthenticated && (
+                  <Button
+                    type="button"
+                    className="button button--white"
+                    onClick={handleLoginClick}
+                    width={121}
+                  >
+                    {t('login')}
+                  </Button>
+                )
               )}
             </div>
           </div>

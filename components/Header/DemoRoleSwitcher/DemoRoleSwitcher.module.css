@@ -1,26 +1,6 @@
-.select {
-  height: 36px;
-  min-width: 121px;
-  padding: 0 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #fff;
-  color: #0a0a0a;
-  font-size: 14px;
-  font-weight: 400;
-  cursor: pointer;
-  transition:
-    border-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.select:hover,
-.select:focus-visible {
-  border-color: #2563eb;
-  color: #1e40af;
-}
-
-.select:disabled {
-  opacity: 0.6;
-  cursor: default;
+/* Fixed-width wrapper so the shared SelectDropdown keeps a stable size
+   in the header and its longest role label stays on one line. */
+.switcher {
+  width: 185px;
+  white-space: nowrap;
 }
