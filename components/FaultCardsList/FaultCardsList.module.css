@@ -44,12 +44,12 @@
   }
 }
 
-/* Card — neutral grey perimeter so the scope-coloured left strip
-   (mine=green / pool=amber / other=gray, applied via .faultCard_*
-   modifier below) actually stands out. Width is content-driven; the
-   old hardcoded 773px + min-height 400 are gone. The card itself
-   is clickable (opens the detail page); the buttons inside still
-   work independently — they stopPropagation in the JSX. */
+/* Card — the whole perimeter is tinted by priority (via the
+   .cardPriority* modifiers below); this neutral grey is only the
+   fallback when a fault has no recognised priority. Width is
+   content-driven; the old hardcoded 773px + min-height 400 are gone.
+   The card itself is clickable (opens the detail page); the buttons
+   inside still work independently — they stopPropagation in the JSX. */
 .faultCard {
   display: flex;
   flex-direction: column;
@@ -59,6 +59,9 @@
 
   background: #fff;
   border: 1px solid #e2e8f0;
+  /* Thicker left edge keeps the original card silhouette; it is tinted
+     by the .cardPriority* modifiers just like the rest of the border. */
+  border-left-width: 4px;
   border-radius: 12px;
   padding: 14px;
 
@@ -76,13 +79,24 @@
   box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
 }
 
-/* Hover/focus: blue accent that matches the project-wide brand
-   colour. The left strip is left alone so the scope coding stays
-   readable on hover (mine stays green, pool amber, etc.). */
+/* Hover/focus: blue accent that matches the project-wide brand colour. */
 .faultCard:hover,
 .faultCard:focus-within {
   border-color: #1e40af;
   box-shadow: 0 4px 12px rgba(30, 64, 175, 0.15);
+}
+
+/* Whole perimeter tinted by priority (canonical palette). */
+.cardPriorityLow {
+  border-color: #15803d;
+}
+
+.cardPriorityMedium {
+  border-color: #d97706;
+}
+
+.cardPriorityHigh {
+  border-color: #dc2626;
 }
 
 .content {
@@ -247,6 +261,36 @@
   margin: 0 0 8px 0;
 }
 
+/* Priority badge — colour-coded pill using the canonical priority
+   palette shared with the priority filter, detail page and calendar
+   (#15803d / #d97706 / #dc2626), so the card matches the rest of the app
+   and High/Alta reads as urgent. Replaces the old unstyled .priorityValue. */
+.priorityBadge {
+  display: inline-block;
+  width: fit-content;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 8px 0;
+}
+
+.priorityLow {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.priorityMedium {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.priorityHigh {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
 .commentContainer {
   background-color: #f1f5f9;
   border-radius: 6px;
@@ -299,19 +343,6 @@
   @media screen and (min-width: 1440px) {
     width: auto;
   }
-}
-
-/* Scope color coding (docx §5.2): mine=green, pool=amber, other=gray */
-.faultCard_mine {
-  border-left: 4px solid #16a34a;
-}
-
-.faultCard_pool {
-  border-left: 4px solid #f59e0b;
-}
-
-.faultCard_other {
-  border-left: 4px solid #94a3b8;
 }
 
 /* Riprogrammata badge — set by ReplanJob on the backend */
