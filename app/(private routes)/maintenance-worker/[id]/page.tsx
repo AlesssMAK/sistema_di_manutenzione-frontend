@@ -1,19 +1,22 @@
 'use client';
 
 import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
+import OvertimeAlertModal from '@/components/MaintenanceWorker/OvertimeAlertModal/OvertimeAlertModal';
 import { ALLOWED_TRANSITIONS } from '@/lib/validation/maintenanceWorkerUpdateValidation';
 import Button from '@/components/UI/Button/Button';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
-import { fetchFaultById } from '@/lib/api/faults';
+import { fetchFaultById, updateFaultByWorker } from '@/lib/api/faults';
+import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { FaultCard } from '@/types/faultType';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { format, isValid, parseISO } from 'date-fns';
 import { useLocale, useTranslations } from 'next-intl';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
+import { formatDuration, liveWorkedMinutes } from '@/lib/utils/faultTime';
 import { useRouter } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
 import css from './page.module.css';
@@ -95,6 +98,7 @@ export default function FaultDetailPage({
 }) {
   const router = useRouter();
   const t = useTranslations('FaultDetail');
+  const tDur = useTranslations('Duration');
   const tNoFound = useTranslations('NoFound');
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
@@ -109,6 +113,16 @@ export default function FaultDetailPage({
   // Which transition the update modal is opened for (null = closed). Each
   // action button locks the modal to its target status.
   const [modalStatus, setModalStatus] = useState<string | null>(null);
+  // Overtime alert: dismissed for this visit, plus a 1-minute ticker so
+  // the running work time is re-evaluated while the page stays open.
+  const [overtimeDismissed, setOvertimeDismissed] = useState(false);
+  const [, setNowTick] = useState(0);
+
+  const { data: settings } = useQuery({
+    queryKey: ['systemSettings'],
+    queryFn: fetchSystemSettings,
+    staleTime: 60 * 60 * 1000,
+  });
 
   const {
     data: fault,
@@ -119,6 +133,11 @@ export default function FaultDetailPage({
     queryFn: () => fetchFaultById(id),
     enabled: Boolean(id),
   });
+
+  useEffect(() => {
+    const timer = setInterval(() => setNowTick(n => n + 1), 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Subscribe to socket events so status changes / comments / replans
   // pushed by another role land in the cache without a manual reload.
@@ -139,6 +158,27 @@ export default function FaultDetailPage({
     );
     queryClient.invalidateQueries({ queryKey: ['faults'] });
     setModalStatus(null);
+  };
+
+  // "Keep working" from the overtime alert: optionally log a comment,
+  // then dismiss the alert for the rest of this visit.
+  const continueMutation = useMutation({
+    mutationFn: (comment: string) =>
+      updateFaultByWorker({
+        faultId: id,
+        statusFault: 'In progress',
+        commentMaintenanceWorker: comment,
+      }),
+    onSuccess: data => {
+      handleUpdateSuccess(data);
+      setOvertimeDismissed(true);
+    },
+    onError: () => setOvertimeDismissed(true),
+  });
+
+  const handleOvertimeContinue = (comment?: string) => {
+    if (comment) continueMutation.mutate(comment);
+    else setOvertimeDismissed(true);
   };
 
   if (isLoading)
@@ -164,6 +204,18 @@ export default function FaultDetailPage({
   const isCompleted = fault.statusFault === 'Completed';
   const isSuspended = fault.statusFault === 'Suspended';
   const wasRescheduled = Boolean(fault.autoRescheduledFrom?.plannedDate);
+
+  // In-app overtime alert: fault still In progress and worked time is
+  // past the planned duration by the configured threshold.
+  const overtimeHours = settings?.maintenance?.overtimeAlertHours ?? 0;
+  const plannedMinutes = fault.estimatedDuration ?? 0;
+  const workedMinutes = liveWorkedMinutes(fault);
+  const showOvertime =
+    overtimeHours > 0 &&
+    fault.statusFault === 'In progress' &&
+    workedMinutes > plannedMinutes + overtimeHours * 60 &&
+    !overtimeDismissed &&
+    !modalStatus;
 
   // Action buttons are driven by the same state machine the backend
   // enforces: Finalizza (→Completed), Sospendi (→Suspended) and
@@ -311,7 +363,13 @@ export default function FaultDetailPage({
               </div>
               <div className={css.infoItem}>
                 <label>{t('labels.estimatedDuration')}</label>
-                <p>{fault.estimatedDuration || 0} min</p>
+                <p>
+                  {formatDuration(fault.estimatedDuration || 0, {
+                    d: tDur('d'),
+                    h: tDur('h'),
+                    m: tDur('m'),
+                  })}
+                </p>
               </div>
             </div>
 
@@ -324,7 +382,13 @@ export default function FaultDetailPage({
                 <div className={css.infoItem}>
                   <label>{t('labels.actualDuration')}</label>
                   <p>
-                    {fault.actualDuration ? `${fault.actualDuration} min` : '—'}
+                    {fault.actualDuration
+                      ? formatDuration(fault.actualDuration, {
+                          d: tDur('d'),
+                          h: tDur('h'),
+                          m: tDur('m'),
+                        })
+                      : '—'}
                   </p>
                 </div>
                 <div className={css.infoItem}>
@@ -459,8 +523,28 @@ export default function FaultDetailPage({
           displayId={fault.faultId}
           currentStatus={fault.statusFault}
           lockedStatus={modalStatus}
+          defaultActualDuration={liveWorkedMinutes(fault)}
           onClose={() => setModalStatus(null)}
           onSuccess={handleUpdateSuccess}
+        />
+      )}
+
+      {showOvertime && (
+        <OvertimeAlertModal
+          displayId={fault.faultId}
+          workedMinutes={workedMinutes}
+          plannedMinutes={plannedMinutes}
+          onComplete={() => {
+            setOvertimeDismissed(true);
+            setModalStatus('Completed');
+          }}
+          onSuspend={() => {
+            setOvertimeDismissed(true);
+            setModalStatus('Suspended');
+          }}
+          onContinue={handleOvertimeContinue}
+          onClose={() => setOvertimeDismissed(true)}
+          isSaving={continueMutation.isPending}
         />
       )}
 

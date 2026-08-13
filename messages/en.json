@@ -1,4 +1,15 @@
 {
+  "Duration": { "d": "d", "h": "h", "m": "min" },
+  "OvertimeAlert": {
+    "title": "Intervention overrunning",
+    "message": "You've been working on this for {worked}, past the planned {planned}. What do you want to do?",
+    "commentLabel": "Comment (optional)",
+    "commentPlaceholder": "Why you're continuing...",
+    "continue": "Keep working",
+    "complete": "Complete",
+    "suspend": "Suspend",
+    "saving": "Saving..."
+  },
   "login": {
     "title": "Login",
     "titleForLoginHomePage": "Log in as",
@@ -356,6 +367,11 @@
         "auditLog": "Audit log (days)",
         "archiveMonths": "Completed reports archive (months)",
         "archiveNever": "Never"
+      },
+      "maintenance": {
+        "section": "Maintenance",
+        "overtimeHours": "Overtime alert (hours)",
+        "overtimeHint": "Hours past the planned duration before the technician is alerted (0 = off)."
       },
       "bacheca": {
         "section": "Board",
@@ -715,6 +731,7 @@
       "comment": "Comment",
       "managerNotes": "Manager notes",
       "assignedTo": "Assigned to",
+      "claimedBy": "Taken over by",
       "planned": "Planned",
       "pool": "Pool",
       "technician": "Maintenance Worker"
@@ -749,7 +766,7 @@
     "buttonAddMaintainers": "Add maintainers",
     "labels": {
       "priority": "Priority *",
-      "estimatedDuration": "Estimated duration (min) *",
+      "estimatedDuration": "Estimated duration *",
       "plannedDate": "Planned date *",
       "plannedTime": "Planned time *",
       "deadline": "Deadline *",

@@ -1,6 +1,8 @@
 'use client';
 
 import { useForm, type Resolver } from 'react-hook-form';
+import { roundToStep } from '@/lib/utils/faultTime';
+import DurationPicker from '@/components/UI/DurationPicker/DurationPicker';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
@@ -26,6 +28,9 @@ interface MaintenanceUpdateModalProps {
    *  Driven by the dedicated Finalizza / Sospendi / Riprendi buttons
    *  on the detail page. */
   lockedStatus?: string;
+  /** Auto-computed worked minutes used to prefill the (editable)
+   *  "actual duration" field on completion. */
+  defaultActualDuration?: number;
   onClose: () => void;
   onSuccess: (updatedFault: FaultCard) => void;
 }
@@ -35,6 +40,7 @@ const MaintenanceUpdateModal = ({
   displayId,
   currentStatus,
   lockedStatus,
+  defaultActualDuration,
   onClose,
   onSuccess,
 }: MaintenanceUpdateModalProps) => {
@@ -75,13 +81,19 @@ const MaintenanceUpdateModal = ({
     defaultValues: {
       statusFault: lockedStatus ?? availableStatuses[0] ?? '',
       commentMaintenanceWorker: '',
-      actualDuration: undefined,
+      // Prefilled with the auto-computed worked time (slot-aligned);
+      // still editable via the duration picker.
+      actualDuration:
+        defaultActualDuration != null
+          ? roundToStep(defaultActualDuration)
+          : undefined,
       suspensionReason: '',
       materialRequest: '',
     },
   });
 
   const selectedStatus = watch('statusFault');
+  const actualDuration = Number(watch('actualDuration') ?? 0);
 
   const mutation = useMutation({
     mutationFn: (values: MaintainerUpdateValues) =>
@@ -202,12 +214,13 @@ const MaintenanceUpdateModal = ({
           {selectedStatus === 'Completed' && (
             <div className={css.field}>
               <p className={css.label}>{t('labels.actualDuration')}</p>
-              <input
-                type="number"
-                min={1}
-                {...register('actualDuration')}
-                className={css.input}
+              <DurationPicker
+                valueMinutes={actualDuration}
+                onChange={v =>
+                  setValue('actualDuration', v, { shouldValidate: false })
+                }
               />
+              <input type="hidden" {...register('actualDuration')} />
               {errors.actualDuration && (
                 <p className={css.error}>{errors.actualDuration.message}</p>
               )}

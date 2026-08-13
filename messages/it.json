@@ -1,4 +1,15 @@
-{"login": {
+{"Duration": { "d": "g", "h": "h", "m": "min" },
+"OvertimeAlert": {
+  "title": "Intervento in ritardo",
+  "message": "Stai lavorando su questo intervento da {worked}, oltre la durata pianificata di {planned}. Cosa vuoi fare?",
+  "commentLabel": "Commento (opzionale)",
+  "commentPlaceholder": "Perché continui...",
+  "continue": "Continua",
+  "complete": "Completa",
+  "suspend": "Sospendi",
+  "saving": "Salvataggio..."
+},
+"login": {
     "title": "Accedi",
     "titleForLoginHomePage": "Accedi come",
     "roleOperatore": "Operatore",
@@ -58,8 +69,8 @@
 "myArea": "La Mia Area",
 "exit": "Esci",
 "login": "Accede",
-"createFault": "Segnala guasto",
-"switchRole": "Cambia ruolo",
+"createFault": "Segnala Guasto",
+"switchRole": "Cambia Ruolo",
 "notifications": {
   "ariaLabel": "Notifiche",
   "tooltip": "Vai ai messaggi"
@@ -79,7 +90,7 @@
   "plants": "Macchine / Impianti",
   "notifications": "Notifiche",
   "logsAudit": "Log & Audit",
-  "systemSettings": "Impostazioni sistema"
+  "systemSettings": "Impostazioni Sistema"
 },
 
 "AdminPage": {
@@ -355,6 +366,11 @@
         "auditLog": "Log di audit (giorni)",
         "archiveMonths": "Archivio segnalazioni completate (mesi)",
         "archiveNever": "Mai"
+      },
+      "maintenance": {
+        "section": "Manutenzione",
+        "overtimeHours": "Avviso ritardo intervento (ore)",
+        "overtimeHint": "Ore oltre la durata pianificata prima di avvisare il tecnico (0 = disattivato)."
       },
       "bacheca": {
         "section": "Bacheca",
@@ -636,7 +652,7 @@
 },
 
 "FaultDetail": {
-  "title": "Dettaglio segnalazione",
+  "title": "Dettaglio Segnalazione",
   "backButton": "Torna indietro",
   "labels": {
     "operator": "Operatore",
@@ -714,6 +730,7 @@
     "comment": "Commento",
     "managerNotes": "Note responsabile",
     "assignedTo": "Assegnato a",
+    "claimedBy": "Preso in carico",
     "planned": "Pianificato",
     "pool": "Pool",
     "technician": "Manutentore"
@@ -748,7 +765,7 @@
   "buttonAddMaintainers": "Aggiungi Manutentori",
   "labels": {
     "priority": "Priorità *",
-    "estimatedDuration": "Durata stimata (min) *",
+    "estimatedDuration": "Durata stimata *",
     "plannedDate": "Data pianificata *",
     "plannedTime": "Ora pianificata *",
     "deadline": "Scadenza *",

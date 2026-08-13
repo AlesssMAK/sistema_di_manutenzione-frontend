@@ -12,6 +12,7 @@ import {
   updateSystemSettings,
   type RetentionSettings,
   type BachecaSettings,
+  type MaintenanceSettings,
   type WeekSchedule,
   type WeekDayKey,
   type DaySchedule,
@@ -73,6 +74,9 @@ const AdminSystemSettingsClientPage = () => {
     showAllFaults: false,
     recentFaultsDays: 30,
   });
+  const [maintenance, setMaintenance] = useState<MaintenanceSettings>({
+    overtimeAlertHours: 2,
+  });
 
   useEffect(() => {
     setPageTitle(tPage('titlePageForStore'));
@@ -98,6 +102,7 @@ const AdminSystemSettingsClientPage = () => {
     setBacheca(
       data.bacheca ?? { showAllFaults: false, recentFaultsDays: 30 }
     );
+    setMaintenance(data.maintenance ?? { overtimeAlertHours: 2 });
   }
 
   const mutation = useMutation({
@@ -196,6 +201,7 @@ const AdminSystemSettingsClientPage = () => {
       holidays,
       retention,
       bacheca,
+      maintenance,
     });
   };
 
@@ -390,6 +396,39 @@ const AdminSystemSettingsClientPage = () => {
               maxWidth: '160px',
             }}
           />
+        </div>
+      </div>
+
+      {/* ── Maintenance — technician overtime alert ─────────────── */}
+      <div className={css.card}>
+        <h2 className={css.cardTitle}>{t('maintenance.section')}</h2>
+
+        <div className={css.field}>
+          <label className={css.fieldLabel}>
+            {t('maintenance.overtimeHours')}
+          </label>
+          <Input
+            type="number"
+            min={0}
+            max={168}
+            value={maintenance.overtimeAlertHours}
+            onChange={(e) =>
+              setMaintenance({
+                ...maintenance,
+                overtimeAlertHours: Number(e.target.value),
+              })
+            }
+            style={{
+              height: '36px',
+              borderRadius: '6px',
+              background: '#f3f3f5',
+              border: 'none',
+              maxWidth: '160px',
+            }}
+          />
+          <p style={{ fontSize: '13px', color: '#64748b', marginTop: '6px' }}>
+            {t('maintenance.overtimeHint')}
+          </p>
         </div>
       </div>
 

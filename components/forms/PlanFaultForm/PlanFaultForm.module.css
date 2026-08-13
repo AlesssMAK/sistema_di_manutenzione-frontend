@@ -167,3 +167,21 @@
   font-size: 13px;
   font-weight: 600;
 }
+
+/* Days / hours / minutes editor for estimated duration. */
+.durationGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.durationUnit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.durationUnitLabel {
+  font-size: 13px;
+  color: #45556c;
+}

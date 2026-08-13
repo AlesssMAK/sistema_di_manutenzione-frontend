@@ -245,3 +245,31 @@
     width: auto;
   }
 }
+
+/* "Preso in carico: <technician>" — a technician claimed a pool fault. */
+.claimedRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 2px 0 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: #ecfdf5;
+  font-size: 13px;
+}
+
+.claimedIcon {
+  stroke: #15803d;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.claimedLabel {
+  color: #166534;
+  font-weight: 600;
+}
+
+.claimedName {
+  color: #0a0a0a;
+  font-weight: 600;
+}

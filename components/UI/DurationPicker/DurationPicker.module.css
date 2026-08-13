@@ -1,0 +1,24 @@
+.group {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.unit {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+/* Keep each dropdown narrow — it only holds a number. */
+.unit > :first-child {
+  min-width: 56px;
+  flex: 1;
+}
+
+.label {
+  font-size: 14px;
+  color: #45556c;
+}

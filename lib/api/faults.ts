@@ -181,3 +181,28 @@ export const claimFault = async (faultId: string): Promise<FaultCard> => {
 
   return res.data;
 };
+
+export interface MaintenanceTabCounts {
+  active: number;
+  overdue: number;
+  completed: number;
+  pool: number;
+}
+
+// Unseen-count badges for the worker board.
+export const fetchMaintenanceTabCounts =
+  async (): Promise<MaintenanceTabCounts> => {
+    const res = await nextServer.get<MaintenanceTabCounts>(
+      '/maintenance-worker/tab-counts'
+    );
+    return res.data;
+  };
+
+export type MaintenanceSeenTab = 'active' | 'overdue' | 'completed' | 'pool';
+
+// Mark a board tab as seen — clears its badge.
+export const markMaintenanceTabSeen = async (
+  tab: MaintenanceSeenTab
+): Promise<void> => {
+  await nextServer.patch('/maintenance-worker/seen', { tab });
+};
