@@ -75,7 +75,8 @@ const BroadcastsList = ({ items, isLoading, isError }: BroadcastsListProps) => {
 
       {openMessage && (
         <MessageDetailModal
-          message={openMessage}
+          anchorId={openMessage._id}
+          subject={openMessage.subject}
           currentUserId={userId}
           onClose={() => setOpenMessage(null)}
         />

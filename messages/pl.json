@@ -526,13 +526,19 @@
     "subtitle": "Wiadomości bezpośrednie i ogłoszenia skierowane do twojej roli.",
     "tabs": {
       "direct": "Bezpośrednie",
-      "announcements": "Ogłoszenia"
+      "announcements": "Wiadomości wg roli"
     },
     "card": {
       "from": "Od",
       "unread": "Nieprzeczytane",
       "reply": "Odpowiedz",
-      "showMore": "Pokaż szczegóły"
+      "showMore": "Pokaż szczegóły",
+      "sent": "Wysłane",
+      "received": "Otrzymane",
+      "deleteThread": "Usuń rozmowę",
+      "deleteThreadConfirm": "Usunąć całą rozmowę?",
+      "yes": "Tak",
+      "no": "Nie"
     },
     "detail": {
       "title": "Szczegóły wiadomości",
@@ -544,7 +550,12 @@
       "sent": "Wysłano",
       "reply": "Odpowiedz",
       "close": "Zamknij",
-      "dateSeparator": "o"
+      "dateSeparator": "o",
+      "you": "Ty",
+      "delete": "Usuń",
+      "deleteConfirm": "Usunąć tę wiadomość?",
+      "deleteYes": "Tak",
+      "deleteNo": "Nie"
     },
     "reply": {
       "title": "Odpowiedz do {author}",
@@ -593,7 +604,10 @@
     "messages": {
       "replySuccess": "Odpowiedź wysłana",
       "replyError": "Błąd podczas wysyłania",
-      "markReadError": "Błąd oznaczania jako przeczytane"
+      "markReadError": "Błąd oznaczania jako przeczytane",
+      "deleted": "Wiadomość usunięta",
+      "deleteError": "Błąd podczas usuwania",
+      "conversationDeleted": "Rozmowa usunięta"
     },
     "empty": {
       "direct": "Brak wiadomości bezpośrednich",

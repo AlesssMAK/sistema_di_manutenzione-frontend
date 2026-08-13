@@ -526,13 +526,19 @@
     "subtitle": "Direct messages and announcements targeted at your role.",
     "tabs": {
       "direct": "Direct",
-      "announcements": "Announcements"
+      "announcements": "Messages by role"
     },
     "card": {
       "from": "From",
       "unread": "Unread",
       "reply": "Reply",
-      "showMore": "Show details"
+      "showMore": "Show details",
+      "sent": "Sent",
+      "received": "Received",
+      "deleteThread": "Delete conversation",
+      "deleteThreadConfirm": "Delete the whole conversation?",
+      "yes": "Yes",
+      "no": "No"
     },
     "detail": {
       "title": "Message detail",
@@ -544,7 +550,12 @@
       "sent": "Sent at",
       "reply": "Reply",
       "close": "Close",
-      "dateSeparator": "at"
+      "dateSeparator": "at",
+      "you": "You",
+      "delete": "Delete",
+      "deleteConfirm": "Delete this message?",
+      "deleteYes": "Yes",
+      "deleteNo": "No"
     },
     "reply": {
       "title": "Reply to {author}",
@@ -593,7 +604,10 @@
     "messages": {
       "replySuccess": "Reply sent",
       "replyError": "Error sending reply",
-      "markReadError": "Error marking as read"
+      "markReadError": "Error marking as read",
+      "deleted": "Message deleted",
+      "deleteError": "Error while deleting",
+      "conversationDeleted": "Conversation deleted"
     },
     "empty": {
       "direct": "No direct messages",

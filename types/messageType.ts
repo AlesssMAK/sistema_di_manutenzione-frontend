@@ -20,8 +20,9 @@ export interface Message {
   authorName: string;
   authorRole: UserRoles;
 
-  /** Set only for direct messages. */
-  recipientId?: string | null;
+  /** Set only for direct messages. Populated ({fullName, role}) on the
+   *  inbox `box=all` and thread endpoints; a raw id otherwise. */
+  recipientId?: MessageAuthor | string | null;
 
   /** Set only for broadcast_role. */
   targetRole?: UserRoles | null;
@@ -109,6 +110,48 @@ export interface MessageListResponse {
   total: number;
   totalPages: number;
   items: Message[];
+}
+
+/** Whole conversation (root + replies), oldest-first. */
+export interface MessageThreadResponse {
+  items: Message[];
+}
+
+/** One direct conversation = one thread/topic (root + its replies). */
+export interface Conversation {
+  /** Thread root id — the conversation key; a new message starts a new one. */
+  threadId: string;
+  /** Topic title (the root message's subject). */
+  subject: string;
+  counterpart: {
+    _id: string;
+    fullName: string;
+    role: UserRoles;
+  };
+  /** Unread messages received in this thread. */
+  unread: number;
+  /** Latest message in the thread (drives the card preview). */
+  last: {
+    _id: string;
+    subject: string;
+    body: string;
+    createdAt: string;
+    /** Raw author id — lets the card tell outgoing from incoming. */
+    authorId: string;
+  };
+}
+
+export interface ConversationListResponse {
+  page: number;
+  perPage: number;
+  total: number;
+  totalPages: number;
+  items: Conversation[];
+}
+
+export interface ListConversationsParams {
+  page?: number;
+  perPage?: number;
 }
 
 export interface UnreadCountResponse {

@@ -526,13 +526,19 @@
     "subtitle": "Mensajes directos y anuncios dirigidos a tu rol.",
     "tabs": {
       "direct": "Directos",
-      "announcements": "Anuncios"
+      "announcements": "Mensajes por rol"
     },
     "card": {
       "from": "De",
       "unread": "No leído",
       "reply": "Responder",
-      "showMore": "Ver detalles"
+      "showMore": "Ver detalles",
+      "sent": "Enviado",
+      "received": "Recibido",
+      "deleteThread": "Eliminar conversación",
+      "deleteThreadConfirm": "¿Eliminar toda la conversación?",
+      "yes": "Sí",
+      "no": "No"
     },
     "detail": {
       "title": "Detalle del mensaje",
@@ -544,7 +550,12 @@
       "sent": "Enviado el",
       "reply": "Responder",
       "close": "Cerrar",
-      "dateSeparator": "a las"
+      "dateSeparator": "a las",
+      "you": "Tú",
+      "delete": "Eliminar",
+      "deleteConfirm": "¿Eliminar este mensaje?",
+      "deleteYes": "Sí",
+      "deleteNo": "No"
     },
     "reply": {
       "title": "Responder a {author}",
@@ -593,7 +604,10 @@
     "messages": {
       "replySuccess": "Respuesta enviada",
       "replyError": "Error al enviar la respuesta",
-      "markReadError": "Error al marcar como leído"
+      "markReadError": "Error al marcar como leído",
+      "deleted": "Mensaje eliminado",
+      "deleteError": "Error al eliminar",
+      "conversationDeleted": "Conversación eliminada"
     },
     "empty": {
       "direct": "Sin mensajes directos",

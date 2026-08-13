@@ -286,22 +286,22 @@
       }
     },
     "Notifications": {
-      "title": "Impostazioni notifiche",
+      "title": "Impostazioni Notifiche",
       "subtitle": "Gestisci email e messaggistica del sistema",
       "save": "Salva",
       "email": {
         "section": "Email",
-        "enabled": "Notifiche email attive",
+        "enabled": "Notifiche Email Attive",
         "from": "Indirizzo mittente",
         "rateLimit": "Limite email per destinatario / ora",
         "triggers": {
           "section": "Eventi che inviano email",
-          "onNewFault": "Nuova segnalazione",
-          "onAssignment": "Assegnazione intervento",
-          "onReassign": "Riassegnazione intervento",
-          "onSicurezzaHse": "Segnalazione di sicurezza (HSE)",
-          "onDirectMessage": "Messaggio diretto",
-          "onSuspended": "Intervento sospeso"
+          "onNewFault": "Nuova Segnalazione",
+          "onAssignment": "Assegnazione Intervento",
+          "onReassign": "Riassegnazione Intervento",
+          "onSicurezzaHse": "Segnalazione di Sicurezza (HSE)",
+          "onDirectMessage": "Messaggio Diretto",
+          "onSuspended": "Intervento Sospeso"
         }
       },
       "messaging": {
@@ -316,7 +316,7 @@
       }
     },
     "SystemSettings": {
-      "title": "Impostazioni globali",
+      "title": "Impostazioni Globali",
       "subtitle": "Fuso orario, orari di lavoro, festività e conservazione dati",
       "save": "Salva",
       "schedule": {
@@ -450,7 +450,7 @@
     "reset": "Reimposta filtro"
   },
   "dayView": {
-    "title": "Vista giornaliera"
+    "title": "Vista Giornaliera"
   },
   "dateNow": {
     "overdue": "Segnalazioni scadute",
@@ -514,7 +514,7 @@
 },
 
 "ReportFaultPage": {
-  "titlePageForStore": "Segnala guasto",
+  "titlePageForStore": "Segnala Guasto",
   "title": "Segnala un guasto",
   "subtitle": "Compila il modulo per registrare un nuovo guasto. Tutti i ruoli possono segnalare problemi notati sugli impianti."
 },
@@ -525,16 +525,22 @@
   "subtitle": "Messaggi diretti e annunci destinati al tuo ruolo.",
   "tabs": {
     "direct": "Diretti",
-    "announcements": "Annunci"
+    "announcements": "Messaggi per Ruolo"
   },
   "card": {
     "from": "Da",
     "unread": "Non letto",
     "reply": "Rispondi",
-    "showMore": "Mostra dettagli"
+    "showMore": "Mostra dettagli",
+    "sent": "Inviato",
+    "received": "Ricevuto",
+    "deleteThread": "Elimina conversazione",
+    "deleteThreadConfirm": "Eliminare tutta la conversazione?",
+    "yes": "Sì",
+    "no": "No"
   },
   "detail": {
-    "title": "Dettaglio messaggio",
+    "title": "Dettaglio Messaggio",
     "from": "Mittente",
     "to": "Destinatario",
     "role": "Ruolo",
@@ -543,7 +549,12 @@
     "sent": "Inviato il",
     "reply": "Rispondi",
     "close": "Chiudi",
-    "dateSeparator": "alle"
+    "dateSeparator": "alle",
+    "you": "Tu",
+    "delete": "Elimina",
+    "deleteConfirm": "Eliminare questo messaggio?",
+    "deleteYes": "Sì",
+    "deleteNo": "No"
   },
   "reply": {
     "title": "Rispondi a {author}",
@@ -556,18 +567,18 @@
     "sending": "Invio..."
   },
   "compose": {
-    "openButton": "Nuovo messaggio",
-    "title": "Nuovo messaggio",
+    "openButton": "Nuovo Messaggio",
+    "title": "Nuovo Messaggio",
     "subtitle": "Invia un messaggio diretto o un annuncio",
     "channels": {
       "direct": "Diretto",
-      "broadcastRole": "Annuncio per ruolo",
-      "broadcastAll": "Annuncio per tutti"
+      "broadcastRole": "Annuncio per Ruolo",
+      "broadcastAll": "Annuncio per Tutti"
     },
     "labels": {
       "channel": "Canale",
       "recipient": "Destinatario",
-      "targetRole": "Ruolo destinatario",
+      "targetRole": "Ruolo Destinatario",
       "subject": "Oggetto",
       "body": "Messaggio",
       "images": "Immagini (opzionale)"
@@ -592,7 +603,10 @@
   "messages": {
     "replySuccess": "Risposta inviata",
     "replyError": "Errore durante l'invio",
-    "markReadError": "Errore di lettura"
+    "markReadError": "Errore di lettura",
+    "deleted": "Messaggio eliminato",
+    "deleteError": "Errore durante l'eliminazione",
+    "conversationDeleted": "Conversazione eliminata"
   },
   "empty": {
     "direct": "Nessun messaggio diretto",
@@ -726,12 +740,12 @@
 },
 
 "PlanFaultForm": {
-  "titlePlan": "Pianifica segnalazione",
-  "titleModify": "Modifica pianificazione",
-  "titleReassign": "Riassegna intervento",
-  "titleAddMaintainers": "Aggiungi manutentori",
+  "titlePlan": "Pianifica Segnalazione",
+  "titleModify": "Modifica Pianificazione",
+  "titleReassign": "Riassegna Intervento",
+  "titleAddMaintainers": "Aggiungi Manutentori",
   "buttonReassign": "Riassegna",
-  "buttonAddMaintainers": "Aggiungi manutentori",
+  "buttonAddMaintainers": "Aggiungi Manutentori",
   "labels": {
     "priority": "Priorità *",
     "estimatedDuration": "Durata stimata (min) *",
@@ -739,9 +753,9 @@
     "plannedTime": "Ora pianificata *",
     "deadline": "Scadenza *",
     "managerComment": "Note responsabile",
-    "assignedMaintainers": "Manutentori assegnati",
-    "alreadyAssigned": "Già assegnati",
-    "additionalMaintainers": "Manutentori da aggiungere"
+    "assignedMaintainers": "Manutentori Assegnati",
+    "alreadyAssigned": "Già Assegnati",
+    "additionalMaintainers": "Manutentori da Aggiungere"
   },
   "managerCommentPlaceholder": "Eventuali note per il manutentore...",
   "datePlaceholder": "Seleziona data",
@@ -756,18 +770,18 @@
     "saving": "Salvataggio..."
   },
   "messages": {
-    "planSuccess": "Segnalazione pianificata",
-    "modifySuccess": "Pianificazione aggiornata",
+    "planSuccess": "Segnalazione Pianificata",
+    "modifySuccess": "Pianificazione Aggiornata",
     "saveError": "Errore durante il salvataggio"
   }
 },
 
 "MaintenanceUpdateModal": {
-  "title": "Aggiorna intervento",
+  "title": "Aggiorna Intervento",
   "titles": {
-    "complete": "Finalizza intervento",
-    "suspend": "Sospendi intervento",
-    "resume": "Riprendi intervento"
+    "complete": "Finalizza Intervento",
+    "suspend": "Sospendi Intervento",
+    "resume": "Riprendi Intervento"
   },
   "labels": {
     "newStatus": "Nuovo stato *",

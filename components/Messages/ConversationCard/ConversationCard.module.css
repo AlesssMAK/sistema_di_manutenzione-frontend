@@ -16,8 +16,6 @@
   }
 }
 
-/* Hover/focus: project-wide brand blue (matches FaultCardsList and the
-   rest of the app) instead of the old light-blue one-off. */
 .card:hover,
 .card:focus-within {
   border-color: #1e40af;
@@ -34,9 +32,6 @@
   border-color: #bfdbfe;
 }
 
-/* Phone: stack the author row above the date so a long name + role +
-   timestamp don't get squeezed (or clipped) on a narrow card.
-   Tablet+: single row with the date pushed to the right. */
 .header {
   display: flex;
   flex-direction: column;
@@ -51,7 +46,7 @@
   }
 }
 
-.author {
+.left {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -60,12 +55,12 @@
   color: #45556c;
 }
 
-.authorName {
+.name {
   font-weight: 600;
   color: #0a0a0a;
 }
 
-.authorRole {
+.role {
   font-size: 12px;
   color: #64748b;
 }
@@ -78,26 +73,19 @@
   flex-shrink: 0;
 }
 
-/* Direction pill for the direct inbox (received vs sent). */
-.direction {
-  display: inline-block;
-  padding: 1px 8px;
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
   border-radius: 999px;
+  background: #2563eb;
+  color: #fff;
   font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  line-height: 1.6;
-}
-
-.directionReceived {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.directionSent {
-  background: #f1f5f9;
-  color: #475569;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .headerRight {
@@ -113,7 +101,6 @@
   white-space: nowrap;
 }
 
-/* × — deletes the whole conversation straight from the list. */
 .deleteThread {
   display: flex;
   align-items: center;
@@ -136,6 +123,29 @@
 /* Hover recolours only the icon — no background box. */
 .deleteThread:hover {
   color: #b91c1c;
+}
+
+.subject {
+  font-weight: 600;
+  font-size: 15px;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.preview {
+  font-size: 14px;
+  color: #45556c;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.youPrefix {
+  color: #64748b;
+  font-weight: 600;
 }
 
 .confirmRow {
@@ -185,22 +195,4 @@
 
 .confirmNo:hover {
   border-color: #94a3b8;
-}
-
-.subject {
-  font-weight: 600;
-  font-size: 15px;
-  color: #0a0a0a;
-  margin: 0;
-}
-
-.preview {
-  font-size: 14px;
-  color: #45556c;
-  line-height: 1.5;
-  margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
