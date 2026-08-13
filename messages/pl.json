@@ -731,6 +731,7 @@
       "comment": "Komentarz",
       "managerNotes": "Notatki kierownika",
       "assignedTo": "Przypisane do",
+      "claimedBy": "Przejęte przez",
       "planned": "Zaplanowane",
       "pool": "Pula",
       "technician": "Konserwator"
@@ -765,7 +766,7 @@
     "buttonAddMaintainers": "Dodaj konserwatorów",
     "labels": {
       "priority": "Priorytet *",
-      "estimatedDuration": "Szacowany czas (min) *",
+      "estimatedDuration": "Szacowany czas *",
       "plannedDate": "Zaplanowana data *",
       "plannedTime": "Zaplanowana godzina *",
       "deadline": "Termin *",

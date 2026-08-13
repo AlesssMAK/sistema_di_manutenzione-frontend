@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -8,7 +8,6 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import Modal from '@/components/UI/Modal/Modal';
 import Button from '@/components/UI/Button/Button';
-import Input from '@/components/UI/Input/Input';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
 import TimePickerInput from '@/components/UI/TimePickerInput/TimePickerInput';
@@ -31,6 +30,8 @@ import type {
   PriorityFaultType,
   TypeFault,
 } from '@/types/faultType';
+import { roundToStep } from '@/lib/utils/faultTime';
+import DurationPicker from '@/components/UI/DurationPicker/DurationPicker';
 import css from './PlanFaultForm.module.css';
 
 /**
@@ -104,7 +105,7 @@ const PlanFaultForm = ({
       priority: fault.priority ?? 'Medium',
       plannedDate: fault.plannedDate ?? '',
       plannedTime: fault.plannedTime ?? '',
-      estimatedDuration: fault.estimatedDuration ?? 60,
+      estimatedDuration: roundToStep(fault.estimatedDuration ?? 60),
       deadline: fault.deadline ?? '',
       managerComment: fault.managerComment ?? '',
       assignedMaintainers: isAddMaintainers ? [] : existingIds,
@@ -112,6 +113,7 @@ const PlanFaultForm = ({
   });
 
   const priority = watch('priority');
+  const estimatedDuration = Number(watch('estimatedDuration') ?? 60);
 
   const { data: maintainers = [], isLoading: maintainersLoading } = useQuery({
     queryKey: ['users', 'maintenanceWorkers'],
@@ -214,19 +216,6 @@ const PlanFaultForm = ({
   const priorityLabel =
     PRIORITY_OPTIONS.find(o => o.value === priority)?.label ?? '';
 
-  // Match the compact gray box of DatePickerInput's trigger so the
-  // number/time fields sit flush with the date pickers in the row.
-  // Inline (not a CSS class) to reliably win over the universal
-  // Input's default 12px-radius / tall padding — same approach as
-  // the shared Filters component.
-  const compactInputStyle: CSSProperties = {
-    height: '36px',
-    padding: '0 12px',
-    borderRadius: '6px',
-    background: '#f3f3f5',
-    border: '1px solid transparent',
-  };
-
   return (
     <Modal onClose={onClose}>
       <div className={css.formContainer}>
@@ -268,19 +257,20 @@ const PlanFaultForm = ({
                 <p className={css.error}>{errors.priority.message}</p>
               )}
             </div>
+          </div>
 
-            <div className={css.field}>
-              <p className={css.label}>{t('labels.estimatedDuration')}</p>
-              <Input
-                type="number"
-                min={1}
-                style={compactInputStyle}
-                {...register('estimatedDuration')}
-              />
-              {errors.estimatedDuration && (
-                <p className={css.error}>{errors.estimatedDuration.message}</p>
-              )}
-            </div>
+          <div className={css.field}>
+            <p className={css.label}>{t('labels.estimatedDuration')}</p>
+            <DurationPicker
+              valueMinutes={estimatedDuration}
+              onChange={v =>
+                setValue('estimatedDuration', v, { shouldValidate: false })
+              }
+            />
+            <input type="hidden" {...register('estimatedDuration')} />
+            {errors.estimatedDuration && (
+              <p className={css.error}>{errors.estimatedDuration.message}</p>
+            )}
           </div>
 
           <div className={css.row}>

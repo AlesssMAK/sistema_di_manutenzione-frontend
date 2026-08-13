@@ -731,6 +731,7 @@
       "comment": "Comentario",
       "managerNotes": "Notas del responsable",
       "assignedTo": "Asignado a",
+      "claimedBy": "Tomado por",
       "planned": "Planificado",
       "pool": "Pool",
       "technician": "Mantenedor"
@@ -765,7 +766,7 @@
     "buttonAddMaintainers": "Añadir mantenedores",
     "labels": {
       "priority": "Prioridad *",
-      "estimatedDuration": "Duración estimada (min) *",
+      "estimatedDuration": "Duración estimada *",
       "plannedDate": "Fecha planificada *",
       "plannedTime": "Hora planificada *",
       "deadline": "Fecha límite *",

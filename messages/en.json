@@ -731,6 +731,7 @@
       "comment": "Comment",
       "managerNotes": "Manager notes",
       "assignedTo": "Assigned to",
+      "claimedBy": "Taken over by",
       "planned": "Planned",
       "pool": "Pool",
       "technician": "Maintenance Worker"
@@ -765,7 +766,7 @@
     "buttonAddMaintainers": "Add maintainers",
     "labels": {
       "priority": "Priority *",
-      "estimatedDuration": "Estimated duration (min) *",
+      "estimatedDuration": "Estimated duration *",
       "plannedDate": "Planned date *",
       "plannedTime": "Planned time *",
       "deadline": "Deadline *",

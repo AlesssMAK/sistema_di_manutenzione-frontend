@@ -28,6 +28,13 @@ export interface DurationUnits {
   m: string;
 }
 
+/** Round a minutes value to the nearest `step` (default 15) — used to
+ *  keep durations aligned with the slot dropdowns. */
+export const roundToStep = (
+  minutes: number | undefined | null,
+  step = 15
+): number => Math.max(0, Math.round((minutes ?? 0) / step) * step);
+
 /** Split a minutes total into days / hours / minutes. */
 export const splitMinutes = (total: number | undefined | null) => {
   const t = Math.max(0, Math.round(total ?? 0));

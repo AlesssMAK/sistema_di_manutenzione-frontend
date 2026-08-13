@@ -4,6 +4,7 @@ import { format, isValid, parseISO } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
+import { formatDuration } from '@/lib/utils/faultTime';
 import type { FaultCard } from '@/types/faultType';
 import Button from '@/components/UI/Button/Button';
 import css from './FaultManagerCard.module.css';
@@ -56,7 +57,21 @@ const FaultManagerCard = ({
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
   const tPriority = useTranslations('Priority');
+  const tDur = useTranslations('Duration');
   const locale = getDateFnsLocale(useLocale());
+  const durUnits = { d: tDur('d'), h: tDur('h'), m: tDur('m') };
+
+  // A technician who claimed a pool fault is recorded in `claimedBy`.
+  // Resolve their name from the (populated) assignedMaintainers so the
+  // manager sees "Preso in carico: <name>".
+  const claimerId = fault.claimedBy ? String(fault.claimedBy) : null;
+  const claimer = claimerId
+    ? (fault.assignedMaintainers ?? []).find(
+        m => typeof m === 'object' && m !== null && String(m._id) === claimerId
+      )
+    : null;
+  const claimerName =
+    claimer && typeof claimer === 'object' ? claimer.fullName : null;
 
   const isPlanned = Boolean(fault.plannedDate);
   const isReadOnly = fault.statusFault === 'Completed';
@@ -98,6 +113,16 @@ const FaultManagerCard = ({
           </span>
         </div>
       </div>
+
+      {claimerName && (
+        <div className={css.claimedRow}>
+          <svg className={css.claimedIcon} width="14" height="14" aria-hidden="true">
+            <use href="/sprite.svg#user" />
+          </svg>
+          <span className={css.claimedLabel}>{t('labels.claimedBy')}:</span>
+          <span className={css.claimedName}>{claimerName}</span>
+        </div>
+      )}
 
       <div className={css.section}>
         <div className={css.row}>
@@ -155,7 +180,7 @@ const FaultManagerCard = ({
                 {formatDate(fault.plannedDate, locale)}
                 {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
                 {fault.estimatedDuration
-                  ? ` · ${fault.estimatedDuration} min`
+                  ? ` · ${formatDuration(fault.estimatedDuration, durUnits)}`
                   : ''}
               </span>
             </div>
