@@ -29,6 +29,11 @@ export interface BachecaSettings {
   recentFaultsDays: number;
 }
 
+export interface MaintenanceSettings {
+  /** Hours past the planned duration before the technician is alerted. */
+  overtimeAlertHours: number;
+}
+
 export interface PublicSystemSettings {
   _id: string;
   timezone: string;
@@ -38,6 +43,7 @@ export interface PublicSystemSettings {
   slotDurationMinutes: number;
   holidays: string[];
   bacheca?: BachecaSettings;
+  maintenance?: MaintenanceSettings;
   updatedAt?: string;
 }
 
@@ -86,6 +92,7 @@ export type UpdateSystemSettingsPayload = Partial<{
   messaging: Partial<MessagingSettings>;
   retention: Partial<RetentionSettings>;
   bacheca: Partial<BachecaSettings>;
+  maintenance: Partial<MaintenanceSettings>;
 }>;
 
 export const fetchSystemSettings = async (): Promise<PublicSystemSettings> => {

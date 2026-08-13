@@ -5,6 +5,7 @@ import Button from '../UI/Button/Button';
 import css from './FaultCardsList.module.css';
 import type { AssignedMaintainer, FaultCard } from '@/types/faultType';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
+import { formatDuration } from '@/lib/utils/faultTime';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -77,6 +78,7 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
   const t = useTranslations('FaultCard');
   const tStatus = useTranslations('StatusFault');
   const tPriority = useTranslations('Priority');
+  const tDur = useTranslations('Duration');
   const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
@@ -246,7 +248,11 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                       </span>
                       <p className={css.value}>
                         {fault.estimatedDuration
-                          ? `${fault.estimatedDuration} min`
+                          ? formatDuration(fault.estimatedDuration, {
+                              d: tDur('d'),
+                              h: tDur('h'),
+                              m: tDur('m'),
+                            })
                           : '—'}
                       </p>
                     </div>

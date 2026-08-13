@@ -1,4 +1,15 @@
 {
+  "Duration": { "d": "d", "h": "h", "m": "min" },
+  "OvertimeAlert": {
+    "title": "Intervención con retraso",
+    "message": "Llevas {worked} trabajando en esto, más de lo planificado ({planned}). ¿Qué quieres hacer?",
+    "commentLabel": "Comentario (opcional)",
+    "commentPlaceholder": "Por qué continúas...",
+    "continue": "Continuar",
+    "complete": "Completar",
+    "suspend": "Suspender",
+    "saving": "Guardando..."
+  },
   "login": {
     "title": "Iniciar sesión",
     "titleForLoginHomePage": "Iniciar sesión como",
@@ -356,6 +367,11 @@
         "auditLog": "Registro de auditoría (días)",
         "archiveMonths": "Archivo de señalaciones completadas (meses)",
         "archiveNever": "Nunca"
+      },
+      "maintenance": {
+        "section": "Mantenimiento",
+        "overtimeHours": "Alerta de retraso (horas)",
+        "overtimeHint": "Horas más allá de la duración planificada antes de avisar al técnico (0 = desactivado)."
       },
       "bacheca": {
         "section": "Tablón",

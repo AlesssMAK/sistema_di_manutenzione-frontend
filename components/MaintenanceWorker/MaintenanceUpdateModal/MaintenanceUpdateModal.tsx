@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
+import { splitMinutes } from '@/lib/utils/faultTime';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
@@ -26,6 +28,9 @@ interface MaintenanceUpdateModalProps {
    *  Driven by the dedicated Finalizza / Sospendi / Riprendi buttons
    *  on the detail page. */
   lockedStatus?: string;
+  /** Auto-computed worked minutes used to prefill the (editable)
+   *  "actual duration" field on completion. */
+  defaultActualDuration?: number;
   onClose: () => void;
   onSuccess: (updatedFault: FaultCard) => void;
 }
@@ -35,10 +40,12 @@ const MaintenanceUpdateModal = ({
   displayId,
   currentStatus,
   lockedStatus,
+  defaultActualDuration,
   onClose,
   onSuccess,
 }: MaintenanceUpdateModalProps) => {
   const t = useTranslations('MaintenanceUpdateModal');
+  const tDur = useTranslations('Duration');
   const queryClient = useQueryClient();
   const isLocked = Boolean(lockedStatus);
   const availableStatuses = ALLOWED_TRANSITIONS[currentStatus] ?? [];
@@ -75,13 +82,31 @@ const MaintenanceUpdateModal = ({
     defaultValues: {
       statusFault: lockedStatus ?? availableStatuses[0] ?? '',
       commentMaintenanceWorker: '',
-      actualDuration: undefined,
+      // Prefilled with the auto-computed worked time; still editable.
+      actualDuration: defaultActualDuration,
       suspensionReason: '',
       materialRequest: '',
     },
   });
 
   const selectedStatus = watch('statusFault');
+
+  // Days / hours / minutes editor for the actual duration. Prefilled from
+  // the auto-computed value; kept in sync with the (hidden) minutes field
+  // that actually gets submitted.
+  const [duration, setDuration] = useState(() =>
+    splitMinutes(defaultActualDuration)
+  );
+  const setUnit = (unit: 'days' | 'hours' | 'minutes', raw: string) => {
+    const n = Math.max(0, Math.floor(Number(raw) || 0));
+    const next = { ...duration, [unit]: n };
+    setDuration(next);
+    setValue(
+      'actualDuration',
+      next.days * 1440 + next.hours * 60 + next.minutes,
+      { shouldValidate: false }
+    );
+  };
 
   const mutation = useMutation({
     mutationFn: (values: MaintainerUpdateValues) =>
@@ -202,12 +227,41 @@ const MaintenanceUpdateModal = ({
           {selectedStatus === 'Completed' && (
             <div className={css.field}>
               <p className={css.label}>{t('labels.actualDuration')}</p>
-              <input
-                type="number"
-                min={1}
-                {...register('actualDuration')}
-                className={css.input}
-              />
+              <div className={css.durationGroup}>
+                <div className={css.durationUnit}>
+                  <input
+                    type="number"
+                    min={0}
+                    value={duration.days}
+                    onChange={e => setUnit('days', e.target.value)}
+                    className={css.input}
+                  />
+                  <span className={css.durationUnitLabel}>{tDur('d')}</span>
+                </div>
+                <div className={css.durationUnit}>
+                  <input
+                    type="number"
+                    min={0}
+                    max={23}
+                    value={duration.hours}
+                    onChange={e => setUnit('hours', e.target.value)}
+                    className={css.input}
+                  />
+                  <span className={css.durationUnitLabel}>{tDur('h')}</span>
+                </div>
+                <div className={css.durationUnit}>
+                  <input
+                    type="number"
+                    min={0}
+                    max={59}
+                    value={duration.minutes}
+                    onChange={e => setUnit('minutes', e.target.value)}
+                    className={css.input}
+                  />
+                  <span className={css.durationUnitLabel}>{tDur('m')}</span>
+                </div>
+              </div>
+              <input type="hidden" {...register('actualDuration')} />
               {errors.actualDuration && (
                 <p className={css.error}>{errors.actualDuration.message}</p>
               )}

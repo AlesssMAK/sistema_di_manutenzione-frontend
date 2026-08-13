@@ -1,4 +1,15 @@
 {
+  "Duration": { "d": "d", "h": "h", "m": "min" },
+  "OvertimeAlert": {
+    "title": "Interwencja przeciąga się",
+    "message": "Pracujesz nad tym już {worked}, ponad zaplanowane {planned}. Co chcesz zrobić?",
+    "commentLabel": "Komentarz (opcjonalny)",
+    "commentPlaceholder": "Dlaczego kontynuujesz...",
+    "continue": "Kontynuuj",
+    "complete": "Zakończ",
+    "suspend": "Wstrzymaj",
+    "saving": "Zapisywanie..."
+  },
   "login": {
     "title": "Logowanie",
     "titleForLoginHomePage": "Zaloguj się jako",
@@ -356,6 +367,11 @@
         "auditLog": "Log audytu (dni)",
         "archiveMonths": "Archiwum zakończonych zgłoszeń (miesiące)",
         "archiveNever": "Nigdy"
+      },
+      "maintenance": {
+        "section": "Konserwacja",
+        "overtimeHours": "Alert przekroczenia (godziny)",
+        "overtimeHint": "Godziny ponad zaplanowany czas, po których technik zostaje powiadomiony (0 = wyłączone)."
       },
       "bacheca": {
         "section": "Tablica",

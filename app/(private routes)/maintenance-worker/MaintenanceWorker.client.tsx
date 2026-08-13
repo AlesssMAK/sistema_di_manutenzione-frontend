@@ -18,12 +18,18 @@ import DaySlotGrid from '@/components/MaintenanceWorker/DaySlotGrid/DaySlotGrid'
 import Button from '@/components/UI/Button/Button';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
-import { fetchFaultCards, fetchFaultDeadlines } from '@/lib/api/faults';
+import {
+  fetchFaultCards,
+  fetchFaultDeadlines,
+  fetchMaintenanceTabCounts,
+  markMaintenanceTabSeen,
+  type MaintenanceSeenTab,
+} from '@/lib/api/faults';
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { FaultCard } from '@/types/faultType';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export type FaultViewMode = 'active' | 'overdue' | 'completed';
 
@@ -77,6 +83,26 @@ const MaintenanceWorkerClient = () => {
     queryFn: fetchSystemSettings,
     staleTime: 60 * 60 * 1000,
   });
+
+  const queryClient = useQueryClient();
+
+  // Unseen-count badges for the board tabs (persisted per user).
+  const { data: tabCounts } = useQuery({
+    queryKey: ['maintenanceTabCounts'],
+    queryFn: fetchMaintenanceTabCounts,
+    staleTime: 30 * 1000,
+  });
+
+  const markSeen = useCallback(
+    (tab: MaintenanceSeenTab) => {
+      markMaintenanceTabSeen(tab)
+        .then(() =>
+          queryClient.invalidateQueries({ queryKey: ['maintenanceTabCounts'] })
+        )
+        .catch(() => {});
+    },
+    [queryClient]
+  );
   // Parse 'HH:mm' → hour bucket the slot grid renders. End hour is
   // inclusive in DaySlotGrid (renders the row), so we floor the
   // end-of-workday to the last hour that contains slot time. The
@@ -271,6 +297,8 @@ const MaintenanceWorkerClient = () => {
     if (newScope === scope) return;
     setScope(newScope);
     setPage(1);
+    // Viewing the pool clears its unseen badge.
+    if (newScope === 'pool') markSeen('pool');
   };
 
   const handleModeChange = (newMode: FaultViewMode) => {
@@ -278,6 +306,8 @@ const MaintenanceWorkerClient = () => {
     setViewMode(newMode);
     setSelectedDate('');
     setPage(1);
+    // Viewing a tab clears its unseen badge.
+    markSeen(newMode);
 
     if (newMode === 'overdue') {
       fetchOverdueDeadlines(priority);
@@ -338,18 +368,36 @@ const MaintenanceWorkerClient = () => {
     fetchPlannedCounts(scope, userId, viewMode);
   }, [scope, userId, viewMode, fetchPlannedCounts]);
 
+  // Mark the landing tab (and pool if landing there) seen once resolved,
+  // so its badge starts cleared — like opening a message inbox.
+  useEffect(() => {
+    if (!scopeResolved) return;
+    markSeen(viewMode);
+    if (scope === 'pool') markSeen('pool');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scopeResolved]);
+
   // Live "new fault" signal — the SocketProvider already broadcasts
   // fault:created globally (toast + query invalidation); here we also
   // count them so the worker gets an explicit, page-level refresh cue
   // (the list is manually fetched, so it doesn't auto-refresh).
   useEffect(() => {
     if (!socket) return;
-    const onCreated = () => setNewFaultCount(c => c + 1);
+    const invalidateCounts = () =>
+      queryClient.invalidateQueries({ queryKey: ['maintenanceTabCounts'] });
+    const onCreated = () => {
+      setNewFaultCount(c => c + 1);
+      invalidateCounts();
+    };
     socket.on('fault:created', onCreated);
+    socket.on('fault:updated', invalidateCounts);
+    socket.on('fault:statusChanged', invalidateCounts);
     return () => {
       socket.off('fault:created', onCreated);
+      socket.off('fault:updated', invalidateCounts);
+      socket.off('fault:statusChanged', invalidateCounts);
     };
-  }, [socket]);
+  }, [socket, queryClient]);
 
   const handleRefreshNew = () => {
     setNewFaultCount(0);
@@ -389,6 +437,15 @@ const MaintenanceWorkerClient = () => {
 
   const showResetButton = !isOverdueMode && (selectedDate || scope !== 'all');
 
+  // Only non-zero counts become badges.
+  const viewCounts: Partial<Record<FaultViewMode, number>> = {};
+  if (tabCounts?.active) viewCounts.active = tabCounts.active;
+  if (tabCounts?.overdue) viewCounts.overdue = tabCounts.overdue;
+  if (tabCounts?.completed) viewCounts.completed = tabCounts.completed;
+  const scopeCounts: Partial<Record<FaultScope, number>> = tabCounts?.pool
+    ? { pool: tabCounts.pool }
+    : {};
+
   return (
     <div className="container">
       <div className={css.page_wrapper}>
@@ -416,6 +473,7 @@ const MaintenanceWorkerClient = () => {
                 tabs={VIEW_MODE_TABS}
                 activeTab={viewMode}
                 onTabChange={handleModeChange}
+                counts={viewCounts}
               />
             </div>
 
@@ -434,6 +492,7 @@ const MaintenanceWorkerClient = () => {
               <ScopeFilterBar
                 activeScope={scope}
                 onScopeChange={handleScopeChange}
+                counts={scopeCounts}
               />
             </div>
 

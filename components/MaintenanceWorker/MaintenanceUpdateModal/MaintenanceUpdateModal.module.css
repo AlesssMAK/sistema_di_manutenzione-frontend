@@ -77,6 +77,28 @@
   background: #ffffff;
 }
 
+/* Days / hours / minutes editor for actual duration. */
+.durationGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.durationUnit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.durationUnit .input {
+  width: 72px;
+}
+
+.durationUnitLabel {
+  font-size: 14px;
+  color: #45556c;
+}
+
 .textarea {
   width: 100%;
   padding: 8px 12px;

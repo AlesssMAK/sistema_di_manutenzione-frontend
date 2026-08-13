@@ -55,6 +55,9 @@ export interface FaultCard {
   completedAt?: string;
   claimedBy?: string;
   claimedAt?: string;
+  /** Work-time accounting (excludes Suspended pauses). */
+  workStartedAt?: string | null;
+  workedMs?: number;
   autoRescheduledFrom?: {
     plannedDate?: string;
     plannedTime?: string;
