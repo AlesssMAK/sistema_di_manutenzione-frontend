@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { getAnnouncements, getInbox } from '@/lib/api/messages';
-import type { Message } from '@/types/messageType';
+import { getAnnouncements, getConversations } from '@/lib/api/messages';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import MessageCard from '../MessageCard/MessageCard';
+import ConversationCard from '../ConversationCard/ConversationCard';
 import MessageDetailModal from '../MessageDetailModal/MessageDetailModal';
 import css from './MessageInbox.module.css';
 
@@ -25,26 +25,38 @@ const MessageInbox = ({ kind, currentUserId }: MessageInboxProps) => {
   const t = useTranslations('MessagesPage');
   const tNoFound = useTranslations('NoFound');
   const [page, setPage] = useState(1);
-  const [openMessage, setOpenMessage] = useState<Message | null>(null);
+  const [openAnchor, setOpenAnchor] = useState<{
+    id: string;
+    subject: string;
+  } | null>(null);
 
-  // Bell drives bubble counts; this view only fetches a role-targeted list
-  // so users see what's relevant to them (broadcast_all lives on
-  // /reports-and-communications, per the channel split decision).
-  const { data, isLoading, isError } = useQuery({
-    queryKey: ['messages', kind, page],
-    queryFn: () =>
-      kind === 'direct'
-        ? getInbox({ box: 'inbox', page, perPage: PER_PAGE })
-        : getAnnouncements({
-            types: ['broadcast_role'],
-            page,
-            perPage: PER_PAGE,
-          }),
+  const isDirect = kind === 'direct';
+
+  // Two separate queries (only the active one runs) — direct is the
+  // chat-list of conversations, announcements are role-targeted broadcasts.
+  const conversationsQuery = useQuery({
+    queryKey: ['messages', 'direct', page],
+    queryFn: () => getConversations({ page, perPage: PER_PAGE }),
     placeholderData: keepPreviousData,
+    enabled: isDirect,
   });
 
-  const items = data?.items ?? [];
-  const totalPages = data?.totalPages ?? 0;
+  const announcementsQuery = useQuery({
+    queryKey: ['messages', 'announcements', page],
+    queryFn: () =>
+      getAnnouncements({ types: ['broadcast_role'], page, perPage: PER_PAGE }),
+    placeholderData: keepPreviousData,
+    enabled: !isDirect,
+  });
+
+  const activeQuery = isDirect ? conversationsQuery : announcementsQuery;
+  const { isLoading, isError } = activeQuery;
+  const conversations = conversationsQuery.data?.items ?? [];
+  const announcements = announcementsQuery.data?.items ?? [];
+  const totalPages = activeQuery.data?.totalPages ?? 0;
+  const isEmpty = isDirect
+    ? conversations.length === 0
+    : announcements.length === 0;
 
   return (
     <div className={css.wrap}>
@@ -57,21 +69,34 @@ const MessageInbox = ({ kind, currentUserId }: MessageInboxProps) => {
           title={tNoFound('serverErrorTitle')}
           message={t('errors.load')}
         />
-      ) : items.length === 0 ? (
+      ) : isEmpty ? (
         <NoFound
           title={tNoFound('noResultsTitle')}
           message={t(`empty.${kind}`)}
         />
       ) : (
         <ul className={css.list}>
-          {items.map(msg => (
-            <MessageCard
-              key={msg._id}
-              message={msg}
-              currentUserId={currentUserId}
-              onClick={setOpenMessage}
-            />
-          ))}
+          {isDirect
+            ? conversations.map(conv => (
+                <ConversationCard
+                  key={conv.threadId}
+                  conversation={conv}
+                  currentUserId={currentUserId}
+                  onOpen={c =>
+                    setOpenAnchor({ id: c.last._id, subject: c.last.subject })
+                  }
+                />
+              ))
+            : announcements.map(msg => (
+                <MessageCard
+                  key={msg._id}
+                  message={msg}
+                  currentUserId={currentUserId}
+                  onClick={m =>
+                    setOpenAnchor({ id: m._id, subject: m.subject })
+                  }
+                />
+              ))}
         </ul>
       )}
 
@@ -85,11 +110,12 @@ const MessageInbox = ({ kind, currentUserId }: MessageInboxProps) => {
         </div>
       )}
 
-      {openMessage && (
+      {openAnchor && (
         <MessageDetailModal
-          message={openMessage}
+          anchorId={openAnchor.id}
+          subject={openAnchor.subject}
           currentUserId={currentUserId}
-          onClose={() => setOpenMessage(null)}
+          onClose={() => setOpenAnchor(null)}
         />
       )}
     </div>

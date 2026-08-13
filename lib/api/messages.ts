@@ -1,15 +1,21 @@
 import nextServer from './api';
 import type { GrantedUser } from '@/types/userTypes';
 import type {
+  Conversation,
+  ConversationListResponse,
   CreateBroadcastPayload,
   CreateDirectPayload,
   ListAnnouncementsParams,
+  ListConversationsParams,
   ListInboxParams,
   Message,
   MessageListResponse,
+  MessageThreadResponse,
   ReplyMessagePayload,
   UnreadCountResponse,
 } from '@/types/messageType';
+
+export type { Conversation };
 
 // ---------- create ----------
 
@@ -106,6 +112,18 @@ export const getAnnouncements = async (
   return data;
 };
 
+// Chat-list view of the direct inbox: one entry per counterpart.
+export const getConversations = async (
+  params: ListConversationsParams = {}
+): Promise<ConversationListResponse> => {
+  const { page = 1, perPage = 10 } = params;
+  const { data } = await nextServer.get<ConversationListResponse>(
+    '/messages/conversations',
+    { params: { page, perPage } }
+  );
+  return data;
+};
+
 // Admin-only — operators explicitly granted direct messaging.
 export const getMessageSenders = async (): Promise<GrantedUser[]> => {
   const { data } = await nextServer.get<{ users: GrantedUser[] }>(
@@ -117,6 +135,16 @@ export const getMessageSenders = async (): Promise<GrantedUser[]> => {
 export const getUnreadCount = async (): Promise<UnreadCountResponse> => {
   const { data } = await nextServer.get<UnreadCountResponse>(
     '/messages/unread-count'
+  );
+  return data;
+};
+
+// Full conversation (root + all replies) that the given message belongs to.
+export const getThread = async (
+  id: string
+): Promise<MessageThreadResponse> => {
+  const { data } = await nextServer.get<MessageThreadResponse>(
+    `/messages/${id}/thread`
   );
   return data;
 };
@@ -153,4 +181,9 @@ export const replyToMessage = async (
 
 export const deleteMessage = async (id: string): Promise<void> => {
   await nextServer.delete(`/messages/${id}`);
+};
+
+// Deletes the whole conversation the given message belongs to.
+export const deleteThread = async (id: string): Promise<void> => {
+  await nextServer.delete(`/messages/${id}/thread`);
 };

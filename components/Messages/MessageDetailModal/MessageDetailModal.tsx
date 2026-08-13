@@ -1,21 +1,31 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { format, isValid, parseISO } from 'date-fns';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import toast from 'react-hot-toast';
-import { markAsRead } from '@/lib/api/messages';
+import { deleteMessage, getThread, markAsRead } from '@/lib/api/messages';
+import { useAuthStore } from '@/lib/store/authStore';
 import type { Message } from '@/types/messageType';
 import Modal from '@/components/UI/Modal/Modal';
 import Button from '@/components/UI/Button/Button';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
+import Loader from '@/components/UI/Loader/Loader';
 import ReplyForm from '../ReplyForm/ReplyForm';
 import css from './MessageDetailModal.module.css';
 
 interface MessageDetailModalProps {
-  message: Message;
+  /** Any message in the conversation — the thread is fetched from it. */
+  anchorId: string;
+  /** Subject shown in the header (from the card that opened the modal). */
+  subject?: string;
   currentUserId: string;
   onClose: () => void;
 }
@@ -33,8 +43,19 @@ const formatFull = (
   return `${datePart} ${separator} ${timePart}`;
 };
 
+const authorIdOf = (m: Message) =>
+  typeof m.authorId === 'object' && m.authorId
+    ? String(m.authorId._id)
+    : String(m.authorId);
+
+const authorNameOf = (m: Message) =>
+  typeof m.authorId === 'object' && m.authorId
+    ? m.authorId.fullName
+    : m.authorName;
+
 const MessageDetailModal = ({
-  message,
+  anchorId,
+  subject,
   currentUserId,
   onClose,
 }: MessageDetailModalProps) => {
@@ -44,136 +65,230 @@ const MessageDetailModal = ({
   const tRoles = useTranslations('Roles');
   const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
+  const isAdmin = useAuthStore(state => state.user?.role === 'admin');
+  const myId = String(currentUserId);
+
   const [isReplying, setIsReplying] = useState(false);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
-  const authorName =
-    typeof message.authorId === 'object' && message.authorId
-      ? message.authorId.fullName
-      : message.authorName;
+  // Whole conversation the anchor belongs to (chat model), oldest-first.
+  const { data: threadData, isLoading: threadLoading } = useQuery({
+    queryKey: ['messageThread', anchorId],
+    queryFn: () => getThread(anchorId),
+    placeholderData: keepPreviousData,
+  });
+  const thread = threadData?.items ?? [];
 
-  // Don't offer a reply CTA when I'm the author — the backend
-  // rejects self-reply with 400, and there's no useful UX in
-  // letting someone reply to their own broadcast.
-  const authorIdStr =
-    typeof message.authorId === 'object' && message.authorId
-      ? String(message.authorId._id)
-      : String(message.authorId);
-  const isAuthor = authorIdStr === String(currentUserId);
-
-  // Auto-mark on first open so the badge ticks down immediately.
-  // Idempotent on the backend ($addToSet), but skip if I'm already in readBy.
-  const markMutation = useMutation({
-    mutationFn: () => markAsRead(message._id),
-    onSuccess: () => {
+  // Mark every message I received-but-haven't-read across the whole
+  // conversation, so opening it clears the unread badge. Own messages are
+  // skipped (the backend 403s "Not your message" for the author).
+  const markedFor = useRef<string | null>(null);
+  useEffect(() => {
+    if (!thread.length) return;
+    const toMark = thread.filter(
+      m => authorIdOf(m) !== myId && !m.readBy.includes(myId)
+    );
+    if (!toMark.length) return;
+    // Guard against re-marking the same anchor render loop.
+    const stamp = toMark.map(m => m._id).join(',');
+    if (markedFor.current === stamp) return;
+    markedFor.current = stamp;
+    Promise.allSettled(toMark.map(m => markAsRead(m._id))).then(() => {
       queryClient.invalidateQueries({ queryKey: ['messages'] });
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [threadData]);
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteMessage(id),
+    onSuccess: (_data, id) => {
+      toast.success(tMessages('deleted'));
+      setConfirmDeleteId(null);
+      queryClient.invalidateQueries({ queryKey: ['messages'] });
+      // Deleting the anchor makes the thread query 404 — just close.
+      if (id === anchorId) {
+        onClose();
+      } else {
+        queryClient.invalidateQueries({ queryKey: ['messageThread', anchorId] });
+      }
     },
     onError: () => {
-      toast.error(tMessages('markReadError'));
+      toast.error(tMessages('deleteError'));
+      setConfirmDeleteId(null);
     },
   });
 
-  useEffect(() => {
-    if (!message.readBy.includes(currentUserId)) {
-      markMutation.mutate();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message._id]);
+  // Reply targets the most recent message NOT written by me — the backend
+  // rejects replying to your own message.
+  const replyTarget = [...thread]
+    .reverse()
+    .find(m => authorIdOf(m) !== myId);
 
-  const destinationLabel = () => {
-    if (message.type === 'direct') return null;
-    if (message.type === 'broadcast_all') return t('broadcastAll');
+  const canDelete = (m: Message) => authorIdOf(m) === myId || isAdmin;
+
+  const destinationLabel = (m: Message) => {
+    if (m.type === 'direct') return null;
+    if (m.type === 'broadcast_all') return t('broadcastAll');
     return t('broadcastRole', {
-      role: message.targetRole ? tRoles(message.targetRole) : '—',
+      role: m.targetRole ? tRoles(m.targetRole) : '—',
     });
   };
 
   return (
     <>
-    <Modal onClose={onClose}>
-      <div className={css.wrap}>
-        <h2 className={css.title}>{t('title')}</h2>
+      <Modal onClose={onClose}>
+        <div className={css.wrap}>
+          <h2 className={css.title}>{t('title')}</h2>
 
-        {message.subject && (
-          <h3 className={css.subject}>{message.subject}</h3>
-        )}
+          {subject && <h3 className={css.subject}>{subject}</h3>}
 
-        <div className={css.meta}>
-          <span className={css.metaLabel}>{t('from')}</span>
-          <span className={css.metaValue}>
-            {authorName} · {tRoles(message.authorRole)}
-          </span>
+          {threadLoading && !threadData ? (
+            <div className={css.threadLoading}>
+              <Loader />
+            </div>
+          ) : (
+            <ul className={css.thread}>
+              {thread.map(m => {
+                const mine = authorIdOf(m) === myId;
+                const dest = destinationLabel(m);
+                // A lone message (no conversation yet) fills the whole
+                // width like the original detail view; once there are
+                // replies, messages split into left/right chat bubbles.
+                const single = thread.length === 1;
+                return (
+                  <li
+                    key={m._id}
+                    className={`${css.bubble} ${
+                      single
+                        ? css.bubbleFull
+                        : mine
+                          ? css.bubbleMine
+                          : css.bubbleTheirs
+                    }`}
+                  >
+                    <div className={css.bubbleHead}>
+                      <span className={css.bubbleAuthor}>
+                        {mine ? t('you') : authorNameOf(m)} ·{' '}
+                        {tRoles(m.authorRole)}
+                      </span>
+                      <div className={css.bubbleHeadRight}>
+                        <span className={css.bubbleDate}>
+                          {formatFull(m.createdAt, locale, t('dateSeparator'))}
+                        </span>
+                        {canDelete(m) && (
+                          <button
+                            type="button"
+                            className={css.bubbleDelete}
+                            aria-label={t('delete')}
+                            title={t('delete')}
+                            onClick={() =>
+                              setConfirmDeleteId(
+                                confirmDeleteId === m._id ? null : m._id
+                              )
+                            }
+                          >
+                            <svg width="17" height="17" aria-hidden="true">
+                              <use href="/sprite.svg#close" />
+                            </svg>
+                          </button>
+                        )}
+                      </div>
+                    </div>
 
-          {message.type !== 'direct' && (
-            <>
-              <span className={css.metaLabel}>{t('to')}</span>
-              <span className={css.metaValue}>{destinationLabel()}</span>
-            </>
+                    {dest && <span className={css.bubbleDest}>{dest}</span>}
+
+                    <div className={css.bubbleBody}>{m.body}</div>
+
+                    {m.img && m.img.length > 0 && (
+                      <div className={css.imageGrid}>
+                        {m.img.map((url, i) => (
+                          <button
+                            key={i}
+                            type="button"
+                            className={css.imageThumb}
+                            onClick={() => setZoomedImage(url)}
+                          >
+                            <img src={url} alt={`${i + 1}`} />
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {confirmDeleteId === m._id && (
+                      <div className={css.confirmRow}>
+                        <span className={css.confirmText}>
+                          {t('deleteConfirm')}
+                        </span>
+                        <button
+                          type="button"
+                          className={css.confirmYes}
+                          disabled={deleteMutation.isPending}
+                          onClick={() => deleteMutation.mutate(m._id)}
+                        >
+                          {t('deleteYes')}
+                        </button>
+                        <button
+                          type="button"
+                          className={css.confirmNo}
+                          onClick={() => setConfirmDeleteId(null)}
+                        >
+                          {t('deleteNo')}
+                        </button>
+                      </div>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           )}
 
-          <span className={css.metaLabel}>{t('sent')}</span>
-          <span className={css.metaValue}>
-            {formatFull(message.createdAt, locale, t('dateSeparator'))}
-          </span>
-        </div>
-
-        <div className={css.body}>{message.body}</div>
-
-        {message.img && message.img.length > 0 && (
-          <div className={css.imageGrid}>
-            {message.img.map((url, i) => (
-              <button
-                key={i}
-                type="button"
-                className={css.imageThumb}
-                onClick={() => setZoomedImage(url)}
-              >
-                <img src={url} alt={`${i + 1}`} />
-              </button>
-            ))}
-          </div>
-        )}
-
-        {isReplying ? (
-          <div>
-            <h4 className={css.replyTitle}>
-              {tReply('title', { author: authorName })}
-            </h4>
-            <ReplyForm
-              originalMessage={message}
-              authorName={authorName}
-              onSuccess={() => {
-                setIsReplying(false);
-                onClose();
-              }}
-              onCancel={() => setIsReplying(false)}
-            />
-          </div>
-        ) : (
-          <div className={css.actions}>
-            <Button
-              type="button"
-              className="button button--white"
-              onClick={onClose}
-            >
-              {t('close')}
-            </Button>
-            {!isAuthor && (
+          {isReplying && replyTarget ? (
+            <div>
+              <h4 className={css.replyTitle}>
+                {tReply('title', { author: authorNameOf(replyTarget) })}
+              </h4>
+              <ReplyForm
+                originalMessage={replyTarget}
+                authorName={authorNameOf(replyTarget)}
+                onSuccess={() => {
+                  setIsReplying(false);
+                  queryClient.invalidateQueries({
+                    queryKey: ['messageThread', anchorId],
+                  });
+                  queryClient.invalidateQueries({ queryKey: ['messages'] });
+                }}
+                onCancel={() => setIsReplying(false)}
+              />
+            </div>
+          ) : (
+            <div className={css.actions}>
               <Button
                 type="button"
-                className="button button--blue"
-                onClick={() => setIsReplying(true)}
+                className="button button--white"
+                onClick={onClose}
               >
-                {t('reply')}
+                {t('close')}
               </Button>
-            )}
-          </div>
-        )}
-      </div>
-    </Modal>
-    {zoomedImage && (
-      <ImageModal imageUrl={zoomedImage} onClose={() => setZoomedImage(null)} />
-    )}
+              {replyTarget && (
+                <Button
+                  type="button"
+                  className="button button--blue"
+                  onClick={() => setIsReplying(true)}
+                >
+                  {t('reply')}
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      </Modal>
+      {zoomedImage && (
+        <ImageModal
+          imageUrl={zoomedImage}
+          onClose={() => setZoomedImage(null)}
+        />
+      )}
     </>
   );
 };
