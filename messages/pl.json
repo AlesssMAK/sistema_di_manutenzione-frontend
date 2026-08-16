@@ -1,7 +1,7 @@
 {
   "Duration": { "d": "d", "h": "h", "m": "min" },
   "OvertimeAlert": {
-    "title": "Interwencja przeciąga się",
+    "title": "Interwencja Przeciąga się",
     "message": "Pracujesz nad tym już {worked}, ponad zaplanowane {planned}. Co chcesz zrobić?",
     "commentLabel": "Komentarz (opcjonalny)",
     "commentPlaceholder": "Dlaczego kontynuujesz...",
@@ -12,7 +12,7 @@
   },
   "login": {
     "title": "Logowanie",
-    "titleForLoginHomePage": "Zaloguj się jako",
+    "titleForLoginHomePage": "Zaloguj się Jako",
     "roleOperatore": "Operator",
     "roleResponsabile": "Kierownik",
     "roleManuntentore": "Konserwator",
@@ -43,19 +43,19 @@
     },
     "forgotLink": "Nie pamiętasz hasła?",
     "passwordReset": {
-      "forgotTitle": "Zresetuj hasło",
+      "forgotTitle": "Zresetuj Hasło",
       "forgotSubtitle": "Podaj swój email, a wyślemy link do zresetowania hasła.",
       "emailPlaceholder": "Podaj swój email",
       "sendLink": "Wyślij link",
       "sent": "Jeśli konto z tym adresem istnieje, wysłaliśmy link. Sprawdź skrzynkę.",
       "backToLogin": "Powrót do logowania",
-      "resetTitle": "Wybierz nowe hasło",
+      "resetTitle": "Wybierz Nowe Hasło",
       "resetSubtitle": "Wpisz i potwierdź nowe hasło.",
       "newPasswordPlaceholder": "Nowe hasło",
       "confirmPasswordPlaceholder": "Potwierdź hasło",
       "policy": "Co najmniej 8 znaków, z wielką i małą literą oraz znakiem specjalnym.",
       "mismatch": "Hasła nie są zgodne",
-      "submit": "Zresetuj hasło",
+      "submit": "Zresetuj Hasło",
       "success": "Hasło zresetowane. Możesz się teraz zalogować.",
       "invalidToken": "Nieprawidłowy lub wygasły link. Poproś o nowy.",
       "missingToken": "Brak tokenu w linku.",
@@ -70,8 +70,8 @@
     "myArea": "Mój Obszar",
     "exit": "Wyloguj",
     "login": "Logowanie",
-    "createFault": "Zgłoś usterkę",
-    "switchRole": "Zmień rolę",
+    "createFault": "Zgłoś Usterkę",
+    "switchRole": "Zmień Rolę",
     "notifications": {
       "ariaLabel": "Powiadomienia",
       "tooltip": "Przejdź do wiadomości"
@@ -91,59 +91,59 @@
     "plants": "Maszyny / Zakłady",
     "notifications": "Powiadomienia",
     "logsAudit": "Logi i Audyt",
-    "systemSettings": "Ustawienia systemu"
+    "systemSettings": "Ustawienia Systemu"
   },
 
   "AdminPage": {
     "titlePageForStore": "Administrator",
     "Users": {
-      "title": "Zarządzanie użytkownikami",
+      "title": "Zarządzanie Użytkownikami",
       "subtitle": "Zarządzaj kontami użytkowników, rolami i uprawnieniami",
-      "newUser": "Nowy użytkownik",
+      "newUser": "Nowy Użytkownik",
       "searchPlaceholder": "Szukaj według imienia...",
       "role": "Rola",
       "status": "Status",
       "search": "Szukaj"
     },
     "Plants": {
-      "title": "Zarządzanie maszynami / zakładami",
+      "title": "Zarządzanie Maszynami / Zakładami",
       "subtitle": "Zarządzaj katalogiem maszyn i zakładów",
-      "newMachine": "Nowa maszyna",
+      "newMachine": "Nowa Maszyna",
       "searchPlaceholder": "Szukaj po nazwie...",
       "status": "Status",
       "search": "Szukaj"
     },
     "UsersList": {
-      "name": "Imię i nazwisko użytkownika",
+      "name": "Imię i Nazwisko Użytkownika",
       "role": "Rola",
-      "email": "Powiązany e-mail",
+      "email": "Powiązany E-mail",
       "status": "Status",
       "actions": "Akcje"
     },
     "CreateAndEditUserForm": {
       "user": "Użytkownik",
-      "title": "Nowy użytkownik",
+      "title": "Nowy Użytkownik",
       "subtitle": "Wypełnij wszystkie pola i wygeneruj kod dostępu dla nowego użytkownika",
       "role": "Rola",
       "fullName": "Imię i nazwisko",
       "email": "E-mail",
       "password": "Hasło",
       "accessCode": "Kod dostępu",
-      "generateAutomatically": "Wygeneruj automatycznie",
-      "setManually": "Ustaw ręcznie",
+      "generateAutomatically": "Wygeneruj Automatycznie",
+      "setManually": "Ustaw Ręcznie",
       "cancel": "Anuluj",
-      "createUser": "Utwórz użytkownika",
+      "createUser": "Utwórz Użytkownika",
       "userCreatedSuccess": "Użytkownik został utworzony pomyślnie",
       "userUpdatedSuccess": "Użytkownik został zaktualizowany pomyślnie",
       "status": "Status",
-      "editTitle": "Edytuj użytkownika",
+      "editTitle": "Edytuj Użytkownika",
       "editSubtitle": "Zarządzaj informacjami o koncie użytkownika i kodzie dostępu",
       "roleChangeDescription": "Aby dokończyć zmianę roli, należy wprowadzić wymagane dane: hasło przy rezygnacji z roli operatora lub kod dostępu przy jej przyjęciu.",
-      "saveChanges": "Zapisz zmiany"
+      "saveChanges": "Zapisz Zmiany"
     },
     "PlantsList": {
-      "name": "Nazwa maszyny",
-      "namePlantPart": "Nazwa części",
+      "name": "Nazwa Maszyny",
+      "namePlantPart": "Nazwa Części",
       "code": "Kod",
       "location": "Lokalizacja",
       "status": "Status",
@@ -155,22 +155,22 @@
       "search": "Szukaj",
       "searchPlaceholder": "Szukaj po nazwie",
       "status": "Status",
-      "name": "Nazwa części",
+      "name": "Nazwa Części",
       "code": "Kod",
       "actions": "Akcje",
       "button": "Nowa Część"
     },
     "CreateAndEditPlantAndPlantPartsForm": {
-      "titleNew": "Nowa maszyna",
-      "titleEdit": "Edytuj maszynę",
+      "titleNew": "Nowa Maszyna",
+      "titleEdit": "Edytuj Maszynę",
       "subtitle": "Zarządzaj informacjami o maszynie lub zakładzie",
-      "partTitleNew": "Utwórz część maszyny",
-      "partTitleEdit": "Edytuj część maszyny",
+      "partTitleNew": "Utwórz Część Maszyny",
+      "partTitleEdit": "Edytuj Część Maszyny",
       "partSubtitle": "Zarządzaj informacjami o części maszyny",
       "partsTitle": "Części Maszyny",
       "partsSubtitle": "Dodaj części, z których składa się ta maszyna",
       "labels": {
-        "namePlant": "Nazwa maszyny",
+        "namePlant": "Nazwa Maszyny",
         "code": "Kod",
         "location": "Lokalizacja",
         "status": "Status",
@@ -205,22 +205,22 @@
       }
     },
     "LogsAudit": {
-      "title": "Logi & Audyt systemu",
+      "title": "Logi & Audyt Systemu",
       "subtitle": "Przeglądaj historię dostępów i zmian w systemie",
       "system": "System",
       "filters": {
         "search": "Użytkownik",
         "searchPlaceholder": "Szukaj po nazwie...",
         "role": "Rola",
-        "allRoles": "Wszystkie role",
+        "allRoles": "Wszystkie Role",
         "from": "Od",
         "to": "Do",
         "clear": "Wyczyść",
         "datePlaceholder": "dd.mm.rrrr"
       },
       "datePicker": {
-        "prevMonth": "Poprzedni miesiąc",
-        "nextMonth": "Następny miesiąc",
+        "prevMonth": "Poprzedni Miesiąc",
+        "nextMonth": "Następny Miesiąc",
         "clear": "Wyczyść",
         "today": "Dziś"
       },
@@ -262,11 +262,11 @@
       },
       "sections": {
         "access": {
-          "title": "Historia dostępów",
+          "title": "Historia Dostępów",
           "empty": "Brak zarejestrowanych dostępów"
         },
         "changes": {
-          "title": "Zmiany w systemie",
+          "title": "Zmiany w Systemie",
           "empty": "Brak zarejestrowanych zmian"
         }
       },
@@ -286,7 +286,7 @@
         "body": "Logi są tylko do odczytu i są przechowywane w celu zapewnienia śledzenia wszystkich operacji wykonanych w systemie. Dane są archiwizowane zgodnie z obowiązującymi przepisami."
       },
       "detail": {
-        "title": "Szczegóły zdarzenia",
+        "title": "Szczegóły Zdarzenia",
         "date": "Data",
         "actor": "Aktor",
         "target": "Obiekt",
@@ -298,7 +298,7 @@
       }
     },
     "Notifications": {
-      "title": "Ustawienia powiadomień",
+      "title": "Ustawienia Powiadomień",
       "subtitle": "Zarządzaj e-mailem i wiadomościami systemu",
       "save": "Zapisz",
       "email": {
@@ -307,7 +307,7 @@
         "from": "Adres nadawcy",
         "rateLimit": "E-maile na odbiorcę / godz.",
         "triggers": {
-          "section": "Zdarzenia wysyłające e-mail",
+          "section": "Zdarzenia Wysyłające E-mail",
           "onNewFault": "Nowe zgłoszenie",
           "onAssignment": "Przypisanie interwencji",
           "onReassign": "Ponowne przypisanie interwencji",
@@ -328,18 +328,18 @@
       }
     },
     "SystemSettings": {
-      "title": "Ustawienia globalne",
+      "title": "Ustawienia Globalne",
       "subtitle": "Strefa czasowa, godziny pracy, święta i przechowywanie danych",
       "save": "Zapisz",
       "schedule": {
-        "section": "Godziny i planowanie",
+        "section": "Godziny i Planowanie",
         "timezone": "Strefa czasowa (IANA)",
         "workStart": "Początek dnia",
         "workEnd": "Koniec dnia",
         "workDays": "Dni robocze",
         "slotDuration": "Czas trwania slotu (minuty)",
         "continuous": "Praca ciągła (24h)",
-        "weekTitle": "Harmonogram tygodniowy",
+        "weekTitle": "Harmonogram Tygodniowy",
         "mode": {
           "off": "Zamknięte",
           "full": "24h",
@@ -363,7 +363,7 @@
         "remove": "Usuń"
       },
       "retention": {
-        "section": "Przechowywanie danych",
+        "section": "Przechowywanie Danych",
         "auditLog": "Log audytu (dni)",
         "archiveMonths": "Archiwum zakończonych zgłoszeń (miesiące)",
         "archiveNever": "Nigdy"
@@ -381,7 +381,7 @@
       "permissions": {
         "roleFilter": "Rola",
         "announcements": {
-          "section": "Kto może tworzyć ogłoszenia",
+          "section": "Kto Może Tworzyć Ogłoszenia",
           "subtitle": "Przyznaj lub cofnij prawo do publikowania na tablicy publicznej.",
           "selectUser": "Wybierz użytkownika",
           "empty": "Brak uprawnionych użytkowników",
@@ -411,7 +411,7 @@
 
   "maintenanceWorkerPage": {
     "titlePageForStore": "Konserwator",
-    "headerTitle": "Planowanie konserwatora",
+    "headerTitle": "Planowanie Konserwatora",
     "headerSubtitle": "Przeglądaj i zarządzaj zaplanowanymi interwencjami",
     "tabs": {
       "active": "Aktywne",
@@ -463,11 +463,11 @@
       }
     },
     "priorityLegend": {
-      "title": "Legenda priorytetów",
-      "reset": "Resetuj filtr"
+      "title": "Legenda Priorytetów",
+      "reset": "Resetuj Filtr"
     },
     "dayView": {
-      "title": "Widok dnia"
+      "title": "Widok Dnia"
     },
     "dateNow": {
       "overdue": "Zgłoszenia opóźnione",
@@ -486,7 +486,7 @@
     "headerSubtitle": "Zarządzaj otrzymanymi zgłoszeniami, bieżącymi czynnościami i archiwum",
     "tabs": {
       "received": "Otrzymane",
-      "inProgress": "W trakcie",
+      "inProgress": "W Trakcie",
       "archive": "Zakończone"
     },
     "empty": {
@@ -512,7 +512,7 @@
     "subtitle": "Wiadomości skierowane do ciebie i zgłoszone przez ciebie usterki.",
     "tabs": {
       "messages": "Wiadomości",
-      "myFaults": "Moje zgłoszenia"
+      "myFaults": "Moje Zgłoszenia"
     },
     "myFaults": {
       "subtitle": "Usterki przez ciebie zgłoszone.",
@@ -531,8 +531,8 @@
   },
 
   "ReportFaultPage": {
-    "titlePageForStore": "Zgłoś usterkę",
-    "title": "Zgłoś usterkę",
+    "titlePageForStore": "Zgłoś Usterkę",
+    "title": "Zgłoś Usterkę",
     "subtitle": "Wypełnij formularz, aby zarejestrować nową usterkę. Każda rola może zgłaszać problemy zauważone na maszynach."
   },
 
@@ -542,7 +542,7 @@
     "subtitle": "Wiadomości bezpośrednie i ogłoszenia skierowane do twojej roli.",
     "tabs": {
       "direct": "Bezpośrednie",
-      "announcements": "Wiadomości wg roli"
+      "announcements": "Wiadomości wg Roli"
     },
     "card": {
       "from": "Od",
@@ -551,13 +551,13 @@
       "showMore": "Pokaż szczegóły",
       "sent": "Wysłane",
       "received": "Otrzymane",
-      "deleteThread": "Usuń rozmowę",
+      "deleteThread": "Usuń Rozmowę",
       "deleteThreadConfirm": "Usunąć całą rozmowę?",
       "yes": "Tak",
       "no": "Nie"
     },
     "detail": {
-      "title": "Szczegóły wiadomości",
+      "title": "Szczegóły Wiadomości",
       "from": "Od",
       "to": "Do",
       "role": "Rola",
@@ -580,22 +580,22 @@
       "bodyLabel": "Wiadomość *",
       "bodyPlaceholder": "Napisz swoją odpowiedź...",
       "cancel": "Anuluj",
-      "send": "Wyślij odpowiedź",
+      "send": "Wyślij Odpowiedź",
       "sending": "Wysyłanie..."
     },
     "compose": {
-      "openButton": "Nowa wiadomość",
-      "title": "Nowa wiadomość",
+      "openButton": "Nowa Wiadomość",
+      "title": "Nowa Wiadomość",
       "subtitle": "Wyślij wiadomość bezpośrednią lub ogłoszenie",
       "channels": {
         "direct": "Bezpośrednia",
-        "broadcastRole": "Ogłoszenie dla roli",
-        "broadcastAll": "Ogłoszenie dla wszystkich"
+        "broadcastRole": "Ogłoszenie Dla Roli",
+        "broadcastAll": "Ogłoszenie Dla Wszystkich"
       },
       "labels": {
         "channel": "Kanał",
         "recipient": "Odbiorca",
-        "targetRole": "Rola odbiorcy",
+        "targetRole": "Rola Odbiorcy",
         "subject": "Temat",
         "body": "Wiadomość",
         "images": "Zdjęcia (opcjonalne)"
@@ -647,40 +647,40 @@
     "badge": "BHP",
     "statusFilter": "Status",
     "statusOptions": {
-      "all": "Wszystkie statusy"
+      "all": "Wszystkie Statusy"
     },
     "empty": "Brak zgłoszeń bezpieczeństwa"
   },
 
   "FaultDetail": {
-    "title": "Szczegóły zgłoszenia",
+    "title": "Szczegóły Zgłoszenia",
     "backButton": "Powrót",
     "labels": {
       "operator": "Operator",
       "status": "Status",
-      "dateCreated": "Data utworzenia",
-      "lastUpdated": "Ostatnia aktualizacja",
+      "dateCreated": "Data Utworzenia",
+      "lastUpdated": "Ostatnia Aktualizacja",
       "plant": "Zakład",
-      "plantPart": "Część zakładu",
-      "type": "Typ usterki",
+      "plantPart": "Część Zakładu",
+      "type": "Typ Usterki",
       "priority": "Priorytet",
       "planned": "Zaplanowane",
-      "estimatedDuration": "Szacowany czas",
+      "estimatedDuration": "Szacowany Czas",
       "deadline": "Termin",
-      "deadlineNotSet": "Nie ustawiono",
-      "assignedMaintainers": "Przypisani konserwatorzy",
-      "attachedPhotos": "Załączone zdjęcia",
-      "actualDuration": "Rzeczywisty czas",
+      "deadlineNotSet": "Nie Ustawiono",
+      "assignedMaintainers": "Przypisani Konserwatorzy",
+      "attachedPhotos": "Załączone Zdjęcia",
+      "actualDuration": "Rzeczywisty Czas",
       "completedAt": "Ukończono",
-      "suspensionReason": "Powód zawieszenia",
-      "materialRequest": "Żądany materiał",
-      "materialUsed": "Zużyty materiał",
-      "claimedAt": "Przyjęto do realizacji"
+      "suspensionReason": "Powód Zawieszenia",
+      "materialRequest": "Żądany Materiał",
+      "materialUsed": "Zużyty Materiał",
+      "claimedAt": "Przyjęto do Realizacji"
     },
     "badges": {
       "rescheduled": "Przełożone",
       "originalLabel": "Pierwotnie:",
-      "assignedToMe": "Przypisane do ciebie",
+      "assignedToMe": "Przypisane do Ciebie",
       "pool": "Pool"
     },
     "comments": {
@@ -693,7 +693,7 @@
     },
     "actions": {
       "planIntervention": "Zaplanuj interwencję",
-      "modifyPlanning": "Modyfikuj planowanie",
+      "modifyPlanning": "Modyfikuj Planowanie",
       "addCommentAndChangeStatus": "Dodaj komentarz i zmień status",
       "finalize": "Zakończ",
       "suspend": "Wstrzymaj",
@@ -707,8 +707,8 @@
     "hseSection": {
       "label": "Notatka BHP (Bezpieczeństwo)",
       "placeholder": "Napisz tu swoją ocenę bezpieczeństwa...",
-      "saveButton": "Zapisz notatkę",
-      "editButton": "Edytuj notatkę",
+      "saveButton": "Zapisz Notatkę",
+      "editButton": "Edytuj Notatkę",
       "saving": "Zapisywanie...",
       "emptyReadonly": "Brak notatki BHP",
       "saved": "Notatka BHP zapisana",
@@ -719,19 +719,19 @@
   "FaultCard": {
     "labels": {
       "operator": "Operator",
-      "dateCreated": "Data utworzenia",
+      "dateCreated": "Data Utworzenia",
       "plant": "Zakład",
       "plantPart": "Część",
       "machine": "Maszyna",
-      "plannedTime": "Zaplanowana godzina",
+      "plannedTime": "Zaplanowana Godzina",
       "deadline": "Termin",
       "priority": "Priorytet",
-      "estimatedDuration": "Szacowany czas",
+      "estimatedDuration": "Szacowany Czas",
       "description": "Opis",
       "comment": "Komentarz",
       "managerNotes": "Notatki kierownika",
       "assignedTo": "Przypisane do",
-      "claimedBy": "Przejęte przez",
+      "claimedBy": "Przejęte Przez",
       "planned": "Zaplanowane",
       "pool": "Pula",
       "technician": "Konserwator"
@@ -739,10 +739,10 @@
     "maintainerCount": "{count, plural, one {# konserwator} few {# konserwatorów} many {# konserwatorów} other {# konserwatorów}}",
     "buttons": {
       "details": "Szczegóły",
-      "viewDetails": "Zobacz szczegóły",
+      "viewDetails": "Zobacz Szczegóły",
       "loading": "Ładowanie...",
       "plan": "Zaplanuj",
-      "modify": "Modyfikuj planowanie",
+      "modify": "Modyfikuj Planowanie",
       "takeOver": "Przejmij",
       "takingOver": "Przejmowanie..."
     },
@@ -758,22 +758,22 @@
   },
 
   "PlanFaultForm": {
-    "titlePlan": "Zaplanuj zgłoszenie",
-    "titleModify": "Modyfikuj planowanie",
-    "titleReassign": "Przepisz interwencję",
-    "titleAddMaintainers": "Dodaj konserwatorów",
+    "titlePlan": "Zaplanuj Zgłoszenie",
+    "titleModify": "Modyfikuj Planowanie",
+    "titleReassign": "Przepisz Interwencję",
+    "titleAddMaintainers": "Dodaj Konserwatorów",
     "buttonReassign": "Przepisz",
-    "buttonAddMaintainers": "Dodaj konserwatorów",
+    "buttonAddMaintainers": "Dodaj Konserwatorów",
     "labels": {
       "priority": "Priorytet *",
-      "estimatedDuration": "Szacowany czas *",
-      "plannedDate": "Zaplanowana data *",
-      "plannedTime": "Zaplanowana godzina *",
+      "estimatedDuration": "Szacowany Czas *",
+      "plannedDate": "Zaplanowana Data *",
+      "plannedTime": "Zaplanowana Godzina *",
       "deadline": "Termin *",
       "managerComment": "Notatki kierownika",
-      "assignedMaintainers": "Przypisani konserwatorzy",
-      "alreadyAssigned": "Już przypisani",
-      "additionalMaintainers": "Konserwatorzy do dodania"
+      "assignedMaintainers": "Przypisani Konserwatorzy",
+      "alreadyAssigned": "Już Przypisani",
+      "additionalMaintainers": "Konserwatorzy do Dodania"
     },
     "managerCommentPlaceholder": "Opcjonalne notatki dla konserwatora...",
     "datePlaceholder": "Wybierz datę",
@@ -795,22 +795,22 @@
   },
 
   "MaintenanceUpdateModal": {
-    "title": "Aktualizuj interwencję",
+    "title": "Aktualizuj Interwencję",
     "titles": {
-      "complete": "Zakończ interwencję",
-      "suspend": "Wstrzymaj interwencję",
-      "resume": "Wznów interwencję"
+      "complete": "Zakończ Interwencję",
+      "suspend": "Wstrzymaj Interwencję",
+      "resume": "Wznów Interwencję"
     },
     "labels": {
-      "newStatus": "Nowy status *",
+      "newStatus": "Nowy Status *",
       "maintainerComment": "Komentarz konserwatora",
       "actualDuration": "Rzeczywisty czas (minuty) *",
-      "suspensionReason": "Powód zawieszenia *",
-      "materialRequest": "Wymagany materiał lub wsparcie",
-      "materialUsed": "Zużyty materiał"
+      "suspensionReason": "Powód Zawieszenia *",
+      "materialRequest": "Wymagany Materiał lub Wsparcie",
+      "materialUsed": "Zużyty Materiał"
     },
     "statusOptions": {
-      "inProgress": "W toku",
+      "inProgress": "W Toku",
       "completed": "Zakończono",
       "suspended": "Wstrzymano"
     },
@@ -823,7 +823,7 @@
     },
     "buttons": {
       "cancel": "Anuluj",
-      "submit": "Potwierdź i zapisz",
+      "submit": "Potwierdź i Zapisz",
       "submitting": "Zapisywanie...",
       "close": "Zamknij"
     },
@@ -837,7 +837,7 @@
 
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Raporty",
-    "title": "Raporty i komunikaty",
+    "title": "Raporty i Komunikaty",
     "subtitle": "Przegląd ostatnich zgłoszeń usterek i ogłoszeń firmowych.",
     "sections": {
       "recentFaults": {
@@ -866,7 +866,7 @@
       "searchFaultsPlaceholder": "ID, operator lub zakład",
       "searchBroadcastsPlaceholder": "Tekst lub autor",
       "status": "Status",
-      "allStatuses": "Wszystkie statusy",
+      "allStatuses": "Wszystkie Statusy",
       "priority": "Priorytet",
       "allPriorities": "Wszystkie priorytety",
       "type": "Typ",
@@ -895,8 +895,8 @@
     "subtitle": "Ogłoszenia publiczne",
     "empty": "Brak ogłoszeń",
     "loginCta": "Zaloguj się",
-    "myAreaCta": "Przejdź do swojej strefy",
-    "createCta": "Nowe ogłoszenie",
+    "myAreaCta": "Przejdź do Swojej Strefy",
+    "createCta": "Nowe Ogłoszenie",
     "delete": "Usuń",
     "errorLoad": "Błąd ładowania ogłoszeń",
     "created": "Ogłoszenie opublikowane",
@@ -913,13 +913,13 @@
       "handover": {
         "title": "Przekazanie",
         "subtitle": "Notatki przekazania między zmianami",
-        "createCta": "Nowe przekazanie",
+        "createCta": "Nowe Przekazanie",
         "empty": "Brak przekazań"
       },
       "announcement": {
         "title": "Ogłoszenia",
         "subtitle": "Ogłoszenia publiczne",
-        "createCta": "Nowe ogłoszenie",
+        "createCta": "Nowe Ogłoszenie",
         "empty": "Brak ogłoszeń"
       }
     },
@@ -941,7 +941,7 @@
 
   "Demo": {
     "banner": "Wersja demo — dane są okresowo resetowane",
-    "welcomeTitle": "Witamy w wersji demo",
+    "welcomeTitle": "Witamy w Wersji Demo",
     "welcomeBody": "To jest publiczne demo Systemu zarządzania konserwacją i komunikacją. Wybierz rolę, aby poznać wszystkie funkcje. Dane są współdzielone między odwiedzającymi i okresowo resetowane.",
     "welcomeCta": "Rozpocznij"
   },
@@ -975,7 +975,7 @@
   },
 
   "NotFound": {
-    "title": "Strona nie znaleziona",
+    "title": "Strona Nie Znaleziona",
     "description": "Niestety, strona, której szukasz, nie istnieje lub została przeniesiona.",
     "backHome": "Powrót do strony głównej"
   },
@@ -998,7 +998,7 @@
 
   "StatusFault": {
     "CREATED": "Utworzono",
-    "IN_PROGRESS": "W toku",
+    "IN_PROGRESS": "W Toku",
     "COMPLETED": "Zakończono",
     "SUSPENDED": "Wstrzymano",
     "OVERDUE": "Opóźnione"
@@ -1011,7 +1011,7 @@
   },
 
   "ReportForm": {
-    "newReport": "Nowy raport",
+    "newReport": "Nowy Raport",
     "fillForm": "Wypełnij formularz, aby zgłosić usterkę lub anomalię",
     "reportId": "ID raportu",
     "operator": "Operator",
@@ -1035,7 +1035,7 @@
   },
 
   "Roles": {
-    "all": "Wszystkie role",
+    "all": "Wszystkie Role",
     "admin": "Administrator",
     "operator": "Operator",
     "manager": "Kierownik",
@@ -1051,7 +1051,7 @@
 
   "Filters": {
     "title": "Filtry",
-    "clear": "Wyczyść filtry"
+    "clear": "Wyczyść Filtry"
   },
 
   "btn": {
@@ -1059,7 +1059,7 @@
   },
 
   "NoFound": {
-    "noResultsTitle": "Brak wyników",
+    "noResultsTitle": "Brak Wyników",
     "noResultsMessage": "Spróbuj zmienić lub usunąć filtry, aby zobaczyć inne wyniki",
     "serverErrorTitle": "Błąd serwera",
     "serverErrorMessage": "Wystąpił problem podczas ładowania danych. Spróbuj ponownie później"
