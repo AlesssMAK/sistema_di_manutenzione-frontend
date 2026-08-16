@@ -1,11 +1,11 @@
 {
   "Duration": { "d": "d", "h": "h", "m": "min" },
   "OvertimeAlert": {
-    "title": "Intervention overrunning",
+    "title": "Intervention Overrunning",
     "message": "You've been working on this for {worked}, past the planned {planned}. What do you want to do?",
     "commentLabel": "Comment (optional)",
     "commentPlaceholder": "Why you're continuing...",
-    "continue": "Keep working",
+    "continue": "Keep Working",
     "complete": "Complete",
     "suspend": "Suspend",
     "saving": "Saving..."
@@ -43,13 +43,13 @@
     },
     "forgotLink": "Forgot password?",
     "passwordReset": {
-      "forgotTitle": "Reset your password",
+      "forgotTitle": "Reset Your Password",
       "forgotSubtitle": "Enter your email and we'll send you a link to reset it.",
       "emailPlaceholder": "Enter your email",
       "sendLink": "Send link",
       "sent": "If an account with this email exists, we've sent a reset link. Check your inbox.",
       "backToLogin": "Back to login",
-      "resetTitle": "Choose a new password",
+      "resetTitle": "Choose a New Password",
       "resetSubtitle": "Enter and confirm your new password.",
       "newPasswordPlaceholder": "New password",
       "confirmPasswordPlaceholder": "Confirm password",
@@ -70,8 +70,8 @@
     "myArea": "My Area",
     "exit": "Logout",
     "login": "Login",
-    "createFault": "Report fault",
-    "switchRole": "Switch role",
+    "createFault": "Report Fault",
+    "switchRole": "Switch Role",
     "notifications": {
       "ariaLabel": "Notifications",
       "tooltip": "Go to messages"
@@ -91,7 +91,7 @@
     "plants": "Machines / Plants",
     "notifications": "Notifications",
     "logsAudit": "Logs & Audit",
-    "systemSettings": "System settings"
+    "systemSettings": "System Settings"
   },
 
   "AdminPage": {
@@ -212,15 +212,15 @@
         "search": "User",
         "searchPlaceholder": "Search by name...",
         "role": "Role",
-        "allRoles": "All roles",
+        "allRoles": "All Roles",
         "from": "From",
         "to": "To",
         "clear": "Clear",
         "datePlaceholder": "dd/mm/yyyy"
       },
       "datePicker": {
-        "prevMonth": "Previous month",
-        "nextMonth": "Next month",
+        "prevMonth": "Previous Month",
+        "nextMonth": "Next Month",
         "clear": "Clear",
         "today": "Today"
       },
@@ -286,7 +286,7 @@
         "body": "Logs are read-only and retained to ensure traceability of every operation performed in the system. Data is stored in compliance with applicable regulations."
       },
       "detail": {
-        "title": "Event detail",
+        "title": "Event Detail",
         "date": "Date",
         "actor": "Actor",
         "target": "Target",
@@ -298,7 +298,7 @@
       }
     },
     "Notifications": {
-      "title": "Notification settings",
+      "title": "Notification Settings",
       "subtitle": "Manage system email and messaging",
       "save": "Save",
       "email": {
@@ -307,7 +307,7 @@
         "from": "Sender address",
         "rateLimit": "Email per recipient / hour",
         "triggers": {
-          "section": "Events that send email",
+          "section": "Events That Send Email",
           "onNewFault": "New report",
           "onAssignment": "Intervention assigned",
           "onReassign": "Intervention reassigned",
@@ -328,18 +328,18 @@
       }
     },
     "SystemSettings": {
-      "title": "Global settings",
+      "title": "Global Settings",
       "subtitle": "Timezone, work hours, holidays and data retention",
       "save": "Save",
       "schedule": {
-        "section": "Hours & scheduling",
+        "section": "Hours & Scheduling",
         "timezone": "Timezone (IANA)",
         "workStart": "Day start",
         "workEnd": "Day end",
         "workDays": "Work days",
         "slotDuration": "Slot duration (minutes)",
         "continuous": "Continuous operation (24h)",
-        "weekTitle": "Weekly schedule",
+        "weekTitle": "Weekly Schedule",
         "mode": {
           "off": "Closed",
           "full": "24h",
@@ -363,7 +363,7 @@
         "remove": "Remove"
       },
       "retention": {
-        "section": "Data retention",
+        "section": "Data Retention",
         "auditLog": "Audit log (days)",
         "archiveMonths": "Completed reports archive (months)",
         "archiveNever": "Never"
@@ -381,7 +381,7 @@
       "permissions": {
         "roleFilter": "Role",
         "announcements": {
-          "section": "Who can post announcements",
+          "section": "Who Can Post Announcements",
           "subtitle": "Grant or revoke the right to publish on the public board.",
           "selectUser": "Select user",
           "empty": "No authorized users",
@@ -463,11 +463,11 @@
       }
     },
     "priorityLegend": {
-      "title": "Priority legend",
-      "reset": "Reset filter"
+      "title": "Priority Legend",
+      "reset": "Reset Filter"
     },
     "dayView": {
-      "title": "Day view"
+      "title": "Day View"
     },
     "dateNow": {
       "overdue": "Overdue reports",
@@ -486,7 +486,7 @@
     "headerSubtitle": "Manage received reports, ongoing activities and the archive",
     "tabs": {
       "received": "Received",
-      "inProgress": "In progress",
+      "inProgress": "In Progress",
       "archive": "Completed"
     },
     "empty": {
@@ -512,7 +512,7 @@
     "subtitle": "Messages addressed to you and faults you've created.",
     "tabs": {
       "messages": "Messages",
-      "myFaults": "My faults"
+      "myFaults": "My Faults"
     },
     "myFaults": {
       "subtitle": "Faults you reported.",
@@ -531,8 +531,8 @@
   },
 
   "ReportFaultPage": {
-    "titlePageForStore": "Report fault",
-    "title": "Report a fault",
+    "titlePageForStore": "Report Fault",
+    "title": "Report a Fault",
     "subtitle": "Fill in the form to register a new fault. Any role can report issues observed on plant equipment."
   },
 
@@ -542,7 +542,7 @@
     "subtitle": "Direct messages and announcements targeted at your role.",
     "tabs": {
       "direct": "Direct",
-      "announcements": "Messages by role"
+      "announcements": "Messages by Role"
     },
     "card": {
       "from": "From",
@@ -551,13 +551,13 @@
       "showMore": "Show details",
       "sent": "Sent",
       "received": "Received",
-      "deleteThread": "Delete conversation",
+      "deleteThread": "Delete Conversation",
       "deleteThreadConfirm": "Delete the whole conversation?",
       "yes": "Yes",
       "no": "No"
     },
     "detail": {
-      "title": "Message detail",
+      "title": "Message Detail",
       "from": "From",
       "to": "To",
       "role": "Role",
@@ -580,22 +580,22 @@
       "bodyLabel": "Message *",
       "bodyPlaceholder": "Write your reply...",
       "cancel": "Cancel",
-      "send": "Send reply",
+      "send": "Send Reply",
       "sending": "Sending..."
     },
     "compose": {
-      "openButton": "New message",
-      "title": "New message",
+      "openButton": "New Message",
+      "title": "New Message",
       "subtitle": "Send a direct message or an announcement",
       "channels": {
         "direct": "Direct",
-        "broadcastRole": "Role announcement",
-        "broadcastAll": "Broadcast to all"
+        "broadcastRole": "Role Announcement",
+        "broadcastAll": "Broadcast to All"
       },
       "labels": {
         "channel": "Channel",
         "recipient": "Recipient",
-        "targetRole": "Target role",
+        "targetRole": "Target Role",
         "subject": "Subject",
         "body": "Message",
         "images": "Images (optional)"
@@ -647,40 +647,40 @@
     "badge": "HSE",
     "statusFilter": "Status",
     "statusOptions": {
-      "all": "All statuses"
+      "all": "All Statuses"
     },
     "empty": "No safety reports"
   },
 
   "FaultDetail": {
-    "title": "Report details",
-    "backButton": "Go back",
+    "title": "Report Details",
+    "backButton": "Go Back",
     "labels": {
       "operator": "Operator",
       "status": "Status",
-      "dateCreated": "Date created",
-      "lastUpdated": "Last updated",
+      "dateCreated": "Date Created",
+      "lastUpdated": "Last Updated",
       "plant": "Plant",
-      "plantPart": "Plant part",
-      "type": "Fault type",
+      "plantPart": "Plant Part",
+      "type": "Fault Type",
       "priority": "Priority",
       "planned": "Planned",
-      "estimatedDuration": "Estimated duration",
+      "estimatedDuration": "Estimated Duration",
       "deadline": "Deadline",
-      "deadlineNotSet": "Not set",
-      "assignedMaintainers": "Assigned maintainers",
-      "attachedPhotos": "Attached photos",
-      "actualDuration": "Actual duration",
+      "deadlineNotSet": "Not Set",
+      "assignedMaintainers": "Assigned Maintainers",
+      "attachedPhotos": "Attached Photos",
+      "actualDuration": "Actual Duration",
       "completedAt": "Completed at",
-      "suspensionReason": "Suspension reason",
-      "materialRequest": "Material requested",
-      "materialUsed": "Material used",
-      "claimedAt": "Taken in charge at"
+      "suspensionReason": "Suspension Reason",
+      "materialRequest": "Material Requested",
+      "materialUsed": "Material Used",
+      "claimedAt": "Taken in Charge at"
     },
     "badges": {
       "rescheduled": "Rescheduled",
       "originalLabel": "Original:",
-      "assignedToMe": "Assigned to you",
+      "assignedToMe": "Assigned to You",
       "pool": "Pool"
     },
     "comments": {
@@ -693,7 +693,7 @@
     },
     "actions": {
       "planIntervention": "Plan intervention",
-      "modifyPlanning": "Modify planning",
+      "modifyPlanning": "Modify Planning",
       "addCommentAndChangeStatus": "Add comment and change status",
       "finalize": "Finalize",
       "suspend": "Suspend",
@@ -707,8 +707,8 @@
     "hseSection": {
       "label": "HSE Note (Safety)",
       "placeholder": "Write your safety assessment here...",
-      "saveButton": "Save note",
-      "editButton": "Edit note",
+      "saveButton": "Save Note",
+      "editButton": "Edit Note",
       "saving": "Saving...",
       "emptyReadonly": "No HSE note",
       "saved": "HSE note saved",
@@ -719,19 +719,19 @@
   "FaultCard": {
     "labels": {
       "operator": "Operator",
-      "dateCreated": "Date created",
+      "dateCreated": "Date Created",
       "plant": "Plant",
       "plantPart": "Part",
       "machine": "Machine",
-      "plannedTime": "Planned time",
+      "plannedTime": "Planned Time",
       "deadline": "Deadline",
       "priority": "Priority",
-      "estimatedDuration": "Estimated duration",
+      "estimatedDuration": "Estimated Duration",
       "description": "Description",
       "comment": "Comment",
       "managerNotes": "Manager notes",
       "assignedTo": "Assigned to",
-      "claimedBy": "Taken over by",
+      "claimedBy": "Taken Over by",
       "planned": "Planned",
       "pool": "Pool",
       "technician": "Maintenance Worker"
@@ -739,12 +739,12 @@
     "maintainerCount": "{count, plural, one {# maintainer} other {# maintainers}}",
     "buttons": {
       "details": "Details",
-      "viewDetails": "View details",
+      "viewDetails": "View Details",
       "loading": "Loading...",
       "plan": "Plan",
-      "modify": "Modify planning",
-      "takeOver": "Take over",
-      "takingOver": "Taking over..."
+      "modify": "Modify Planning",
+      "takeOver": "Take Over",
+      "takingOver": "Taking Over..."
     },
     "messages": {
       "claimed": "Intervention taken over",
@@ -758,22 +758,22 @@
   },
 
   "PlanFaultForm": {
-    "titlePlan": "Plan report",
-    "titleModify": "Modify planning",
-    "titleReassign": "Reassign intervention",
-    "titleAddMaintainers": "Add maintainers",
+    "titlePlan": "Plan Report",
+    "titleModify": "Modify Planning",
+    "titleReassign": "Reassign Intervention",
+    "titleAddMaintainers": "Add Maintainers",
     "buttonReassign": "Reassign",
-    "buttonAddMaintainers": "Add maintainers",
+    "buttonAddMaintainers": "Add Maintainers",
     "labels": {
       "priority": "Priority *",
-      "estimatedDuration": "Estimated duration *",
-      "plannedDate": "Planned date *",
-      "plannedTime": "Planned time *",
+      "estimatedDuration": "Estimated Duration *",
+      "plannedDate": "Planned Date *",
+      "plannedTime": "Planned Time *",
       "deadline": "Deadline *",
       "managerComment": "Manager notes",
-      "assignedMaintainers": "Assigned maintainers",
-      "alreadyAssigned": "Already assigned",
-      "additionalMaintainers": "Maintainers to add"
+      "assignedMaintainers": "Assigned Maintainers",
+      "alreadyAssigned": "Already Assigned",
+      "additionalMaintainers": "Maintainers to Add"
     },
     "managerCommentPlaceholder": "Optional notes for the maintainer...",
     "datePlaceholder": "Select date",
@@ -795,22 +795,22 @@
   },
 
   "MaintenanceUpdateModal": {
-    "title": "Update intervention",
+    "title": "Update Intervention",
     "titles": {
-      "complete": "Finalize intervention",
-      "suspend": "Suspend intervention",
-      "resume": "Resume intervention"
+      "complete": "Finalize Intervention",
+      "suspend": "Suspend Intervention",
+      "resume": "Resume Intervention"
     },
     "labels": {
-      "newStatus": "New status *",
+      "newStatus": "New Status *",
       "maintainerComment": "Maintainer comment",
       "actualDuration": "Actual duration (minutes) *",
-      "suspensionReason": "Reason for suspension *",
-      "materialRequest": "Material or support requested",
-      "materialUsed": "Material used"
+      "suspensionReason": "Reason for Suspension *",
+      "materialRequest": "Material or Support Requested",
+      "materialUsed": "Material Used"
     },
     "statusOptions": {
-      "inProgress": "In progress",
+      "inProgress": "In Progress",
       "completed": "Completed",
       "suspended": "Suspended"
     },
@@ -823,7 +823,7 @@
     },
     "buttons": {
       "cancel": "Cancel",
-      "submit": "Confirm and save",
+      "submit": "Confirm and Save",
       "submitting": "Saving...",
       "close": "Close"
     },
@@ -866,7 +866,7 @@
       "searchFaultsPlaceholder": "ID, operator or plant",
       "searchBroadcastsPlaceholder": "Text or author",
       "status": "Status",
-      "allStatuses": "All statuses",
+      "allStatuses": "All Statuses",
       "priority": "Priority",
       "allPriorities": "All priorities",
       "type": "Type",
@@ -895,8 +895,8 @@
     "subtitle": "Public announcements",
     "empty": "No announcements yet",
     "loginCta": "Log in",
-    "myAreaCta": "Go to your area",
-    "createCta": "New announcement",
+    "myAreaCta": "Go to Your Area",
+    "createCta": "New Announcement",
     "delete": "Delete",
     "errorLoad": "Failed to load announcements",
     "created": "Announcement published",
@@ -913,13 +913,13 @@
       "handover": {
         "title": "Handover",
         "subtitle": "Handover notes between shifts",
-        "createCta": "New handover",
+        "createCta": "New Handover",
         "empty": "No handovers yet"
       },
       "announcement": {
         "title": "Announcements",
         "subtitle": "Public announcements",
-        "createCta": "New announcement",
+        "createCta": "New Announcement",
         "empty": "No announcements yet"
       }
     },
@@ -941,9 +941,9 @@
 
   "Demo": {
     "banner": "Demo version — data is reset periodically",
-    "welcomeTitle": "Welcome to the demo",
+    "welcomeTitle": "Welcome to the Demo",
     "welcomeBody": "This is a public demo of the Maintenance Management & Communications System. Pick a role to explore every feature. Data is shared between visitors and is reset periodically.",
-    "welcomeCta": "Get started"
+    "welcomeCta": "Get Started"
   },
   "RolesPage": {
     "titlePageForStore": "Roles",
@@ -960,7 +960,7 @@
         "description": "Manage reports and plan interventions"
       },
       "maintenanceWorker": {
-        "title": "Maintenance technician",
+        "title": "Maintenance Technician",
         "description": "View the schedule and carry out interventions"
       },
       "safety": {
@@ -975,7 +975,7 @@
   },
 
   "NotFound": {
-    "title": "Page not found",
+    "title": "Page Not Found",
     "description": "Unfortunately, the page you are looking for does not exist or has been moved.",
     "backHome": "Return to homepage"
   },
@@ -998,7 +998,7 @@
 
   "StatusFault": {
     "CREATED": "Created",
-    "IN_PROGRESS": "In progress",
+    "IN_PROGRESS": "In Progress",
     "COMPLETED": "Completed",
     "SUSPENDED": "Suspended",
     "OVERDUE": "Overdue"
@@ -1035,7 +1035,7 @@
   },
 
   "Roles": {
-    "all": "All roles",
+    "all": "All Roles",
     "admin": "Administrator",
     "operator": "Operator",
     "manager": "Manager",
@@ -1059,7 +1059,7 @@
   },
 
   "NoFound": {
-    "noResultsTitle": "No results found",
+    "noResultsTitle": "No Results Found",
     "noResultsMessage": "Try adjusting or removing filters to see other results",
     "serverErrorTitle": "Server Error",
     "serverErrorMessage": "A problem occurred while loading the data. Please try again later"

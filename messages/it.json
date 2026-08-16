@@ -1,6 +1,6 @@
 {"Duration": { "d": "g", "h": "h", "m": "min" },
 "OvertimeAlert": {
-  "title": "Intervento in ritardo",
+  "title": "Intervento in Ritardo",
   "message": "Stai lavorando su questo intervento da {worked}, oltre la durata pianificata di {planned}. Cosa vuoi fare?",
   "commentLabel": "Commento (opzionale)",
   "commentPlaceholder": "Perché continui...",
@@ -11,7 +11,7 @@
 },
 "login": {
     "title": "Accedi",
-    "titleForLoginHomePage": "Accedi come",
+    "titleForLoginHomePage": "Accedi Come",
     "roleOperatore": "Operatore",
     "roleResponsabile": "Responsabile",
     "roleManuntentore": "Manuntentore",
@@ -42,13 +42,13 @@
     },
     "forgotLink": "Password dimenticata?",
     "passwordReset": {
-      "forgotTitle": "Reimposta la password",
+      "forgotTitle": "Reimposta la Password",
       "forgotSubtitle": "Inserisci la tua email: ti invieremo un link per reimpostarla.",
       "emailPlaceholder": "Inserisci la tua email",
       "sendLink": "Invia il link",
       "sent": "Se esiste un account con questa email, ti abbiamo inviato un link. Controlla la posta.",
       "backToLogin": "Torna al login",
-      "resetTitle": "Scegli una nuova password",
+      "resetTitle": "Scegli una Nuova Password",
       "resetSubtitle": "Inserisci e conferma la tua nuova password.",
       "newPasswordPlaceholder": "Nuova password",
       "confirmPasswordPlaceholder": "Conferma password",
@@ -211,15 +211,15 @@
         "search": "Utente",
         "searchPlaceholder": "Cerca per nome...",
         "role": "Ruolo",
-        "allRoles": "Tutti i ruoli",
+        "allRoles": "Tutti i Ruoli",
         "from": "Dal",
         "to": "Al",
         "clear": "Pulisci",
         "datePlaceholder": "gg/mm/aaaa"
       },
       "datePicker": {
-        "prevMonth": "Mese precedente",
-        "nextMonth": "Mese successivo",
+        "prevMonth": "Mese Precedente",
+        "nextMonth": "Mese Successivo",
         "clear": "Pulisci",
         "today": "Oggi"
       },
@@ -285,7 +285,7 @@
         "body": "I log sono in sola lettura e vengono conservati per garantire la tracciabilità di tutte le operazioni effettuate nel sistema. I dati vengono archiviati conformemente alle normative vigenti."
       },
       "detail": {
-        "title": "Dettaglio evento",
+        "title": "Dettaglio Evento",
         "date": "Data",
         "actor": "Attore",
         "target": "Oggetto",
@@ -306,7 +306,7 @@
         "from": "Indirizzo mittente",
         "rateLimit": "Limite email per destinatario / ora",
         "triggers": {
-          "section": "Eventi che inviano email",
+          "section": "Eventi Che Inviano Email",
           "onNewFault": "Nuova Segnalazione",
           "onAssignment": "Assegnazione Intervento",
           "onReassign": "Riassegnazione Intervento",
@@ -331,14 +331,14 @@
       "subtitle": "Fuso orario, orari di lavoro, festività e conservazione dati",
       "save": "Salva",
       "schedule": {
-        "section": "Orari e pianificazione",
+        "section": "Orari e Pianificazione",
         "timezone": "Fuso orario (IANA)",
         "workStart": "Inizio giornata",
         "workEnd": "Fine giornata",
         "workDays": "Giorni lavorativi",
         "slotDuration": "Durata slot (minuti)",
         "continuous": "Attività continua (24h)",
-        "weekTitle": "Orario settimanale",
+        "weekTitle": "Orario Settimanale",
         "mode": {
           "off": "Chiuso",
           "full": "24h",
@@ -362,7 +362,7 @@
         "remove": "Rimuovi"
       },
       "retention": {
-        "section": "Conservazione dati",
+        "section": "Conservazione Dati",
         "auditLog": "Log di audit (giorni)",
         "archiveMonths": "Archivio segnalazioni completate (mesi)",
         "archiveNever": "Mai"
@@ -380,7 +380,7 @@
       "permissions": {
         "roleFilter": "Ruolo",
         "announcements": {
-          "section": "Chi può creare avvisi",
+          "section": "Chi Può Creare Avvisi",
           "subtitle": "Concedi o revoca il permesso di pubblicare avvisi sulla bacheca pubblica.",
           "selectUser": "Seleziona utente",
           "empty": "Nessun utente autorizzato",
@@ -414,7 +414,7 @@
   "headerSubtitle": "Visualizza e gestisci gli interventi pianificati",
   "tabs": {
     "active": "Attive",
-    "overdue": "In ritardo",
+    "overdue": "In Ritardo",
     "completed": "Completate"
   },
   "scope": {
@@ -463,7 +463,7 @@
   },
   "priorityLegend": {
     "title": "Legenda Priorità",
-    "reset": "Reimposta filtro"
+    "reset": "Reimposta Filtro"
   },
   "dayView": {
     "title": "Vista Giornaliera"
@@ -485,7 +485,7 @@
   "headerSubtitle": "Gestisci le segnalazioni ricevute, le attività in corso e l'archivio",
   "tabs": {
     "received": "Ricevute",
-    "inProgress": "In lavorazione",
+    "inProgress": "In Lavorazione",
     "archive": "Completate"
   },
   "empty": {
@@ -511,7 +511,7 @@
   "subtitle": "Messaggi a te indirizzati e segnalazioni che hai creato.",
   "tabs": {
     "messages": "Messaggi",
-    "myFaults": "Le mie segnalazioni"
+    "myFaults": "Le Mie Segnalazioni"
   },
   "myFaults": {
     "subtitle": "Segnalazioni create da te.",
@@ -531,7 +531,7 @@
 
 "ReportFaultPage": {
   "titlePageForStore": "Segnala Guasto",
-  "title": "Segnala un guasto",
+  "title": "Segnala un Guasto",
   "subtitle": "Compila il modulo per registrare un nuovo guasto. Tutti i ruoli possono segnalare problemi notati sugli impianti."
 },
 
@@ -550,7 +550,7 @@
     "showMore": "Mostra dettagli",
     "sent": "Inviato",
     "received": "Ricevuto",
-    "deleteThread": "Elimina conversazione",
+    "deleteThread": "Elimina Conversazione",
     "deleteThreadConfirm": "Eliminare tutta la conversazione?",
     "yes": "Sì",
     "no": "No"
@@ -579,7 +579,7 @@
     "bodyLabel": "Messaggio *",
     "bodyPlaceholder": "Scrivi la tua risposta...",
     "cancel": "Annulla",
-    "send": "Invia risposta",
+    "send": "Invia Risposta",
     "sending": "Invio..."
   },
   "compose": {
@@ -646,40 +646,40 @@
   "badge": "HSE",
   "statusFilter": "Stato",
   "statusOptions": {
-    "all": "Tutti gli stati"
+    "all": "Tutti gli Stati"
   },
   "empty": "Nessuna segnalazione di sicurezza"
 },
 
 "FaultDetail": {
   "title": "Dettaglio Segnalazione",
-  "backButton": "Torna indietro",
+  "backButton": "Torna Indietro",
   "labels": {
     "operator": "Operatore",
     "status": "Stato",
-    "dateCreated": "Data creazione",
-    "lastUpdated": "Ultimo aggiornamento",
+    "dateCreated": "Data Creazione",
+    "lastUpdated": "Ultimo Aggiornamento",
     "plant": "Impianto",
-    "plantPart": "Parte di impianto",
-    "type": "Tipo guasto",
+    "plantPart": "Parte di Impianto",
+    "type": "Tipo Guasto",
     "priority": "Priorità",
     "planned": "Pianificato",
-    "estimatedDuration": "Durata stimata",
+    "estimatedDuration": "Durata Stimata",
     "deadline": "Scadenza",
-    "deadlineNotSet": "Non impostata",
-    "assignedMaintainers": "Manutentori assegnati",
-    "attachedPhotos": "Foto allegate",
-    "actualDuration": "Durata effettiva",
+    "deadlineNotSet": "Non Impostata",
+    "assignedMaintainers": "Manutentori Assegnati",
+    "attachedPhotos": "Foto Allegate",
+    "actualDuration": "Durata Effettiva",
     "completedAt": "Completato il",
-    "suspensionReason": "Motivo della sospensione",
-    "materialRequest": "Materiale richiesto",
-    "materialUsed": "Materiale utilizzato",
-    "claimedAt": "Preso in carico il"
+    "suspensionReason": "Motivo della Sospensione",
+    "materialRequest": "Materiale Richiesto",
+    "materialUsed": "Materiale Utilizzato",
+    "claimedAt": "Preso in Carico il"
   },
   "badges": {
     "rescheduled": "Riprogrammata",
     "originalLabel": "Originale:",
-    "assignedToMe": "Assegnato a te",
+    "assignedToMe": "Assegnato a Te",
     "pool": "Pool"
   },
   "comments": {
@@ -692,7 +692,7 @@
   },
   "actions": {
     "planIntervention": "Pianifica intervento",
-    "modifyPlanning": "Modifica pianificazione",
+    "modifyPlanning": "Modifica Pianificazione",
     "addCommentAndChangeStatus": "Aggiungi commento e cambia stato",
     "finalize": "Finalizza",
     "suspend": "Sospendi",
@@ -706,8 +706,8 @@
   "hseSection": {
     "label": "Nota HSE (Sicurezza)",
     "placeholder": "Scrivi qui la tua valutazione di sicurezza...",
-    "saveButton": "Salva nota",
-    "editButton": "Modifica la nota",
+    "saveButton": "Salva Nota",
+    "editButton": "Modifica la Nota",
     "saving": "Salvataggio...",
     "emptyReadonly": "Nessuna nota HSE",
     "saved": "Nota HSE salvata",
@@ -718,19 +718,19 @@
 "FaultCard": {
   "labels": {
     "operator": "Operatore",
-    "dateCreated": "Data creazione",
+    "dateCreated": "Data Creazione",
     "plant": "Impianto",
     "plantPart": "Parte",
     "machine": "Macchina",
-    "plannedTime": "Ora pianificata",
+    "plannedTime": "Ora Pianificata",
     "deadline": "Scadenza",
     "priority": "Priorità",
-    "estimatedDuration": "Durata stimata",
+    "estimatedDuration": "Durata Stimata",
     "description": "Descrizione",
     "comment": "Commento",
     "managerNotes": "Note responsabile",
     "assignedTo": "Assegnato a",
-    "claimedBy": "Preso in carico",
+    "claimedBy": "Preso in Carico",
     "planned": "Pianificato",
     "pool": "Pool",
     "technician": "Manutentore"
@@ -738,12 +738,12 @@
   "maintainerCount": "{count, plural, one {# manutentore} other {# manutentori}}",
   "buttons": {
     "details": "Dettagli",
-    "viewDetails": "Visualizza dettagli",
+    "viewDetails": "Visualizza Dettagli",
     "loading": "Caricamento...",
     "plan": "Pianifica",
-    "modify": "Modifica pianificazione",
-    "takeOver": "Prendi in carico",
-    "takingOver": "Presa in carico..."
+    "modify": "Modifica Pianificazione",
+    "takeOver": "Prendi in Carico",
+    "takingOver": "Presa in Carico..."
   },
   "messages": {
     "claimed": "Intervento preso in carico",
@@ -765,9 +765,9 @@
   "buttonAddMaintainers": "Aggiungi Manutentori",
   "labels": {
     "priority": "Priorità *",
-    "estimatedDuration": "Durata stimata *",
-    "plannedDate": "Data pianificata *",
-    "plannedTime": "Ora pianificata *",
+    "estimatedDuration": "Durata Stimata *",
+    "plannedDate": "Data Pianificata *",
+    "plannedTime": "Ora Pianificata *",
     "deadline": "Scadenza *",
     "managerComment": "Note responsabile",
     "assignedMaintainers": "Manutentori Assegnati",
@@ -801,15 +801,15 @@
     "resume": "Riprendi Intervento"
   },
   "labels": {
-    "newStatus": "Nuovo stato *",
+    "newStatus": "Nuovo Stato *",
     "maintainerComment": "Commento manutentore",
     "actualDuration": "Durata effettiva (minuti) *",
-    "suspensionReason": "Motivo della sospensione *",
-    "materialRequest": "Materiale o supporto richiesto",
-    "materialUsed": "Materiale utilizzato"
+    "suspensionReason": "Motivo della Sospensione *",
+    "materialRequest": "Materiale o Supporto Richiesto",
+    "materialUsed": "Materiale Utilizzato"
   },
   "statusOptions": {
-    "inProgress": "In corso",
+    "inProgress": "In Corso",
     "completed": "Completato",
     "suspended": "Sospeso"
   },
@@ -822,7 +822,7 @@
   },
   "buttons": {
     "cancel": "Annulla",
-    "submit": "Conferma e salva",
+    "submit": "Conferma e Salva",
     "submitting": "Salvataggio...",
     "close": "Chiudi"
   },
@@ -865,7 +865,7 @@
     "searchFaultsPlaceholder": "ID, operatore o impianto",
     "searchBroadcastsPlaceholder": "Testo o autore",
     "status": "Stato",
-    "allStatuses": "Tutti gli stati",
+    "allStatuses": "Tutti gli Stati",
     "priority": "Priorità",
     "allPriorities": "Tutte le priorità",
     "type": "Tipologia",
@@ -894,8 +894,8 @@
   "subtitle": "Avvisi e comunicazioni pubbliche",
   "empty": "Nessun avviso al momento",
   "loginCta": "Accedi",
-  "myAreaCta": "Vai alla tua area",
-  "createCta": "Crea avviso",
+  "myAreaCta": "Vai alla Tua Area",
+  "createCta": "Crea Avviso",
   "delete": "Elimina",
   "errorLoad": "Errore nel caricamento degli avvisi",
   "created": "Avviso pubblicato",
@@ -912,13 +912,13 @@
     "handover": {
       "title": "Consegne",
       "subtitle": "Passaggio di consegne tra turni",
-      "createCta": "Nuova consegna",
+      "createCta": "Nuova Consegna",
       "empty": "Nessuna consegna al momento"
     },
     "announcement": {
       "title": "Annunci",
       "subtitle": "Avvisi e comunicazioni pubbliche",
-      "createCta": "Nuovo annuncio",
+      "createCta": "Nuovo Annuncio",
       "empty": "Nessun avviso al momento"
     }
   },
@@ -940,7 +940,7 @@
 
 "Demo": {
   "banner": "Versione demo — i dati vengono ripristinati periodicamente",
-  "welcomeTitle": "Benvenuto nella demo",
+  "welcomeTitle": "Benvenuto Nella Demo",
   "welcomeBody": "Questa è una demo pubblica del Sistema di Gestione Manutenzione e Comunicazioni. Scegli un ruolo per esplorare tutte le funzionalità. I dati sono condivisi tra i visitatori e vengono ripristinati periodicamente.",
   "welcomeCta": "Inizia"
 },
@@ -974,7 +974,7 @@
 },
 
 "NotFound": {
-  "title": "Pagina non trovata",
+  "title": "Pagina Non Trovata",
   "description": "Purtroppo la pagina che stai cercando non esiste o è stata spostata.",
   "backHome": "Torna alla pagina principale"
 },
@@ -997,7 +997,7 @@
 
   "StatusFault": {
     "CREATED": "Creato",
-    "IN_PROGRESS": "In corso",
+    "IN_PROGRESS": "In Corso",
     "COMPLETED": "Completato",
     "SUSPENDED": "Sospeso",
     "OVERDUE": "Scaduto"
@@ -1034,7 +1034,7 @@
   },
 
   "Roles": {
-    "all": "Tutti i ruoli",
+    "all": "Tutti i Ruoli",
     "admin": "Amministratore",
     "operator": "Operatore",
     "manager": "Responsabile",
@@ -1058,7 +1058,7 @@
   },
 
   "NoFound": {
-    "noResultsTitle": "Nessun risultato trovato",
+    "noResultsTitle": "Nessun Risultato Trovato",
     "noResultsMessage": "Prova a modificare o rimuovere i filtri per visualizzare altri risultati",
     "serverErrorTitle": "Errore del server",
     "serverErrorMessage": "Si è verificato un problema durante il caricamento dei dati. Riprova più tardi"

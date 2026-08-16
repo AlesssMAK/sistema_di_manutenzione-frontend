@@ -1,7 +1,7 @@
 {
   "Duration": { "d": "d", "h": "h", "m": "min" },
   "OvertimeAlert": {
-    "title": "Intervención con retraso",
+    "title": "Intervención con Retraso",
     "message": "Llevas {worked} trabajando en esto, más de lo planificado ({planned}). ¿Qué quieres hacer?",
     "commentLabel": "Comentario (opcional)",
     "commentPlaceholder": "Por qué continúas...",
@@ -11,8 +11,8 @@
     "saving": "Guardando..."
   },
   "login": {
-    "title": "Iniciar sesión",
-    "titleForLoginHomePage": "Iniciar sesión como",
+    "title": "Iniciar Sesión",
+    "titleForLoginHomePage": "Iniciar Sesión Como",
     "roleOperatore": "Operador",
     "roleResponsabile": "Responsable",
     "roleManuntentore": "Mantenimiento",
@@ -43,13 +43,13 @@
     },
     "forgotLink": "¿Olvidaste la contraseña?",
     "passwordReset": {
-      "forgotTitle": "Restablecer la contraseña",
+      "forgotTitle": "Restablecer la Contraseña",
       "forgotSubtitle": "Introduce tu email y te enviaremos un enlace para restablecerla.",
       "emailPlaceholder": "Introduce tu email",
       "sendLink": "Enviar enlace",
       "sent": "Si existe una cuenta con este email, te hemos enviado un enlace. Revisa tu bandeja.",
       "backToLogin": "Volver al inicio de sesión",
-      "resetTitle": "Elige una nueva contraseña",
+      "resetTitle": "Elige una Nueva Contraseña",
       "resetSubtitle": "Introduce y confirma tu nueva contraseña.",
       "newPasswordPlaceholder": "Nueva contraseña",
       "confirmPasswordPlaceholder": "Confirmar contraseña",
@@ -70,8 +70,8 @@
     "myArea": "Mi Área",
     "exit": "Salir",
     "login": "Acceder",
-    "createFault": "Reportar avería",
-    "switchRole": "Cambiar rol",
+    "createFault": "Reportar Avería",
+    "switchRole": "Cambiar Rol",
     "notifications": {
       "ariaLabel": "Notificaciones",
       "tooltip": "Ir a los mensajes"
@@ -91,7 +91,7 @@
     "plants": "Máquinas / Instalaciones",
     "notifications": "Notificaciones",
     "logsAudit": "Log & Audit",
-    "systemSettings": "Configuración del sistema"
+    "systemSettings": "Configuración del Sistema"
   },
 
   "AdminPage": {
@@ -167,7 +167,7 @@
       "partTitleNew": "Crear Pieza de la Máquina",
       "partTitleEdit": "Editar Pieza de la Máquina",
       "partSubtitle": "Gestiona la información de la pieza de la máquina",
-      "partsTitle": "Piezas de la máquina",
+      "partsTitle": "Piezas de la Máquina",
       "partsSubtitle": "Añade las piezas que componen esta máquina",
       "labels": {
         "namePlant": "Nombre de Máquina",
@@ -212,15 +212,15 @@
         "search": "Usuario",
         "searchPlaceholder": "Buscar por nombre...",
         "role": "Rol",
-        "allRoles": "Todos los roles",
+        "allRoles": "Todos los Roles",
         "from": "Desde",
         "to": "Hasta",
         "clear": "Limpiar",
         "datePlaceholder": "dd/mm/aaaa"
       },
       "datePicker": {
-        "prevMonth": "Mes anterior",
-        "nextMonth": "Mes siguiente",
+        "prevMonth": "Mes Anterior",
+        "nextMonth": "Mes Siguiente",
         "clear": "Limpiar",
         "today": "Hoy"
       },
@@ -286,7 +286,7 @@
         "body": "Los registros son de solo lectura y se conservan para garantizar la trazabilidad de todas las operaciones realizadas en el sistema. Los datos se almacenan conforme a la normativa vigente."
       },
       "detail": {
-        "title": "Detalle del evento",
+        "title": "Detalle del Evento",
         "date": "Fecha",
         "actor": "Actor",
         "target": "Objeto",
@@ -298,7 +298,7 @@
       }
     },
     "Notifications": {
-      "title": "Ajustes de notificaciones",
+      "title": "Ajustes de Notificaciones",
       "subtitle": "Gestiona el correo y la mensajería del sistema",
       "save": "Guardar",
       "email": {
@@ -307,7 +307,7 @@
         "from": "Dirección del remitente",
         "rateLimit": "Correos por destinatario / hora",
         "triggers": {
-          "section": "Eventos que envían correo",
+          "section": "Eventos Que Envían Correo",
           "onNewFault": "Nueva señalación",
           "onAssignment": "Intervención asignada",
           "onReassign": "Intervención reasignada",
@@ -328,18 +328,18 @@
       }
     },
     "SystemSettings": {
-      "title": "Ajustes globales",
+      "title": "Ajustes Globales",
       "subtitle": "Zona horaria, horario laboral, festivos y retención de datos",
       "save": "Guardar",
       "schedule": {
-        "section": "Horarios y planificación",
+        "section": "Horarios y Planificación",
         "timezone": "Zona horaria (IANA)",
         "workStart": "Inicio de jornada",
         "workEnd": "Fin de jornada",
         "workDays": "Días laborables",
         "slotDuration": "Duración de franja (minutos)",
         "continuous": "Actividad continua (24h)",
-        "weekTitle": "Horario semanal",
+        "weekTitle": "Horario Semanal",
         "mode": {
           "off": "Cerrado",
           "full": "24h",
@@ -363,7 +363,7 @@
         "remove": "Quitar"
       },
       "retention": {
-        "section": "Retención de datos",
+        "section": "Retención de Datos",
         "auditLog": "Registro de auditoría (días)",
         "archiveMonths": "Archivo de señalaciones completadas (meses)",
         "archiveNever": "Nunca"
@@ -381,7 +381,7 @@
       "permissions": {
         "roleFilter": "Rol",
         "announcements": {
-          "section": "Quién puede crear anuncios",
+          "section": "Quién Puede Crear Anuncios",
           "subtitle": "Concede o revoca el permiso de publicar en el tablón público.",
           "selectUser": "Seleccionar usuario",
           "empty": "Ningún usuario autorizado",
@@ -415,7 +415,7 @@
     "headerSubtitle": "Visualiza y gestiona las intervenciones planificadas",
     "tabs": {
       "active": "Activas",
-      "overdue": "En retraso",
+      "overdue": "En Retraso",
       "completed": "Completadas"
     },
     "scope": {
@@ -463,11 +463,11 @@
       }
     },
     "priorityLegend": {
-      "title": "Leyenda de prioridad",
-      "reset": "Restablecer filtro"
+      "title": "Leyenda de Prioridad",
+      "reset": "Restablecer Filtro"
     },
     "dayView": {
-      "title": "Vista diaria"
+      "title": "Vista Diaria"
     },
     "dateNow": {
       "overdue": "Señalaciones vencidas",
@@ -486,7 +486,7 @@
     "headerSubtitle": "Gestiona las señalaciones recibidas, las actividades en curso y el archivo",
     "tabs": {
       "received": "Recibidas",
-      "inProgress": "En curso",
+      "inProgress": "En Curso",
       "archive": "Completadas"
     },
     "empty": {
@@ -512,7 +512,7 @@
     "subtitle": "Mensajes dirigidos a ti y averías que has reportado.",
     "tabs": {
       "messages": "Mensajes",
-      "myFaults": "Mis reportes"
+      "myFaults": "Mis Reportes"
     },
     "myFaults": {
       "subtitle": "Averías reportadas por ti.",
@@ -531,8 +531,8 @@
   },
 
   "ReportFaultPage": {
-    "titlePageForStore": "Reportar avería",
-    "title": "Reportar una avería",
+    "titlePageForStore": "Reportar Avería",
+    "title": "Reportar una Avería",
     "subtitle": "Completa el formulario para registrar una nueva avería. Cualquier rol puede reportar problemas observados en los equipos."
   },
 
@@ -542,22 +542,22 @@
     "subtitle": "Mensajes directos y anuncios dirigidos a tu rol.",
     "tabs": {
       "direct": "Directos",
-      "announcements": "Mensajes por rol"
+      "announcements": "Mensajes por Rol"
     },
     "card": {
       "from": "De",
       "unread": "No leído",
       "reply": "Responder",
-      "showMore": "Ver detalles",
+      "showMore": "Ver Detalles",
       "sent": "Enviado",
       "received": "Recibido",
-      "deleteThread": "Eliminar conversación",
+      "deleteThread": "Eliminar Conversación",
       "deleteThreadConfirm": "¿Eliminar toda la conversación?",
       "yes": "Sí",
       "no": "No"
     },
     "detail": {
-      "title": "Detalle del mensaje",
+      "title": "Detalle del Mensaje",
       "from": "De",
       "to": "Para",
       "role": "Rol",
@@ -580,22 +580,22 @@
       "bodyLabel": "Mensaje *",
       "bodyPlaceholder": "Escribe tu respuesta...",
       "cancel": "Cancelar",
-      "send": "Enviar respuesta",
+      "send": "Enviar Respuesta",
       "sending": "Enviando..."
     },
     "compose": {
-      "openButton": "Nuevo mensaje",
-      "title": "Nuevo mensaje",
+      "openButton": "Nuevo Mensaje",
+      "title": "Nuevo Mensaje",
       "subtitle": "Envía un mensaje directo o un anuncio",
       "channels": {
         "direct": "Directo",
-        "broadcastRole": "Anuncio por rol",
-        "broadcastAll": "Anuncio para todos"
+        "broadcastRole": "Anuncio por Rol",
+        "broadcastAll": "Anuncio para Todos"
       },
       "labels": {
         "channel": "Canal",
         "recipient": "Destinatario",
-        "targetRole": "Rol destinatario",
+        "targetRole": "Rol Destinatario",
         "subject": "Asunto",
         "body": "Mensaje",
         "images": "Imágenes (opcional)"
@@ -647,40 +647,40 @@
     "badge": "HSE",
     "statusFilter": "Estado",
     "statusOptions": {
-      "all": "Todos los estados"
+      "all": "Todos los Estados"
     },
     "empty": "No hay señalaciones de seguridad"
   },
 
   "FaultDetail": {
-    "title": "Detalle de la señalación",
+    "title": "Detalle de la Señalación",
     "backButton": "Volver",
     "labels": {
       "operator": "Operador",
       "status": "Estado",
-      "dateCreated": "Fecha de creación",
-      "lastUpdated": "Última actualización",
+      "dateCreated": "Fecha de Creación",
+      "lastUpdated": "Última Actualización",
       "plant": "Instalación",
-      "plantPart": "Parte de la instalación",
-      "type": "Tipo de avería",
+      "plantPart": "Parte de la Instalación",
+      "type": "Tipo de Avería",
       "priority": "Prioridad",
       "planned": "Planificado",
-      "estimatedDuration": "Duración estimada",
-      "deadline": "Fecha límite",
-      "deadlineNotSet": "No establecida",
-      "assignedMaintainers": "Mantenedores asignados",
-      "attachedPhotos": "Fotos adjuntas",
-      "actualDuration": "Duración real",
+      "estimatedDuration": "Duración Estimada",
+      "deadline": "Fecha Límite",
+      "deadlineNotSet": "No Establecida",
+      "assignedMaintainers": "Mantenedores Asignados",
+      "attachedPhotos": "Fotos Adjuntas",
+      "actualDuration": "Duración Real",
       "completedAt": "Completado el",
-      "suspensionReason": "Motivo de suspensión",
-      "materialRequest": "Material solicitado",
-      "materialUsed": "Material utilizado",
-      "claimedAt": "Tomado a cargo el"
+      "suspensionReason": "Motivo de Suspensión",
+      "materialRequest": "Material Solicitado",
+      "materialUsed": "Material Utilizado",
+      "claimedAt": "Tomado a Cargo el"
     },
     "badges": {
       "rescheduled": "Reprogramada",
       "originalLabel": "Original:",
-      "assignedToMe": "Asignado a ti",
+      "assignedToMe": "Asignado a Ti",
       "pool": "Pool"
     },
     "comments": {
@@ -693,7 +693,7 @@
     },
     "actions": {
       "planIntervention": "Planificar intervención",
-      "modifyPlanning": "Modificar planificación",
+      "modifyPlanning": "Modificar Planificación",
       "addCommentAndChangeStatus": "Añadir comentario y cambiar estado",
       "finalize": "Finalizar",
       "suspend": "Suspender",
@@ -707,8 +707,8 @@
     "hseSection": {
       "label": "Nota HSE (Seguridad)",
       "placeholder": "Escribe aquí tu evaluación de seguridad...",
-      "saveButton": "Guardar nota",
-      "editButton": "Modificar nota",
+      "saveButton": "Guardar Nota",
+      "editButton": "Modificar Nota",
       "saving": "Guardando...",
       "emptyReadonly": "Sin nota HSE",
       "saved": "Nota HSE guardada",
@@ -719,14 +719,14 @@
   "FaultCard": {
     "labels": {
       "operator": "Operador",
-      "dateCreated": "Fecha de creación",
+      "dateCreated": "Fecha de Creación",
       "plant": "Instalación",
       "plantPart": "Parte",
       "machine": "Máquina",
-      "plannedTime": "Hora planificada",
-      "deadline": "Fecha límite",
+      "plannedTime": "Hora Planificada",
+      "deadline": "Fecha Límite",
       "priority": "Prioridad",
-      "estimatedDuration": "Duración estimada",
+      "estimatedDuration": "Duración Estimada",
       "description": "Descripción",
       "comment": "Comentario",
       "managerNotes": "Notas del responsable",
@@ -739,12 +739,12 @@
     "maintainerCount": "{count, plural, one {# mantenedor} other {# mantenedores}}",
     "buttons": {
       "details": "Detalles",
-      "viewDetails": "Ver detalles",
+      "viewDetails": "Ver Detalles",
       "loading": "Cargando...",
       "plan": "Planificar",
-      "modify": "Modificar planificación",
-      "takeOver": "Tomar a cargo",
-      "takingOver": "Tomando a cargo..."
+      "modify": "Modificar Planificación",
+      "takeOver": "Tomar a Cargo",
+      "takingOver": "Tomando a Cargo..."
     },
     "messages": {
       "claimed": "Intervención tomada a cargo",
@@ -758,22 +758,22 @@
   },
 
   "PlanFaultForm": {
-    "titlePlan": "Planificar señalación",
-    "titleModify": "Modificar planificación",
-    "titleReassign": "Reasignar intervención",
-    "titleAddMaintainers": "Añadir mantenedores",
+    "titlePlan": "Planificar Señalación",
+    "titleModify": "Modificar Planificación",
+    "titleReassign": "Reasignar Intervención",
+    "titleAddMaintainers": "Añadir Mantenedores",
     "buttonReassign": "Reasignar",
-    "buttonAddMaintainers": "Añadir mantenedores",
+    "buttonAddMaintainers": "Añadir Mantenedores",
     "labels": {
       "priority": "Prioridad *",
-      "estimatedDuration": "Duración estimada *",
-      "plannedDate": "Fecha planificada *",
-      "plannedTime": "Hora planificada *",
-      "deadline": "Fecha límite *",
+      "estimatedDuration": "Duración Estimada *",
+      "plannedDate": "Fecha Planificada *",
+      "plannedTime": "Hora Planificada *",
+      "deadline": "Fecha Límite *",
       "managerComment": "Notas del responsable",
-      "assignedMaintainers": "Mantenedores asignados",
-      "alreadyAssigned": "Ya asignados",
-      "additionalMaintainers": "Mantenedores a añadir"
+      "assignedMaintainers": "Mantenedores Asignados",
+      "alreadyAssigned": "Ya Asignados",
+      "additionalMaintainers": "Mantenedores a Añadir"
     },
     "managerCommentPlaceholder": "Notas opcionales para el mantenedor...",
     "datePlaceholder": "Seleccionar fecha",
@@ -795,22 +795,22 @@
   },
 
   "MaintenanceUpdateModal": {
-    "title": "Actualizar intervención",
+    "title": "Actualizar Intervención",
     "titles": {
-      "complete": "Finalizar intervención",
-      "suspend": "Suspender intervención",
-      "resume": "Reanudar intervención"
+      "complete": "Finalizar Intervención",
+      "suspend": "Suspender Intervención",
+      "resume": "Reanudar Intervención"
     },
     "labels": {
-      "newStatus": "Nuevo estado *",
+      "newStatus": "Nuevo Estado *",
       "maintainerComment": "Comentario del mantenedor",
       "actualDuration": "Duración efectiva (minutos) *",
       "suspensionReason": "Motivo de la suspensión *",
-      "materialRequest": "Material o soporte solicitado",
-      "materialUsed": "Material utilizado"
+      "materialRequest": "Material o Soporte Solicitado",
+      "materialUsed": "Material Utilizado"
     },
     "statusOptions": {
-      "inProgress": "En curso",
+      "inProgress": "En Curso",
       "completed": "Completado",
       "suspended": "Suspendido"
     },
@@ -823,7 +823,7 @@
     },
     "buttons": {
       "cancel": "Cancelar",
-      "submit": "Confirmar y guardar",
+      "submit": "Confirmar y Guardar",
       "submitting": "Guardando...",
       "close": "Cerrar"
     },
@@ -866,7 +866,7 @@
       "searchFaultsPlaceholder": "ID, operador o planta",
       "searchBroadcastsPlaceholder": "Texto o autor",
       "status": "Estado",
-      "allStatuses": "Todos los estados",
+      "allStatuses": "Todos los Estados",
       "priority": "Prioridad",
       "allPriorities": "Todas las prioridades",
       "type": "Tipo",
@@ -895,8 +895,8 @@
     "subtitle": "Anuncios públicos",
     "empty": "No hay anuncios por ahora",
     "loginCta": "Acceder",
-    "myAreaCta": "Ir a tu área",
-    "createCta": "Nuevo anuncio",
+    "myAreaCta": "Ir a Tu Área",
+    "createCta": "Nuevo Anuncio",
     "delete": "Eliminar",
     "errorLoad": "Error al cargar los anuncios",
     "created": "Anuncio publicado",
@@ -913,13 +913,13 @@
       "handover": {
         "title": "Relevo",
         "subtitle": "Notas de entrega entre turnos",
-        "createCta": "Nueva entrega",
+        "createCta": "Nueva Entrega",
         "empty": "No hay entregas por ahora"
       },
       "announcement": {
         "title": "Anuncios",
         "subtitle": "Anuncios públicos",
-        "createCta": "Nuevo anuncio",
+        "createCta": "Nuevo Anuncio",
         "empty": "No hay anuncios por ahora"
       }
     },
@@ -941,7 +941,7 @@
 
   "Demo": {
     "banner": "Versión demo — los datos se restablecen periódicamente",
-    "welcomeTitle": "Bienvenido a la demo",
+    "welcomeTitle": "Bienvenido a la Demo",
     "welcomeBody": "Esta es una demo pública del Sistema de Gestión de Mantenimiento y Comunicaciones. Elige un rol para explorar todas las funcionalidades. Los datos son compartidos entre visitantes y se restablecen periódicamente.",
     "welcomeCta": "Empezar"
   },
@@ -975,7 +975,7 @@
   },
 
   "NotFound": {
-    "title": "Página no encontrada",
+    "title": "Página No Encontrada",
     "description": "Lamentablemente, la página que buscas no existe o ha sido movida.",
     "backHome": "Volver a la página principal"
   },
@@ -998,7 +998,7 @@
 
   "StatusFault": {
     "CREATED": "Creado",
-    "IN_PROGRESS": "En progreso",
+    "IN_PROGRESS": "En Progreso",
     "COMPLETED": "Completado",
     "SUSPENDED": "Suspendido",
     "OVERDUE": "Vencido"
@@ -1035,7 +1035,7 @@
   },
 
   "Roles": {
-    "all": "Todos los roles",
+    "all": "Todos los Roles",
     "admin": "Administrador",
     "operator": "Operador",
     "manager": "Responsable",
@@ -1051,7 +1051,7 @@
 
   "Filters": {
     "title": "Filtros",
-    "clear": "Limpiar filtros"
+    "clear": "Limpiar Filtros"
   },
 
   "btn": {
@@ -1059,7 +1059,7 @@
   },
 
   "NoFound": {
-    "noResultsTitle": "No se encontraron resultados",
+    "noResultsTitle": "No Se Encontraron Resultados",
     "noResultsMessage": "Intenta modificar o quitar los filtros para ver otros resultados",
     "serverErrorTitle": "Error del servidor",
     "serverErrorMessage": "Ocurrió un problema al cargar los datos. Inténtalo de nuevo más tarde"
