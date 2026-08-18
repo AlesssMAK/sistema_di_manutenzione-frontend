@@ -112,12 +112,14 @@ const PlantPartsList = ({ onClose, plant }: PlantPartsListProps) => {
             <NoFound
               title={tNoFound('noResultsTitle')}
               message={tNoFound('noResultsMessage')}
+              hideIcon
             />
           )}
           {isError && (
             <NoFound
               title={tNoFound('serverErrorTitle')}
               message={tNoFound('serverErrorMessage')}
+              hideIcon
             />
           )}
           {isLoading && isFetching && (

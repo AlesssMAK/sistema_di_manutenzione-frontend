@@ -3,13 +3,15 @@ import css from './NoFound.module.css';
 interface NoFoundProps {
   title: string;
   message: string;
-  isVisible?: boolean;
+  /** Hide the illustration (crossed-circle) — for error states,
+   *  nested/compact lists and other places where it's just noise. */
+  hideIcon?: boolean;
 }
 
-const NoFound = ({ title, message, isVisible = false }: NoFoundProps) => {
+const NoFound = ({ title, message, hideIcon = false }: NoFoundProps) => {
   return (
     <div className={css.noFound}>
-      {!isVisible && (
+      {!hideIcon && (
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="110"

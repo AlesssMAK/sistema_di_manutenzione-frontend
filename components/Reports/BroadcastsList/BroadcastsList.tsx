@@ -37,6 +37,7 @@ const BroadcastsList = ({ items, isLoading, isError }: BroadcastsListProps) => {
       <NoFound
         title={tNoFound('serverErrorTitle')}
         message={t('errors.loadBroadcasts')}
+        hideIcon
       />
     );
   }
@@ -44,8 +45,9 @@ const BroadcastsList = ({ items, isLoading, isError }: BroadcastsListProps) => {
   if (items.length === 0) {
     return (
       <NoFound
-        title={tNoFound('noResultsTitle')}
+        title={tNoFound('emptyTitle')}
         message={t('sections.broadcasts.empty')}
+        hideIcon
       />
     );
   }

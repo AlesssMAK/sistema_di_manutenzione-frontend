@@ -219,10 +219,11 @@ const ManagerClient = () => {
             <NoFound
               title={tNoFound('serverErrorTitle')}
               message={tNoFound('serverErrorMessage')}
+              hideIcon
             />
           ) : faults.length === 0 ? (
             <NoFound
-              title={tNoFound('noResultsTitle')}
+              title={tNoFound('emptyTitle')}
               message={t(`empty.${activeTab}`)}
             />
           ) : (

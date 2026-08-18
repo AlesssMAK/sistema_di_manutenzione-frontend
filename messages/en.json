@@ -700,8 +700,10 @@
       "resume": "Resume"
     },
     "errors": {
-      "faultNotFound": "Report not found",
-      "interventionNotFound": "Intervention not found",
+      "faultNotFoundTitle": "Report Not Found",
+      "faultNotFound": "The requested report does not exist or has been removed.",
+      "interventionNotFoundTitle": "Intervention Not Found",
+      "interventionNotFound": "The requested intervention does not exist or has been removed.",
       "loadError": "Error loading data"
     },
     "hseSection": {
@@ -1060,6 +1062,7 @@
 
   "NoFound": {
     "noResultsTitle": "No Results Found",
+    "emptyTitle": "Nothing Here Yet",
     "noResultsMessage": "Try adjusting or removing filters to see other results",
     "serverErrorTitle": "Server Error",
     "serverErrorMessage": "A problem occurred while loading the data. Please try again later"

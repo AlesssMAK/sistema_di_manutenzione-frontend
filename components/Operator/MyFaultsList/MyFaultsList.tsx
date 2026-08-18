@@ -132,9 +132,10 @@ const MyFaultsList = () => {
         <NoFound
           title={tNoFound('serverErrorTitle')}
           message={t('errors.load')}
+          hideIcon
         />
       ) : items.length === 0 ? (
-        <NoFound title={tNoFound('noResultsTitle')} message={t('empty')} />
+        <NoFound title={tNoFound('emptyTitle')} message={t('empty')} hideIcon />
       ) : (
         <ul className={css.list}>
           {items.map(fault => (
