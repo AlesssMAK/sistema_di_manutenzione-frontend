@@ -136,7 +136,7 @@ const ManagerFaultDetailPage = ({
       <div className="container">
         <div className={css.page_wrapper}>
           <NoFound
-            title={tNoFound('noResultsTitle')}
+            title={t('errors.faultNotFoundTitle')}
             message={t('errors.faultNotFound')}
           />
         </div>

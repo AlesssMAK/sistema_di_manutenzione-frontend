@@ -543,7 +543,7 @@ const MaintenanceWorkerClient = () => {
               <div className={css.noResults}>
                 <div className={css.no_found_container}>
                   <NoFound
-                    title={tNoFound('noResultsTitle')}
+                    title={tNoFound('emptyTitle')}
                     message={emptyText}
                   />
                 </div>

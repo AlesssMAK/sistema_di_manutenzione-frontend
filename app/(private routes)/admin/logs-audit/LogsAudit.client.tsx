@@ -206,6 +206,7 @@ const AdminLogsAuditClientPage = () => {
         <NoFound
           title={tNoFound('serverErrorTitle')}
           message={tNoFound('serverErrorMessage')}
+          hideIcon
         />
       ) : (activeQuery.data?.items.length ?? 0) === 0 ? (
         <p className={css.empty}>{emptyText}</p>

@@ -700,8 +700,10 @@
       "resume": "Wznów"
     },
     "errors": {
-      "faultNotFound": "Zgłoszenie nie znalezione",
-      "interventionNotFound": "Interwencja nie znaleziona",
+      "faultNotFoundTitle": "Zgłoszenie Nie Znalezione",
+      "faultNotFound": "Żądane zgłoszenie nie istnieje lub zostało usunięte.",
+      "interventionNotFoundTitle": "Interwencja Nie Znaleziona",
+      "interventionNotFound": "Żądana interwencja nie istnieje lub została usunięta.",
       "loadError": "Błąd podczas ładowania danych"
     },
     "hseSection": {
@@ -1060,6 +1062,7 @@
 
   "NoFound": {
     "noResultsTitle": "Brak Wyników",
+    "emptyTitle": "Jeszcze Nic Tu Nie Ma",
     "noResultsMessage": "Spróbuj zmienić lub usunąć filtry, aby zobaczyć inne wyniki",
     "serverErrorTitle": "Błąd serwera",
     "serverErrorMessage": "Wystąpił problem podczas ładowania danych. Spróbuj ponownie później"

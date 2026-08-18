@@ -68,11 +68,13 @@ const MessageInbox = ({ kind, currentUserId }: MessageInboxProps) => {
         <NoFound
           title={tNoFound('serverErrorTitle')}
           message={t('errors.load')}
+          hideIcon
         />
       ) : isEmpty ? (
         <NoFound
-          title={tNoFound('noResultsTitle')}
+          title={tNoFound('emptyTitle')}
           message={t(`empty.${kind}`)}
+          hideIcon
         />
       ) : (
         <ul className={css.list}>

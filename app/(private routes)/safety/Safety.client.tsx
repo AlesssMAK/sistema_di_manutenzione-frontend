@@ -90,9 +90,10 @@ const SafetyClient = () => {
             <NoFound
               title={tNoFound('serverErrorTitle')}
               message={tNoFound('serverErrorMessage')}
+              hideIcon
             />
           ) : faults.length === 0 ? (
-            <NoFound title={tNoFound('noResultsTitle')} message={t('empty')} />
+            <NoFound title={tNoFound('emptyTitle')} message={t('empty')} />
           ) : (
             <ul className={css.cardList}>
               {faults.map(fault => (

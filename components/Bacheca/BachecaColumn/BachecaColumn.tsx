@@ -279,10 +279,11 @@ const BachecaColumn = ({
         <NoFound
           title={tNoFound('serverErrorTitle')}
           message={t('errorLoad')}
+          hideIcon
         />
       ) : items.length === 0 ? (
         <NoFound
-          title={tNoFound('noResultsTitle')}
+          title={tNoFound('emptyTitle')}
           message={t(`sections.${category}.empty`)}
         />
       ) : (

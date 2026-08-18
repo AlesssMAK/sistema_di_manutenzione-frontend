@@ -88,6 +88,7 @@ const AdminNotificationsClientPage = () => {
         <NoFound
           title={tNoFound('serverErrorTitle')}
           message={tNoFound('serverErrorMessage')}
+          hideIcon
         />
       </section>
     );

@@ -700,8 +700,10 @@
       "resume": "Reanudar"
     },
     "errors": {
-      "faultNotFound": "Señalación no encontrada",
-      "interventionNotFound": "Intervención no encontrada",
+      "faultNotFoundTitle": "Señalación No Encontrada",
+      "faultNotFound": "La señalación solicitada no existe o ha sido eliminada.",
+      "interventionNotFoundTitle": "Intervención No Encontrada",
+      "interventionNotFound": "La intervención solicitada no existe o ha sido eliminada.",
       "loadError": "Error al cargar los datos"
     },
     "hseSection": {
@@ -1060,6 +1062,7 @@
 
   "NoFound": {
     "noResultsTitle": "No Se Encontraron Resultados",
+    "emptyTitle": "Aún No Hay Nada",
     "noResultsMessage": "Intenta modificar o quitar los filtros para ver otros resultados",
     "serverErrorTitle": "Error del servidor",
     "serverErrorMessage": "Ocurrió un problema al cargar los datos. Inténtalo de nuevo más tarde"

@@ -59,6 +59,7 @@ const RecentFaultsList = ({ items, isLoading, isError }: RecentFaultsListProps) 
       <NoFound
         title={tNoFound('serverErrorTitle')}
         message={t('errors.loadFaults')}
+        hideIcon
       />
     );
   }
@@ -66,8 +67,9 @@ const RecentFaultsList = ({ items, isLoading, isError }: RecentFaultsListProps) 
   if (items.length === 0) {
     return (
       <NoFound
-        title={tNoFound('noResultsTitle')}
+        title={tNoFound('emptyTitle')}
         message={t('sections.recentFaults.empty')}
+        hideIcon
       />
     );
   }
