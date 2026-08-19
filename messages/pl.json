@@ -431,7 +431,39 @@
       "warehouse": {
         "section": "Magazyn",
         "enabledLabel": "Włącz Moduł Magazynu",
-        "enabledHint": "Gdy wyłączone, strona Magazyn i jej funkcje są niedostępne dla wszystkich."
+        "enabledHint": "Gdy wyłączone, strona Magazyn i jej funkcje są niedostępne dla wszystkich.",
+        "lowStockNotify": "Powiadamiaj o niskim stanie",
+        "lowStockHint": "Wysyła powiadomienie push do wybranych ról, gdy pozycja spadnie poniżej minimum.",
+        "lowStockRoles": "Role do powiadomienia",
+        "units": {
+          "title": "Jednostki miary",
+          "code": "Kod",
+          "name": "Nazwa",
+          "add": "Dodaj",
+          "empty": "Brak jednostek miary",
+          "deactivate": "Dezaktywuj",
+          "activate": "Przywróć",
+          "created": "Utworzono jednostkę",
+          "deactivated": "Dezaktywowano jednostkę",
+          "activated": "Przywrócono jednostkę",
+          "error": "Błąd podczas zapisywania",
+          "fillRequired": "Wypełnij kod i nazwę"
+        },
+        "warehouses": {
+          "title": "Magazyny",
+          "code": "Kod",
+          "name": "Nazwa",
+          "location": "Lokalizacja",
+          "add": "Dodaj",
+          "empty": "Brak magazynów",
+          "deactivate": "Dezaktywuj",
+          "activate": "Przywróć",
+          "created": "Utworzono magazyn",
+          "deactivated": "Dezaktywowano magazyn",
+          "activated": "Przywrócono magazyn",
+          "error": "Błąd podczas zapisywania",
+          "fillRequired": "Wypełnij kod i nazwę"
+        }
       }
     }
   },
@@ -826,7 +858,8 @@
       "actualDuration": "Rzeczywisty czas (minuty) *",
       "suspensionReason": "Powód Zawieszenia *",
       "materialRequest": "Wymagany Materiał lub Wsparcie",
-      "materialUsed": "Zużyty Materiał"
+      "materialUsed": "Zużyty Materiał",
+      "stockMaterials": "Pobierz materiały z magazynu"
     },
     "statusOptions": {
       "inProgress": "W Toku",
@@ -850,7 +883,8 @@
       "success": "Interwencja zaktualizowana pomyślnie",
       "error": "Błąd podczas aktualizacji",
       "noTransitions": "Brak możliwości aktualizacji ze statusu \"{status}\".",
-      "takeOverHint": " Użyj \"Przejmij\", aby rozpocząć."
+      "takeOverHint": " Użyj \"Przejmij\", aby rozpocząć.",
+      "materialsError": "Awaria zaktualizowana, ale wydanie materiałów nie powiodło się."
     }
   },
   "reportsAndCommunicationsPage": {
@@ -1096,7 +1130,9 @@
         "save": "Zapisz Zmiany",
         "create": "Utwórz",
         "cancel": "Anuluj",
-        "close": "Zamknij"
+        "close": "Zamknij",
+        "searchLabel": "Szukaj",
+        "statusLabel": "Status"
       },
       "units": {
         "new": "Nowa Jednostka",
@@ -1194,7 +1230,9 @@
           "task": "Zadanie / zlecenie",
           "taskLabel": "Opis zadania"
         }
-      }
+      },
+      "levelLabel": "Stan",
+      "all": "Wszystkie"
     }
   }
 }

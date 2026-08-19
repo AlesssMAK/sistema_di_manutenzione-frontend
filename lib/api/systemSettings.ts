@@ -34,9 +34,16 @@ export interface MaintenanceSettings {
   overtimeAlertHours: number;
 }
 
+export interface WarehouseLowStockSettings {
+  notify: boolean;
+  /** Roles that receive the low-stock push alert. */
+  roles: string[];
+}
+
 export interface WarehouseSettings {
   /** Global on/off for the whole inventory module. */
   enabled: boolean;
+  lowStock?: WarehouseLowStockSettings;
 }
 
 export interface PublicSystemSettings {

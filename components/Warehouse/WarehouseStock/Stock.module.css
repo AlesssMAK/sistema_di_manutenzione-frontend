@@ -36,6 +36,10 @@
   white-space: nowrap;
 }
 
+.filtersGap {
+  margin-bottom: 20px;
+}
+
 .tableWrap {
   overflow-x: auto;
 }

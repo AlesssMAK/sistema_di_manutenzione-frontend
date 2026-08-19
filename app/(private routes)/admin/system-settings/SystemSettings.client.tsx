@@ -25,6 +25,8 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
 import TimePickerInput from '@/components/UI/TimePickerInput/TimePickerInput';
 import GrantUsersSection from '@/components/Admin/GrantUsersSection/GrantUsersSection';
+import WarehouseUnitsManager from '@/components/Admin/WarehouseUnitsManager/WarehouseUnitsManager';
+import WarehouseWarehousesManager from '@/components/Admin/WarehouseWarehousesManager/WarehouseWarehousesManager';
 import { getAnnouncementAuthors } from '@/lib/api/announcements';
 import { getMessageSenders } from '@/lib/api/messages';
 import {
@@ -64,6 +66,14 @@ const AdminSystemSettingsClientPage = () => {
     { value: 'operator' as const, label: tRoles('operator') },
     { value: 'safety' as const, label: tRoles('safety') },
   ];
+  // Roles that can receive the low-stock alert (admins included).
+  const notifyRoleOptions = [
+    { value: 'admin', label: tRoles('admin') },
+    { value: 'manager', label: tRoles('manager') },
+    { value: 'maintenanceWorker', label: tRoles('maintenanceWorker') },
+    { value: 'safety', label: tRoles('safety') },
+    { value: 'operator', label: tRoles('operator') },
+  ];
   const queryClient = useQueryClient();
 
   const [timezone, setTimezone] = useState('');
@@ -84,6 +94,7 @@ const AdminSystemSettingsClientPage = () => {
   });
   const [warehouse, setWarehouse] = useState<WarehouseSettings>({
     enabled: false,
+    lowStock: { notify: false, roles: [] },
   });
 
   useEffect(() => {
@@ -111,7 +122,10 @@ const AdminSystemSettingsClientPage = () => {
       data.bacheca ?? { showAllFaults: false, recentFaultsDays: 30 }
     );
     setMaintenance(data.maintenance ?? { overtimeAlertHours: 2 });
-    setWarehouse(data.warehouse ?? { enabled: false });
+    setWarehouse({
+      enabled: data.warehouse?.enabled ?? false,
+      lowStock: data.warehouse?.lowStock ?? { notify: false, roles: [] },
+    });
   }
 
   const mutation = useMutation({
@@ -538,6 +552,78 @@ const AdminSystemSettingsClientPage = () => {
 
         {warehouse.enabled && (
           <>
+            <div className={css.field}>
+              <Toggle
+                id="warehouse-lowstock-notify"
+                checked={warehouse.lowStock?.notify ?? false}
+                onChange={(checked) =>
+                  setWarehouse({
+                    ...warehouse,
+                    lowStock: {
+                      notify: checked,
+                      roles: warehouse.lowStock?.roles ?? [],
+                    },
+                  })
+                }
+                label={t('warehouse.lowStockNotify')}
+              />
+              <p style={{ fontSize: '13px', color: '#64748b', marginTop: '6px' }}>
+                {t('warehouse.lowStockHint')}
+              </p>
+            </div>
+
+            {warehouse.lowStock?.notify && (
+              <div className={css.field}>
+                <label className={css.fieldLabel}>
+                  {t('warehouse.lowStockRoles')}
+                </label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
+                  {notifyRoleOptions.map((r) => {
+                    const checked =
+                      warehouse.lowStock?.roles.includes(r.value) ?? false;
+                    return (
+                      <label
+                        key={r.value}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          fontSize: '14px',
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={(e) => {
+                            const roles = new Set(
+                              warehouse.lowStock?.roles ?? []
+                            );
+                            if (e.target.checked) roles.add(r.value);
+                            else roles.delete(r.value);
+                            setWarehouse({
+                              ...warehouse,
+                              lowStock: {
+                                notify: warehouse.lowStock?.notify ?? true,
+                                roles: [...roles],
+                              },
+                            });
+                          }}
+                        />
+                        {r.label}
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            <div className={css.field}>
+              <WarehouseWarehousesManager />
+            </div>
+            <div className={css.field}>
+              <WarehouseUnitsManager />
+            </div>
+
             <GrantUsersSection
               title={t('permissions.warehouseManage.section')}
               subtitle={t('permissions.warehouseManage.subtitle')}

@@ -4,17 +4,14 @@
 
 .head {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
+  margin-bottom: 12px;
 }
 
-.searchWrap {
-  flex: 1;
-  min-width: 200px;
-  max-width: 360px;
+.filtersGap {
+  margin-bottom: 20px;
 }
 
 .newBtn {

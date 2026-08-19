@@ -8,7 +8,7 @@ import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import Loader from '@/components/UI/Loader/Loader';
 import WarehouseStock from '@/components/Warehouse/WarehouseStock/WarehouseStock';
-import WarehouseCatalog from '@/components/Warehouse/WarehouseCatalog/WarehouseCatalog';
+import ItemsSection from '@/components/Warehouse/WarehouseCatalog/ItemsSection';
 import css from './Warehouse.module.css';
 
 type WarehouseTab = 'stock' | 'catalog';
@@ -67,7 +67,7 @@ const WarehouseClient = () => {
 
       <div className={css.tabContent}>
         {activeTab === 'stock' && canOperate && <WarehouseStock />}
-        {activeTab === 'catalog' && canManage && <WarehouseCatalog />}
+        {activeTab === 'catalog' && canManage && <ItemsSection />}
       </div>
     </div>
   );

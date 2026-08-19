@@ -431,7 +431,39 @@
       "warehouse": {
         "section": "Warehouse",
         "enabledLabel": "Enable the Warehouse Module",
-        "enabledHint": "When off, the Warehouse page and its features are unavailable to everyone."
+        "enabledHint": "When off, the Warehouse page and its features are unavailable to everyone.",
+        "lowStockNotify": "Notify on Low Stock",
+        "lowStockHint": "Send a push notification to the selected roles when an item drops below its reorder point.",
+        "lowStockRoles": "Roles to Notify",
+        "units": {
+          "title": "Units of Measure",
+          "code": "Code",
+          "name": "Name",
+          "add": "Add",
+          "empty": "No units of measure",
+          "deactivate": "Deactivate",
+          "activate": "Reactivate",
+          "created": "Unit created",
+          "deactivated": "Unit deactivated",
+          "activated": "Unit reactivated",
+          "error": "Error while saving",
+          "fillRequired": "Fill in code and name"
+        },
+        "warehouses": {
+          "title": "Warehouses",
+          "code": "Code",
+          "name": "Name",
+          "location": "Location",
+          "add": "Add",
+          "empty": "No warehouses",
+          "deactivate": "Deactivate",
+          "activate": "Reactivate",
+          "created": "Warehouse created",
+          "deactivated": "Warehouse deactivated",
+          "activated": "Warehouse reactivated",
+          "error": "Error while saving",
+          "fillRequired": "Fill in code and name"
+        }
       }
     }
   },
@@ -826,7 +858,8 @@
       "actualDuration": "Actual duration (minutes) *",
       "suspensionReason": "Reason for Suspension *",
       "materialRequest": "Material or Support Requested",
-      "materialUsed": "Material Used"
+      "materialUsed": "Material Used",
+      "stockMaterials": "Issue Materials from Stock"
     },
     "statusOptions": {
       "inProgress": "In Progress",
@@ -850,7 +883,8 @@
       "success": "Intervention updated successfully",
       "error": "Error during update",
       "noTransitions": "No update possible from status \"{status}\".",
-      "takeOverHint": " Use \"Take over\" to start."
+      "takeOverHint": " Use \"Take over\" to start.",
+      "materialsError": "Fault updated, but issuing the materials failed."
     }
   },
   "reportsAndCommunicationsPage": {
@@ -1096,7 +1130,9 @@
         "save": "Save Changes",
         "create": "Create",
         "cancel": "Cancel",
-        "close": "Close"
+        "close": "Close",
+        "searchLabel": "Search",
+        "statusLabel": "Status"
       },
       "units": {
         "new": "New Unit",
@@ -1194,7 +1230,9 @@
           "task": "Task / order",
           "taskLabel": "Task description"
         }
-      }
+      },
+      "levelLabel": "Stock",
+      "all": "All"
     }
   }
 }

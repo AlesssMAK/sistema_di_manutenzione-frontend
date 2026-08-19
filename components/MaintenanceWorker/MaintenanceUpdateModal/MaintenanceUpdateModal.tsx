@@ -1,7 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
 import { roundToStep } from '@/lib/utils/faultTime';
+import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
+import { stockOut } from '@/lib/api/warehouse';
+import FaultMaterialsPicker, {
+  type MaterialsPayload,
+} from '@/components/Warehouse/FaultMaterialsPicker/FaultMaterialsPicker';
 import DurationPicker from '@/components/UI/DurationPicker/DurationPicker';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -46,6 +52,10 @@ const MaintenanceUpdateModal = ({
 }: MaintenanceUpdateModalProps) => {
   const t = useTranslations('MaintenanceUpdateModal');
   const queryClient = useQueryClient();
+  const { canOperate: canOperateWarehouse, moduleEnabled } =
+    useWarehouseAccess();
+  // Structured materials to issue from stock on completion (optional).
+  const [materials, setMaterials] = useState<MaterialsPayload | null>(null);
   const isLocked = Boolean(lockedStatus);
   const availableStatuses = ALLOWED_TRANSITIONS[currentStatus] ?? [];
 
@@ -116,9 +126,26 @@ const MaintenanceUpdateModal = ({
           materialRequest: values.materialRequest || undefined,
         }),
       }),
-    onSuccess: data => {
+    onSuccess: async data => {
       queryClient.invalidateQueries({ queryKey: ['faults'] });
       queryClient.invalidateQueries({ queryKey: ['fault', faultId] });
+      // Best-effort: issue the picked materials against this fault. The
+      // fault is already updated, so a stock failure only warns.
+      if (materials) {
+        try {
+          await stockOut({
+            warehouseId: materials.warehouseId,
+            lines: materials.lines,
+            reference: { type: 'fault', faultId },
+          });
+          queryClient.invalidateQueries({ queryKey: ['warehouse', 'stock'] });
+          queryClient.invalidateQueries({
+            queryKey: ['warehouse', 'movements'],
+          });
+        } catch {
+          toast.error(t('messages.materialsError'));
+        }
+      }
       toast.success(t('messages.success'));
       onSuccess(data);
       onClose();
@@ -238,6 +265,15 @@ const MaintenanceUpdateModal = ({
               />
             </div>
           )}
+
+          {selectedStatus === 'Completed' &&
+            moduleEnabled &&
+            canOperateWarehouse && (
+              <div className={css.field}>
+                <p className={css.label}>{t('labels.stockMaterials')}</p>
+                <FaultMaterialsPicker onChange={setMaterials} />
+              </div>
+            )}
 
           {selectedStatus === 'Suspended' && (
             <>
