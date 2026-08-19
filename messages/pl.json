@@ -1,5 +1,9 @@
 {
-  "Duration": { "d": "d", "h": "h", "m": "min" },
+  "Duration": {
+    "d": "d",
+    "h": "h",
+    "m": "min"
+  },
   "OvertimeAlert": {
     "title": "Interwencja Przeciąga się",
     "message": "Pracujesz nad tym już {worked}, ponad zaplanowane {planned}. Co chcesz zrobić?",
@@ -62,7 +66,6 @@
       "genericError": "Coś poszło nie tak. Spróbuj ponownie."
     }
   },
-
   "header": {
     "navItem1": "Role",
     "navItem2": "Raporty",
@@ -83,9 +86,9 @@
       "disabled": "Powiadomienia push wyłączone",
       "blocked": "Powiadomienia zablokowane przez przeglądarkę",
       "error": "Nie udało się włączyć powiadomień"
-    }
+    },
+    "warehouse": "Magazyn"
   },
-
   "AdminSidebar": {
     "users": "Użytkownicy",
     "plants": "Maszyny / Zakłady",
@@ -93,7 +96,6 @@
     "logsAudit": "Logi i Audyt",
     "systemSettings": "Ustawienia Systemu"
   },
-
   "AdminPage": {
     "titlePageForStore": "Administrator",
     "Users": {
@@ -399,16 +401,40 @@
           "granted": "Uprawnienie przyznane",
           "revoked": "Uprawnienie cofnięte",
           "error": "Błąd podczas zapisywania"
+        },
+        "warehouseManage": {
+          "section": "Kto Może Zarządzać Magazynem",
+          "subtitle": "Umożliwia zarządzanie katalogiem: magazyny, jednostki miary i pozycje.",
+          "selectUser": "Wybierz użytkownika",
+          "empty": "Brak uprawnionych użytkowników",
+          "revoke": "Odbierz",
+          "granted": "Uprawnienie nadane",
+          "revoked": "Uprawnienie odebrane",
+          "error": "Błąd podczas zapisywania"
+        },
+        "warehouseOperate": {
+          "section": "Kto Może Obsługiwać Stany Magazynowe",
+          "subtitle": "Umożliwia przyjęcia, wydania i korekty stanów.",
+          "selectUser": "Wybierz użytkownika",
+          "empty": "Brak uprawnionych użytkowników",
+          "revoke": "Odbierz",
+          "granted": "Uprawnienie nadane",
+          "revoked": "Uprawnienie odebrane",
+          "error": "Błąd podczas zapisywania"
         }
       },
       "messages": {
         "saving": "Zapisywanie...",
         "saved": "Ustawienia zapisane",
         "error": "Błąd podczas zapisu"
+      },
+      "warehouse": {
+        "section": "Magazyn",
+        "enabledLabel": "Włącz Moduł Magazynu",
+        "enabledHint": "Gdy wyłączone, strona Magazyn i jej funkcje są niedostępne dla wszystkich."
       }
     }
   },
-
   "maintenanceWorkerPage": {
     "titlePageForStore": "Konserwator",
     "headerTitle": "Planowanie Konserwatora",
@@ -479,7 +505,6 @@
       "prioritySuffix": ", priorytet: {priority}"
     }
   },
-
   "ManagerPage": {
     "titlePageForStore": "Kierownik",
     "headerTitle": "Panel Kierownika",
@@ -505,7 +530,6 @@
       "datePlaceholder": "Wybierz datę"
     }
   },
-
   "OperatorPage": {
     "titlePageForStore": "Operator",
     "title": "Panel Operatora",
@@ -529,13 +553,11 @@
       }
     }
   },
-
   "ReportFaultPage": {
     "titlePageForStore": "Zgłoś Usterkę",
     "title": "Zgłoś Usterkę",
     "subtitle": "Wypełnij formularz, aby zarejestrować nową usterkę. Każda rola może zgłaszać problemy zauważone na maszynach."
   },
-
   "MessagesPage": {
     "titlePageForStore": "Wiadomości",
     "title": "Wiadomości",
@@ -639,7 +661,6 @@
       "subjectTooLong": "Temat jest za długi (max 200)"
     }
   },
-
   "SafetyPage": {
     "titlePageForStore": "Bezpieczeństwo (BHP)",
     "headerTitle": "Monitorowanie Bezpieczeństwa",
@@ -651,7 +672,6 @@
     },
     "empty": "Brak zgłoszeń bezpieczeństwa"
   },
-
   "FaultDetail": {
     "title": "Szczegóły Zgłoszenia",
     "backButton": "Powrót",
@@ -717,7 +737,6 @@
       "saveError": "Błąd podczas zapisywania notatki"
     }
   },
-
   "FaultCard": {
     "labels": {
       "operator": "Operator",
@@ -758,7 +777,6 @@
     },
     "empty": "Brak zgłoszeń"
   },
-
   "PlanFaultForm": {
     "titlePlan": "Zaplanuj Zgłoszenie",
     "titleModify": "Modyfikuj Planowanie",
@@ -795,7 +813,6 @@
       "saveError": "Błąd podczas zapisywania"
     }
   },
-
   "MaintenanceUpdateModal": {
     "title": "Aktualizuj Interwencję",
     "titles": {
@@ -836,7 +853,6 @@
       "takeOverHint": " Użyj \"Przejmij\", aby rozpocząć."
     }
   },
-
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Raporty",
     "title": "Raporty i Komunikaty",
@@ -890,7 +906,6 @@
       "loadBroadcasts": "Błąd ładowania komunikatów"
     }
   },
-
   "BachecaPage": {
     "titlePageForStore": "Tablica",
     "title": "Tablica",
@@ -940,7 +955,6 @@
       "cancel": "Anuluj"
     }
   },
-
   "Demo": {
     "banner": "Wersja demo — dane są okresowo resetowane",
     "welcomeTitle": "Witamy w Wersji Demo",
@@ -975,29 +989,24 @@
       }
     }
   },
-
   "NotFound": {
     "title": "Strona Nie Znaleziona",
     "description": "Niestety, strona, której szukasz, nie istnieje lub została przeniesiona.",
     "backHome": "Powrót do strony głównej"
   },
-
   "loader": {
     "loading": "Ładowanie, proszę czekać..."
   },
-
   "Error": {
     "errorTitle": "Coś poszło nie tak!",
     "errorMessage": "Przepraszamy. Wystąpił błąd podczas przetwarzania Twojego żądania.",
     "tryAgain": "Spróbuj ponownie",
     "goHome": "Powrót do strony głównej"
   },
-
   "TypeFault": {
     "PRODUCTION": "Produkcja",
     "SAFETY": "Bezpieczeństwo"
   },
-
   "StatusFault": {
     "CREATED": "Utworzono",
     "IN_PROGRESS": "W Toku",
@@ -1005,13 +1014,11 @@
     "SUSPENDED": "Wstrzymano",
     "OVERDUE": "Opóźnione"
   },
-
   "Priority": {
     "Low": "Niski",
     "Medium": "Średni",
     "High": "Wysoki"
   },
-
   "ReportForm": {
     "newReport": "Nowy Raport",
     "fillForm": "Wypełnij formularz, aby zgłosić usterkę lub anomalię",
@@ -1035,7 +1042,6 @@
     "reportCreatedSuccessfully": "Raport został pomyślnie utworzony",
     "maxImages": "Maksymalnie 5 zdjęć"
   },
-
   "Roles": {
     "all": "Wszystkie Role",
     "admin": "Administrator",
@@ -1044,27 +1050,151 @@
     "maintenanceWorker": "Konserwator",
     "safety": "Bezpieczeństwo"
   },
-
   "Statuses": {
     "all": "Wszystkie",
     "active": "Aktywne",
     "deactivated": "Dezaktywowane"
   },
-
   "Filters": {
     "title": "Filtry",
     "clear": "Wyczyść Filtry"
   },
-
   "btn": {
     "loading": "ładowanie..."
   },
-
   "NoFound": {
     "noResultsTitle": "Brak Wyników",
     "emptyTitle": "Jeszcze Nic Tu Nie Ma",
     "noResultsMessage": "Spróbuj zmienić lub usunąć filtry, aby zobaczyć inne wyniki",
     "serverErrorTitle": "Błąd serwera",
     "serverErrorMessage": "Wystąpił problem podczas ładowania danych. Spróbuj ponownie później"
+  },
+  "WarehousePage": {
+    "title": "Magazyn",
+    "subtitle": "Zarządzaj stanami, ruchami i katalogiem.",
+    "tabs": {
+      "stock": "Stany",
+      "catalog": "Katalog"
+    },
+    "catalog": {
+      "tabs": {
+        "items": "Pozycje",
+        "warehouses": "Magazyny",
+        "units": "Jednostki Miary"
+      },
+      "common": {
+        "searchPlaceholder": "Szukaj…",
+        "deactivated": "Dezaktywowano",
+        "active": "Aktywny",
+        "edit": "Edytuj",
+        "saved": "Zmiany zapisane",
+        "created": "Utworzono pomyślnie",
+        "error": "Błąd podczas zapisywania",
+        "deactivatedDone": "Dezaktywowano",
+        "fillRequired": "Wypełnij wymagane pola",
+        "deactivate": "Dezaktywuj",
+        "save": "Zapisz Zmiany",
+        "create": "Utwórz",
+        "cancel": "Anuluj",
+        "close": "Zamknij"
+      },
+      "units": {
+        "new": "Nowa Jednostka",
+        "empty": "Brak jednostek miary",
+        "newTitle": "Nowa Jednostka Miary",
+        "editTitle": "Edytuj Jednostkę Miary",
+        "fields": {
+          "code": "Kod",
+          "name": "Nazwa"
+        }
+      },
+      "warehouses": {
+        "new": "Nowy Magazyn",
+        "empty": "Brak magazynów",
+        "newTitle": "Nowy Magazyn",
+        "editTitle": "Edytuj Magazyn",
+        "fields": {
+          "code": "Kod",
+          "name": "Nazwa",
+          "location": "Lokalizacja"
+        }
+      },
+      "items": {
+        "new": "Nowa Pozycja",
+        "empty": "Brak pozycji",
+        "newTitle": "Nowa Pozycja",
+        "editTitle": "Edytuj Pozycję",
+        "fields": {
+          "code": "Kod",
+          "name": "Nazwa",
+          "unit": "Jednostka Miary",
+          "unitPlaceholder": "Wybierz jednostkę",
+          "category": "Kategoria",
+          "note": "Notatka"
+        }
+      }
+    },
+    "stock": {
+      "warehouseLabel": "Magazyn",
+      "selectWarehouse": "Wybierz magazyn",
+      "searchLabel": "Szukaj",
+      "searchPlaceholder": "Szukaj pozycji…",
+      "lowOnly": "Tylko niski stan",
+      "low": "Niski stan",
+      "empty": "Brak stanów",
+      "pickWarehouseTitle": "Wybierz magazyn",
+      "pickWarehouseHint": "Wybierz magazyn, aby zobaczyć stany.",
+      "actions": {
+        "in": "Przyjęcie",
+        "out": "Wydanie",
+        "adjust": "Korekta"
+      },
+      "table": {
+        "item": "Pozycja",
+        "unit": "J.m.",
+        "quantity": "Ilość",
+        "min": "Min"
+      },
+      "type": {
+        "in": "Przyjęcie",
+        "out": "Wydanie",
+        "adjust": "Korekta"
+      },
+      "history": {
+        "title": "Ruchy",
+        "show": "Pokaż",
+        "hide": "Ukryj",
+        "empty": "Brak ruchów",
+        "type": "Typ",
+        "item": "Pozycja",
+        "qty": "Ilość",
+        "by": "Operator",
+        "when": "Data"
+      },
+      "op": {
+        "titleIn": "Przyjęcie Towaru",
+        "titleOut": "Wydanie Towaru",
+        "titleAdjust": "Korekta Stanu",
+        "item": "Pozycja",
+        "itemPlaceholder": "Wybierz pozycję",
+        "countedQty": "Policzona ilość",
+        "lines": "Wiersze",
+        "qty": "Ilość",
+        "addLine": "Dodaj wiersz",
+        "note": "Notatka",
+        "confirm": "Potwierdź",
+        "done": "Operacja zakończona",
+        "doneWithWarnings": "Operacja zakończona z ostrzeżeniami",
+        "warningsIntro": "Uwaga, niektóre stany są niskie lub ujemne:",
+        "negative": "ujemny",
+        "addAtLeastOne": "Dodaj co najmniej jeden poprawny wiersz",
+        "ref": {
+          "label": "Odniesienie",
+          "none": "Brak",
+          "task": "Zadanie / zlecenie",
+          "taskLabel": "Opis zadania"
+        }
+      }
+    }
   }
 }

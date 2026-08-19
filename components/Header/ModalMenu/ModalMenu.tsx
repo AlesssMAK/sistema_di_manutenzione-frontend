@@ -14,6 +14,7 @@ import PushToggle from '../PushToggle/PushToggle';
 import { roleRoutes } from '@/constants/roleRoutes';
 import { IS_DEMO } from '@/lib/config/demo';
 import DemoRoleSwitcher from '../DemoRoleSwitcher/DemoRoleSwitcher';
+import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
 
 export interface ModalMenuProps {
   onClose: () => void;
@@ -27,6 +28,7 @@ const ModalMenu = ({
   handleLogout,
 }: ModalMenuProps) => {
   const { user, isAuthenticated } = useAuthStore();
+  const { canAccess: canAccessWarehouse } = useWarehouseAccess();
   const t = useTranslations('header');
   const tBacheca = useTranslations('BachecaPage');
   const handleBackdropClick = (ev: React.MouseEvent<HTMLDivElement>) => {
@@ -79,6 +81,13 @@ const ModalMenu = ({
                   <li className={css.nav_list_item}>
                     <Link href={`${route}`} onClick={onClose}>
                       {t('myArea')}
+                    </Link>
+                  </li>
+                )}
+                {canAccessWarehouse && (
+                  <li className={css.nav_list_item}>
+                    <Link href="/warehouse" onClick={onClose}>
+                      {t('warehouse')}
                     </Link>
                   </li>
                 )}

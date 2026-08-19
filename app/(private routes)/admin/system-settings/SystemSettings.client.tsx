@@ -13,6 +13,7 @@ import {
   type RetentionSettings,
   type BachecaSettings,
   type MaintenanceSettings,
+  type WarehouseSettings,
   type WeekSchedule,
   type WeekDayKey,
   type DaySchedule,
@@ -26,6 +27,10 @@ import TimePickerInput from '@/components/UI/TimePickerInput/TimePickerInput';
 import GrantUsersSection from '@/components/Admin/GrantUsersSection/GrantUsersSection';
 import { getAnnouncementAuthors } from '@/lib/api/announcements';
 import { getMessageSenders } from '@/lib/api/messages';
+import {
+  getWarehouseManagers,
+  getWarehouseOperators,
+} from '@/lib/api/warehouse';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Toggle from '@/components/UI/Toggle/Toggle';
 import { TIMEZONES } from '@/constants/timezones';
@@ -77,6 +82,9 @@ const AdminSystemSettingsClientPage = () => {
   const [maintenance, setMaintenance] = useState<MaintenanceSettings>({
     overtimeAlertHours: 2,
   });
+  const [warehouse, setWarehouse] = useState<WarehouseSettings>({
+    enabled: false,
+  });
 
   useEffect(() => {
     setPageTitle(tPage('titlePageForStore'));
@@ -103,6 +111,7 @@ const AdminSystemSettingsClientPage = () => {
       data.bacheca ?? { showAllFaults: false, recentFaultsDays: 30 }
     );
     setMaintenance(data.maintenance ?? { overtimeAlertHours: 2 });
+    setWarehouse(data.warehouse ?? { enabled: false });
   }
 
   const mutation = useMutation({
@@ -203,6 +212,7 @@ const AdminSystemSettingsClientPage = () => {
       retention,
       bacheca,
       maintenance,
+      warehouse,
     });
   };
 
@@ -509,6 +519,59 @@ const AdminSystemSettingsClientPage = () => {
           fetchGranted={getMessageSenders}
           fixedRole="operator"
         />
+      </div>
+
+      {/* ── Warehouse — module toggle + who can use it (one card) ─ */}
+      <div className={css.card}>
+        <h2 className={css.cardTitle}>{t('warehouse.section')}</h2>
+        <div className={css.field}>
+          <Toggle
+            id="warehouse-enabled"
+            checked={warehouse.enabled}
+            onChange={(checked) => setWarehouse({ enabled: checked })}
+            label={t('warehouse.enabledLabel')}
+          />
+          <p style={{ fontSize: '13px', color: '#64748b', marginTop: '6px' }}>
+            {t('warehouse.enabledHint')}
+          </p>
+        </div>
+
+        {warehouse.enabled && (
+          <>
+            <GrantUsersSection
+              title={t('permissions.warehouseManage.section')}
+              subtitle={t('permissions.warehouseManage.subtitle')}
+              selectUserPlaceholder={t('permissions.warehouseManage.selectUser')}
+              emptyText={t('permissions.warehouseManage.empty')}
+              revokeLabel={t('permissions.warehouseManage.revoke')}
+              successGranted={t('permissions.warehouseManage.granted')}
+              successRevoked={t('permissions.warehouseManage.revoked')}
+              errorText={t('permissions.warehouseManage.error')}
+              permissionKey="canManageWarehouse"
+              grantedQueryKey={['warehouse', 'managers']}
+              fetchGranted={getWarehouseManagers}
+              roleFilterLabel={t('permissions.roleFilter')}
+              allRolesLabel={tRoles('all')}
+              roleOptions={grantRoleOptions}
+            />
+            <GrantUsersSection
+              title={t('permissions.warehouseOperate.section')}
+              subtitle={t('permissions.warehouseOperate.subtitle')}
+              selectUserPlaceholder={t('permissions.warehouseOperate.selectUser')}
+              emptyText={t('permissions.warehouseOperate.empty')}
+              revokeLabel={t('permissions.warehouseOperate.revoke')}
+              successGranted={t('permissions.warehouseOperate.granted')}
+              successRevoked={t('permissions.warehouseOperate.revoked')}
+              errorText={t('permissions.warehouseOperate.error')}
+              permissionKey="canOperateWarehouse"
+              grantedQueryKey={['warehouse', 'operators']}
+              fetchGranted={getWarehouseOperators}
+              roleFilterLabel={t('permissions.roleFilter')}
+              allRolesLabel={tRoles('all')}
+              roleOptions={grantRoleOptions}
+            />
+          </>
+        )}
       </div>
 
       <div className={css.actions}>

@@ -1,0 +1,170 @@
+.section {
+  margin-top: 16px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.searchWrap {
+  flex: 1;
+  min-width: 200px;
+  max-width: 360px;
+}
+
+.newBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.rowMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.rowName {
+  font-weight: 600;
+  color: #111827;
+}
+
+.rowCode {
+  color: #6b7280;
+  font-weight: 400;
+  margin-left: 6px;
+  font-size: 13px;
+}
+
+.rowSub {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.rowDeactivated {
+  opacity: 0.55;
+}
+
+.badge {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  white-space: nowrap;
+}
+
+.rowActions {
+  display: flex;
+  gap: 6px;
+}
+
+.iconBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: #f3f4f6;
+  cursor: pointer;
+  color: #374151;
+  transition: color 0.15s, background 0.15s;
+}
+
+.iconBtn:hover {
+  color: #1e40af;
+}
+
+.iconBtn svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Modal form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.formTitle {
+  margin-bottom: 4px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.input {
+  height: 36px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: none;
+  padding: 0 12px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.textarea {
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: none;
+  padding: 10px 12px;
+  font-size: 14px;
+  width: 100%;
+  resize: none;
+  min-height: 68px;
+  font-family: inherit;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.paginationWrap {
+  margin-top: 20px;
+}
+
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}

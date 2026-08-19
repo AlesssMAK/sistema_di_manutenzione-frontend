@@ -1,5 +1,9 @@
 {
-  "Duration": { "d": "d", "h": "h", "m": "min" },
+  "Duration": {
+    "d": "d",
+    "h": "h",
+    "m": "min"
+  },
   "OvertimeAlert": {
     "title": "Intervention Overrunning",
     "message": "You've been working on this for {worked}, past the planned {planned}. What do you want to do?",
@@ -62,7 +66,6 @@
       "genericError": "Something went wrong. Please try again."
     }
   },
-
   "header": {
     "navItem1": "Roles",
     "navItem2": "Reports",
@@ -83,9 +86,9 @@
       "disabled": "Push notifications disabled",
       "blocked": "Notifications blocked by the browser",
       "error": "Could not enable notifications"
-    }
+    },
+    "warehouse": "Warehouse"
   },
-
   "AdminSidebar": {
     "users": "Users",
     "plants": "Machines / Plants",
@@ -93,7 +96,6 @@
     "logsAudit": "Logs & Audit",
     "systemSettings": "System Settings"
   },
-
   "AdminPage": {
     "titlePageForStore": "Administrator",
     "Users": {
@@ -399,16 +401,40 @@
           "granted": "Permission granted",
           "revoked": "Permission revoked",
           "error": "Error while saving"
+        },
+        "warehouseManage": {
+          "section": "Who Can Manage the Warehouse",
+          "subtitle": "Allows managing the catalog: warehouses, units of measure and items.",
+          "selectUser": "Select user",
+          "empty": "No users enabled",
+          "revoke": "Revoke",
+          "granted": "Permission granted",
+          "revoked": "Permission revoked",
+          "error": "Error while saving"
+        },
+        "warehouseOperate": {
+          "section": "Who Can Move Stock",
+          "subtitle": "Allows receiving, issuing and adjusting stock.",
+          "selectUser": "Select user",
+          "empty": "No users enabled",
+          "revoke": "Revoke",
+          "granted": "Permission granted",
+          "revoked": "Permission revoked",
+          "error": "Error while saving"
         }
       },
       "messages": {
         "saving": "Saving...",
         "saved": "Settings saved",
         "error": "Error while saving"
+      },
+      "warehouse": {
+        "section": "Warehouse",
+        "enabledLabel": "Enable the Warehouse Module",
+        "enabledHint": "When off, the Warehouse page and its features are unavailable to everyone."
       }
     }
   },
-
   "maintenanceWorkerPage": {
     "titlePageForStore": "Maintenance Worker",
     "headerTitle": "Maintenance Worker Planning",
@@ -479,7 +505,6 @@
       "prioritySuffix": ", priority: {priority}"
     }
   },
-
   "ManagerPage": {
     "titlePageForStore": "Manager",
     "headerTitle": "Manager Dashboard",
@@ -505,7 +530,6 @@
       "datePlaceholder": "Select date"
     }
   },
-
   "OperatorPage": {
     "titlePageForStore": "Operator",
     "title": "Operator Dashboard",
@@ -529,13 +553,11 @@
       }
     }
   },
-
   "ReportFaultPage": {
     "titlePageForStore": "Report Fault",
     "title": "Report a Fault",
     "subtitle": "Fill in the form to register a new fault. Any role can report issues observed on plant equipment."
   },
-
   "MessagesPage": {
     "titlePageForStore": "Messages",
     "title": "Messages",
@@ -639,7 +661,6 @@
       "subjectTooLong": "Subject is too long (max 200)"
     }
   },
-
   "SafetyPage": {
     "titlePageForStore": "Safety (HSE)",
     "headerTitle": "Safety Monitoring",
@@ -651,7 +672,6 @@
     },
     "empty": "No safety reports"
   },
-
   "FaultDetail": {
     "title": "Report Details",
     "backButton": "Go Back",
@@ -717,7 +737,6 @@
       "saveError": "Error saving note"
     }
   },
-
   "FaultCard": {
     "labels": {
       "operator": "Operator",
@@ -758,7 +777,6 @@
     },
     "empty": "No reports"
   },
-
   "PlanFaultForm": {
     "titlePlan": "Plan Report",
     "titleModify": "Modify Planning",
@@ -795,7 +813,6 @@
       "saveError": "Error during save"
     }
   },
-
   "MaintenanceUpdateModal": {
     "title": "Update Intervention",
     "titles": {
@@ -836,7 +853,6 @@
       "takeOverHint": " Use \"Take over\" to start."
     }
   },
-
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Reports",
     "title": "Reports & Communications",
@@ -890,7 +906,6 @@
       "loadBroadcasts": "Error loading communications"
     }
   },
-
   "BachecaPage": {
     "titlePageForStore": "Board",
     "title": "Board",
@@ -940,7 +955,6 @@
       "cancel": "Cancel"
     }
   },
-
   "Demo": {
     "banner": "Demo version — data is reset periodically",
     "welcomeTitle": "Welcome to the Demo",
@@ -975,29 +989,24 @@
       }
     }
   },
-
   "NotFound": {
     "title": "Page Not Found",
     "description": "Unfortunately, the page you are looking for does not exist or has been moved.",
     "backHome": "Return to homepage"
   },
-
   "loader": {
     "loading": "Loading, please wait..."
   },
-
   "Error": {
     "errorTitle": "Something went wrong!",
     "errorMessage": "Sorry. An error occurred while processing your request.",
     "tryAgain": "Try again",
     "goHome": "Go to home"
   },
-
   "TypeFault": {
     "PRODUCTION": "Production",
     "SAFETY": "Safety"
   },
-
   "StatusFault": {
     "CREATED": "Created",
     "IN_PROGRESS": "In Progress",
@@ -1005,13 +1014,11 @@
     "SUSPENDED": "Suspended",
     "OVERDUE": "Overdue"
   },
-
   "Priority": {
     "Low": "Low",
     "Medium": "Medium",
     "High": "High"
   },
-
   "ReportForm": {
     "newReport": "New Report",
     "fillForm": "Fill out the form to report a malfunction or anomaly",
@@ -1035,7 +1042,6 @@
     "reportCreatedSuccessfully": "Report created successfully",
     "maxImages": "Maximum 5 images"
   },
-
   "Roles": {
     "all": "All Roles",
     "admin": "Administrator",
@@ -1044,27 +1050,151 @@
     "maintenanceWorker": "Maintenance Worker",
     "safety": "Safety"
   },
-
   "Statuses": {
     "all": "All",
     "active": "Active",
     "deactivated": "Deactivated"
   },
-
   "Filters": {
     "title": "Filters",
     "clear": "Clear Filters"
   },
-
   "btn": {
     "loading": "loading..."
   },
-
   "NoFound": {
     "noResultsTitle": "No Results Found",
     "emptyTitle": "Nothing Here Yet",
     "noResultsMessage": "Try adjusting or removing filters to see other results",
     "serverErrorTitle": "Server Error",
     "serverErrorMessage": "A problem occurred while loading the data. Please try again later"
+  },
+  "WarehousePage": {
+    "title": "Warehouse",
+    "subtitle": "Manage stock, movements and the catalog.",
+    "tabs": {
+      "stock": "Stock",
+      "catalog": "Catalog"
+    },
+    "catalog": {
+      "tabs": {
+        "items": "Items",
+        "warehouses": "Warehouses",
+        "units": "Units of Measure"
+      },
+      "common": {
+        "searchPlaceholder": "Search…",
+        "deactivated": "Deactivated",
+        "active": "Active",
+        "edit": "Edit",
+        "saved": "Changes saved",
+        "created": "Created successfully",
+        "error": "Error while saving",
+        "deactivatedDone": "Deactivated",
+        "fillRequired": "Fill in the required fields",
+        "deactivate": "Deactivate",
+        "save": "Save Changes",
+        "create": "Create",
+        "cancel": "Cancel",
+        "close": "Close"
+      },
+      "units": {
+        "new": "New Unit",
+        "empty": "No units of measure",
+        "newTitle": "New Unit of Measure",
+        "editTitle": "Edit Unit of Measure",
+        "fields": {
+          "code": "Code",
+          "name": "Name"
+        }
+      },
+      "warehouses": {
+        "new": "New Warehouse",
+        "empty": "No warehouses",
+        "newTitle": "New Warehouse",
+        "editTitle": "Edit Warehouse",
+        "fields": {
+          "code": "Code",
+          "name": "Name",
+          "location": "Location"
+        }
+      },
+      "items": {
+        "new": "New Item",
+        "empty": "No items",
+        "newTitle": "New Item",
+        "editTitle": "Edit Item",
+        "fields": {
+          "code": "Code",
+          "name": "Name",
+          "unit": "Unit of Measure",
+          "unitPlaceholder": "Select unit",
+          "category": "Category",
+          "note": "Note"
+        }
+      }
+    },
+    "stock": {
+      "warehouseLabel": "Warehouse",
+      "selectWarehouse": "Select warehouse",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search item…",
+      "lowOnly": "Low stock only",
+      "low": "Low",
+      "empty": "No stock",
+      "pickWarehouseTitle": "Select a warehouse",
+      "pickWarehouseHint": "Choose a warehouse to see its stock.",
+      "actions": {
+        "in": "Receive",
+        "out": "Issue",
+        "adjust": "Adjust"
+      },
+      "table": {
+        "item": "Item",
+        "unit": "UoM",
+        "quantity": "Quantity",
+        "min": "Min"
+      },
+      "type": {
+        "in": "Receive",
+        "out": "Issue",
+        "adjust": "Adjust"
+      },
+      "history": {
+        "title": "Movements",
+        "show": "Show",
+        "hide": "Hide",
+        "empty": "No movements",
+        "type": "Type",
+        "item": "Item",
+        "qty": "Quantity",
+        "by": "Operator",
+        "when": "Date"
+      },
+      "op": {
+        "titleIn": "Receive Goods",
+        "titleOut": "Issue Goods",
+        "titleAdjust": "Adjust Stock",
+        "item": "Item",
+        "itemPlaceholder": "Select item",
+        "countedQty": "Counted quantity",
+        "lines": "Lines",
+        "qty": "Qty",
+        "addLine": "Add line",
+        "note": "Note",
+        "confirm": "Confirm",
+        "done": "Operation completed",
+        "doneWithWarnings": "Operation completed with warnings",
+        "warningsIntro": "Warning, some stock is low or negative:",
+        "negative": "negative",
+        "addAtLeastOne": "Add at least one valid line",
+        "ref": {
+          "label": "Reference",
+          "none": "None",
+          "task": "Task / order",
+          "taskLabel": "Task description"
+        }
+      }
+    }
   }
 }

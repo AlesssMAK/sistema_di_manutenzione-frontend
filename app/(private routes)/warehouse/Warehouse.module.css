@@ -1,0 +1,13 @@
+.header {
+  margin-bottom: 20px;
+}
+
+.tabContent {
+  margin-top: 20px;
+}
+
+.loaderWrap {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
