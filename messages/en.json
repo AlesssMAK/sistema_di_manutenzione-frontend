@@ -1229,10 +1229,23 @@
           "none": "None",
           "task": "Task / order",
           "taskLabel": "Task description"
-        }
+        },
+        "scan": "Scan",
+        "scanned": "{name} added",
+        "scanNotFound": "Item not found: {code}"
       },
       "levelLabel": "Stock",
       "all": "All"
+    },
+    "qr": {
+      "scanTitle": "Scan Code",
+      "scanHint": "Point the camera at the item QR code.",
+      "cameraError": "Cannot access the camera.",
+      "labelTitle": "QR Label",
+      "print": "Print",
+      "close": "Close",
+      "qr": "QR",
+      "scan": "Scan"
     }
   }
 }

@@ -14,6 +14,16 @@
   margin-bottom: 20px;
 }
 
+.codeRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.codeRow .input {
+  flex: 1;
+}
+
 .newBtn {
   display: inline-flex;
   align-items: center;

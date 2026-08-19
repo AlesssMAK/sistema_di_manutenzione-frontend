@@ -1229,10 +1229,23 @@
           "none": "Nessuno",
           "task": "Attività / ordine",
           "taskLabel": "Descrizione attività"
-        }
+        },
+        "scan": "Scansiona",
+        "scanned": "{name} aggiunto",
+        "scanNotFound": "Articolo non trovato: {code}"
       },
       "levelLabel": "Giacenza",
       "all": "Tutte"
+    },
+    "qr": {
+      "scanTitle": "Scansiona codice",
+      "scanHint": "Inquadra il codice QR dell'articolo.",
+      "cameraError": "Impossibile accedere alla fotocamera.",
+      "labelTitle": "Etichetta QR",
+      "print": "Stampa",
+      "close": "Chiudi",
+      "qr": "QR",
+      "scan": "Scansiona"
     }
   }
 }

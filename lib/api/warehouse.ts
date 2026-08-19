@@ -121,6 +121,13 @@ export const getAllItems = async (params: ListParams = {}) => {
   return res.data.data;
 };
 
+export const getItemByCode = async (code: string) => {
+  const res = await nextServer.get<{ data: InventoryItem }>(
+    `/warehouse/items/by-code/${encodeURIComponent(code)}`
+  );
+  return res.data.data;
+};
+
 export const createItem = async (data: CreateItemRequest) => {
   const res = await nextServer.post<{ data: InventoryItem }>(
     '/warehouse/items',

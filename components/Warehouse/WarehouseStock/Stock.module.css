@@ -101,6 +101,10 @@
   margin-bottom: 2px;
 }
 
+.scanBtn {
+  align-self: flex-start;
+}
+
 .field {
   display: flex;
   flex-direction: column;

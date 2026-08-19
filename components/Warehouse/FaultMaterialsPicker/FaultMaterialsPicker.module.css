@@ -55,8 +55,13 @@
   fill: currentColor;
 }
 
+.btnRow {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
 .addBtn {
-  align-self: flex-start;
   font-size: 13px;
   color: #1e40af;
   background: none;

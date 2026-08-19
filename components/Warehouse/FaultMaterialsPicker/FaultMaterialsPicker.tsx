@@ -3,13 +3,19 @@
 import { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { getAllItems, getAllWarehouses } from '@/lib/api/warehouse';
+import toast from 'react-hot-toast';
+import {
+  getAllItems,
+  getAllWarehouses,
+  getItemByCode,
+} from '@/lib/api/warehouse';
 import type {
   InventoryItem,
   MovementLine,
   Warehouse,
 } from '@/types/warehouseType';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import QrScannerModal from '@/components/Warehouse/QrScannerModal/QrScannerModal';
 import css from './FaultMaterialsPicker.module.css';
 
 export interface MaterialsPayload {
@@ -46,6 +52,7 @@ const FaultMaterialsPicker = ({ onChange }: FaultMaterialsPickerProps) => {
   const [warehouseId, setWarehouseId] = useState('');
   const [warehouseText, setWarehouseText] = useState('');
   const [lines, setLines] = useState<DraftLine[]>([emptyLine()]);
+  const [scanning, setScanning] = useState(false);
 
   const { data: whData } = useQuery({
     queryKey: ['warehouse', 'warehouses', 'active-pool'],
@@ -108,6 +115,27 @@ const FaultMaterialsPicker = ({ onChange }: FaultMaterialsPickerProps) => {
     emit(warehouseId, next);
   };
 
+  const handleScan = async (code: string) => {
+    setScanning(false);
+    try {
+      const item = await getItemByCode(code.trim());
+      const label = itemLabel(item);
+      const empty = lines.find((l) => !l.itemId);
+      const next = empty
+        ? lines.map((l) =>
+            l.key === empty.key
+              ? { ...l, itemId: item._id, itemText: label }
+              : l
+          )
+        : [...lines, { ...emptyLine(), itemId: item._id, itemText: label }];
+      setLines(next);
+      emit(warehouseId, next);
+      toast.success(tOp('scanned', { name: item.name }));
+    } catch {
+      toast.error(tOp('scanNotFound', { code }));
+    }
+  };
+
   return (
     <div className={css.wrap}>
       <SelectDropdown
@@ -155,9 +183,25 @@ const FaultMaterialsPicker = ({ onChange }: FaultMaterialsPickerProps) => {
         ))}
       </div>
 
-      <button type="button" className={css.addBtn} onClick={addLine}>
-        + {tOp('addLine')}
-      </button>
+      <div className={css.btnRow}>
+        <button type="button" className={css.addBtn} onClick={addLine}>
+          + {tOp('addLine')}
+        </button>
+        <button
+          type="button"
+          className={css.addBtn}
+          onClick={() => setScanning(true)}
+        >
+          {tOp('scan')}
+        </button>
+      </div>
+
+      {scanning && (
+        <QrScannerModal
+          onScan={handleScan}
+          onClose={() => setScanning(false)}
+        />
+      )}
     </div>
   );
 };
