@@ -1229,10 +1229,23 @@
           "none": "Ninguna",
           "task": "Tarea / pedido",
           "taskLabel": "Descripción de la tarea"
-        }
+        },
+        "scan": "Escanear",
+        "scanned": "{name} añadido",
+        "scanNotFound": "Artículo no encontrado: {code}"
       },
       "levelLabel": "Existencias",
       "all": "Todas"
+    },
+    "qr": {
+      "scanTitle": "Escanear código",
+      "scanHint": "Apunta la cámara al código QR del artículo.",
+      "cameraError": "No se puede acceder a la cámara.",
+      "labelTitle": "Etiqueta QR",
+      "print": "Imprimir",
+      "close": "Cerrar",
+      "qr": "QR",
+      "scan": "Escanear"
     }
   }
 }

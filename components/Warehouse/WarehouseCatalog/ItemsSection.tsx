@@ -21,6 +21,8 @@ import Pagination from '@/components/UI/Pagination/Pagination';
 import Toggle from '@/components/UI/Toggle/Toggle';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
+import QrLabelModal from '@/components/Warehouse/QrLabelModal/QrLabelModal';
+import QrScannerModal from '@/components/Warehouse/QrScannerModal/QrScannerModal';
 import { useStatusOptions } from '@/constants/status';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import css from './Catalog.module.css';
@@ -38,6 +40,7 @@ const unitTextOf = (item: InventoryItem): string =>
 const ItemsSection = () => {
   const t = useTranslations('WarehousePage.catalog.items');
   const tCommon = useTranslations('WarehousePage.catalog.common');
+  const tQr = useTranslations('WarehousePage.qr');
   const tNoFound = useTranslations('NoFound');
   const tStatuses = useTranslations('Statuses');
   const queryClient = useQueryClient();
@@ -48,6 +51,7 @@ const ItemsSection = () => {
   const [page, setPage] = useState(1);
   const [editing, setEditing] = useState<InventoryItem | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [labelItem, setLabelItem] = useState<InventoryItem | null>(null);
 
   const statusMapper = createOptionMapper(useStatusOptions());
 
@@ -142,6 +146,16 @@ const ItemsSection = () => {
                 <button
                   type="button"
                   className={css.iconBtn}
+                  onClick={() => setLabelItem(item)}
+                  aria-label={tQr('qr')}
+                  title={tQr('qr')}
+                  style={{ fontSize: '11px', fontWeight: 700 }}
+                >
+                  QR
+                </button>
+                <button
+                  type="button"
+                  className={css.iconBtn}
                   onClick={() => {
                     setEditing(item);
                     setIsOpen(true);
@@ -168,6 +182,14 @@ const ItemsSection = () => {
       {isOpen && (
         <ItemFormModal item={editing} onClose={close} onSaved={invalidate} />
       )}
+
+      {labelItem && (
+        <QrLabelModal
+          code={labelItem.code}
+          name={labelItem.name}
+          onClose={() => setLabelItem(null)}
+        />
+      )}
     </div>
   );
 };
@@ -181,8 +203,10 @@ interface ItemFormModalProps {
 const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
   const t = useTranslations('WarehousePage.catalog.items');
   const tCommon = useTranslations('WarehousePage.catalog.common');
+  const tQr = useTranslations('WarehousePage.qr');
   const isEdit = Boolean(item);
 
+  const [scanning, setScanning] = useState(false);
   const [code, setCode] = useState(item?.code ?? '');
   const [name, setName] = useState(item?.name ?? '');
   const [category, setCategory] = useState(item?.category ?? '');
@@ -260,15 +284,29 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
   };
 
   return (
-    <Modal onClose={onClose}>
-      <form className={css.form} onSubmit={onSubmit}>
+    <>
+      <Modal onClose={onClose}>
+        <form className={css.form} onSubmit={onSubmit}>
         <h2 className={`${css.formTitle} title`}>
           {isEdit ? t('editTitle') : t('newTitle')}
         </h2>
 
         <div className={css.field}>
           <label className={css.label}>{t('fields.code')} *</label>
-          <input className={css.input} value={code} onChange={(e) => setCode(e.target.value)} />
+          <div className={css.codeRow}>
+            <input
+              className={css.input}
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+            />
+            <Button
+              type="button"
+              className="button button--white"
+              onClick={() => setScanning(true)}
+            >
+              {tQr('scan')}
+            </Button>
+          </div>
         </div>
         <div className={css.field}>
           <label className={css.label}>{t('fields.name')} *</label>
@@ -330,8 +368,19 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
             {isEdit ? tCommon('save') : tCommon('create')}
           </Button>
         </div>
-      </form>
-    </Modal>
+        </form>
+      </Modal>
+
+      {scanning && (
+        <QrScannerModal
+          onScan={(scanned) => {
+            setCode(scanned.trim());
+            setScanning(false);
+          }}
+          onClose={() => setScanning(false)}
+        />
+      )}
+    </>
   );
 };
 

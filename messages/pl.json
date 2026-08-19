@@ -1229,10 +1229,23 @@
           "none": "Brak",
           "task": "Zadanie / zlecenie",
           "taskLabel": "Opis zadania"
-        }
+        },
+        "scan": "Skanuj",
+        "scanned": "Dodano {name}",
+        "scanNotFound": "Nie znaleziono pozycji: {code}"
       },
       "levelLabel": "Stan",
       "all": "Wszystkie"
+    },
+    "qr": {
+      "scanTitle": "Skanuj kod",
+      "scanHint": "Skieruj kamerę na kod QR pozycji.",
+      "cameraError": "Brak dostępu do kamery.",
+      "labelTitle": "Etykieta QR",
+      "print": "Drukuj",
+      "close": "Zamknij",
+      "qr": "QR",
+      "scan": "Skanuj"
     }
   }
 }

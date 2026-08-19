@@ -6,10 +6,12 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import {
   getAllItems,
+  getItemByCode,
   stockAdjust,
   stockIn,
   stockOut,
 } from '@/lib/api/warehouse';
+import QrScannerModal from '@/components/Warehouse/QrScannerModal/QrScannerModal';
 import type {
   InventoryItem,
   MovementLine,
@@ -64,6 +66,7 @@ const StockOpModal = ({
   const [refType, setRefType] = useState<ReferenceType>('none');
   const [refLabel, setRefLabel] = useState('');
   const [warnings, setWarnings] = useState<StockOutWarning[]>([]);
+  const [scanning, setScanning] = useState(false);
 
   const { data: itemsData } = useQuery({
     queryKey: ['warehouse', 'items', 'active-pool'],
@@ -92,6 +95,32 @@ const StockOpModal = ({
 
   const setLine = (key: number, patch: Partial<DraftLine>) =>
     setLines(prev => prev.map(l => (l.key === key ? { ...l, ...patch } : l)));
+
+  // Resolve a scanned SKU to an item and drop it into a line: the single
+  // line for adjust, the first empty line (or a new one) for in/out.
+  const handleScan = async (code: string) => {
+    setScanning(false);
+    try {
+      const item = await getItemByCode(code.trim());
+      const label = itemLabel(item);
+      if (isAdjust) {
+        setLine(lines[0].key, { itemId: item._id, itemText: label });
+      } else {
+        const empty = lines.find(l => !l.itemId);
+        if (empty) {
+          setLine(empty.key, { itemId: item._id, itemText: label });
+        } else {
+          setLines(prev => [
+            ...prev,
+            { ...emptyLine(), itemId: item._id, itemText: label },
+          ]);
+        }
+      }
+      toast.success(t('scanned', { name: item.name }));
+    } catch {
+      toast.error(t('scanNotFound', { code }));
+    }
+  };
 
   const toLines = (): MovementLine[] =>
     lines
@@ -172,9 +201,20 @@ const StockOpModal = ({
         : t('titleAdjust');
 
   return (
-    <Modal onClose={onClose}>
-      <form className={css.form} onSubmit={onSubmit}>
+    <>
+      <Modal onClose={onClose}>
+        <form className={css.form} onSubmit={onSubmit}>
         <h2 className={`${css.formTitle} title`}>{title}</h2>
+
+        {warnings.length === 0 && (
+          <Button
+            type="button"
+            className={`${css.scanBtn} button button--white`}
+            onClick={() => setScanning(true)}
+          >
+            {t('scan')}
+          </Button>
+        )}
 
         {warnings.length > 0 ? (
           <div className={css.warnBox}>
@@ -350,8 +390,16 @@ const StockOpModal = ({
             </>
           )}
         </div>
-      </form>
-    </Modal>
+        </form>
+      </Modal>
+
+      {scanning && (
+        <QrScannerModal
+          onScan={handleScan}
+          onClose={() => setScanning(false)}
+        />
+      )}
+    </>
   );
 };
 

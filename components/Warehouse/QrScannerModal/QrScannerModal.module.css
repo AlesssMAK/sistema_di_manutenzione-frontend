@@ -1,0 +1,33 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 2px;
+}
+
+.hint {
+  font-size: 14px;
+  color: #64748b;
+}
+
+.error {
+  font-size: 14px;
+  color: #b91c1c;
+}
+
+.reader {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.reader :global(video) {
+  width: 100% !important;
+  border-radius: 8px;
+}
