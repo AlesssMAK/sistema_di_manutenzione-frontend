@@ -431,7 +431,39 @@
       "warehouse": {
         "section": "Magazzino",
         "enabledLabel": "Abilita il modulo magazzino",
-        "enabledHint": "Se disattivato, la pagina Magazzino e le sue funzioni non sono disponibili per nessuno."
+        "enabledHint": "Se disattivato, la pagina Magazzino e le sue funzioni non sono disponibili per nessuno.",
+        "lowStockNotify": "Avvisa quando la scorta è bassa",
+        "lowStockHint": "Invia una notifica push ai ruoli selezionati quando un articolo scende sotto la scorta minima.",
+        "lowStockRoles": "Ruoli da avvisare",
+        "units": {
+          "title": "Unità di misura",
+          "code": "Codice",
+          "name": "Nome",
+          "add": "Aggiungi",
+          "empty": "Nessuna unità di misura",
+          "deactivate": "Disattiva",
+          "activate": "Riattiva",
+          "created": "Unità creata",
+          "deactivated": "Unità disattivata",
+          "activated": "Unità riattivata",
+          "error": "Errore durante il salvataggio",
+          "fillRequired": "Compila codice e nome"
+        },
+        "warehouses": {
+          "title": "Magazzini",
+          "code": "Codice",
+          "name": "Nome",
+          "location": "Ubicazione",
+          "add": "Aggiungi",
+          "empty": "Nessun magazzino",
+          "deactivate": "Disattiva",
+          "activate": "Riattiva",
+          "created": "Magazzino creato",
+          "deactivated": "Magazzino disattivato",
+          "activated": "Magazzino riattivato",
+          "error": "Errore durante il salvataggio",
+          "fillRequired": "Compila codice e nome"
+        }
       }
     }
   },
@@ -826,7 +858,8 @@
       "actualDuration": "Durata effettiva (minuti) *",
       "suspensionReason": "Motivo della Sospensione *",
       "materialRequest": "Materiale o Supporto Richiesto",
-      "materialUsed": "Materiale Utilizzato"
+      "materialUsed": "Materiale Utilizzato",
+      "stockMaterials": "Preleva materiali dal magazzino"
     },
     "statusOptions": {
       "inProgress": "In Corso",
@@ -850,7 +883,8 @@
       "success": "Intervento aggiornato con successo",
       "error": "Errore durante l'aggiornamento",
       "noTransitions": "Nessun aggiornamento possibile da stato \"{status}\".",
-      "takeOverHint": " Usa \"Prendi in carico\" per iniziare."
+      "takeOverHint": " Usa \"Prendi in carico\" per iniziare.",
+      "materialsError": "Intervento aggiornato, ma lo scarico materiali non è riuscito."
     }
   },
   "reportsAndCommunicationsPage": {
@@ -1096,7 +1130,9 @@
         "save": "Salva Modifiche",
         "create": "Crea",
         "cancel": "Annulla",
-        "close": "Chiudi"
+        "close": "Chiudi",
+        "searchLabel": "Cerca",
+        "statusLabel": "Stato"
       },
       "units": {
         "new": "Nuova Unità",
@@ -1194,7 +1230,9 @@
           "task": "Attività / ordine",
           "taskLabel": "Descrizione attività"
         }
-      }
+      },
+      "levelLabel": "Giacenza",
+      "all": "Tutte"
     }
   }
 }

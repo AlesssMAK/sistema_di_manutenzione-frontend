@@ -12,12 +12,11 @@ import type {
   Warehouse,
 } from '@/types/warehouseType';
 import Button from '@/components/UI/Button/Button';
-import Input from '@/components/UI/Input/Input';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
-import Toggle from '@/components/UI/Toggle/Toggle';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
 import StockOpModal, { type StockOp } from './StockOpModal';
 import css from './Stock.module.css';
 
@@ -76,6 +75,37 @@ const WarehouseStock = () => {
   const totalPages = stockData?.pagination.totalPages ?? 0;
   const movements: StockMovement[] = movData?.movements ?? [];
 
+  const filters: FiltersItem[] = [
+    {
+      id: 'search',
+      type: 'input',
+      label: t('searchLabel'),
+      value: search,
+      placeholder: t('searchPlaceholder'),
+      onChange: (v) => {
+        setSearch(v);
+        setPage(1);
+      },
+      icon: 'search',
+    },
+    {
+      id: 'level',
+      type: 'select',
+      label: t('levelLabel'),
+      value: lowOnly ? t('lowOnly') : t('all'),
+      options: [t('all'), t('lowOnly')],
+      onSelect: (label) => {
+        setLowOnly(label === t('lowOnly'));
+        setPage(1);
+      },
+    },
+  ];
+  const onClearFilters = () => {
+    setSearch('');
+    setLowOnly(false);
+    setPage(1);
+  };
+
   const movTypeClass = (type: string) =>
     type === 'in' ? css.movIn : type === 'out' ? css.movOut : css.movAdjust;
 
@@ -97,19 +127,6 @@ const WarehouseStock = () => {
               }
             }}
           />
-        </div>
-        <div className={css.filter}>
-          <label className={css.filterLabel}>{t('searchLabel')}</label>
-          <Input
-            type="text"
-            value={search}
-            placeholder={t('searchPlaceholder')}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ height: '36px', borderRadius: '6px', background: '#f3f3f5', border: 'none' }}
-          />
-        </div>
-        <div className={css.filter} style={{ minWidth: 'auto' }}>
-          <Toggle id="stock-low-only" checked={lowOnly} onChange={setLowOnly} label={t('lowOnly')} />
         </div>
         <div className={css.spacer} />
         <div className={css.actions}>
@@ -139,6 +156,12 @@ const WarehouseStock = () => {
           </Button>
         </div>
       </div>
+
+      {warehouseId && (
+        <div className={css.filtersGap}>
+          <Filters items={filters} onClear={onClearFilters} />
+        </div>
+      )}
 
       {!warehouseId ? (
         <NoFound title={t('pickWarehouseTitle')} message={t('pickWarehouseHint')} hideIcon />

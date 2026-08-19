@@ -14,13 +14,15 @@ import {
 } from '@/lib/api/warehouse';
 import type { InventoryItem, Unit } from '@/types/warehouseType';
 import Button from '@/components/UI/Button/Button';
-import Input from '@/components/UI/Input/Input';
 import Modal from '@/components/UI/Modal/Modal';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import Toggle from '@/components/UI/Toggle/Toggle';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
+import { useStatusOptions } from '@/constants/status';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
 import css from './Catalog.module.css';
 
 const PER_PAGE = 10;
@@ -37,18 +39,46 @@ const ItemsSection = () => {
   const t = useTranslations('WarehousePage.catalog.items');
   const tCommon = useTranslations('WarehousePage.catalog.common');
   const tNoFound = useTranslations('NoFound');
+  const tStatuses = useTranslations('Statuses');
   const queryClient = useQueryClient();
 
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
+  const [status, setStatus] = useState('');
   const [page, setPage] = useState(1);
   const [editing, setEditing] = useState<InventoryItem | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
+  const statusMapper = createOptionMapper(useStatusOptions());
+
+  const filters: FiltersItem[] = [
+    {
+      id: 'search',
+      type: 'input',
+      label: tCommon('searchLabel'),
+      value: search,
+      placeholder: tCommon('searchPlaceholder'),
+      onChange: setSearch,
+      icon: 'search',
+    },
+    {
+      id: 'status',
+      type: 'select',
+      label: tCommon('statusLabel'),
+      value: statusMapper.getLabelByValue(status) ?? tStatuses('all'),
+      options: statusMapper.labelsArray,
+      onSelect: (label) => setStatus(statusMapper.getValueByLabel(label) ?? ''),
+    },
+  ];
+  const onClear = () => {
+    setSearch('');
+    setStatus('');
+  };
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['warehouse', 'items', debouncedSearch || undefined, page],
+    queryKey: ['warehouse', 'items', debouncedSearch || undefined, status, page],
     queryFn: () =>
-      getAllItems({ search: debouncedSearch, page, perPage: PER_PAGE }),
+      getAllItems({ search: debouncedSearch, status, page, perPage: PER_PAGE }),
     placeholderData: keepPreviousData,
   });
 
@@ -62,15 +92,6 @@ const ItemsSection = () => {
   return (
     <div className={css.section}>
       <div className={css.head}>
-        <div className={css.searchWrap}>
-          <Input
-            type="text"
-            value={search}
-            placeholder={tCommon('searchPlaceholder')}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ height: '36px', borderRadius: '6px', background: '#f3f3f5', border: 'none' }}
-          />
-        </div>
         <Button
           type="button"
           className={`${css.newBtn} button button--blue`}
@@ -84,6 +105,9 @@ const ItemsSection = () => {
           </svg>
           {t('new')}
         </Button>
+      </div>
+      <div className={css.filtersGap}>
+        <Filters items={filters} onClear={onClear} />
       </div>
 
       {isLoading ? (

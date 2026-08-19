@@ -431,7 +431,39 @@
       "warehouse": {
         "section": "Almacén",
         "enabledLabel": "Habilitar el Módulo de Almacén",
-        "enabledHint": "Si está desactivado, la página de Almacén y sus funciones no están disponibles para nadie."
+        "enabledHint": "Si está desactivado, la página de Almacén y sus funciones no están disponibles para nadie.",
+        "lowStockNotify": "Avisar cuando la existencia es baja",
+        "lowStockHint": "Envía una notificación push a los roles seleccionados cuando un artículo baja del mínimo.",
+        "lowStockRoles": "Roles a avisar",
+        "units": {
+          "title": "Unidades de medida",
+          "code": "Código",
+          "name": "Nombre",
+          "add": "Añadir",
+          "empty": "Ninguna unidad de medida",
+          "deactivate": "Desactivar",
+          "activate": "Reactivar",
+          "created": "Unidad creada",
+          "deactivated": "Unidad desactivada",
+          "activated": "Unidad reactivada",
+          "error": "Error al guardar",
+          "fillRequired": "Completa código y nombre"
+        },
+        "warehouses": {
+          "title": "Almacenes",
+          "code": "Código",
+          "name": "Nombre",
+          "location": "Ubicación",
+          "add": "Añadir",
+          "empty": "Ningún almacén",
+          "deactivate": "Desactivar",
+          "activate": "Reactivar",
+          "created": "Almacén creado",
+          "deactivated": "Almacén desactivado",
+          "activated": "Almacén reactivado",
+          "error": "Error al guardar",
+          "fillRequired": "Completa código y nombre"
+        }
       }
     }
   },
@@ -826,7 +858,8 @@
       "actualDuration": "Duración efectiva (minutos) *",
       "suspensionReason": "Motivo de la suspensión *",
       "materialRequest": "Material o Soporte Solicitado",
-      "materialUsed": "Material Utilizado"
+      "materialUsed": "Material Utilizado",
+      "stockMaterials": "Retirar materiales del almacén"
     },
     "statusOptions": {
       "inProgress": "En Curso",
@@ -850,7 +883,8 @@
       "success": "Intervención actualizada con éxito",
       "error": "Error durante la actualización",
       "noTransitions": "No es posible actualizar desde el estado \"{status}\".",
-      "takeOverHint": " Usa \"Tomar a cargo\" para empezar."
+      "takeOverHint": " Usa \"Tomar a cargo\" para empezar.",
+      "materialsError": "Avería actualizada, pero la salida de materiales falló."
     }
   },
   "reportsAndCommunicationsPage": {
@@ -1096,7 +1130,9 @@
         "save": "Guardar Cambios",
         "create": "Crear",
         "cancel": "Cancelar",
-        "close": "Cerrar"
+        "close": "Cerrar",
+        "searchLabel": "Buscar",
+        "statusLabel": "Estado"
       },
       "units": {
         "new": "Nueva Unidad",
@@ -1194,7 +1230,9 @@
           "task": "Tarea / pedido",
           "taskLabel": "Descripción de la tarea"
         }
-      }
+      },
+      "levelLabel": "Existencias",
+      "all": "Todas"
     }
   }
 }

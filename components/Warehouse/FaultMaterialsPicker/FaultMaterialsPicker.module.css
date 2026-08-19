@@ -1,0 +1,66 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lineRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.lineItem {
+  flex: 1;
+  min-width: 0;
+}
+
+.qty {
+  width: 88px;
+  height: 36px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: none;
+  padding: 0 10px;
+  font-size: 14px;
+}
+
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: #f3f4f6;
+  cursor: pointer;
+  color: #374151;
+  flex-shrink: 0;
+}
+
+.remove:hover {
+  color: #b91c1c;
+}
+
+.remove svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.addBtn {
+  align-self: flex-start;
+  font-size: 13px;
+  color: #1e40af;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 0;
+}
