@@ -34,6 +34,11 @@ export interface MaintenanceSettings {
   overtimeAlertHours: number;
 }
 
+export interface WarehouseSettings {
+  /** Global on/off for the whole inventory module. */
+  enabled: boolean;
+}
+
 export interface PublicSystemSettings {
   _id: string;
   timezone: string;
@@ -44,6 +49,7 @@ export interface PublicSystemSettings {
   holidays: string[];
   bacheca?: BachecaSettings;
   maintenance?: MaintenanceSettings;
+  warehouse?: WarehouseSettings;
   updatedAt?: string;
 }
 
@@ -93,6 +99,7 @@ export type UpdateSystemSettingsPayload = Partial<{
   retention: Partial<RetentionSettings>;
   bacheca: Partial<BachecaSettings>;
   maintenance: Partial<MaintenanceSettings>;
+  warehouse: Partial<WarehouseSettings>;
 }>;
 
 export const fetchSystemSettings = async (): Promise<PublicSystemSettings> => {

@@ -17,6 +17,7 @@ import CreateFaultButton from './CreateFaultButton/CreateFaultButton';
 import { roleRoutes } from '@/constants/roleRoutes';
 import { IS_DEMO } from '@/lib/config/demo';
 import DemoRoleSwitcher from './DemoRoleSwitcher/DemoRoleSwitcher';
+import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -25,6 +26,7 @@ const Header = () => {
   const { pageTitle } = usePageStore();
 
   const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
+  const { canAccess: canAccessWarehouse } = useWarehouseAccess();
   const router = useRouter();
 
   const open = () => setIsOpenModal(true);
@@ -84,6 +86,13 @@ const Header = () => {
                 <li className={css.nav_list_item}>
                   <Link href={`${route}`} onClick={close}>
                     {t('myArea')}
+                  </Link>
+                </li>
+              )}
+              {canAccessWarehouse && (
+                <li className={css.nav_list_item}>
+                  <Link href="/warehouse" onClick={close}>
+                    {t('warehouse')}
                   </Link>
                 </li>
               )}

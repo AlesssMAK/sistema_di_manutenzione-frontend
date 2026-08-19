@@ -1,5 +1,9 @@
 {
-  "Duration": { "d": "d", "h": "h", "m": "min" },
+  "Duration": {
+    "d": "d",
+    "h": "h",
+    "m": "min"
+  },
   "OvertimeAlert": {
     "title": "Intervención con Retraso",
     "message": "Llevas {worked} trabajando en esto, más de lo planificado ({planned}). ¿Qué quieres hacer?",
@@ -62,7 +66,6 @@
       "genericError": "Algo salió mal. Inténtalo de nuevo."
     }
   },
-
   "header": {
     "navItem1": "Roles",
     "navItem2": "Reportes",
@@ -83,9 +86,9 @@
       "disabled": "Notificaciones push desactivadas",
       "blocked": "Notificaciones bloqueadas por el navegador",
       "error": "No se pudieron activar las notificaciones"
-    }
+    },
+    "warehouse": "Almacén"
   },
-
   "AdminSidebar": {
     "users": "Usuarios",
     "plants": "Máquinas / Instalaciones",
@@ -93,7 +96,6 @@
     "logsAudit": "Log & Audit",
     "systemSettings": "Configuración del Sistema"
   },
-
   "AdminPage": {
     "titlePageForStore": "Administrador",
     "Users": {
@@ -399,16 +401,40 @@
           "granted": "Permiso concedido",
           "revoked": "Permiso revocado",
           "error": "Error al guardar"
+        },
+        "warehouseManage": {
+          "section": "Quién Puede Gestionar el Almacén",
+          "subtitle": "Permite gestionar el catálogo: almacenes, unidades de medida y artículos.",
+          "selectUser": "Seleccionar usuario",
+          "empty": "Ningún usuario habilitado",
+          "revoke": "Revocar",
+          "granted": "Permiso concedido",
+          "revoked": "Permiso revocado",
+          "error": "Error al guardar"
+        },
+        "warehouseOperate": {
+          "section": "Quién Puede Mover las Existencias",
+          "subtitle": "Permite entradas, salidas y ajustes de existencias.",
+          "selectUser": "Seleccionar usuario",
+          "empty": "Ningún usuario habilitado",
+          "revoke": "Revocar",
+          "granted": "Permiso concedido",
+          "revoked": "Permiso revocado",
+          "error": "Error al guardar"
         }
       },
       "messages": {
         "saving": "Guardando...",
         "saved": "Ajustes guardados",
         "error": "Error al guardar"
+      },
+      "warehouse": {
+        "section": "Almacén",
+        "enabledLabel": "Habilitar el Módulo de Almacén",
+        "enabledHint": "Si está desactivado, la página de Almacén y sus funciones no están disponibles para nadie."
       }
     }
   },
-
   "maintenanceWorkerPage": {
     "titlePageForStore": "Mantenedor",
     "headerTitle": "Planificación del Mantenedor",
@@ -479,7 +505,6 @@
       "prioritySuffix": ", prioridad: {priority}"
     }
   },
-
   "ManagerPage": {
     "titlePageForStore": "Responsable",
     "headerTitle": "Panel del Responsable",
@@ -505,7 +530,6 @@
       "datePlaceholder": "Seleccionar fecha"
     }
   },
-
   "OperatorPage": {
     "titlePageForStore": "Operador",
     "title": "Panel del Operador",
@@ -529,13 +553,11 @@
       }
     }
   },
-
   "ReportFaultPage": {
     "titlePageForStore": "Reportar Avería",
     "title": "Reportar una Avería",
     "subtitle": "Completa el formulario para registrar una nueva avería. Cualquier rol puede reportar problemas observados en los equipos."
   },
-
   "MessagesPage": {
     "titlePageForStore": "Mensajes",
     "title": "Mensajes",
@@ -639,7 +661,6 @@
       "subjectTooLong": "El asunto es demasiado largo (máx. 200)"
     }
   },
-
   "SafetyPage": {
     "titlePageForStore": "Seguridad (HSE)",
     "headerTitle": "Monitoreo de Seguridad",
@@ -651,7 +672,6 @@
     },
     "empty": "No hay señalaciones de seguridad"
   },
-
   "FaultDetail": {
     "title": "Detalle de la Señalación",
     "backButton": "Volver",
@@ -717,7 +737,6 @@
       "saveError": "Error al guardar la nota"
     }
   },
-
   "FaultCard": {
     "labels": {
       "operator": "Operador",
@@ -758,7 +777,6 @@
     },
     "empty": "No hay señalaciones"
   },
-
   "PlanFaultForm": {
     "titlePlan": "Planificar Señalación",
     "titleModify": "Modificar Planificación",
@@ -795,7 +813,6 @@
       "saveError": "Error al guardar"
     }
   },
-
   "MaintenanceUpdateModal": {
     "title": "Actualizar Intervención",
     "titles": {
@@ -836,7 +853,6 @@
       "takeOverHint": " Usa \"Tomar a cargo\" para empezar."
     }
   },
-
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Reportes",
     "title": "Reportes y Comunicaciones",
@@ -890,7 +906,6 @@
       "loadBroadcasts": "Error al cargar comunicaciones"
     }
   },
-
   "BachecaPage": {
     "titlePageForStore": "Tablón",
     "title": "Tablón",
@@ -940,7 +955,6 @@
       "cancel": "Cancelar"
     }
   },
-
   "Demo": {
     "banner": "Versión demo — los datos se restablecen periódicamente",
     "welcomeTitle": "Bienvenido a la Demo",
@@ -975,29 +989,24 @@
       }
     }
   },
-
   "NotFound": {
     "title": "Página No Encontrada",
     "description": "Lamentablemente, la página que buscas no existe o ha sido movida.",
     "backHome": "Volver a la página principal"
   },
-
   "loader": {
     "loading": "Cargando, por favor espera..."
   },
-
   "Error": {
     "errorTitle": "¡Algo salió mal!",
     "errorMessage": "Lo sentimos. Ocurrió un error al procesar tu solicitud.",
     "tryAgain": "Intentar de nuevo",
     "goHome": "Ir a home"
   },
-
   "TypeFault": {
     "PRODUCTION": "Producción",
     "SAFETY": "Seguridad"
   },
-
   "StatusFault": {
     "CREATED": "Creado",
     "IN_PROGRESS": "En Progreso",
@@ -1005,13 +1014,11 @@
     "SUSPENDED": "Suspendido",
     "OVERDUE": "Vencido"
   },
-
   "Priority": {
     "Low": "Baja",
     "Medium": "Media",
     "High": "Alta"
   },
-
   "ReportForm": {
     "newReport": "Nueva Señalización",
     "fillForm": "Completa el formulario para reportar una avería o anomalía",
@@ -1035,7 +1042,6 @@
     "reportCreatedSuccessfully": "Señalización creada con éxito",
     "maxImages": "Máximo 5 imágenes"
   },
-
   "Roles": {
     "all": "Todos los Roles",
     "admin": "Administrador",
@@ -1044,27 +1050,151 @@
     "maintenanceWorker": "Mantenedor",
     "safety": "Seguridad"
   },
-
   "Statuses": {
     "all": "Todos",
     "active": "Activo",
     "deactivated": "Desactivado"
   },
-
   "Filters": {
     "title": "Filtros",
     "clear": "Limpiar Filtros"
   },
-
   "btn": {
     "loading": "cargando..."
   },
-
   "NoFound": {
     "noResultsTitle": "No Se Encontraron Resultados",
     "emptyTitle": "Aún No Hay Nada",
     "noResultsMessage": "Intenta modificar o quitar los filtros para ver otros resultados",
     "serverErrorTitle": "Error del servidor",
     "serverErrorMessage": "Ocurrió un problema al cargar los datos. Inténtalo de nuevo más tarde"
+  },
+  "WarehousePage": {
+    "title": "Almacén",
+    "subtitle": "Gestiona existencias, movimientos y catálogo.",
+    "tabs": {
+      "stock": "Existencias",
+      "catalog": "Catálogo"
+    },
+    "catalog": {
+      "tabs": {
+        "items": "Artículos",
+        "warehouses": "Almacenes",
+        "units": "Unidades de Medida"
+      },
+      "common": {
+        "searchPlaceholder": "Buscar…",
+        "deactivated": "Desactivado",
+        "active": "Activo",
+        "edit": "Editar",
+        "saved": "Cambios guardados",
+        "created": "Creado correctamente",
+        "error": "Error al guardar",
+        "deactivatedDone": "Desactivado",
+        "fillRequired": "Completa los campos obligatorios",
+        "deactivate": "Desactivar",
+        "save": "Guardar Cambios",
+        "create": "Crear",
+        "cancel": "Cancelar",
+        "close": "Cerrar"
+      },
+      "units": {
+        "new": "Nueva Unidad",
+        "empty": "Ninguna unidad de medida",
+        "newTitle": "Nueva Unidad de Medida",
+        "editTitle": "Editar Unidad de Medida",
+        "fields": {
+          "code": "Código",
+          "name": "Nombre"
+        }
+      },
+      "warehouses": {
+        "new": "Nuevo Almacén",
+        "empty": "Ningún almacén",
+        "newTitle": "Nuevo Almacén",
+        "editTitle": "Editar Almacén",
+        "fields": {
+          "code": "Código",
+          "name": "Nombre",
+          "location": "Ubicación"
+        }
+      },
+      "items": {
+        "new": "Nuevo Artículo",
+        "empty": "Ningún artículo",
+        "newTitle": "Nuevo Artículo",
+        "editTitle": "Editar Artículo",
+        "fields": {
+          "code": "Código",
+          "name": "Nombre",
+          "unit": "Unidad de Medida",
+          "unitPlaceholder": "Seleccionar unidad",
+          "category": "Categoría",
+          "note": "Nota"
+        }
+      }
+    },
+    "stock": {
+      "warehouseLabel": "Almacén",
+      "selectWarehouse": "Seleccionar almacén",
+      "searchLabel": "Buscar",
+      "searchPlaceholder": "Buscar artículo…",
+      "lowOnly": "Solo bajo mínimo",
+      "low": "Bajo mínimo",
+      "empty": "Sin existencias",
+      "pickWarehouseTitle": "Selecciona un almacén",
+      "pickWarehouseHint": "Elige un almacén para ver sus existencias.",
+      "actions": {
+        "in": "Entrada",
+        "out": "Salida",
+        "adjust": "Ajuste"
+      },
+      "table": {
+        "item": "Artículo",
+        "unit": "U.M.",
+        "quantity": "Cantidad",
+        "min": "Mín"
+      },
+      "type": {
+        "in": "Entrada",
+        "out": "Salida",
+        "adjust": "Ajuste"
+      },
+      "history": {
+        "title": "Movimientos",
+        "show": "Mostrar",
+        "hide": "Ocultar",
+        "empty": "Sin movimientos",
+        "type": "Tipo",
+        "item": "Artículo",
+        "qty": "Cantidad",
+        "by": "Operario",
+        "when": "Fecha"
+      },
+      "op": {
+        "titleIn": "Entrada de Mercancía",
+        "titleOut": "Salida de Mercancía",
+        "titleAdjust": "Ajuste de Existencias",
+        "item": "Artículo",
+        "itemPlaceholder": "Seleccionar artículo",
+        "countedQty": "Cantidad contada",
+        "lines": "Líneas",
+        "qty": "Cant.",
+        "addLine": "Añadir línea",
+        "note": "Nota",
+        "confirm": "Confirmar",
+        "done": "Operación completada",
+        "doneWithWarnings": "Operación completada con avisos",
+        "warningsIntro": "Atención, algunas existencias están bajas o en negativo:",
+        "negative": "negativa",
+        "addAtLeastOne": "Añade al menos una línea válida",
+        "ref": {
+          "label": "Referencia",
+          "none": "Ninguna",
+          "task": "Tarea / pedido",
+          "taskLabel": "Descripción de la tarea"
+        }
+      }
+    }
   }
 }

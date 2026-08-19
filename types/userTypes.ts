@@ -3,6 +3,8 @@ import { STATUS } from '@/constants/status';
 export interface UserPermissions {
   canCreateAnnouncements?: boolean;
   canSendMessages?: boolean;
+  canManageWarehouse?: boolean;
+  canOperateWarehouse?: boolean;
 }
 
 /** Trimmed user shape returned by the "who is granted X" admin lists. */
