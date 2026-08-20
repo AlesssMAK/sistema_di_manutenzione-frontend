@@ -40,10 +40,17 @@ export interface WarehouseLowStockSettings {
   roles: string[];
 }
 
+export interface WarehouseLabelSettings {
+  /** Printable label formats available to technicians. */
+  qr: boolean;
+  barcode: boolean;
+}
+
 export interface WarehouseSettings {
   /** Global on/off for the whole inventory module. */
   enabled: boolean;
   lowStock?: WarehouseLowStockSettings;
+  labels?: WarehouseLabelSettings;
 }
 
 export interface PublicSystemSettings {

@@ -95,6 +95,7 @@ const AdminSystemSettingsClientPage = () => {
   const [warehouse, setWarehouse] = useState<WarehouseSettings>({
     enabled: false,
     lowStock: { notify: false, roles: [] },
+    labels: { qr: true, barcode: true },
   });
 
   useEffect(() => {
@@ -125,6 +126,7 @@ const AdminSystemSettingsClientPage = () => {
     setWarehouse({
       enabled: data.warehouse?.enabled ?? false,
       lowStock: data.warehouse?.lowStock ?? { notify: false, roles: [] },
+      labels: data.warehouse?.labels ?? { qr: true, barcode: true },
     });
   }
 
@@ -616,6 +618,49 @@ const AdminSystemSettingsClientPage = () => {
                 </div>
               </div>
             )}
+
+            <div className={css.field}>
+              <label className={css.fieldLabel}>
+                {t('warehouse.labelsSection')}
+              </label>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                  marginTop: '6px',
+                }}
+              >
+                <Toggle
+                  id="warehouse-label-qr"
+                  checked={warehouse.labels?.qr ?? true}
+                  onChange={(checked) =>
+                    setWarehouse({
+                      ...warehouse,
+                      labels: {
+                        qr: checked,
+                        barcode: warehouse.labels?.barcode ?? true,
+                      },
+                    })
+                  }
+                  label={t('warehouse.labelQr')}
+                />
+                <Toggle
+                  id="warehouse-label-barcode"
+                  checked={warehouse.labels?.barcode ?? true}
+                  onChange={(checked) =>
+                    setWarehouse({
+                      ...warehouse,
+                      labels: {
+                        qr: warehouse.labels?.qr ?? true,
+                        barcode: checked,
+                      },
+                    })
+                  }
+                  label={t('warehouse.labelBarcode')}
+                />
+              </div>
+            </div>
 
             <div className={css.field}>
               <WarehouseWarehousesManager />

@@ -17,7 +17,7 @@ const WarehouseClient = () => {
   const t = useTranslations('WarehousePage');
   const router = useRouter();
   const { canAccess, canManage, canOperate, isLoading } = useWarehouseAccess();
-  const setPageTitle = usePageStore((s) => s.setPageTitle);
+  const setPageTitle = usePageStore(s => s.setPageTitle);
 
   useEffect(() => {
     setPageTitle(t('title'));
@@ -40,34 +40,42 @@ const WarehouseClient = () => {
 
   // Derive the effective tab during render so it stays valid for the
   // granted permissions without a state-syncing effect.
-  const activeTab: WarehouseTab = tabs.some((tab) => tab.value === selectedTab)
+  const activeTab: WarehouseTab = tabs.some(tab => tab.value === selectedTab)
     ? selectedTab
     : (tabs[0]?.value ?? 'stock');
 
   if (isLoading || !canAccess) {
     return (
-      <div className="container">
-        <div className={css.loaderWrap}>
-          <Loader />
+      <div className="section">
+        <div className="container">
+          <div className={css.loaderWrap}>
+            <Loader />
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container">
-      <div className={css.header}>
-        <h1 className="title">{t('title')}</h1>
-        <p className="subtitle">{t('subtitle')}</p>
-      </div>
+    <div className="section">
+      <div className="container">
+        <div className={css.header}>
+          <h1 className="title">{t('title')}</h1>
+          <p className="subtitle">{t('subtitle')}</p>
+        </div>
 
-      {tabs.length > 1 && (
-        <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setSelectedTab} />
-      )}
+        {tabs.length > 1 && (
+          <Tabs
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={setSelectedTab}
+          />
+        )}
 
-      <div className={css.tabContent}>
-        {activeTab === 'stock' && canOperate && <WarehouseStock />}
-        {activeTab === 'catalog' && canManage && <ItemsSection />}
+        <div className={css.tabContent}>
+          {activeTab === 'stock' && canOperate && <WarehouseStock />}
+          {activeTab === 'catalog' && canManage && <ItemsSection />}
+        </div>
       </div>
     </div>
   );

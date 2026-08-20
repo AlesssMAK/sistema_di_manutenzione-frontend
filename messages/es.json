@@ -463,7 +463,10 @@
           "activated": "Almacén reactivado",
           "error": "Error al guardar",
           "fillRequired": "Completa código y nombre"
-        }
+        },
+        "labelsSection": "Formatos de etiqueta",
+        "labelQr": "Etiquetas QR",
+        "labelBarcode": "Etiquetas de código de barras"
       }
     }
   },
@@ -1183,7 +1186,8 @@
       "actions": {
         "in": "Entrada",
         "out": "Salida",
-        "adjust": "Ajuste"
+        "adjust": "Ajuste",
+        "transfer": "Traslado"
       },
       "table": {
         "item": "Artículo",
@@ -1232,20 +1236,25 @@
         },
         "scan": "Escanear",
         "scanned": "{name} añadido",
-        "scanNotFound": "Artículo no encontrado: {code}"
+        "scanNotFound": "Artículo no encontrado: {code}",
+        "titleTransfer": "Traslado entre almacenes",
+        "destination": "Almacén de destino",
+        "selectDestination": "Seleccionar destino"
       },
       "levelLabel": "Existencias",
       "all": "Todas"
     },
     "qr": {
       "scanTitle": "Escanear código",
-      "scanHint": "Apunta la cámara al código QR del artículo.",
+      "scanHint": "Apunta la cámara al código de barras o QR del artículo.",
       "cameraError": "No se puede acceder a la cámara.",
-      "labelTitle": "Etiqueta QR",
+      "labelTitle": "Etiqueta",
       "print": "Imprimir",
       "close": "Cerrar",
-      "qr": "QR",
-      "scan": "Escanear"
+      "scan": "Escanear",
+      "labelBtn": "Etiqueta",
+      "formatQr": "QR",
+      "formatBarcode": "Código de barras"
     }
   }
 }

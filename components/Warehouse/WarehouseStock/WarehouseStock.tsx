@@ -154,6 +154,14 @@ const WarehouseStock = () => {
           >
             {t('actions.adjust')}
           </Button>
+          <Button
+            type="button"
+            className={`${css.actionBtn} button button--white`}
+            disabled={!warehouseId}
+            onClick={() => setOp('transfer')}
+          >
+            {t('actions.transfer')}
+          </Button>
         </div>
       </div>
 

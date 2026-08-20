@@ -120,6 +120,10 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  /* Fit inside the Modal's margin + padding so content never overflows
+     on small screens. */
+  width: min(480px, calc(100vw - 56px));
+  max-width: 100%;
 }
 
 .formTitle {

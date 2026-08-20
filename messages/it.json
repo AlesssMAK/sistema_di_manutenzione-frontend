@@ -463,7 +463,10 @@
           "activated": "Magazzino riattivato",
           "error": "Errore durante il salvataggio",
           "fillRequired": "Compila codice e nome"
-        }
+        },
+        "labelsSection": "Formati etichetta",
+        "labelQr": "Etichette QR",
+        "labelBarcode": "Etichette codice a barre"
       }
     }
   },
@@ -1183,7 +1186,8 @@
       "actions": {
         "in": "Carico",
         "out": "Scarico",
-        "adjust": "Rettifica"
+        "adjust": "Rettifica",
+        "transfer": "Trasferimento"
       },
       "table": {
         "item": "Articolo",
@@ -1232,20 +1236,25 @@
         },
         "scan": "Scansiona",
         "scanned": "{name} aggiunto",
-        "scanNotFound": "Articolo non trovato: {code}"
+        "scanNotFound": "Articolo non trovato: {code}",
+        "titleTransfer": "Trasferimento tra magazzini",
+        "destination": "Magazzino di destinazione",
+        "selectDestination": "Seleziona destinazione"
       },
       "levelLabel": "Giacenza",
       "all": "Tutte"
     },
     "qr": {
       "scanTitle": "Scansiona codice",
-      "scanHint": "Inquadra il codice QR dell'articolo.",
+      "scanHint": "Inquadra il codice a barre o QR dell'articolo.",
       "cameraError": "Impossibile accedere alla fotocamera.",
-      "labelTitle": "Etichetta QR",
+      "labelTitle": "Etichetta",
       "print": "Stampa",
       "close": "Chiudi",
-      "qr": "QR",
-      "scan": "Scansiona"
+      "scan": "Scansiona",
+      "labelBtn": "Etichetta",
+      "formatQr": "QR",
+      "formatBarcode": "Codice a barre"
     }
   }
 }

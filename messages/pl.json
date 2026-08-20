@@ -463,7 +463,10 @@
           "activated": "Przywrócono magazyn",
           "error": "Błąd podczas zapisywania",
           "fillRequired": "Wypełnij kod i nazwę"
-        }
+        },
+        "labelsSection": "Formaty etykiet",
+        "labelQr": "Etykiety QR",
+        "labelBarcode": "Etykiety kodów kreskowych"
       }
     }
   },
@@ -1183,7 +1186,8 @@
       "actions": {
         "in": "Przyjęcie",
         "out": "Wydanie",
-        "adjust": "Korekta"
+        "adjust": "Korekta",
+        "transfer": "Przesunięcie"
       },
       "table": {
         "item": "Pozycja",
@@ -1232,20 +1236,25 @@
         },
         "scan": "Skanuj",
         "scanned": "Dodano {name}",
-        "scanNotFound": "Nie znaleziono pozycji: {code}"
+        "scanNotFound": "Nie znaleziono pozycji: {code}",
+        "titleTransfer": "Przesunięcie między magazynami",
+        "destination": "Magazyn docelowy",
+        "selectDestination": "Wybierz magazyn docelowy"
       },
       "levelLabel": "Stan",
       "all": "Wszystkie"
     },
     "qr": {
       "scanTitle": "Skanuj kod",
-      "scanHint": "Skieruj kamerę na kod QR pozycji.",
+      "scanHint": "Skieruj kamerę na kod kreskowy lub QR pozycji.",
       "cameraError": "Brak dostępu do kamery.",
-      "labelTitle": "Etykieta QR",
+      "labelTitle": "Etykieta",
       "print": "Drukuj",
       "close": "Zamknij",
-      "qr": "QR",
-      "scan": "Skanuj"
+      "scan": "Skanuj",
+      "labelBtn": "Etykieta",
+      "formatQr": "QR",
+      "formatBarcode": "Kod kreskowy"
     }
   }
 }
