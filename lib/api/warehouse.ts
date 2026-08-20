@@ -10,6 +10,7 @@ import type {
   MovementsQuery,
   MovementsResponse,
   StockAdjustRequest,
+  StockTransferRequest,
   StockInRequest,
   StockMutationResult,
   StockOutRequest,
@@ -184,6 +185,14 @@ export const stockOut = async (data: StockOutRequest) => {
 export const stockAdjust = async (data: StockAdjustRequest) => {
   const res = await nextServer.post<{ data: StockMutationResult }>(
     '/warehouse/movements/adjust',
+    data
+  );
+  return res.data.data;
+};
+
+export const stockTransfer = async (data: StockTransferRequest) => {
+  const res = await nextServer.post<{ data: StockMutationResult }>(
+    '/warehouse/movements/transfer',
     data
   );
   return res.data.data;

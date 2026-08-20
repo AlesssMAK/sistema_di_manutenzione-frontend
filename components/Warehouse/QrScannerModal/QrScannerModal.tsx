@@ -35,7 +35,15 @@ const QrScannerModal = ({ onScan, onClose }: QrScannerModalProps) => {
       try {
         await scanner.start(
           { facingMode: 'environment' },
-          { fps: 10, qrbox: { width: 240, height: 240 } },
+          {
+            fps: 10,
+            // Wide scan box so 1D barcodes (EAN/UPC/Code128) read as well
+            // as QR. All supported formats are enabled by default.
+            qrbox: (viewfinderWidth: number) => {
+              const width = Math.min(Math.max(viewfinderWidth - 24, 160), 300);
+              return { width, height: Math.round(width * 0.6) };
+            },
+          },
           (decoded) => {
             if (doneRef.current) return;
             doneRef.current = true;

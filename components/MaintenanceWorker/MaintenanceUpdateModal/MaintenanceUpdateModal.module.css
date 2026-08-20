@@ -2,7 +2,10 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  width: min(560px, 92vw);
+  /* Fit inside the Modal's own margin (8px) + padding (20px) per side, so
+     the form content never overflows / gets clipped on small screens. */
+  width: min(560px, calc(100vw - 56px));
+  max-width: 100%;
   padding: 4px;
 }
 

@@ -21,8 +21,9 @@ import Pagination from '@/components/UI/Pagination/Pagination';
 import Toggle from '@/components/UI/Toggle/Toggle';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
-import QrLabelModal from '@/components/Warehouse/QrLabelModal/QrLabelModal';
+import LabelModal from '@/components/Warehouse/LabelModal/LabelModal';
 import QrScannerModal from '@/components/Warehouse/QrScannerModal/QrScannerModal';
+import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { useStatusOptions } from '@/constants/status';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import css from './Catalog.module.css';
@@ -86,6 +87,14 @@ const ItemsSection = () => {
     placeholderData: keepPreviousData,
   });
 
+  const { data: settings } = useQuery({
+    queryKey: ['systemSettings', 'public'],
+    queryFn: fetchSystemSettings,
+    staleTime: 5 * 60 * 1000,
+  });
+  const labelFormats = settings?.warehouse?.labels ?? { qr: true, barcode: true };
+  const labelsEnabled = labelFormats.qr || labelFormats.barcode;
+
   const invalidate = () =>
     queryClient.invalidateQueries({ queryKey: ['warehouse', 'items'] });
 
@@ -143,16 +152,19 @@ const ItemsSection = () => {
                 <span className={css.badge}>{tCommon('deactivated')}</span>
               )}
               <div className={css.rowActions}>
-                <button
-                  type="button"
-                  className={css.iconBtn}
-                  onClick={() => setLabelItem(item)}
-                  aria-label={tQr('qr')}
-                  title={tQr('qr')}
-                  style={{ fontSize: '11px', fontWeight: 700 }}
-                >
-                  QR
-                </button>
+                {labelsEnabled && (
+                  <button
+                    type="button"
+                    className={css.iconBtn}
+                    onClick={() => setLabelItem(item)}
+                    aria-label={tQr('labelBtn')}
+                    title={tQr('labelBtn')}
+                  >
+                    <svg>
+                      <use href="/sprite.svg#squares" />
+                    </svg>
+                  </button>
+                )}
                 <button
                   type="button"
                   className={css.iconBtn}
@@ -184,9 +196,10 @@ const ItemsSection = () => {
       )}
 
       {labelItem && (
-        <QrLabelModal
+        <LabelModal
           code={labelItem.code}
           name={labelItem.name}
+          formats={labelFormats}
           onClose={() => setLabelItem(null)}
         />
       )}

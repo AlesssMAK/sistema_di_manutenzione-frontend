@@ -6,10 +6,12 @@ import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import {
   getAllItems,
+  getAllWarehouses,
   getItemByCode,
   stockAdjust,
   stockIn,
   stockOut,
+  stockTransfer,
 } from '@/lib/api/warehouse';
 import QrScannerModal from '@/components/Warehouse/QrScannerModal/QrScannerModal';
 import type {
@@ -17,13 +19,14 @@ import type {
   MovementLine,
   ReferenceType,
   StockOutWarning,
+  Warehouse,
 } from '@/types/warehouseType';
 import Button from '@/components/UI/Button/Button';
 import Modal from '@/components/UI/Modal/Modal';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import css from './Stock.module.css';
 
-export type StockOp = 'in' | 'out' | 'adjust';
+export type StockOp = 'in' | 'out' | 'adjust' | 'transfer';
 
 interface StockOpModalProps {
   op: StockOp;
@@ -61,10 +64,13 @@ const StockOpModal = ({
   const queryClient = useQueryClient();
 
   const isAdjust = op === 'adjust';
+  const isTransfer = op === 'transfer';
   const [lines, setLines] = useState<DraftLine[]>([emptyLine()]);
   const [note, setNote] = useState('');
   const [refType, setRefType] = useState<ReferenceType>('none');
   const [refLabel, setRefLabel] = useState('');
+  const [toWarehouseId, setToWarehouseId] = useState('');
+  const [toWarehouseText, setToWarehouseText] = useState('');
   const [warnings, setWarnings] = useState<StockOutWarning[]>([]);
   const [scanning, setScanning] = useState(false);
 
@@ -72,6 +78,21 @@ const StockOpModal = ({
     queryKey: ['warehouse', 'items', 'active-pool'],
     queryFn: () => getAllItems({ status: 'active', perPage: 200 }),
   });
+  const { data: whData } = useQuery({
+    queryKey: ['warehouse', 'warehouses', 'active-pool'],
+    queryFn: () => getAllWarehouses({ status: 'active', perPage: 200 }),
+    enabled: isTransfer,
+  });
+  // Destination options exclude the source warehouse.
+  const destWarehouses: Warehouse[] = useMemo(
+    () => (whData?.warehouses ?? []).filter(w => w._id !== warehouseId),
+    [whData, warehouseId]
+  );
+  const whByLabel = useMemo(() => {
+    const map = new Map<string, Warehouse>();
+    destWarehouses.forEach(w => map.set(w.name, w));
+    return map;
+  }, [destWarehouses]);
   const items: InventoryItem[] = useMemo(
     () => itemsData?.items ?? [],
     [itemsData]
@@ -146,6 +167,14 @@ const StockOpModal = ({
           note: note.trim() || undefined,
         });
       }
+      if (op === 'transfer') {
+        return stockTransfer({
+          fromWarehouseId: warehouseId,
+          toWarehouseId,
+          lines: payloadLines,
+          note: note.trim() || undefined,
+        });
+      }
       return stockOut({
         warehouseId,
         lines: payloadLines,
@@ -158,7 +187,11 @@ const StockOpModal = ({
     },
     onSuccess: res => {
       invalidateStock();
-      if (op === 'out' && res.warnings && res.warnings.length > 0) {
+      if (
+        (op === 'out' || op === 'transfer') &&
+        res.warnings &&
+        res.warnings.length > 0
+      ) {
         // Surface the low/negative warnings but keep the success — the
         // issue went through (negative stock is allowed).
         setWarnings(res.warnings);
@@ -180,6 +213,10 @@ const StockOpModal = ({
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isTransfer && !toWarehouseId) {
+      toast.error(t('selectDestination'));
+      return;
+    }
     if (isAdjust) {
       const l = lines[0];
       if (!l.itemId || l.quantity === '' || Number(l.quantity) < 0) {
@@ -193,8 +230,9 @@ const StockOpModal = ({
     mutation.mutate();
   };
 
-  const title =
-    op === 'in'
+  const title = isTransfer
+    ? t('titleTransfer')
+    : op === 'in'
       ? t('titleIn')
       : op === 'out'
         ? t('titleOut')
@@ -230,6 +268,23 @@ const StockOpModal = ({
           </div>
         ) : (
           <>
+            {isTransfer && (
+              <div className={css.field}>
+                <label className={css.label}>{t('destination')} *</label>
+                <SelectDropdown
+                  options={destWarehouses.map(w => w.name)}
+                  selectedValue={toWarehouseText}
+                  placeholder={t('selectDestination')}
+                  onSelect={label => {
+                    const w = whByLabel.get(label);
+                    if (w) {
+                      setToWarehouseId(w._id);
+                      setToWarehouseText(label);
+                    }
+                  }}
+                />
+              </div>
+            )}
             {isAdjust ? (
               <>
                 <div className={css.field}>

@@ -5,6 +5,13 @@
   gap: 8px;
 }
 
+/* On very narrow phones let the three slots wrap instead of overflowing. */
+@media screen and (max-width: 360px) {
+  .group {
+    flex-wrap: wrap;
+  }
+}
+
 .unit {
   display: flex;
   align-items: center;

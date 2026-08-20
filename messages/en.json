@@ -463,7 +463,10 @@
           "activated": "Warehouse reactivated",
           "error": "Error while saving",
           "fillRequired": "Fill in code and name"
-        }
+        },
+        "labelsSection": "Label Formats",
+        "labelQr": "QR Labels",
+        "labelBarcode": "Barcode Labels"
       }
     }
   },
@@ -1183,7 +1186,8 @@
       "actions": {
         "in": "Receive",
         "out": "Issue",
-        "adjust": "Adjust"
+        "adjust": "Adjust",
+        "transfer": "Transfer"
       },
       "table": {
         "item": "Item",
@@ -1232,20 +1236,25 @@
         },
         "scan": "Scan",
         "scanned": "{name} added",
-        "scanNotFound": "Item not found: {code}"
+        "scanNotFound": "Item not found: {code}",
+        "titleTransfer": "Transfer Between Warehouses",
+        "destination": "Destination Warehouse",
+        "selectDestination": "Select destination"
       },
       "levelLabel": "Stock",
       "all": "All"
     },
     "qr": {
       "scanTitle": "Scan Code",
-      "scanHint": "Point the camera at the item QR code.",
+      "scanHint": "Point the camera at the item barcode or QR code.",
       "cameraError": "Cannot access the camera.",
-      "labelTitle": "QR Label",
+      "labelTitle": "Label",
       "print": "Print",
       "close": "Close",
-      "qr": "QR",
-      "scan": "Scan"
+      "scan": "Scan",
+      "labelBtn": "Label",
+      "formatQr": "QR",
+      "formatBarcode": "Barcode"
     }
   }
 }

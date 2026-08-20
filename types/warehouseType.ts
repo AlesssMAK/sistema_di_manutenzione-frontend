@@ -1,7 +1,7 @@
 import { STATUS } from '@/constants/status';
 
 export type MovementType = 'in' | 'out' | 'adjust';
-export type ReferenceType = 'fault' | 'task' | 'none';
+export type ReferenceType = 'fault' | 'task' | 'transfer' | 'none';
 
 export interface Pagination {
   page: number;
@@ -237,6 +237,13 @@ export interface StockAdjustRequest {
   warehouseId: string;
   itemId: string;
   quantity: number;
+  note?: string;
+}
+
+export interface StockTransferRequest {
+  fromWarehouseId: string;
+  toWarehouseId: string;
+  lines: MovementLine[];
   note?: string;
 }
 
