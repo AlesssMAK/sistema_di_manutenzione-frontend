@@ -1,7 +1,12 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useDebounce } from 'use-debounce';
 import toast from 'react-hot-toast';
@@ -30,7 +35,8 @@ import css from './Catalog.module.css';
 
 const PER_PAGE = 10;
 
-const unitLabel = (u: { name: string; code: string }) => `${u.name} (${u.code})`;
+const unitLabel = (u: { name: string; code: string }) =>
+  `${u.name} (${u.code})`;
 
 // unitId is populated on read, a plain id on write.
 const unitIdOf = (item: InventoryItem): string =>
@@ -72,7 +78,7 @@ const ItemsSection = () => {
       label: tCommon('statusLabel'),
       value: statusMapper.getLabelByValue(status) ?? tStatuses('all'),
       options: statusMapper.labelsArray,
-      onSelect: (label) => setStatus(statusMapper.getValueByLabel(label) ?? ''),
+      onSelect: label => setStatus(statusMapper.getValueByLabel(label) ?? ''),
     },
   ];
   const onClear = () => {
@@ -81,7 +87,13 @@ const ItemsSection = () => {
   };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['warehouse', 'items', debouncedSearch || undefined, status, page],
+    queryKey: [
+      'warehouse',
+      'items',
+      debouncedSearch || undefined,
+      status,
+      page,
+    ],
     queryFn: () =>
       getAllItems({ search: debouncedSearch, status, page, perPage: PER_PAGE }),
     placeholderData: keepPreviousData,
@@ -92,7 +104,10 @@ const ItemsSection = () => {
     queryFn: fetchSystemSettings,
     staleTime: 5 * 60 * 1000,
   });
-  const labelFormats = settings?.warehouse?.labels ?? { qr: true, barcode: true };
+  const labelFormats = settings?.warehouse?.labels ?? {
+    qr: true,
+    barcode: true,
+  };
   const labelsEnabled = labelFormats.qr || labelFormats.barcode;
 
   const invalidate = () =>
@@ -113,7 +128,7 @@ const ItemsSection = () => {
             setIsOpen(true);
           }}
         >
-          <svg width="16" height="16">
+          <svg width="16" height="16" className={css.plus_btn}>
             <use href="/sprite.svg#plus" />
           </svg>
           {t('new')}
@@ -128,12 +143,16 @@ const ItemsSection = () => {
           <Loader />
         </div>
       ) : isError ? (
-        <NoFound title={tNoFound('serverErrorTitle')} message={tNoFound('serverErrorMessage')} hideIcon />
+        <NoFound
+          title={tNoFound('serverErrorTitle')}
+          message={tNoFound('serverErrorMessage')}
+          hideIcon
+        />
       ) : items.length === 0 ? (
         <NoFound title={tNoFound('emptyTitle')} message={t('empty')} hideIcon />
       ) : (
         <ul className={css.list}>
-          {items.map((item) => (
+          {items.map(item => (
             <li
               key={item._id}
               className={`${css.row} ${item.status === 'deactivated' ? css.rowDeactivated : ''}`}
@@ -187,7 +206,11 @@ const ItemsSection = () => {
 
       {totalPages > 1 && (
         <div className={css.paginationWrap}>
-          <Pagination totalPages={totalPages} page={page} onPageChange={setPage} />
+          <Pagination
+            totalPages={totalPages}
+            page={page}
+            onPageChange={setPage}
+          />
         </div>
       )}
 
@@ -226,6 +249,10 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
   const [note, setNote] = useState(item?.note ?? '');
   const [unitId, setUnitId] = useState(item ? unitIdOf(item) : '');
   const [unitText, setUnitText] = useState(item ? unitTextOf(item) : '');
+  const [packageLabel, setPackageLabel] = useState(item?.packageLabel ?? '');
+  const [unitsPerPackage, setUnitsPerPackage] = useState(
+    item?.unitsPerPackage != null ? String(item.unitsPerPackage) : ''
+  );
   const [active, setActive] = useState(item ? item.status === 'active' : true);
 
   // Active units only — the pool for the picker.
@@ -236,12 +263,15 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
   const units: Unit[] = useMemo(() => unitsData?.units ?? [], [unitsData]);
   const unitByLabel = useMemo(() => {
     const map = new Map<string, Unit>();
-    units.forEach((u) => map.set(unitLabel(u), u));
+    units.forEach(u => map.set(unitLabel(u), u));
     return map;
   }, [units]);
 
   const mutation = useMutation({
     mutationFn: async () => {
+      const perPackage = unitsPerPackage.trim()
+        ? Number(unitsPerPackage)
+        : undefined;
       if (isEdit && item) {
         return updateItem({
           itemId: item._id,
@@ -250,6 +280,9 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
             name: name.trim(),
             category: category.trim(),
             unitId,
+            // null clears a previously set package on the item.
+            packageLabel: packageLabel.trim() || null,
+            unitsPerPackage: perPackage ?? null,
             note: note.trim(),
             status: active ? 'active' : 'deactivated',
           },
@@ -260,6 +293,8 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
         name: name.trim(),
         category: category.trim() || undefined,
         unitId,
+        packageLabel: packageLabel.trim() || undefined,
+        unitsPerPackage: perPackage,
         note: note.trim() || undefined,
       });
     },
@@ -300,93 +335,126 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
     <>
       <Modal onClose={onClose}>
         <form className={css.form} onSubmit={onSubmit}>
-        <h2 className={`${css.formTitle} title`}>
-          {isEdit ? t('editTitle') : t('newTitle')}
-        </h2>
+          <h2 className={`${css.formTitle} title`}>
+            {isEdit ? t('editTitle') : t('newTitle')}
+          </h2>
 
-        <div className={css.field}>
-          <label className={css.label}>{t('fields.code')} *</label>
-          <div className={css.codeRow}>
+          <div className={css.field}>
+            <label className={css.label}>{t('fields.code')} *</label>
+            <div className={css.codeRow}>
+              <input
+                className={css.input}
+                value={code}
+                onChange={e => setCode(e.target.value)}
+              />
+              <Button
+                type="button"
+                className="button button--white"
+                onClick={() => setScanning(true)}
+              >
+                {tQr('scan')}
+              </Button>
+            </div>
+          </div>
+          <div className={css.field}>
+            <label className={css.label}>{t('fields.name')} *</label>
             <input
               className={css.input}
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
+              value={name}
+              onChange={e => setName(e.target.value)}
             />
-            <Button
-              type="button"
-              className="button button--white"
-              onClick={() => setScanning(true)}
-            >
-              {tQr('scan')}
-            </Button>
           </div>
-        </div>
-        <div className={css.field}>
-          <label className={css.label}>{t('fields.name')} *</label>
-          <input className={css.input} value={name} onChange={(e) => setName(e.target.value)} />
-        </div>
-        <div className={css.field}>
-          <label className={css.label}>{t('fields.unit')} *</label>
-          <SelectDropdown
-            options={units.map(unitLabel)}
-            selectedValue={unitText}
-            placeholder={t('fields.unitPlaceholder')}
-            onSelect={(label) => {
-              const u = unitByLabel.get(label);
-              if (u) {
-                setUnitId(u._id);
-                setUnitText(label);
-              }
-            }}
-          />
-        </div>
-        <div className={css.field}>
-          <label className={css.label}>{t('fields.category')}</label>
-          <input className={css.input} value={category} onChange={(e) => setCategory(e.target.value)} />
-        </div>
-        <div className={css.field}>
-          <label className={css.label}>{t('fields.note')}</label>
-          <textarea className={css.textarea} value={note} onChange={(e) => setNote(e.target.value)} />
-        </div>
-
-        {isEdit && (
           <div className={css.field}>
-            <Toggle
-              id="item-active"
-              checked={active}
-              onChange={setActive}
-              label={active ? tCommon('active') : tCommon('deactivated')}
+            <label className={css.label}>{t('fields.unit')} *</label>
+            <SelectDropdown
+              options={units.map(unitLabel)}
+              selectedValue={unitText}
+              placeholder={t('fields.unitPlaceholder')}
+              onSelect={label => {
+                const u = unitByLabel.get(label);
+                if (u) {
+                  setUnitId(u._id);
+                  setUnitText(label);
+                }
+              }}
             />
           </div>
-        )}
+          <div className={css.field}>
+            <label className={css.label}>{t('fields.packageLabel')}</label>
+            <input
+              className={css.input}
+              value={packageLabel}
+              placeholder={t('fields.packagePlaceholder')}
+              onChange={e => setPackageLabel(e.target.value)}
+            />
+            <span className={css.hint}>{t('fields.packageHint')}</span>
+          </div>
+          <div className={css.field}>
+            <label className={css.label}>{t('fields.unitsPerPackage')}</label>
+            <input
+              className={css.input}
+              type="number"
+              min={0}
+              step="any"
+              value={unitsPerPackage}
+              onChange={e => setUnitsPerPackage(e.target.value)}
+            />
+          </div>
+          <div className={css.field}>
+            <label className={css.label}>{t('fields.category')}</label>
+            <input
+              className={css.input}
+              value={category}
+              onChange={e => setCategory(e.target.value)}
+            />
+          </div>
+          <div className={css.field}>
+            <label className={css.label}>{t('fields.note')}</label>
+            <textarea
+              className={css.textarea}
+              value={note}
+              onChange={e => setNote(e.target.value)}
+            />
+          </div>
 
-        <div className={css.formActions}>
-          {isEdit && item?.status === 'active' && (
-            <Button
-              type="button"
-              className="button button--white"
-              width="100%"
-              onClick={() => remove.mutate()}
-              disabled={remove.isPending}
-            >
-              {tCommon('deactivate')}
-            </Button>
+          {isEdit && (
+            <div className={css.field}>
+              <Toggle
+                id="item-active"
+                checked={active}
+                onChange={setActive}
+                label={active ? tCommon('active') : tCommon('deactivated')}
+              />
+            </div>
           )}
-          <Button
-            type="submit"
-            className="button button--blue"
-            width="100%"
-            disabled={mutation.isPending}
-          >
-            {isEdit ? tCommon('save') : tCommon('create')}
-          </Button>
-        </div>
+
+          <div className={css.formActions}>
+            {isEdit && item?.status === 'active' && (
+              <Button
+                type="button"
+                className="button button--white"
+                width="100%"
+                onClick={() => remove.mutate()}
+                disabled={remove.isPending}
+              >
+                {tCommon('deactivate')}
+              </Button>
+            )}
+            <Button
+              type="submit"
+              className="button button--blue"
+              width="100%"
+              disabled={mutation.isPending}
+            >
+              {isEdit ? tCommon('save') : tCommon('create')}
+            </Button>
+          </div>
         </form>
       </Modal>
 
       {scanning && (
         <QrScannerModal
-          onScan={(scanned) => {
+          onScan={scanned => {
             setCode(scanned.trim());
             setScanning(false);
           }}

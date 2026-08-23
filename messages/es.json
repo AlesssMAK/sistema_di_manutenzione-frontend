@@ -437,7 +437,7 @@
         "lowStockRoles": "Roles a avisar",
         "units": {
           "title": "Unidades de medida",
-          "code": "Código",
+          "symbol": "Símbolo",
           "name": "Nombre",
           "add": "Añadir",
           "empty": "Ninguna unidad de medida",
@@ -447,7 +447,8 @@
           "deactivated": "Unidad desactivada",
           "activated": "Unidad reactivada",
           "error": "Error al guardar",
-          "fillRequired": "Completa código y nombre"
+          "fillRequired": "Completa código y nombre",
+          "allowDecimals": "Permitir Decimales"
         },
         "warehouses": {
           "title": "Almacenes",
@@ -1168,6 +1169,10 @@
           "name": "Nombre",
           "unit": "Unidad de Medida",
           "unitPlaceholder": "Seleccionar unidad",
+          "packageLabel": "Envase",
+          "packagePlaceholder": "p. ej. Caja, Rollo",
+          "packageHint": "Opcional: si el artículo llega en envases.",
+          "unitsPerPackage": "Unidades por Envase",
           "category": "Categoría",
           "note": "Nota"
         }
@@ -1221,6 +1226,9 @@
         "lines": "Líneas",
         "qty": "Cant.",
         "addLine": "Añadir línea",
+        "inPackages": "En envases ({label} × {per})",
+        "packageFallback": "envase",
+        "integerOnly": "La unidad {unit} solo admite números enteros",
         "note": "Nota",
         "confirm": "Confirmar",
         "done": "Operación completada",

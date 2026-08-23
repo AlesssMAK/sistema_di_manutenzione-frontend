@@ -80,6 +80,18 @@ const FaultMaterialsPicker = ({ onChange }: FaultMaterialsPickerProps) => {
     items.forEach((i) => m.set(itemLabel(i), i));
     return m;
   }, [items]);
+  const itemById = useMemo(() => {
+    const m = new Map<string, InventoryItem>();
+    items.forEach((i) => m.set(i._id, i));
+    return m;
+  }, [items]);
+
+  // Piece-like usage units stay integer; continuous ones allow decimals.
+  const stepFor = (itemId: string): string => {
+    const it = itemById.get(itemId);
+    if (!it || typeof it.unitId === 'string') return 'any';
+    return it.unitId.allowsDecimals ? 'any' : '1';
+  };
 
   // Report a usable payload (warehouse + at least one valid line) or null.
   const emit = (whId: string, ls: DraftLine[]) => {
@@ -163,6 +175,7 @@ const FaultMaterialsPicker = ({ onChange }: FaultMaterialsPickerProps) => {
               className={css.qty}
               type="number"
               min={0}
+              step={l.itemId ? stepFor(l.itemId) : 'any'}
               placeholder={tOp('qty')}
               value={l.quantity}
               onChange={(e) => patchLine(l.key, { quantity: e.target.value })}

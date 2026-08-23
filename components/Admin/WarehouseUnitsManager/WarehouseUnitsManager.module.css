@@ -1,41 +1,79 @@
-.wrap {
+/* Mirrors GrantUsersSection so the warehouse sub-sections match the rest
+   of the admin settings card (labels, inputs, chips, hover). Shared by
+   WarehouseUnitsManager and WarehouseWarehousesManager. */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.controls {
   display: flex;
   flex-direction: column;
   gap: 12px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
 }
 
-.addRow {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
-
-.field {
+.control {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    flex: 1 1 160px;
+  }
 }
 
-.fieldLabel {
+.controlNarrow {
+  @media screen and (min-width: 768px) {
+    flex: 0 0 140px;
+  }
+}
+
+.controlLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #45556c;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.decimalsRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #0a0a0a;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.empty {
   font-size: 13px;
   color: #64748b;
+  margin: 0;
 }
 
-.input {
-  height: 36px;
-  border-radius: 6px;
-  background: #f3f3f5;
-  border: none;
-  padding: 0 12px;
-  font-size: 14px;
-}
-
-.codeInput {
-  width: 120px;
-}
-
-.list {
+.chips {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -48,11 +86,12 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 10px;
-  border: 1px solid #e5e7eb;
+  padding: 5px 6px 5px 12px;
   border-radius: 999px;
-  font-size: 14px;
-  background: #fff;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .chipDeactivated {
@@ -60,8 +99,13 @@
 }
 
 .chipCode {
-  color: #6b7280;
-  font-size: 13px;
+  color: rgba(30, 64, 175, 0.7);
+  font-weight: 500;
+}
+
+.chipDecimals {
+  color: #1e40af;
+  font-weight: 700;
 }
 
 .chipBtn {
@@ -69,18 +113,16 @@
   align-items: center;
   justify-content: center;
   border: none;
-  background: none;
-  cursor: pointer;
-  color: #6b7280;
+  border-radius: 999px;
+  background: rgba(30, 64, 175, 0.15);
+  color: #1e40af;
   font-size: 12px;
-  padding: 0;
+  font-weight: 600;
+  padding: 2px 10px;
+  cursor: pointer;
+  transition: background 0.15s ease;
 }
 
 .chipBtn:hover {
-  color: #1e40af;
-}
-
-.empty {
-  font-size: 13px;
-  color: #64748b;
+  background: rgba(30, 64, 175, 0.3);
 }

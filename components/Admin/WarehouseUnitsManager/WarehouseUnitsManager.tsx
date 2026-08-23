@@ -12,6 +12,7 @@ import {
 } from '@/lib/api/warehouse';
 import type { Unit } from '@/types/warehouseType';
 import Button from '@/components/UI/Button/Button';
+import Input from '@/components/UI/Input/Input';
 import css from './WarehouseUnitsManager.module.css';
 
 // Compact units-of-measure manager for the admin settings card. Units
@@ -23,6 +24,7 @@ const WarehouseUnitsManager = () => {
 
   const [code, setCode] = useState('');
   const [name, setName] = useState('');
+  const [allowsDecimals, setAllowsDecimals] = useState(false);
 
   const { data } = useQuery({
     queryKey: ['warehouse', 'units', 'manage'],
@@ -41,11 +43,13 @@ const WarehouseUnitsManager = () => {
     );
 
   const add = useMutation({
-    mutationFn: () => createUnit({ code: code.trim(), name: name.trim() }),
+    mutationFn: () =>
+      createUnit({ code: code.trim(), name: name.trim(), allowsDecimals }),
     onSuccess: () => {
       toast.success(t('created'));
       setCode('');
       setName('');
+      setAllowsDecimals(false);
       invalidate();
     },
     onError,
@@ -79,24 +83,26 @@ const WarehouseUnitsManager = () => {
   };
 
   return (
-    <div className={css.wrap}>
-      <label className={css.fieldLabel}>{t('title')}</label>
+    <div className={css.section}>
+      <div className={css.head}>
+        <h2 className={css.title}>{t('title')}</h2>
+      </div>
 
-      <div className={css.addRow}>
-        <div className={css.field}>
-          <span className={css.fieldLabel}>{t('code')}</span>
-          <input
-            className={`${css.input} ${css.codeInput}`}
+      <div className={css.controls}>
+        <div className={`${css.control} ${css.controlNarrow}`}>
+          <label className={css.controlLabel}>{t('symbol')}</label>
+          <Input
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            onChange={e => setCode(e.target.value)}
+            style={{ height: '36px', borderRadius: '6px' }}
           />
         </div>
-        <div className={css.field}>
-          <span className={css.fieldLabel}>{t('name')}</span>
-          <input
-            className={css.input}
+        <div className={css.control}>
+          <label className={css.controlLabel}>{t('name')}</label>
+          <Input
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={e => setName(e.target.value)}
+            style={{ height: '36px', borderRadius: '6px' }}
           />
         </div>
         <Button
@@ -104,16 +110,26 @@ const WarehouseUnitsManager = () => {
           className="button button--blue"
           onClick={onAdd}
           disabled={add.isPending}
+          height={36}
         >
           {t('add')}
         </Button>
       </div>
 
+      <label className={css.decimalsRow}>
+        <input
+          type="checkbox"
+          checked={allowsDecimals}
+          onChange={e => setAllowsDecimals(e.target.checked)}
+        />
+        <span>{t('allowDecimals')}</span>
+      </label>
+
       {units.length === 0 ? (
         <p className={css.empty}>{t('empty')}</p>
       ) : (
-        <ul className={css.list}>
-          {units.map((u) => {
+        <ul className={css.chips}>
+          {units.map(u => {
             const isActive = u.status === 'active';
             return (
               <li
@@ -122,6 +138,15 @@ const WarehouseUnitsManager = () => {
               >
                 <span>
                   {u.name} <span className={css.chipCode}>({u.code})</span>
+                  {u.allowsDecimals && (
+                    <span
+                      className={css.chipDecimals}
+                      title={t('allowDecimals')}
+                    >
+                      {' '}
+                      0,5
+                    </span>
+                  )}
                 </span>
                 {isActive ? (
                   <button

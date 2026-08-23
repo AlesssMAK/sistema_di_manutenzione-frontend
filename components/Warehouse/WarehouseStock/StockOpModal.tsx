@@ -43,6 +43,9 @@ interface DraftLine {
   itemId: string;
   itemText: string;
   quantity: string;
+  // Carico only: when true the quantity is entered in packages and is
+  // expanded by the item's unitsPerPackage into the usage unit.
+  inPackages: boolean;
 }
 
 let lineSeq = 0;
@@ -51,6 +54,7 @@ const emptyLine = (): DraftLine => ({
   itemId: '',
   itemText: '',
   quantity: '',
+  inPackages: false,
 });
 
 const StockOpModal = ({
@@ -102,6 +106,47 @@ const StockOpModal = ({
     items.forEach(i => map.set(itemLabel(i), i));
     return map;
   }, [items]);
+  const itemById = useMemo(() => {
+    const map = new Map<string, InventoryItem>();
+    items.forEach(i => map.set(i._id, i));
+    return map;
+  }, [items]);
+
+  // Package size for an item (undefined when it isn't sold in packages).
+  const packageOf = (itemId: string): number | undefined => {
+    const per = itemById.get(itemId)?.unitsPerPackage;
+    return per && per > 0 ? per : undefined;
+  };
+  // Whether the item's usage unit permits fractional quantities.
+  const unitAllowsDecimals = (itemId: string): boolean => {
+    const it = itemById.get(itemId);
+    if (!it || typeof it.unitId === 'string') return true;
+    return it.unitId.allowsDecimals;
+  };
+  const unitCodeOf = (itemId: string): string => {
+    const it = itemById.get(itemId);
+    return !it || typeof it.unitId === 'string' ? '' : it.unitId.code;
+  };
+  // In packages mode fractional boxes are allowed (the expanded total is
+  // still integer-checked on submit); otherwise the unit's rule applies.
+  const lineStep = (l: DraftLine): string => {
+    if (op === 'in' && l.inPackages && packageOf(l.itemId)) return 'any';
+    return unitAllowsDecimals(l.itemId) ? 'any' : '1';
+  };
+  // Expanded quantity a line contributes, in the usage unit.
+  const lineQty = (l: DraftLine): number => {
+    const per = packageOf(l.itemId);
+    return op === 'in' && l.inPackages && per
+      ? Number(l.quantity) * per
+      : Number(l.quantity);
+  };
+  // When an item is chosen, default Carico to package entry if it has one.
+  const pickItem = (line: DraftLine, i: InventoryItem) =>
+    setLine(line.key, {
+      itemId: i._id,
+      itemText: itemLabel(i),
+      inPackages: op === 'in' && Boolean(i.unitsPerPackage && i.unitsPerPackage > 0),
+    });
 
   const refOptions: { value: ReferenceType; label: string }[] = [
     { value: 'none', label: t('ref.none') },
@@ -124,16 +169,18 @@ const StockOpModal = ({
     try {
       const item = await getItemByCode(code.trim());
       const label = itemLabel(item);
+      const inPackages =
+        op === 'in' && Boolean(item.unitsPerPackage && item.unitsPerPackage > 0);
       if (isAdjust) {
-        setLine(lines[0].key, { itemId: item._id, itemText: label });
+        setLine(lines[0].key, { itemId: item._id, itemText: label, inPackages });
       } else {
         const empty = lines.find(l => !l.itemId);
         if (empty) {
-          setLine(empty.key, { itemId: item._id, itemText: label });
+          setLine(empty.key, { itemId: item._id, itemText: label, inPackages });
         } else {
           setLines(prev => [
             ...prev,
-            { ...emptyLine(), itemId: item._id, itemText: label },
+            { ...emptyLine(), itemId: item._id, itemText: label, inPackages },
           ]);
         }
       }
@@ -146,7 +193,7 @@ const StockOpModal = ({
   const toLines = (): MovementLine[] =>
     lines
       .filter(l => l.itemId && Number(l.quantity) > 0)
-      .map(l => ({ itemId: l.itemId, quantity: Number(l.quantity) }));
+      .map(l => ({ itemId: l.itemId, quantity: lineQty(l) }));
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -227,6 +274,22 @@ const StockOpModal = ({
       toast.error(t('addAtLeastOne'));
       return;
     }
+
+    // Enforce integer quantities for piece-like units. For Carico in
+    // packages this checks the expanded total (catches e.g. 0.5 box × 3 pz).
+    const badItemId = isAdjust
+      ? !unitAllowsDecimals(lines[0].itemId) &&
+        !Number.isInteger(Number(lines[0].quantity))
+        ? lines[0].itemId
+        : null
+      : (toLines().find(
+          l => !unitAllowsDecimals(l.itemId) && !Number.isInteger(l.quantity)
+        )?.itemId ?? null);
+    if (badItemId) {
+      toast.error(t('integerOnly', { unit: unitCodeOf(badItemId) }));
+      return;
+    }
+
     mutation.mutate();
   };
 
@@ -295,11 +358,7 @@ const StockOpModal = ({
                     placeholder={t('itemPlaceholder')}
                     onSelect={label => {
                       const i = itemByLabel.get(label);
-                      if (i)
-                        setLine(lines[0].key, {
-                          itemId: i._id,
-                          itemText: label,
-                        });
+                      if (i) pickItem(lines[0], i);
                     }}
                   />
                 </div>
@@ -309,6 +368,7 @@ const StockOpModal = ({
                     className={css.input}
                     type="number"
                     min={0}
+                    step={lineStep(lines[0])}
                     value={lines[0].quantity}
                     onChange={e =>
                       setLine(lines[0].key, { quantity: e.target.value })
@@ -320,49 +380,81 @@ const StockOpModal = ({
               <div className={css.field}>
                 <label className={css.label}>{t('lines')} *</label>
                 <div className={css.lines}>
-                  {lines.map(l => (
-                    <div key={l.key} className={css.lineRow}>
-                      <div className={css.lineItem}>
-                        <SelectDropdown
-                          options={items.map(itemLabel)}
-                          selectedValue={l.itemText}
-                          placeholder={t('itemPlaceholder')}
-                          onSelect={label => {
-                            const i = itemByLabel.get(label);
-                            if (i)
-                              setLine(l.key, {
-                                itemId: i._id,
-                                itemText: label,
-                              });
-                          }}
-                        />
+                  {lines.map(l => {
+                    const per = op === 'in' ? packageOf(l.itemId) : undefined;
+                    return (
+                      <div key={l.key} className={css.lineGroup}>
+                        <div className={css.lineRow}>
+                          <div className={css.lineItem}>
+                            <SelectDropdown
+                              options={items.map(itemLabel)}
+                              selectedValue={l.itemText}
+                              placeholder={t('itemPlaceholder')}
+                              onSelect={label => {
+                                const i = itemByLabel.get(label);
+                                if (i) pickItem(l, i);
+                              }}
+                            />
+                          </div>
+                          <input
+                            className={`${css.input} ${css.lineQty}`}
+                            type="number"
+                            min={0}
+                            step={lineStep(l)}
+                            placeholder={t('qty')}
+                            value={l.quantity}
+                            onChange={e =>
+                              setLine(l.key, { quantity: e.target.value })
+                            }
+                          />
+                          {lines.length > 1 && (
+                            <button
+                              type="button"
+                              className={css.lineRemove}
+                              onClick={() =>
+                                setLines(prev =>
+                                  prev.filter(x => x.key !== l.key)
+                                )
+                              }
+                              aria-label={tCommon('deactivate')}
+                            >
+                              <svg>
+                                <use href="/sprite.svg#close" />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                        {per && (
+                          <div className={css.pkgRow}>
+                            <label className={css.pkgToggle}>
+                              <input
+                                type="checkbox"
+                                checked={l.inPackages}
+                                onChange={e =>
+                                  setLine(l.key, {
+                                    inPackages: e.target.checked,
+                                  })
+                                }
+                              />
+                              <span>
+                                {t('inPackages', {
+                                  label:
+                                    itemById.get(l.itemId)?.packageLabel ??
+                                    t('packageFallback'),
+                                  per,
+                                })}
+                              </span>
+                            </label>
+                            {l.inPackages && Number(l.quantity) > 0 && (
+                              <span className={css.pkgPreview}>
+                                = {lineQty(l)} {unitCodeOf(l.itemId)}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </div>
-                      <input
-                        className={`${css.input} ${css.lineQty}`}
-                        type="number"
-                        min={0}
-                        placeholder={t('qty')}
-                        value={l.quantity}
-                        onChange={e =>
-                          setLine(l.key, { quantity: e.target.value })
-                        }
-                      />
-                      {lines.length > 1 && (
-                        <button
-                          type="button"
-                          className={css.lineRemove}
-                          onClick={() =>
-                            setLines(prev => prev.filter(x => x.key !== l.key))
-                          }
-                          aria-label={tCommon('deactivate')}
-                        >
-                          <svg>
-                            <use href="/sprite.svg#close" />
-                          </svg>
-                        </button>
-                      )}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 <button
                   type="button"
