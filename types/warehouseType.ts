@@ -18,6 +18,9 @@ export interface Unit {
   _id: string;
   code: string;
   name: string;
+  // Piece-like units (pezzo) stay integer; continuous ones (litri, kg,
+  // metri, centimetri) allow fractional quantities.
+  allowsDecimals: boolean;
   status: STATUS;
 }
 
@@ -35,11 +38,13 @@ export interface UnitsResponse {
 export interface CreateUnitRequest {
   code: string;
   name: string;
+  allowsDecimals?: boolean;
 }
 
 export interface UpdateUnit {
   code?: string;
   name?: string;
+  allowsDecimals?: boolean;
   status?: STATUS;
 }
 
@@ -89,9 +94,9 @@ export interface UpdateWarehouseRequest {
 
 /* --------------------------- Inventory item ---------------------------- */
 
-// unitId comes back populated ({ code, name }) on list/read, but is a
-// plain id string on write.
-export type UnitRef = Pick<Unit, '_id' | 'code' | 'name'>;
+// unitId comes back populated ({ code, name, allowsDecimals }) on
+// list/read, but is a plain id string on write.
+export type UnitRef = Pick<Unit, '_id' | 'code' | 'name' | 'allowsDecimals'>;
 
 export interface InventoryItem {
   _id: string;
@@ -99,6 +104,11 @@ export interface InventoryItem {
   name: string;
   category?: string;
   unitId: UnitRef | string;
+  // Optional package intake: when set, Carico can be entered in whole
+  // packages (packageLabel) and is expanded by unitsPerPackage into the
+  // usage unit. Consumption always uses the usage unit.
+  packageLabel?: string;
+  unitsPerPackage?: number;
   note?: string;
   status: STATUS;
 }
@@ -119,6 +129,8 @@ export interface CreateItemRequest {
   name: string;
   category?: string;
   unitId: string;
+  packageLabel?: string;
+  unitsPerPackage?: number;
   note?: string;
 }
 
@@ -127,6 +139,8 @@ export interface UpdateItem {
   name?: string;
   category?: string;
   unitId?: string;
+  packageLabel?: string | null;
+  unitsPerPackage?: number | null;
   note?: string;
   status?: STATUS;
 }
@@ -140,7 +154,14 @@ export interface UpdateItemRequest {
 
 export type ItemRef = Pick<
   InventoryItem,
-  '_id' | 'code' | 'name' | 'category' | 'unitId' | 'status'
+  | '_id'
+  | 'code'
+  | 'name'
+  | 'category'
+  | 'unitId'
+  | 'packageLabel'
+  | 'unitsPerPackage'
+  | 'status'
 >;
 export type WarehouseRef = Pick<Warehouse, '_id' | 'code' | 'name'>;
 

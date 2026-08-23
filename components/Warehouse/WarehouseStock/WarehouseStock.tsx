@@ -30,6 +30,23 @@ const unitCode = (item: StockLevel['itemId']): string => {
 const itemName = (item: StockLevel['itemId']): string =>
   typeof item === 'string' ? item : (item as ItemRef).name;
 
+// For package-tracked items, how many whole-ish packages the on-hand
+// represents (informational only). Rounded to one decimal.
+const packageInfo = (
+  item: StockLevel['itemId'],
+  quantity: number
+): { label: string; approx: number } | null => {
+  if (typeof item === 'string') return null;
+  const ref = item as ItemRef;
+  if (!ref.packageLabel || !ref.unitsPerPackage || ref.unitsPerPackage <= 0) {
+    return null;
+  }
+  return {
+    label: ref.packageLabel,
+    approx: Math.round((quantity / ref.unitsPerPackage) * 10) / 10,
+  };
+};
+
 const WarehouseStock = () => {
   const t = useTranslations('WarehousePage.stock');
   const tNoFound = useTranslations('NoFound');
@@ -195,6 +212,7 @@ const WarehouseStock = () => {
             <tbody>
               {levels.map((lvl) => {
                 const low = lvl.quantity <= lvl.minLevel;
+                const pkg = packageInfo(lvl.itemId, lvl.quantity);
                 return (
                   <tr key={lvl._id}>
                     <td>{itemName(lvl.itemId)}</td>
@@ -204,6 +222,11 @@ const WarehouseStock = () => {
                         {lvl.quantity}
                       </span>
                       {low && <span className={css.lowBadge}>{t('low')}</span>}
+                      {pkg && (
+                        <span className={css.pkgHint}>
+                          ≈ {pkg.approx} {pkg.label}
+                        </span>
+                      )}
                     </td>
                     <td>{lvl.minLevel}</td>
                   </tr>

@@ -437,7 +437,7 @@
         "lowStockRoles": "Ruoli da avvisare",
         "units": {
           "title": "Unità di misura",
-          "code": "Codice",
+          "symbol": "Simbolo",
           "name": "Nome",
           "add": "Aggiungi",
           "empty": "Nessuna unità di misura",
@@ -447,7 +447,8 @@
           "deactivated": "Unità disattivata",
           "activated": "Unità riattivata",
           "error": "Errore durante il salvataggio",
-          "fillRequired": "Compila codice e nome"
+          "fillRequired": "Compila codice e nome",
+          "allowDecimals": "Consenti decimali"
         },
         "warehouses": {
           "title": "Magazzini",
@@ -1168,6 +1169,10 @@
           "name": "Nome",
           "unit": "Unità di Misura",
           "unitPlaceholder": "Seleziona unità",
+          "packageLabel": "Confezione",
+          "packagePlaceholder": "es. Scatola, Rotolo",
+          "packageHint": "Facoltativo: se l'articolo arriva in confezioni.",
+          "unitsPerPackage": "Pezzi per confezione",
           "category": "Categoria",
           "note": "Note"
         }
@@ -1221,6 +1226,9 @@
         "lines": "Righe",
         "qty": "Qtà",
         "addLine": "Aggiungi riga",
+        "inPackages": "In confezioni ({label} × {per})",
+        "packageFallback": "confezione",
+        "integerOnly": "L'unità {unit} ammette solo numeri interi",
         "note": "Note",
         "confirm": "Conferma",
         "done": "Operazione completata",

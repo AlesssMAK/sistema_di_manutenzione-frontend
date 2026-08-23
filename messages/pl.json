@@ -437,7 +437,7 @@
         "lowStockRoles": "Role do powiadomienia",
         "units": {
           "title": "Jednostki miary",
-          "code": "Kod",
+          "symbol": "Symbol",
           "name": "Nazwa",
           "add": "Dodaj",
           "empty": "Brak jednostek miary",
@@ -447,7 +447,8 @@
           "deactivated": "Dezaktywowano jednostkę",
           "activated": "Przywrócono jednostkę",
           "error": "Błąd podczas zapisywania",
-          "fillRequired": "Wypełnij kod i nazwę"
+          "fillRequired": "Wypełnij kod i nazwę",
+          "allowDecimals": "Zezwól na Ułamki"
         },
         "warehouses": {
           "title": "Magazyny",
@@ -1168,6 +1169,10 @@
           "name": "Nazwa",
           "unit": "Jednostka Miary",
           "unitPlaceholder": "Wybierz jednostkę",
+          "packageLabel": "Opakowanie",
+          "packagePlaceholder": "np. Pudełko, Rolka",
+          "packageHint": "Opcjonalnie: jeśli artykuł przychodzi w opakowaniach.",
+          "unitsPerPackage": "Sztuk w Opakowaniu",
           "category": "Kategoria",
           "note": "Notatka"
         }
@@ -1221,6 +1226,9 @@
         "lines": "Wiersze",
         "qty": "Ilość",
         "addLine": "Dodaj wiersz",
+        "inPackages": "W opakowaniach ({label} × {per})",
+        "packageFallback": "opakowanie",
+        "integerOnly": "Jednostka {unit} dopuszcza tylko liczby całkowite",
         "note": "Notatka",
         "confirm": "Potwierdź",
         "done": "Operacja zakończona",

@@ -437,7 +437,7 @@
         "lowStockRoles": "Roles to Notify",
         "units": {
           "title": "Units of Measure",
-          "code": "Code",
+          "symbol": "Symbol",
           "name": "Name",
           "add": "Add",
           "empty": "No units of measure",
@@ -447,7 +447,8 @@
           "deactivated": "Unit deactivated",
           "activated": "Unit reactivated",
           "error": "Error while saving",
-          "fillRequired": "Fill in code and name"
+          "fillRequired": "Fill in code and name",
+          "allowDecimals": "Allow Decimals"
         },
         "warehouses": {
           "title": "Warehouses",
@@ -1168,6 +1169,10 @@
           "name": "Name",
           "unit": "Unit of Measure",
           "unitPlaceholder": "Select unit",
+          "packageLabel": "Package",
+          "packagePlaceholder": "e.g. Box, Roll",
+          "packageHint": "Optional: if the item arrives in packages.",
+          "unitsPerPackage": "Units per Package",
           "category": "Category",
           "note": "Note"
         }
@@ -1221,6 +1226,9 @@
         "lines": "Lines",
         "qty": "Qty",
         "addLine": "Add line",
+        "inPackages": "In packages ({label} × {per})",
+        "packageFallback": "package",
+        "integerOnly": "Unit {unit} allows whole numbers only",
         "note": "Note",
         "confirm": "Confirm",
         "done": "Operation completed",

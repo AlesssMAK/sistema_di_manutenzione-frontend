@@ -12,6 +12,7 @@ import {
 } from '@/lib/api/warehouse';
 import type { Warehouse } from '@/types/warehouseType';
 import Button from '@/components/UI/Button/Button';
+import Input from '@/components/UI/Input/Input';
 import css from '../WarehouseUnitsManager/WarehouseUnitsManager.module.css';
 
 // Compact warehouses (locations) manager for the admin settings card —
@@ -86,32 +87,34 @@ const WarehouseWarehousesManager = () => {
   };
 
   return (
-    <div className={css.wrap}>
-      <label className={css.fieldLabel}>{t('title')}</label>
+    <div className={css.section}>
+      <div className={css.head}>
+        <h2 className={css.title}>{t('title')}</h2>
+      </div>
 
-      <div className={css.addRow}>
-        <div className={css.field}>
-          <span className={css.fieldLabel}>{t('code')}</span>
-          <input
-            className={`${css.input} ${css.codeInput}`}
+      <div className={css.controls}>
+        <div className={`${css.control} ${css.controlNarrow}`}>
+          <label className={css.controlLabel}>{t('code')}</label>
+          <Input
             value={code}
-            onChange={(e) => setCode(e.target.value)}
+            onChange={e => setCode(e.target.value)}
+            style={{ height: '36px', borderRadius: '6px' }}
           />
         </div>
-        <div className={css.field}>
-          <span className={css.fieldLabel}>{t('name')}</span>
-          <input
-            className={css.input}
+        <div className={css.control}>
+          <label className={css.controlLabel}>{t('name')}</label>
+          <Input
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={e => setName(e.target.value)}
+            style={{ height: '36px', borderRadius: '6px' }}
           />
         </div>
-        <div className={css.field}>
-          <span className={css.fieldLabel}>{t('location')}</span>
-          <input
-            className={css.input}
+        <div className={css.control}>
+          <label className={css.controlLabel}>{t('location')}</label>
+          <Input
             value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            onChange={e => setLocation(e.target.value)}
+            style={{ height: '36px', borderRadius: '6px' }}
           />
         </div>
         <Button
@@ -119,6 +122,7 @@ const WarehouseWarehousesManager = () => {
           className="button button--blue"
           onClick={onAdd}
           disabled={add.isPending}
+          height={36}
         >
           {t('add')}
         </Button>
@@ -127,8 +131,8 @@ const WarehouseWarehousesManager = () => {
       {warehouses.length === 0 ? (
         <p className={css.empty}>{t('empty')}</p>
       ) : (
-        <ul className={css.list}>
-          {warehouses.map((w) => {
+        <ul className={css.chips}>
+          {warehouses.map(w => {
             const isActive = w.status === 'active';
             return (
               <li
