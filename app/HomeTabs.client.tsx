@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
@@ -17,7 +17,6 @@ import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { getAnnouncements } from '@/lib/api/messages';
 import { getAllPlants } from '@/lib/api/plants';
 import { useAuthStore } from '@/lib/store/authStore';
-import { usePageStore } from '@/lib/store/pageStore';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import type { PriorityFaultType, TypeFault } from '@/types/faultType';
 import type { AnnouncementType } from '@/types/messageType';
@@ -49,7 +48,6 @@ const HomeTabsClient = () => {
   const tStatus = useTranslations('StatusFault');
   const tPriority = useTranslations('Priority');
   const tType = useTranslations('TypeFault');
-  const setPageTitle = usePageStore(state => state.setPageTitle);
 
   const { user, isAuthenticated } = useAuthStore();
   const router = useRouter();
@@ -90,16 +88,6 @@ const HomeTabsClient = () => {
   const [fType, setFType] = useState<TypeFault | ''>('');
   const [fDate, setFDate] = useState('');
   const [fPage, setFPage] = useState(1);
-
-  useEffect(() => {
-    const titleByTab: Record<HomeTab, string> = {
-      annunci: tBacheca('sections.announcement.title'),
-      handover: tBacheca('sections.handover.title'),
-      comunicazioni: t('tabs.broadcasts'),
-      segnalazioni: t('tabs.faults'),
-    };
-    setPageTitle(titleByTab[activeTab]);
-  }, [activeTab, setPageTitle, t, tBacheca]);
 
   // Machines for the handover picker (active only). Only fetched when
   // the user can create — readers don't need it.
@@ -153,7 +141,8 @@ const HomeTabsClient = () => {
   // fetching the whole history.
   const dataCreatedFrom = useMemo(() => {
     if (settings?.bacheca?.showAllFaults) return undefined;
-    const days = settings?.bacheca?.recentFaultsDays ?? DEFAULT_RECENT_FAULTS_DAYS;
+    const days =
+      settings?.bacheca?.recentFaultsDays ?? DEFAULT_RECENT_FAULTS_DAYS;
     const d = new Date();
     d.setDate(d.getDate() - days);
     return d.toISOString().slice(0, 10);

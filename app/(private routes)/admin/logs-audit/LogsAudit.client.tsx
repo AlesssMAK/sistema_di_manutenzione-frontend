@@ -1,19 +1,19 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { useMemo, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-import { usePageStore } from '@/lib/store/pageStore';
-import { getAuditLogs } from '@/lib/api/auditLog';
-import { createOptionMapper } from '@/lib/utils/translationMapper';
+
+import LogAuditDetailModal from '@/components/Admin/LogsAuditList/LogAuditDetailModal/LogAuditDetailModal';
+import LogsAuditList from '@/components/Admin/LogsAuditList/LogsAuditList';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
-import LogsAuditList from '@/components/Admin/LogsAuditList/LogsAuditList';
-import LogAuditDetailModal from '@/components/Admin/LogsAuditList/LogAuditDetailModal/LogAuditDetailModal';
+import { getAuditLogs } from '@/lib/api/auditLog';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
 import type {
   AuditActorRole,
   AuditLogEntry,
@@ -36,10 +36,8 @@ const ACTOR_ROLES: AuditActorRole[] = [
 
 const AdminLogsAuditClientPage = () => {
   const t = useTranslations('AdminPage.LogsAudit');
-  const tPage = useTranslations('AdminPage');
   const tRoles = useTranslations('Roles');
   const tNoFound = useTranslations('NoFound');
-  const setPageTitle = usePageStore((s) => s.setPageTitle);
 
   const [openEntry, setOpenEntry] = useState<AuditLogEntry | null>(null);
   const [activeTab, setActiveTab] = useState<AuditTab>('access');
@@ -53,10 +51,6 @@ const AdminLogsAuditClientPage = () => {
   const [to, setTo] = useState('');
   const [accessPage, setAccessPage] = useState(1);
   const [changesPage, setChangesPage] = useState(1);
-
-  useEffect(() => {
-    setPageTitle(tPage('titlePageForStore'));
-  }, [setPageTitle, tPage]);
 
   // Any filter change invalidates the current page on both tabs. Adjusted
   // during render rather than in an effect so the reset lands in the same
@@ -73,7 +67,7 @@ const AdminLogsAuditClientPage = () => {
     () =>
       createOptionMapper([
         { value: '', label: t('filters.allRoles') },
-        ...ACTOR_ROLES.map((r) => ({
+        ...ACTOR_ROLES.map(r => ({
           value: r,
           label: r === 'system' ? t('system') : tRoles(r),
         })),
@@ -133,7 +127,7 @@ const AdminLogsAuditClientPage = () => {
       label: t('filters.role'),
       value: roleMapper.getLabelByValue(actorRole) ?? t('filters.allRoles'),
       options: roleMapper.labelsArray,
-      onSelect: (label) =>
+      onSelect: label =>
         setActorRole(
           (roleMapper.getValueByLabel(label) ?? '') as AuditActorRole | ''
         ),
@@ -168,8 +162,7 @@ const AdminLogsAuditClientPage = () => {
 
   const activeQuery = activeTab === 'access' ? accessQuery : changesQuery;
   const activePage = activeTab === 'access' ? accessPage : changesPage;
-  const setActivePage =
-    activeTab === 'access' ? setAccessPage : setChangesPage;
+  const setActivePage = activeTab === 'access' ? setAccessPage : setChangesPage;
   const emptyText =
     activeTab === 'access'
       ? t('sections.access.empty')

@@ -8,12 +8,12 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import { fetchFaultCards } from '@/lib/api/faults';
-import { usePageStore } from '@/lib/store/pageStore';
+
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import { FaultCard, PriorityFaultType, TypeFault } from '@/types/faultType';
 import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import css from './Manager.module.css';
 
@@ -34,8 +34,6 @@ const ManagerClient = () => {
   const tNoFound = useTranslations('NoFound');
   const tPriority = useTranslations('Priority');
   const tType = useTranslations('TypeFault');
-  const setPageTitle = usePageStore(state => state.setPageTitle);
-
   const TABS: TabItem<ManagerTab>[] = [
     { value: 'received', label: t('tabs.received') },
     { value: 'inProgress', label: t('tabs.inProgress') },
@@ -53,10 +51,6 @@ const ManagerClient = () => {
   const [priority, setPriority] = useState<PriorityFaultType | ''>('');
   const [typeFault, setTypeFault] = useState<TypeFault | ''>('');
   const [plannedDate, setPlannedDate] = useState('');
-
-  useEffect(() => {
-    setPageTitle(t('titlePageForStore'));
-  }, [setPageTitle, t]);
 
   // Any filter change resets pagination back to the first page. Adjusted
   // during render rather than in an effect so the reset lands in the same

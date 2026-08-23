@@ -1,10 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { usePageStore } from '@/lib/store/pageStore';
+
+import Button from '@/components/UI/Button/Button';
+import Input from '@/components/UI/Input/Input';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
 import {
   fetchFullSystemSettings,
   updateSystemSettings,
@@ -12,10 +16,6 @@ import {
   type EmailTriggers,
   type MessagingSettings,
 } from '@/lib/api/systemSettings';
-import Input from '@/components/UI/Input/Input';
-import Button from '@/components/UI/Button/Button';
-import Loader from '@/components/UI/Loader/Loader';
-import NoFound from '@/components/UI/NoFound/NoFound';
 import css from './Notifications.module.css';
 
 const TRIGGER_KEYS: (keyof EmailTriggers)[] = [
@@ -29,17 +29,11 @@ const TRIGGER_KEYS: (keyof EmailTriggers)[] = [
 
 const AdminNotificationsClientPage = () => {
   const t = useTranslations('AdminPage.Notifications');
-  const tPage = useTranslations('AdminPage');
   const tNoFound = useTranslations('NoFound');
-  const setPageTitle = usePageStore((s) => s.setPageTitle);
   const queryClient = useQueryClient();
 
   const [email, setEmail] = useState<EmailSettings | null>(null);
   const [messaging, setMessaging] = useState<MessagingSettings | null>(null);
-
-  useEffect(() => {
-    setPageTitle(tPage('titlePageForStore'));
-  }, [setPageTitle, tPage]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['systemSettings', 'full'],
@@ -114,7 +108,7 @@ const AdminNotificationsClientPage = () => {
             type="checkbox"
             className={css.toggleInput}
             checked={email.enabled}
-            onChange={(e) => setEmail({ ...email, enabled: e.target.checked })}
+            onChange={e => setEmail({ ...email, enabled: e.target.checked })}
             id="email-enabled"
           />
           <span className={css.toggleSwitch} />
@@ -126,7 +120,7 @@ const AdminNotificationsClientPage = () => {
           <Input
             type="email"
             value={email.from}
-            onChange={(e) => setEmail({ ...email, from: e.target.value })}
+            onChange={e => setEmail({ ...email, from: e.target.value })}
             disabled={!email.enabled}
             style={{
               height: '36px',
@@ -139,14 +133,14 @@ const AdminNotificationsClientPage = () => {
 
         <h3 className={css.subTitle}>{t('email.triggers.section')}</h3>
         <div className={css.triggerList}>
-          {TRIGGER_KEYS.map((key) => (
+          {TRIGGER_KEYS.map(key => (
             <label key={key} className={css.toggleRow}>
               <input
                 type="checkbox"
                 className={css.toggleInput}
                 checked={email.triggers[key]}
                 disabled={!email.enabled}
-                onChange={(e) =>
+                onChange={e =>
                   setEmail({
                     ...email,
                     triggers: { ...email.triggers, [key]: e.target.checked },
@@ -168,7 +162,7 @@ const AdminNotificationsClientPage = () => {
             min={0}
             max={1000}
             value={email.rateLimits.perRecipientPerHour}
-            onChange={(e) =>
+            onChange={e =>
               setEmail({
                 ...email,
                 rateLimits: { perRecipientPerHour: Number(e.target.value) },
@@ -199,7 +193,7 @@ const AdminNotificationsClientPage = () => {
             min={1}
             max={365}
             value={messaging.broadcastTtlDays}
-            onChange={(e) =>
+            onChange={e =>
               setMessaging({
                 ...messaging,
                 broadcastTtlDays: Number(e.target.value),
@@ -224,7 +218,7 @@ const AdminNotificationsClientPage = () => {
             min={0}
             max={1000}
             value={messaging.directRateLimitPerHour}
-            onChange={(e) =>
+            onChange={e =>
               setMessaging({
                 ...messaging,
                 directRateLimitPerHour: Number(e.target.value),

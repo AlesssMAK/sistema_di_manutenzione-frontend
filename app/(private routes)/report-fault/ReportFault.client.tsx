@@ -1,22 +1,15 @@
 'use client';
 
 import ReportForm from '@/components/forms/ReportForm/ReportForm';
-import { usePageStore } from '@/lib/store/pageStore';
+
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import css from './page.module.css';
 
 const ReportFaultClient = () => {
-  const t = useTranslations('ReportFaultPage');
   const tDetail = useTranslations('FaultDetail');
   const tTitle = useTranslations('ReportForm');
   const router = useRouter();
-  const setPageTitle = usePageStore(state => state.setPageTitle);
-
-  useEffect(() => {
-    setPageTitle(t('titlePageForStore'));
-  }, [setPageTitle, t]);
 
   return (
     <div className="container">

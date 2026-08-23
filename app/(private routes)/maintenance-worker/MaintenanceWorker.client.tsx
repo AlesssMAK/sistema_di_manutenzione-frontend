@@ -6,7 +6,7 @@ import ScopeFilterBar, {
   type FaultScope,
 } from '@/components/MaintenanceWorker/ScopeFilterBar/ScopeFilterBar';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
-import { usePageStore } from '@/lib/store/pageStore';
+
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import css from './page.module.css';
@@ -39,7 +39,6 @@ const PER_PAGE = 6;
 const MaintenanceWorkerClient = () => {
   const t = useTranslations('maintenanceWorkerPage');
   const tNoFound = useTranslations('NoFound');
-  const setPageTitle = usePageStore(state => state.setPageTitle);
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
 
@@ -344,9 +343,6 @@ const MaintenanceWorkerClient = () => {
   }, [userId, scopeResolved]);
 
   useEffect(() => {
-    setPageTitle(t('titlePageForStore'));
-    // Wait for the landing scope to be resolved before the first load
-    // so we don't fetch 'mine' then immediately re-fetch 'pool'.
     if (!scopeResolved) return;
     // A fresh load reflects current state, so the "new since load"
     // counter starts over.
@@ -354,7 +350,6 @@ const MaintenanceWorkerClient = () => {
     loadData(1, priority, selectedDate, viewMode, scope, userId);
   }, [
     scopeResolved,
-    setPageTitle,
     t,
     loadData,
     priority,
@@ -542,10 +537,7 @@ const MaintenanceWorkerClient = () => {
             ) : (
               <div className={css.noResults}>
                 <div className={css.no_found_container}>
-                  <NoFound
-                    title={tNoFound('emptyTitle')}
-                    message={emptyText}
-                  />
+                  <NoFound title={tNoFound('emptyTitle')} message={emptyText} />
                 </div>
                 {showResetButton && (
                   <div className={css.no_found_btn}>

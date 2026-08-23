@@ -1,41 +1,41 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
-import { format, isValid, parseISO } from 'date-fns';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { format, isValid, parseISO } from 'date-fns';
+import { useLocale, useTranslations } from 'next-intl';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { usePageStore } from '@/lib/store/pageStore';
-import {
-  fetchFullSystemSettings,
-  updateSystemSettings,
-  type RetentionSettings,
-  type BachecaSettings,
-  type MaintenanceSettings,
-  type WarehouseSettings,
-  type WeekSchedule,
-  type WeekDayKey,
-  type DaySchedule,
-} from '@/lib/api/systemSettings';
-import Input from '@/components/UI/Input/Input';
-import Button from '@/components/UI/Button/Button';
-import Loader from '@/components/UI/Loader/Loader';
-import NoFound from '@/components/UI/NoFound/NoFound';
-import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
-import TimePickerInput from '@/components/UI/TimePickerInput/TimePickerInput';
+
 import GrantUsersSection from '@/components/Admin/GrantUsersSection/GrantUsersSection';
 import WarehouseUnitsManager from '@/components/Admin/WarehouseUnitsManager/WarehouseUnitsManager';
 import WarehouseWarehousesManager from '@/components/Admin/WarehouseWarehousesManager/WarehouseWarehousesManager';
+import Button from '@/components/UI/Button/Button';
+import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
+import Input from '@/components/UI/Input/Input';
+import Loader from '@/components/UI/Loader/Loader';
+import NoFound from '@/components/UI/NoFound/NoFound';
+import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import TimePickerInput from '@/components/UI/TimePickerInput/TimePickerInput';
+import Toggle from '@/components/UI/Toggle/Toggle';
+import { TIMEZONES } from '@/constants/timezones';
 import { getAnnouncementAuthors } from '@/lib/api/announcements';
 import { getMessageSenders } from '@/lib/api/messages';
+import {
+  fetchFullSystemSettings,
+  updateSystemSettings,
+  type BachecaSettings,
+  type DaySchedule,
+  type MaintenanceSettings,
+  type RetentionSettings,
+  type WarehouseSettings,
+  type WeekDayKey,
+  type WeekSchedule,
+} from '@/lib/api/systemSettings';
 import {
   getWarehouseManagers,
   getWarehouseOperators,
 } from '@/lib/api/warehouse';
-import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
-import Toggle from '@/components/UI/Toggle/Toggle';
-import { TIMEZONES } from '@/constants/timezones';
 import css from './SystemSettings.module.css';
 
 // Monday-first weekday order; values are JS getDay() codes
@@ -52,11 +52,10 @@ const WEEK_DAYS: { value: number; key: string }[] = [
 
 const AdminSystemSettingsClientPage = () => {
   const t = useTranslations('AdminPage.SystemSettings');
-  const tPage = useTranslations('AdminPage');
+
   const tNoFound = useTranslations('NoFound');
   const tRoles = useTranslations('Roles');
   const locale = getDateFnsLocale(useLocale());
-  const setPageTitle = usePageStore((s) => s.setPageTitle);
 
   // Role filter options for the announcements grant section (admins are
   // excluded — they can always publish).
@@ -98,10 +97,6 @@ const AdminSystemSettingsClientPage = () => {
     labels: { qr: true, barcode: true },
   });
 
-  useEffect(() => {
-    setPageTitle(tPage('titlePageForStore'));
-  }, [setPageTitle, tPage]);
-
   const { data, isLoading, isError } = useQuery({
     queryKey: ['systemSettings', 'full'],
     queryFn: fetchFullSystemSettings,
@@ -117,11 +112,9 @@ const AdminSystemSettingsClientPage = () => {
     setTimezone(data.timezone);
     setWeekSchedule(data.weekSchedule);
     setSlotDuration(data.slotDurationMinutes);
-    setHolidays((data.holidays ?? []).map((h) => String(h).slice(0, 10)));
+    setHolidays((data.holidays ?? []).map(h => String(h).slice(0, 10)));
     setRetention(data.retention);
-    setBacheca(
-      data.bacheca ?? { showAllFaults: false, recentFaultsDays: 30 }
-    );
+    setBacheca(data.bacheca ?? { showAllFaults: false, recentFaultsDays: 30 });
     setMaintenance(data.maintenance ?? { overtimeAlertHours: 2 });
     setWarehouse({
       enabled: data.warehouse?.enabled ?? false,
@@ -175,7 +168,7 @@ const AdminSystemSettingsClientPage = () => {
   };
 
   const setDayMode = (key: WeekDayKey, mode: 'off' | 'full' | 'hours') => {
-    setWeekSchedule((prev) => {
+    setWeekSchedule(prev => {
       if (!prev) return prev;
       const cur = prev[key];
       let next: DaySchedule;
@@ -197,26 +190,24 @@ const AdminSystemSettingsClientPage = () => {
     field: 'start' | 'end',
     value: string
   ) => {
-    setWeekSchedule((prev) =>
+    setWeekSchedule(prev =>
       prev ? { ...prev, [key]: { ...prev[key], [field]: value } } : prev
     );
   };
 
   const addHoliday = () => {
     if (!newHoliday || holidays.includes(newHoliday)) return;
-    setHolidays((prev) => [...prev, newHoliday].sort());
+    setHolidays(prev => [...prev, newHoliday].sort());
     setNewHoliday('');
   };
 
   const removeHoliday = (date: string) => {
-    setHolidays((prev) => prev.filter((d) => d !== date));
+    setHolidays(prev => prev.filter(d => d !== date));
   };
 
   const formatHoliday = (iso: string) => {
     const parsed = parseISO(iso);
-    return isValid(parsed)
-      ? format(parsed, 'dd MMMM yyyy', { locale })
-      : iso;
+    return isValid(parsed) ? format(parsed, 'dd MMMM yyyy', { locale }) : iso;
   };
 
   const onSave = () => {
@@ -258,7 +249,7 @@ const AdminSystemSettingsClientPage = () => {
           <label className={css.fieldLabel}>{t('schedule.weekTitle')}</label>
           <div className={css.week}>
             {weekSchedule &&
-              WEEK_DAYS.map((d) => {
+              WEEK_DAYS.map(d => {
                 const key = d.key as WeekDayKey;
                 const day = weekSchedule[key];
                 const mode = dayMode(day);
@@ -268,7 +259,7 @@ const AdminSystemSettingsClientPage = () => {
                       {t(`weekDays.${d.key}`)}
                     </span>
                     <div className={css.modeGroup}>
-                      {(['off', 'full', 'hours'] as const).map((m) => (
+                      {(['off', 'full', 'hours'] as const).map(m => (
                         <button
                           key={m}
                           type="button"
@@ -286,14 +277,14 @@ const AdminSystemSettingsClientPage = () => {
                         <div className={css.timePickerBox}>
                           <TimePickerInput
                             value={day.start}
-                            onChange={(v) => setDayTime(key, 'start', v)}
+                            onChange={v => setDayTime(key, 'start', v)}
                           />
                         </div>
                         <span className={css.weekDash}>–</span>
                         <div className={css.timePickerBox}>
                           <TimePickerInput
                             value={day.end}
-                            onChange={(v) => setDayTime(key, 'end', v)}
+                            onChange={v => setDayTime(key, 'end', v)}
                           />
                         </div>
                       </div>
@@ -305,15 +296,13 @@ const AdminSystemSettingsClientPage = () => {
         </div>
 
         <div className={css.field}>
-          <label className={css.fieldLabel}>
-            {t('schedule.slotDuration')}
-          </label>
+          <label className={css.fieldLabel}>{t('schedule.slotDuration')}</label>
           <Input
             type="number"
             min={5}
             max={240}
             value={slotDuration}
-            onChange={(e) => setSlotDuration(Number(e.target.value))}
+            onChange={e => setSlotDuration(Number(e.target.value))}
             style={{
               height: '36px',
               borderRadius: '6px',
@@ -351,7 +340,7 @@ const AdminSystemSettingsClientPage = () => {
           <p className={css.empty}>{t('holidays.empty')}</p>
         ) : (
           <ul className={css.holidayList}>
-            {holidays.map((h) => (
+            {holidays.map(h => (
               <li key={h} className={css.holidayItem}>
                 <span>{formatHoliday(h)}</span>
                 <button
@@ -381,7 +370,7 @@ const AdminSystemSettingsClientPage = () => {
             min={1}
             max={3650}
             value={retention.auditLogDays}
-            onChange={(e) =>
+            onChange={e =>
               setRetention({
                 ...retention,
                 auditLogDays: Number(e.target.value),
@@ -407,7 +396,7 @@ const AdminSystemSettingsClientPage = () => {
             max={120}
             value={retention.completedFaultsArchiveMonths ?? ''}
             placeholder={t('retention.archiveNever')}
-            onChange={(e) =>
+            onChange={e =>
               setRetention({
                 ...retention,
                 completedFaultsArchiveMonths: e.target.value
@@ -439,7 +428,7 @@ const AdminSystemSettingsClientPage = () => {
             min={0}
             max={168}
             value={maintenance.overtimeAlertHours}
-            onChange={(e) =>
+            onChange={e =>
               setMaintenance({
                 ...maintenance,
                 overtimeAlertHours: Number(e.target.value),
@@ -467,7 +456,7 @@ const AdminSystemSettingsClientPage = () => {
           <Toggle
             id="bacheca-show-all"
             checked={bacheca.showAllFaults}
-            onChange={(checked) =>
+            onChange={checked =>
               setBacheca({ ...bacheca, showAllFaults: checked })
             }
             label={t('bacheca.showAll')}
@@ -482,7 +471,7 @@ const AdminSystemSettingsClientPage = () => {
             max={3650}
             value={bacheca.recentFaultsDays}
             disabled={bacheca.showAllFaults}
-            onChange={(e) =>
+            onChange={e =>
               setBacheca({
                 ...bacheca,
                 recentFaultsDays: Number(e.target.value),
@@ -544,7 +533,7 @@ const AdminSystemSettingsClientPage = () => {
           <Toggle
             id="warehouse-enabled"
             checked={warehouse.enabled}
-            onChange={(checked) => setWarehouse({ enabled: checked })}
+            onChange={checked => setWarehouse({ enabled: checked })}
             label={t('warehouse.enabledLabel')}
           />
           <p style={{ fontSize: '13px', color: '#64748b', marginTop: '6px' }}>
@@ -558,7 +547,7 @@ const AdminSystemSettingsClientPage = () => {
               <Toggle
                 id="warehouse-lowstock-notify"
                 checked={warehouse.lowStock?.notify ?? false}
-                onChange={(checked) =>
+                onChange={checked =>
                   setWarehouse({
                     ...warehouse,
                     lowStock: {
@@ -569,7 +558,9 @@ const AdminSystemSettingsClientPage = () => {
                 }
                 label={t('warehouse.lowStockNotify')}
               />
-              <p style={{ fontSize: '13px', color: '#64748b', marginTop: '6px' }}>
+              <p
+                style={{ fontSize: '13px', color: '#64748b', marginTop: '6px' }}
+              >
                 {t('warehouse.lowStockHint')}
               </p>
             </div>
@@ -580,7 +571,7 @@ const AdminSystemSettingsClientPage = () => {
                   {t('warehouse.lowStockRoles')}
                 </label>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px' }}>
-                  {notifyRoleOptions.map((r) => {
+                  {notifyRoleOptions.map(r => {
                     const checked =
                       warehouse.lowStock?.roles.includes(r.value) ?? false;
                     return (
@@ -596,7 +587,7 @@ const AdminSystemSettingsClientPage = () => {
                         <input
                           type="checkbox"
                           checked={checked}
-                          onChange={(e) => {
+                          onChange={e => {
                             const roles = new Set(
                               warehouse.lowStock?.roles ?? []
                             );
@@ -634,7 +625,7 @@ const AdminSystemSettingsClientPage = () => {
                 <Toggle
                   id="warehouse-label-qr"
                   checked={warehouse.labels?.qr ?? true}
-                  onChange={(checked) =>
+                  onChange={checked =>
                     setWarehouse({
                       ...warehouse,
                       labels: {
@@ -648,7 +639,7 @@ const AdminSystemSettingsClientPage = () => {
                 <Toggle
                   id="warehouse-label-barcode"
                   checked={warehouse.labels?.barcode ?? true}
-                  onChange={(checked) =>
+                  onChange={checked =>
                     setWarehouse({
                       ...warehouse,
                       labels: {
@@ -672,7 +663,9 @@ const AdminSystemSettingsClientPage = () => {
             <GrantUsersSection
               title={t('permissions.warehouseManage.section')}
               subtitle={t('permissions.warehouseManage.subtitle')}
-              selectUserPlaceholder={t('permissions.warehouseManage.selectUser')}
+              selectUserPlaceholder={t(
+                'permissions.warehouseManage.selectUser'
+              )}
               emptyText={t('permissions.warehouseManage.empty')}
               revokeLabel={t('permissions.warehouseManage.revoke')}
               successGranted={t('permissions.warehouseManage.granted')}
@@ -688,7 +681,9 @@ const AdminSystemSettingsClientPage = () => {
             <GrantUsersSection
               title={t('permissions.warehouseOperate.section')}
               subtitle={t('permissions.warehouseOperate.subtitle')}
-              selectUserPlaceholder={t('permissions.warehouseOperate.selectUser')}
+              selectUserPlaceholder={t(
+                'permissions.warehouseOperate.selectUser'
+              )}
               emptyText={t('permissions.warehouseOperate.empty')}
               revokeLabel={t('permissions.warehouseOperate.revoke')}
               successGranted={t('permissions.warehouseOperate.granted')}

@@ -7,17 +7,17 @@ import Filters, { FiltersItem } from '@/components/UI/Filters/Filters';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import { useRoleOptions } from '@/constants/roleType';
-import { useStatusOptions, STATUS } from '@/constants/status';
+import { STATUS, useStatusOptions } from '@/constants/status';
 import { getAllUsers } from '@/lib/api/users';
-import { usePageStore } from '@/lib/store/pageStore';
+
+import Pagination from '@/components/UI/Pagination/Pagination';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import { User, UserRoles } from '@/types/userTypes';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import css from '../UsersAndPlants.module.css';
-import Pagination from '@/components/UI/Pagination/Pagination';
 
 const AdminUsersClientPage = () => {
   const [search, setSearch] = useState<string>('');
@@ -27,16 +27,10 @@ const AdminUsersClientPage = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [debouncedSearch] = useDebounce(search, 500);
 
-  const tPage = useTranslations('AdminPage');
   const t = useTranslations('AdminPage.Users');
   const tRoles = useTranslations('Roles');
   const tStatuses = useTranslations('Statuses');
   const tNoFound = useTranslations('NoFound');
-  const setPageTitle = usePageStore(state => state.setPageTitle);
-
-  useEffect(() => {
-    setPageTitle(tPage('titlePageForStore'));
-  }, []);
 
   const roleOptions = useRoleOptions();
   const roleMapper = createOptionMapper(roleOptions);

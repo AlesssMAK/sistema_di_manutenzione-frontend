@@ -9,7 +9,6 @@ import { useState } from 'react';
 import ModalMenu from './ModalMenu/ModalMenu';
 import { useTranslations } from 'use-intl';
 import { logout } from '@/lib/api/auth';
-import { usePageStore } from '@/lib/store/pageStore';
 import LanguageButton from '../LanguageSwitcher/LanguageSwitcher';
 import NotificationBell from './NotificationBell/NotificationBell';
 import PushToggle from './PushToggle/PushToggle';
@@ -18,12 +17,12 @@ import { roleRoutes } from '@/constants/roleRoutes';
 import { IS_DEMO } from '@/lib/config/demo';
 import DemoRoleSwitcher from './DemoRoleSwitcher/DemoRoleSwitcher';
 import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
+import Image from 'next/image';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const t = useTranslations('header');
   const tBacheca = useTranslations('BachecaPage');
-  const { pageTitle } = usePageStore();
 
   const { user, isAuthenticated, clearIsAuthenticated } = useAuthStore();
   const { canAccess: canAccessWarehouse } = useWarehouseAccess();
@@ -51,10 +50,24 @@ const Header = () => {
         <div className={css.header_container}>
           <Link href={isAuthenticated ? `${route}` : '/'}>
             <div className={css.logo_container}>
-              <div className={css.logo}>SM</div>
+              <div className={css.logo}>
+                <Image
+                  src="/images/logo-syllert.png"
+                  width={40}
+                  height={40}
+                  alt="SYLLERT logo"
+                />
+              </div>
               <div className={css.logo_title_container}>
-                <h2 className={css.logo_title}>Sistema Manutenzione</h2>
-                <p className={css.logo_page_name}>{pageTitle}</p>
+                {/* <h2 className={css.logo_title}> */}
+                <Image
+                  src="/images/syllert-logo-text.png"
+                  width={120}
+                  height={16}
+                  alt="SYLLERT logo"
+                />
+                {/* </h2> */}
+                {/* <p className={css.logo_page_name}>{pageTitle}</p> */}
               </div>
             </div>
           </Link>
