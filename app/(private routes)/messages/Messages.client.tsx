@@ -7,17 +7,15 @@ import MessageInbox, {
 import Button from '@/components/UI/Button/Button';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import { useAuthStore } from '@/lib/store/authStore';
-import { usePageStore } from '@/lib/store/pageStore';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import css from './page.module.css';
 
 const MessagesClient = () => {
   const t = useTranslations('MessagesPage');
   const tDetail = useTranslations('FaultDetail');
   const router = useRouter();
-  const setPageTitle = usePageStore(state => state.setPageTitle);
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
 
@@ -31,10 +29,6 @@ const MessagesClient = () => {
   const allowedChannels: Array<'direct' | 'broadcastAll' | 'broadcastRole'> =
     isOperator ? ['direct'] : ['direct', 'broadcastRole', 'broadcastAll'];
   const canCompose = allowedChannels.length > 0;
-
-  useEffect(() => {
-    setPageTitle(t('titlePageForStore'));
-  }, [setPageTitle, t]);
 
   // Both tabs are shown to every role now — operators included.
   const tabs = useMemo<TabItem<InboxKind>[]>(

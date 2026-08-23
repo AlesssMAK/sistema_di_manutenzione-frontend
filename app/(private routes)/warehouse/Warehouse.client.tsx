@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { usePageStore } from '@/lib/store/pageStore';
 import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import Loader from '@/components/UI/Loader/Loader';
@@ -17,11 +16,6 @@ const WarehouseClient = () => {
   const t = useTranslations('WarehousePage');
   const router = useRouter();
   const { canAccess, canManage, canOperate, isLoading } = useWarehouseAccess();
-  const setPageTitle = usePageStore(s => s.setPageTitle);
-
-  useEffect(() => {
-    setPageTitle(t('title'));
-  }, [setPageTitle, t]);
 
   // The nav hides the link, but a direct URL still needs guarding: bounce
   // out once we know the module is off or the user has no grant.

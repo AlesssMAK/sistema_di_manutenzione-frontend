@@ -6,10 +6,9 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import { fetchFaultCards } from '@/lib/api/faults';
-import { usePageStore } from '@/lib/store/pageStore';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import css from './Safety.module.css';
 
 const PER_PAGE = 8;
@@ -18,7 +17,6 @@ const SafetyClient = () => {
   const t = useTranslations('SafetyPage');
   const tNoFound = useTranslations('NoFound');
   const tStatus = useTranslations('StatusFault');
-  const setPageTitle = usePageStore(state => state.setPageTitle);
 
   const STATUS_OPTIONS = [
     { label: t('statusOptions.all'), value: '' },
@@ -31,10 +29,6 @@ const SafetyClient = () => {
 
   const [statusFault, setStatusFault] = useState<string>('');
   const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    setPageTitle(t('titlePageForStore'));
-  }, [setPageTitle, t]);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['faults', 'safety', statusFault || 'all', page],

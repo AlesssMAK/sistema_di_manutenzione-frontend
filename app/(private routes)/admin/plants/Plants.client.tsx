@@ -5,17 +5,17 @@ import Filters, { FiltersItem } from '@/components/UI/Filters/Filters';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import { getAllPlants } from '@/lib/api/plants';
-import { usePageStore } from '@/lib/store/pageStore';
-import { createOptionMapper } from '@/lib/utils/translationMapper';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import { useDebounce } from 'use-debounce';
-import css from '../UsersAndPlants.module.css';
-import { useStatusOptions, STATUS } from '@/constants/status';
+
 import PlantsList from '@/components/Admin/PlantsList/PalntsList';
 import CreateAndEditPlantForm from '@/components/forms/CreateAndEditPlantAndPlantPartsForm/CreateAndEditPlantAndPlantPartsForm';
 import Pagination from '@/components/UI/Pagination/Pagination';
+import { STATUS, useStatusOptions } from '@/constants/status';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import { useDebounce } from 'use-debounce';
+import css from '../UsersAndPlants.module.css';
 
 const AdminPlantsClientPage = () => {
   const [search, setSearch] = useState<string>('');
@@ -24,15 +24,9 @@ const AdminPlantsClientPage = () => {
   const [status, setStatus] = useState<STATUS | string>('');
   const [debouncedSearch] = useDebounce(search, 500);
 
-  const tPage = useTranslations('AdminPage');
   const t = useTranslations('AdminPage.Plants');
   const tNoFound = useTranslations('NoFound');
   const tStatuses = useTranslations('Statuses');
-  const setPageTitle = usePageStore(state => state.setPageTitle);
-
-  useEffect(() => {
-    setPageTitle(tPage('titlePageForStore'));
-  }, [setPageTitle, tPage]);
 
   const statusOptions = useStatusOptions();
   const statusMapper = createOptionMapper(statusOptions);
