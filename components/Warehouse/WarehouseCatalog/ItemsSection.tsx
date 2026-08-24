@@ -28,6 +28,7 @@ import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
 import LabelModal from '@/components/Warehouse/LabelModal/LabelModal';
 import QrScannerModal from '@/components/Warehouse/QrScannerModal/QrScannerModal';
+import ItemDetailModal from './ItemDetailModal';
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { useStatusOptions } from '@/constants/status';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
@@ -59,6 +60,7 @@ const ItemsSection = () => {
   const [editing, setEditing] = useState<InventoryItem | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [labelItem, setLabelItem] = useState<InventoryItem | null>(null);
+  const [detailItem, setDetailItem] = useState<InventoryItem | null>(null);
 
   const statusMapper = createOptionMapper(useStatusOptions());
 
@@ -155,7 +157,8 @@ const ItemsSection = () => {
           {items.map(item => (
             <li
               key={item._id}
-              className={`${css.row} ${item.status === 'deactivated' ? css.rowDeactivated : ''}`}
+              className={`${css.row} ${css.rowClickable} ${item.status === 'deactivated' ? css.rowDeactivated : ''}`}
+              onClick={() => setDetailItem(item)}
             >
               <div className={css.rowMain}>
                 <span className={css.rowName}>
@@ -175,7 +178,10 @@ const ItemsSection = () => {
                   <button
                     type="button"
                     className={css.iconBtn}
-                    onClick={() => setLabelItem(item)}
+                    onClick={e => {
+                      e.stopPropagation();
+                      setLabelItem(item);
+                    }}
                     aria-label={tQr('labelBtn')}
                     title={tQr('labelBtn')}
                   >
@@ -187,7 +193,8 @@ const ItemsSection = () => {
                 <button
                   type="button"
                   className={css.iconBtn}
-                  onClick={() => {
+                  onClick={e => {
+                    e.stopPropagation();
                     setEditing(item);
                     setIsOpen(true);
                   }}
@@ -224,6 +231,23 @@ const ItemsSection = () => {
           name={labelItem.name}
           formats={labelFormats}
           onClose={() => setLabelItem(null)}
+        />
+      )}
+
+      {detailItem && (
+        <ItemDetailModal
+          item={detailItem}
+          labelsEnabled={labelsEnabled}
+          onClose={() => setDetailItem(null)}
+          onEdit={() => {
+            setEditing(detailItem);
+            setIsOpen(true);
+            setDetailItem(null);
+          }}
+          onLabel={() => {
+            setLabelItem(detailItem);
+            setDetailItem(null);
+          }}
         />
       )}
     </div>

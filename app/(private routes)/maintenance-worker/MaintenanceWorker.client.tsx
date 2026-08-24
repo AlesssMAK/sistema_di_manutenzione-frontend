@@ -43,9 +43,9 @@ const MaintenanceWorkerClient = () => {
   const userId = String(user?._id ?? '');
 
   const VIEW_MODE_TABS: TabItem<FaultViewMode>[] = [
-    { value: 'active', label: t('tabs.active') },
-    { value: 'overdue', label: t('tabs.overdue') },
-    { value: 'completed', label: t('tabs.completed') },
+    { value: 'active', label: t('tabs.active'), icon: 'wrench' },
+    { value: 'overdue', label: t('tabs.overdue'), icon: 'clock' },
+    { value: 'completed', label: t('tabs.completed'), icon: 'check-circle' },
   ];
 
   const [items, setItems] = useState<FaultCard[]>([]);

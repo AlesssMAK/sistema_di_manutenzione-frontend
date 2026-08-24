@@ -1175,6 +1175,14 @@
           "unitsPerPackage": "Sztuk w Opakowaniu",
           "category": "Kategoria",
           "note": "Notatka"
+        },
+        "card": {
+          "decimals": "Ułamki",
+          "yes": "Tak",
+          "no": "Nie",
+          "stockTitle": "Stany wg magazynu",
+          "warehouse": "Magazyn",
+          "noStock": "Brak stanu"
         }
       }
     },

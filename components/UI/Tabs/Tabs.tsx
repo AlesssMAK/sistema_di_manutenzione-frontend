@@ -5,6 +5,11 @@ import css from './Tabs.module.css';
 export interface TabItem<T extends string = string> {
   value: T;
   label: string;
+  /**
+   * Optional sprite icon id (e.g. "megaphone"). When set, narrow screens
+   * show the icon instead of the label; wide screens keep the label.
+   */
+  icon?: string;
 }
 
 interface TabsProps<T extends string = string> {
@@ -36,10 +41,17 @@ const Tabs = <T extends string = string>({
             type="button"
             role="tab"
             aria-selected={isActive}
+            aria-label={tab.label}
+            title={tab.label}
             onClick={() => onTabChange(tab.value)}
             className={`${css.tabButton} ${isActive ? css.tabActive : ''}`}
           >
-            {tab.label}
+            {tab.icon && (
+              <svg className={css.tabIcon} aria-hidden="true">
+                <use href={`/sprite.svg#${tab.icon}`} />
+              </svg>
+            )}
+            <span className={tab.icon ? css.tabLabel : ''}>{tab.label}</span>
             {count !== undefined && (
               <span className={css.tabCount}>{count}</span>
             )}

@@ -1175,6 +1175,14 @@
           "unitsPerPackage": "Units per Package",
           "category": "Category",
           "note": "Note"
+        },
+        "card": {
+          "decimals": "Decimals",
+          "yes": "Yes",
+          "no": "No",
+          "stockTitle": "Stock by Warehouse",
+          "warehouse": "Warehouse",
+          "noStock": "No stock"
         }
       }
     },

@@ -21,6 +21,7 @@ import { roleRoutes } from '@/constants/roleRoutes';
 import { ApiError } from '@/app/api/api';
 import { LoginCredentials } from '@/types/authType';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 const LoginForm = () => {
   const t = useTranslations('login');
@@ -86,59 +87,70 @@ const LoginForm = () => {
   };
 
   return (
-    <div className={css.login_container}>
-      <h1 className={css.logit_title}>{t('title')}</h1>
-      <p className={css.logit_subtitle}>{t('subtitle')}</p>
-      <form onSubmit={handleSubmit(onLoginSubmit)} className={css.form}>
-        <div className={css.inputs_container}>
-          <div className={css.input_container}>
-            <Input
-              {...register('identifier')}
-              type="text"
-              placeholder={t('placeholderEmailOrFullName')}
-              style={{ height: '52px' }}
-            />
-            {errors.identifier && (
-              <p className={css.error}>{errors.identifier.message}</p>
-            )}
+    <div className={css.container}>
+      <div className={css.img_contaainer}>
+        <Image
+          className={css.img}
+          src="/images/syllert-login.png"
+          alt="Syllert image"
+          width={720}
+          height={720}
+        />
+      </div>
+      <div className={css.login_container}>
+        <h1 className={css.logit_title}>{t('title')}</h1>
+        <p className={css.logit_subtitle}>{t('subtitle')}</p>
+        <form onSubmit={handleSubmit(onLoginSubmit)} className={css.form}>
+          <div className={css.inputs_container}>
+            <div className={css.input_container}>
+              <Input
+                {...register('identifier')}
+                type="text"
+                placeholder={t('placeholderEmailOrFullName')}
+                style={{ height: '52px' }}
+              />
+              {errors.identifier && (
+                <p className={css.error}>{errors.identifier.message}</p>
+              )}
+            </div>
+            <div className={css.input_container}>
+              <Input
+                {...register('secret')}
+                type="password"
+                placeholder={t('placeholderPasswordOrPersonalCode')}
+                style={{ height: '52px' }}
+              />
+              {errors.secret && (
+                <p className={css.error}>{errors.secret.message}</p>
+              )}
+            </div>
           </div>
-          <div className={css.input_container}>
-            <Input
-              {...register('secret')}
-              type="password"
-              placeholder={t('placeholderPasswordOrPersonalCode')}
-              style={{ height: '52px' }}
-            />
-            {errors.secret && (
-              <p className={css.error}>{errors.secret.message}</p>
-            )}
+          <div className={css.btn_container}>
+            <Button
+              type="button"
+              className="button button--white"
+              width="100%"
+              onClick={onClose}
+              height={44}
+            >
+              {t('cancel')}
+            </Button>
+            <Button
+              type="submit"
+              className="button button--blue"
+              width="100%"
+              height={44}
+            >
+              {t('submit')}
+            </Button>
           </div>
-        </div>
-        <div className={css.btn_container}>
-          <Button
-            type="button"
-            className="button button--white"
-            width="100%"
-            onClick={onClose}
-            height={44}
-          >
-            {t('cancel')}
-          </Button>
-          <Button
-            type="submit"
-            className="button button--blue"
-            width="100%"
-            height={44}
-          >
-            {t('submit')}
-          </Button>
-        </div>
-      </form>
-      {showForgotLink && (
-        <Link href="/forgot-password" className={css.forgot_link}>
-          {t('forgotLink')}
-        </Link>
-      )}
+        </form>
+        {showForgotLink && (
+          <Link href="/forgot-password" className={css.forgot_link}>
+            {t('forgotLink')}
+          </Link>
+        )}
+      </div>
     </div>
   );
 };

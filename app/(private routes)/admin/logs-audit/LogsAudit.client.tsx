@@ -151,8 +151,8 @@ const AdminLogsAuditClientPage = () => {
   ];
 
   const tabs: TabItem<AuditTab>[] = [
-    { value: 'access', label: t('sections.access.title') },
-    { value: 'changes', label: t('sections.changes.title') },
+    { value: 'access', label: t('sections.access.title'), icon: 'key' },
+    { value: 'changes', label: t('sections.changes.title'), icon: 'edit' },
   ];
 
   const counts: Partial<Record<AuditTab, number>> = {

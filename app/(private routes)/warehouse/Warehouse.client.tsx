@@ -25,8 +25,10 @@ const WarehouseClient = () => {
 
   const tabs = useMemo<TabItem<WarehouseTab>[]>(() => {
     const list: TabItem<WarehouseTab>[] = [];
-    if (canOperate) list.push({ value: 'stock', label: t('tabs.stock') });
-    if (canManage) list.push({ value: 'catalog', label: t('tabs.catalog') });
+    if (canOperate)
+      list.push({ value: 'stock', label: t('tabs.stock'), icon: 'package' });
+    if (canManage)
+      list.push({ value: 'catalog', label: t('tabs.catalog'), icon: 'clipboard' });
     return list;
   }, [canOperate, canManage, t]);
 

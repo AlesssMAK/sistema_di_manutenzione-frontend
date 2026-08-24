@@ -42,6 +42,36 @@
   }
 }
 
+/* Icon-labelled tabs (e.g. the Bacheca board): phone shows the sprite
+   icon, tablet+ shows the text label. Tabs without an `icon` keep their
+   plain label at every width (the .tabLabel class isn't applied). */
+.tabIcon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  fill: none;
+  /* currentColor follows the tab's color states (default / hover /
+     active), so the icon inherits the same hover + active treatment as
+     the text label. */
+  stroke: currentColor;
+  transition: stroke 0.15s ease;
+}
+
+.tabLabel {
+  display: none;
+}
+
+@media screen and (min-width: 768px) {
+  .tabIcon {
+    display: none;
+  }
+
+  .tabLabel {
+    display: inline;
+  }
+}
+
 .tabButton:hover {
   color: #0a0a0a;
 }

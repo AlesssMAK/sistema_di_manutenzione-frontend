@@ -1175,6 +1175,14 @@
           "unitsPerPackage": "Unidades por Envase",
           "category": "Categoría",
           "note": "Nota"
+        },
+        "card": {
+          "decimals": "Decimales",
+          "yes": "Sí",
+          "no": "No",
+          "stockTitle": "Existencias por almacén",
+          "warehouse": "Almacén",
+          "noStock": "Sin existencias"
         }
       }
     },
