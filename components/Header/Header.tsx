@@ -53,8 +53,8 @@ const Header = () => {
               <div className={css.logo}>
                 <Image
                   src="/images/logo-syllert.png"
-                  width={40}
-                  height={40}
+                  width={44}
+                  height={44}
                   alt="SYLLERT logo"
                 />
               </div>
@@ -63,7 +63,7 @@ const Header = () => {
                 <Image
                   src="/images/syllert-logo-text.png"
                   width={120}
-                  height={16}
+                  height={14}
                   alt="SYLLERT logo"
                 />
                 {/* </h2> */}

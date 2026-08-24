@@ -13,6 +13,7 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import { getAuditLogs } from '@/lib/api/auditLog';
+import { useAutoTabSwitch } from '@/lib/hooks/useAutoTabSwitch';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import type {
   AuditActorRole,
@@ -23,6 +24,7 @@ import css from './LogsAudit.module.css';
 
 type AuditTab = 'access' | 'changes';
 
+const AUDIT_TAB_ORDER: AuditTab[] = ['access', 'changes'];
 const PER_PAGE = 10;
 
 const ACTOR_ROLES: AuditActorRole[] = [
@@ -159,6 +161,22 @@ const AdminLogsAuditClientPage = () => {
     access: accessQuery.data?.total ?? 0,
     changes: changesQuery.data?.total ?? 0,
   };
+
+  // When a filter empties the current tab but matches in the other,
+  // jump to it. Fires only on filter/count changes, not on manual tab
+  // clicks. Waits until both category totals have settled.
+  const auditCountsReady =
+    accessQuery.data !== undefined &&
+    changesQuery.data !== undefined &&
+    !accessQuery.isFetching &&
+    !changesQuery.isFetching;
+  useAutoTabSwitch<AuditTab>({
+    activeTab,
+    order: AUDIT_TAB_ORDER,
+    counts,
+    ready: auditCountsReady,
+    onSwitch: setActiveTab,
+  });
 
   const activeQuery = activeTab === 'access' ? accessQuery : changesQuery;
   const activePage = activeTab === 'access' ? accessPage : changesPage;

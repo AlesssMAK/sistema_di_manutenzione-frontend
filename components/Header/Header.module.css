@@ -12,7 +12,7 @@
 
 .logo_container {
   display: flex;
-  gap: 10px;
+  gap: 4px;
 }
 
 .logo {
@@ -32,17 +32,6 @@
   flex-direction: column;
   justify-content: center;
 }
-
-/* .logo_title {
-  font-weight: 700;
-  line-height: 28px;
-  color: #0a0a0a;
-  font-size: 14px;
-
-  @media screen and (min-width: 768px) {
-    font-size: 18px;
-  }
-} */
 
 .logo_page_name {
   font-weight: 400;
