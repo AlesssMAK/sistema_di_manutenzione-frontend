@@ -35,9 +35,9 @@ const ManagerClient = () => {
   const tPriority = useTranslations('Priority');
   const tType = useTranslations('TypeFault');
   const TABS: TabItem<ManagerTab>[] = [
-    { value: 'received', label: t('tabs.received') },
-    { value: 'inProgress', label: t('tabs.inProgress') },
-    { value: 'archive', label: t('tabs.archive') },
+    { value: 'received', label: t('tabs.received'), icon: 'clipboard' },
+    { value: 'inProgress', label: t('tabs.inProgress'), icon: 'reload' },
+    { value: 'archive', label: t('tabs.archive'), icon: 'archive' },
   ];
 
   const [activeTab, setActiveTab] = useState<ManagerTab>('received');

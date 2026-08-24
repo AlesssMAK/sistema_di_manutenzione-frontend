@@ -19,8 +19,8 @@ const OperatorPageClient = () => {
   const [activeTab, setActiveTab] = useState<OperatorTab>('messages');
 
   const tabs: TabItem<OperatorTab>[] = [
-    { value: 'messages', label: t('tabs.messages') },
-    { value: 'myFaults', label: t('tabs.myFaults') },
+    { value: 'messages', label: t('tabs.messages'), icon: 'mail' },
+    { value: 'myFaults', label: t('tabs.myFaults'), icon: 'alert-triangle' },
   ];
 
   return (

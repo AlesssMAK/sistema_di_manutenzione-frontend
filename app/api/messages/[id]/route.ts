@@ -15,6 +15,10 @@ export async function DELETE(
     const res = await api.delete(`/messages/${id}`, {
       headers: { Cookie: cookie.toString() },
     });
+    // 204/205/304 must be bodiless — NextResponse.json() would throw.
+    if ([204, 205, 304].includes(res.status)) {
+      return new NextResponse(null, { status: res.status });
+    }
     return NextResponse.json(res.data ?? null, { status: res.status });
   } catch (error) {
     if (isAxiosError(error)) {

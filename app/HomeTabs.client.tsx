@@ -346,9 +346,18 @@ const HomeTabsClient = () => {
     segnalazioni: t('tabs.faults'),
   };
 
+  // Sprite icon per tab — shown instead of the label on phones.
+  const tabIcons: Record<HomeTab, string> = {
+    annunci: 'megaphone',
+    handover: 'package',
+    comunicazioni: 'message-square',
+    segnalazioni: 'alert-triangle',
+  };
+
   const TABS: TabItem<HomeTab>[] = availableTabs.map(value => ({
     value,
     label: tabLabels[value],
+    icon: tabIcons[value],
   }));
 
   const counts: Partial<Record<HomeTab, number>> = {

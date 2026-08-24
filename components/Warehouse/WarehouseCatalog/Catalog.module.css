@@ -60,6 +60,18 @@
   background: #fff;
 }
 
+.rowClickable {
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.rowClickable:hover {
+  border-color: #bfdbfe;
+  box-shadow: 0 1px 4px rgba(30, 64, 175, 0.1);
+}
+
 .rowMain {
   flex: 1;
   min-width: 0;
@@ -195,4 +207,90 @@
   display: flex;
   justify-content: center;
   padding: 40px 0;
+}
+
+/* Item detail card */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: min(480px, calc(100vw - 56px));
+  max-width: 100%;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+.detailRow {
+  display: flex;
+  gap: 12px;
+}
+
+.detailKey {
+  flex: 0 0 120px;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.detailVal {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.stockTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0a0a0a;
+  margin: 0 0 8px;
+}
+
+.stockTableWrap {
+  overflow-x: auto;
+}
+
+.stockTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stockTable th,
+.stockTable td {
+  text-align: left;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eef0f3;
+  font-size: 14px;
+}
+
+.stockTable th {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.qtyLow {
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.stockPkg {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.lowBadge {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  margin-left: 8px;
 }

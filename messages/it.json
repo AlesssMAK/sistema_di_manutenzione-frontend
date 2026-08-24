@@ -1175,6 +1175,14 @@
           "unitsPerPackage": "Pezzi per confezione",
           "category": "Categoria",
           "note": "Note"
+        },
+        "card": {
+          "decimals": "Decimali",
+          "yes": "Sì",
+          "no": "No",
+          "stockTitle": "Giacenze per magazzino",
+          "warehouse": "Magazzino",
+          "noStock": "Nessuna giacenza"
         }
       }
     },

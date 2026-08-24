@@ -33,8 +33,8 @@ const MessagesClient = () => {
   // Both tabs are shown to every role now — operators included.
   const tabs = useMemo<TabItem<InboxKind>[]>(
     () => [
-      { value: 'direct', label: t('tabs.direct') },
-      { value: 'announcements', label: t('tabs.announcements') },
+      { value: 'direct', label: t('tabs.direct'), icon: 'mail' },
+      { value: 'announcements', label: t('tabs.announcements'), icon: 'megaphone' },
     ],
     [t]
   );
