@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import {
   keepPreviousData,
   useMutation,
@@ -13,11 +13,12 @@ import toast from 'react-hot-toast';
 import {
   createItem,
   deleteItem,
+  getAllCategories,
   getAllItems,
   getAllUnits,
   updateItem,
 } from '@/lib/api/warehouse';
-import type { InventoryItem, Unit } from '@/types/warehouseType';
+import type { Category, InventoryItem, Unit } from '@/types/warehouseType';
 import Button from '@/components/UI/Button/Button';
 import Modal from '@/components/UI/Modal/Modal';
 import Loader from '@/components/UI/Loader/Loader';
@@ -45,8 +46,31 @@ const unitIdOf = (item: InventoryItem): string =>
 const unitTextOf = (item: InventoryItem): string =>
   typeof item.unitId === 'string' ? '' : unitLabel(item.unitId);
 
-const ItemsSection = () => {
-  const t = useTranslations('WarehousePage.catalog.items');
+// categoryId is populated ({ _id, name }) on read, a plain id on write.
+const categoryIdOf = (item: InventoryItem): string =>
+  !item.categoryId
+    ? ''
+    : typeof item.categoryId === 'string'
+      ? item.categoryId
+      : item.categoryId._id;
+const categoryNameOf = (item: InventoryItem): string =>
+  !item.categoryId || typeof item.categoryId === 'string'
+    ? ''
+    : item.categoryId.name;
+
+interface ItemsSectionProps {
+  /** Hide the internal "new" button — the parent renders it in the page
+   *  header (catalog view) instead, calling openNew() via the ref. */
+  hideNewButton?: boolean;
+}
+
+export interface ItemsSectionHandle {
+  openNew: () => void;
+}
+
+const ItemsSection = forwardRef<ItemsSectionHandle, ItemsSectionProps>(
+  ({ hideNewButton = false }, ref) => {
+    const t = useTranslations('WarehousePage.catalog.items');
   const tCommon = useTranslations('WarehousePage.catalog.common');
   const tQr = useTranslations('WarehousePage.qr');
   const tNoFound = useTranslations('NoFound');
@@ -62,7 +86,31 @@ const ItemsSection = () => {
   const [labelItem, setLabelItem] = useState<InventoryItem | null>(null);
   const [detailItem, setDetailItem] = useState<InventoryItem | null>(null);
 
+  const [categoryId, setCategoryId] = useState('');
+
   const statusMapper = createOptionMapper(useStatusOptions());
+
+  // Active categories drive both the catalog filter and the item form
+  // select.
+  const { data: catData } = useQuery({
+    queryKey: ['warehouse', 'categories', 'active-pool'],
+    queryFn: () => getAllCategories({ status: 'active', perPage: 200 }),
+  });
+  const categories: Category[] = useMemo(
+    () => catData?.categories ?? [],
+    [catData]
+  );
+  const allCategoriesLabel = t('fields.allCategories');
+  const catNameById = useMemo(() => {
+    const m = new Map<string, string>();
+    categories.forEach(c => m.set(c._id, c.name));
+    return m;
+  }, [categories]);
+  const catIdByName = useMemo(() => {
+    const m = new Map<string, string>();
+    categories.forEach(c => m.set(c.name, c._id));
+    return m;
+  }, [categories]);
 
   const filters: FiltersItem[] = [
     {
@@ -73,6 +121,19 @@ const ItemsSection = () => {
       placeholder: tCommon('searchPlaceholder'),
       onChange: setSearch,
       icon: 'search',
+    },
+    {
+      id: 'category',
+      type: 'select',
+      label: t('fields.category'),
+      value: categoryId
+        ? (catNameById.get(categoryId) ?? allCategoriesLabel)
+        : allCategoriesLabel,
+      options: [allCategoriesLabel, ...categories.map(c => c.name)],
+      onSelect: label =>
+        setCategoryId(
+          label === allCategoriesLabel ? '' : (catIdByName.get(label) ?? '')
+        ),
     },
     {
       id: 'status',
@@ -86,6 +147,7 @@ const ItemsSection = () => {
   const onClear = () => {
     setSearch('');
     setStatus('');
+    setCategoryId('');
   };
 
   const { data, isLoading, isError } = useQuery({
@@ -94,10 +156,17 @@ const ItemsSection = () => {
       'items',
       debouncedSearch || undefined,
       status,
+      categoryId,
       page,
     ],
     queryFn: () =>
-      getAllItems({ search: debouncedSearch, status, page, perPage: PER_PAGE }),
+      getAllItems({
+        search: debouncedSearch,
+        status,
+        ...(categoryId ? { categoryId } : {}),
+        page,
+        perPage: PER_PAGE,
+      }),
     placeholderData: keepPreviousData,
   });
 
@@ -116,26 +185,38 @@ const ItemsSection = () => {
     queryClient.invalidateQueries({ queryKey: ['warehouse', 'items'] });
 
   const close = () => setIsOpen(false);
+
+  // Let the parent's header button open the create form imperatively —
+  // no setState-in-effect, the form modal stays owned here.
+  useImperativeHandle(ref, () => ({
+    openNew: () => {
+      setEditing(null);
+      setIsOpen(true);
+    },
+  }));
+
   const items = data?.items ?? [];
   const totalPages = data?.pagination.totalPages ?? 0;
 
   return (
     <div className={css.section}>
-      <div className={css.head}>
-        <Button
-          type="button"
-          className={`${css.newBtn} button button--blue`}
-          onClick={() => {
-            setEditing(null);
-            setIsOpen(true);
-          }}
-        >
-          <svg width="16" height="16" className={css.plus_btn}>
-            <use href="/sprite.svg#plus" />
-          </svg>
-          {t('new')}
-        </Button>
-      </div>
+      {!hideNewButton && (
+        <div className={css.head}>
+          <Button
+            type="button"
+            className={`${css.newBtn} button button--blue`}
+            onClick={() => {
+              setEditing(null);
+              setIsOpen(true);
+            }}
+          >
+            <svg width="16" height="16" className={css.plus_btn}>
+              <use href="/sprite.svg#plus" />
+            </svg>
+            {t('new')}
+          </Button>
+        </div>
+      )}
       <div className={css.filtersGap}>
         <Filters items={filters} onClear={onClear} />
       </div>
@@ -167,7 +248,7 @@ const ItemsSection = () => {
                 </span>
                 <div className={css.rowSub}>
                   {typeof item.unitId !== 'string' && unitLabel(item.unitId)}
-                  {item.category ? ` · ${item.category}` : ''}
+                  {categoryNameOf(item) ? ` · ${categoryNameOf(item)}` : ''}
                 </div>
               </div>
               {item.status === 'deactivated' && (
@@ -252,7 +333,10 @@ const ItemsSection = () => {
       )}
     </div>
   );
-};
+  }
+);
+
+ItemsSection.displayName = 'ItemsSection';
 
 interface ItemFormModalProps {
   item: InventoryItem | null;
@@ -269,7 +353,10 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
   const [scanning, setScanning] = useState(false);
   const [code, setCode] = useState(item?.code ?? '');
   const [name, setName] = useState(item?.name ?? '');
-  const [category, setCategory] = useState(item?.category ?? '');
+  const [categoryId, setCategoryId] = useState(item ? categoryIdOf(item) : '');
+  const [categoryText, setCategoryText] = useState(
+    item ? categoryNameOf(item) : ''
+  );
   const [note, setNote] = useState(item?.note ?? '');
   const [unitId, setUnitId] = useState(item ? unitIdOf(item) : '');
   const [unitText, setUnitText] = useState(item ? unitTextOf(item) : '');
@@ -291,6 +378,21 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
     return map;
   }, [units]);
 
+  // Active categories for the select (deduped with the catalog filter).
+  const { data: catData } = useQuery({
+    queryKey: ['warehouse', 'categories', 'active-pool'],
+    queryFn: () => getAllCategories({ status: 'active', perPage: 200 }),
+  });
+  const categories: Category[] = useMemo(
+    () => catData?.categories ?? [],
+    [catData]
+  );
+  const categoryByName = useMemo(() => {
+    const map = new Map<string, Category>();
+    categories.forEach(c => map.set(c.name, c));
+    return map;
+  }, [categories]);
+
   const mutation = useMutation({
     mutationFn: async () => {
       const perPackage = unitsPerPackage.trim()
@@ -302,7 +404,8 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
           data: {
             code: code.trim(),
             name: name.trim(),
-            category: category.trim(),
+            // null clears the category on the item.
+            categoryId: categoryId || null,
             unitId,
             // null clears a previously set package on the item.
             packageLabel: packageLabel.trim() || null,
@@ -315,7 +418,7 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
       return createItem({
         code: code.trim(),
         name: name.trim(),
-        category: category.trim() || undefined,
+        categoryId: categoryId || undefined,
         unitId,
         packageLabel: packageLabel.trim() || undefined,
         unitsPerPackage: perPackage,
@@ -426,10 +529,17 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
           </div>
           <div className={css.field}>
             <label className={css.label}>{t('fields.category')}</label>
-            <input
-              className={css.input}
-              value={category}
-              onChange={e => setCategory(e.target.value)}
+            <SelectDropdown
+              options={categories.map(c => c.name)}
+              selectedValue={categoryText}
+              placeholder={t('fields.categoryPlaceholder')}
+              onSelect={label => {
+                const c = categoryByName.get(label);
+                if (c) {
+                  setCategoryId(c._id);
+                  setCategoryText(label);
+                }
+              }}
             />
           </div>
           <div className={css.field}>

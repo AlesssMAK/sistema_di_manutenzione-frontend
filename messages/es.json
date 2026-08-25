@@ -434,7 +434,10 @@
         "enabledHint": "Si está desactivado, la página de Almacén y sus funciones no están disponibles para nadie.",
         "lowStockNotify": "Avisar cuando la existencia es baja",
         "lowStockHint": "Envía una notificación push a los roles seleccionados cuando un artículo baja del mínimo.",
-        "lowStockRoles": "Roles a avisar",
+        "lowStockUsers": "Usuarios a avisar",
+        "lowStockUsersPlaceholder": "Añadir un usuario…",
+        "lowStockUsersEmpty": "Ningún usuario seleccionado",
+        "lowStockUsersRemove": "Quitar",
         "units": {
           "title": "Unidades de medida",
           "symbol": "Símbolo",
@@ -449,6 +452,28 @@
           "error": "Error al guardar",
           "fillRequired": "Completa código y nombre",
           "allowDecimals": "Permitir Decimales"
+        },
+        "categories": {
+          "title": "Categorías",
+          "name": "Nombre",
+          "add": "Añadir",
+          "empty": "Ninguna categoría",
+          "deactivate": "Desactivar",
+          "activate": "Reactivar",
+          "created": "Categoría creada",
+          "deactivated": "Categoría desactivada",
+          "activated": "Categoría reactivada",
+          "error": "Error al guardar",
+          "fillRequired": "Introduce el nombre"
+        },
+        "access": {
+          "title": "Acceso a los almacenes",
+          "subtitle": "Limita qué almacenes puede usar cada operador. Vacío = todos.",
+          "empty": "Ningún operador con acceso al almacén.",
+          "addWarehouse": "Añadir almacén…",
+          "allWarehouses": "Todos los almacenes",
+          "remove": "Quitar",
+          "error": "Error al guardar"
         },
         "warehouses": {
           "title": "Almacenes",
@@ -1110,6 +1135,7 @@
   "WarehousePage": {
     "title": "Almacén",
     "subtitle": "Gestiona existencias, movimientos y catálogo.",
+    "catalogSubtitle": "Gestiona los artículos del almacén.",
     "tabs": {
       "stock": "Existencias",
       "catalog": "Catálogo"
@@ -1174,6 +1200,8 @@
           "packageHint": "Opcional: si el artículo llega en envases.",
           "unitsPerPackage": "Unidades por Envase",
           "category": "Categoría",
+          "categoryPlaceholder": "Seleccionar categoría",
+          "allCategories": "Todas las categorías",
           "note": "Nota"
         },
         "card": {

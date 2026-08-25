@@ -434,7 +434,10 @@
         "enabledHint": "Gdy wyłączone, strona Magazyn i jej funkcje są niedostępne dla wszystkich.",
         "lowStockNotify": "Powiadamiaj o niskim stanie",
         "lowStockHint": "Wysyła powiadomienie push do wybranych ról, gdy pozycja spadnie poniżej minimum.",
-        "lowStockRoles": "Role do powiadomienia",
+        "lowStockUsers": "Użytkownicy do powiadomienia",
+        "lowStockUsersPlaceholder": "Dodaj użytkownika…",
+        "lowStockUsersEmpty": "Nie wybrano użytkowników",
+        "lowStockUsersRemove": "Usuń",
         "units": {
           "title": "Jednostki miary",
           "symbol": "Symbol",
@@ -449,6 +452,28 @@
           "error": "Błąd podczas zapisywania",
           "fillRequired": "Wypełnij kod i nazwę",
           "allowDecimals": "Zezwól na Ułamki"
+        },
+        "categories": {
+          "title": "Kategorie",
+          "name": "Nazwa",
+          "add": "Dodaj",
+          "empty": "Brak kategorii",
+          "deactivate": "Dezaktywuj",
+          "activate": "Reaktywuj",
+          "created": "Utworzono kategorię",
+          "deactivated": "Dezaktywowano kategorię",
+          "activated": "Reaktywowano kategorię",
+          "error": "Błąd podczas zapisywania",
+          "fillRequired": "Wpisz nazwę"
+        },
+        "access": {
+          "title": "Dostęp do magazynów",
+          "subtitle": "Ogranicz, których magazynów może używać każdy operator. Puste = wszystkie.",
+          "empty": "Brak operatorów z dostępem do magazynu.",
+          "addWarehouse": "Dodaj magazyn…",
+          "allWarehouses": "Wszystkie magazyny",
+          "remove": "Usuń",
+          "error": "Błąd podczas zapisywania"
         },
         "warehouses": {
           "title": "Magazyny",
@@ -1110,6 +1135,7 @@
   "WarehousePage": {
     "title": "Magazyn",
     "subtitle": "Zarządzaj stanami, ruchami i katalogiem.",
+    "catalogSubtitle": "Zarządzaj artykułami magazynu.",
     "tabs": {
       "stock": "Stany",
       "catalog": "Katalog"
@@ -1174,6 +1200,8 @@
           "packageHint": "Opcjonalnie: jeśli artykuł przychodzi w opakowaniach.",
           "unitsPerPackage": "Sztuk w Opakowaniu",
           "category": "Kategoria",
+          "categoryPlaceholder": "Wybierz kategorię",
+          "allCategories": "Wszystkie kategorie",
           "note": "Notatka"
         },
         "card": {

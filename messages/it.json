@@ -72,7 +72,7 @@
     "navItem3": "Home",
     "myArea": "La Mia Area",
     "exit": "Esci",
-    "login": "Accede",
+    "login": "Accedi",
     "createFault": "Segnala Guasto",
     "switchRole": "Cambia Ruolo",
     "notifications": {
@@ -434,7 +434,10 @@
         "enabledHint": "Se disattivato, la pagina Magazzino e le sue funzioni non sono disponibili per nessuno.",
         "lowStockNotify": "Avvisa quando la scorta è bassa",
         "lowStockHint": "Invia una notifica push ai ruoli selezionati quando un articolo scende sotto la scorta minima.",
-        "lowStockRoles": "Ruoli da avvisare",
+        "lowStockUsers": "Utenti da avvisare",
+        "lowStockUsersPlaceholder": "Aggiungi un utente…",
+        "lowStockUsersEmpty": "Nessun utente selezionato",
+        "lowStockUsersRemove": "Rimuovi",
         "units": {
           "title": "Unità di misura",
           "symbol": "Simbolo",
@@ -449,6 +452,28 @@
           "error": "Errore durante il salvataggio",
           "fillRequired": "Compila codice e nome",
           "allowDecimals": "Consenti decimali"
+        },
+        "categories": {
+          "title": "Categorie",
+          "name": "Nome",
+          "add": "Aggiungi",
+          "empty": "Nessuna categoria",
+          "deactivate": "Disattiva",
+          "activate": "Riattiva",
+          "created": "Categoria creata",
+          "deactivated": "Categoria disattivata",
+          "activated": "Categoria riattivata",
+          "error": "Errore durante il salvataggio",
+          "fillRequired": "Inserisci il nome"
+        },
+        "access": {
+          "title": "Accesso ai magazzini",
+          "subtitle": "Limita quali magazzini ogni operatore può usare. Vuoto = tutti.",
+          "empty": "Nessun operatore con accesso al magazzino.",
+          "addWarehouse": "Aggiungi magazzino…",
+          "allWarehouses": "Tutti i magazzini",
+          "remove": "Rimuovi",
+          "error": "Errore durante il salvataggio"
         },
         "warehouses": {
           "title": "Magazzini",
@@ -1110,6 +1135,7 @@
   "WarehousePage": {
     "title": "Magazzino",
     "subtitle": "Gestisci giacenze, movimenti e catalogo.",
+    "catalogSubtitle": "Gestisci gli articoli del magazzino.",
     "tabs": {
       "stock": "Giacenze",
       "catalog": "Catalogo"
@@ -1174,6 +1200,8 @@
           "packageHint": "Facoltativo: se l'articolo arriva in confezioni.",
           "unitsPerPackage": "Pezzi per confezione",
           "category": "Categoria",
+          "categoryPlaceholder": "Seleziona categoria",
+          "allCategories": "Tutte le categorie",
           "note": "Note"
         },
         "card": {

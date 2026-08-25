@@ -53,6 +53,42 @@ export interface UpdateUnitRequest {
   data: UpdateUnit;
 }
 
+/* ------------------------------ Category ------------------------------- */
+
+export interface Category {
+  _id: string;
+  name: string;
+  status: STATUS;
+}
+
+export interface CategoriesData {
+  categories: Category[];
+  pagination: Pagination;
+}
+
+export interface CategoriesResponse {
+  success: boolean;
+  message: string;
+  data: CategoriesData;
+}
+
+export interface CreateCategoryRequest {
+  name: string;
+}
+
+export interface UpdateCategory {
+  name?: string;
+  status?: STATUS;
+}
+
+export interface UpdateCategoryRequest {
+  categoryId: string;
+  data: UpdateCategory;
+}
+
+// Populated ({ _id, name }) on item read; a plain id string on write.
+export type CategoryRef = Pick<Category, '_id' | 'name'>;
+
 /* ------------------------------ Warehouse ------------------------------ */
 
 export interface Warehouse {
@@ -102,7 +138,8 @@ export interface InventoryItem {
   _id: string;
   code: string;
   name: string;
-  category?: string;
+  // Populated ({ _id, name }) on read, a plain id on write.
+  categoryId?: CategoryRef | string;
   unitId: UnitRef | string;
   // Optional package intake: when set, Carico can be entered in whole
   // packages (packageLabel) and is expanded by unitsPerPackage into the
@@ -127,7 +164,7 @@ export interface ItemsResponse {
 export interface CreateItemRequest {
   code: string;
   name: string;
-  category?: string;
+  categoryId?: string;
   unitId: string;
   packageLabel?: string;
   unitsPerPackage?: number;
@@ -137,7 +174,7 @@ export interface CreateItemRequest {
 export interface UpdateItem {
   code?: string;
   name?: string;
-  category?: string;
+  categoryId?: string | null;
   unitId?: string;
   packageLabel?: string | null;
   unitsPerPackage?: number | null;
@@ -157,7 +194,7 @@ export type ItemRef = Pick<
   | '_id'
   | 'code'
   | 'name'
-  | 'category'
+  | 'categoryId'
   | 'unitId'
   | 'packageLabel'
   | 'unitsPerPackage'
@@ -188,6 +225,7 @@ export interface StockResponse {
 export interface StockQuery {
   warehouseId?: string;
   itemId?: string;
+  categoryId?: string;
   search?: string;
   lowOnly?: boolean;
   page?: number;

@@ -36,8 +36,8 @@ export interface MaintenanceSettings {
 
 export interface WarehouseLowStockSettings {
   notify: boolean;
-  /** Roles that receive the low-stock push alert. */
-  roles: string[];
+  /** Specific users that receive the low-stock push alert. */
+  userIds: string[];
 }
 
 export interface WarehouseLabelSettings {

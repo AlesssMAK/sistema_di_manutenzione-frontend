@@ -74,10 +74,10 @@ const ItemDetailModal = ({
               </dd>
             </div>
           )}
-          {item.category && (
+          {item.categoryId && typeof item.categoryId !== 'string' && (
             <div className={css.detailRow}>
               <dt className={css.detailKey}>{t('fields.category')}</dt>
-              <dd className={css.detailVal}>{item.category}</dd>
+              <dd className={css.detailVal}>{item.categoryId.name}</dd>
             </div>
           )}
           {item.note && (
