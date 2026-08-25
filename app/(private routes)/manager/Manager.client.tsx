@@ -9,6 +9,7 @@ import Pagination from '@/components/UI/Pagination/Pagination';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import { fetchFaultCards } from '@/lib/api/faults';
 
+import { useAutoTabSwitch } from '@/lib/hooks/useAutoTabSwitch';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import { FaultCard, PriorityFaultType, TypeFault } from '@/types/faultType';
 import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query';
@@ -132,6 +133,20 @@ const ManagerClient = () => {
     setActiveTab(tab);
     setPage(1);
   };
+
+  // When the active filter leaves the current tab empty but matches in
+  // another, jump to the first tab (in order) that has results. Waits
+  // until every per-tab count has settled so loading never triggers it.
+  const countsReady =
+    countsResults.every(r => r.data !== undefined) &&
+    countsResults.every(r => !r.isFetching);
+  useAutoTabSwitch<ManagerTab>({
+    activeTab,
+    order: TAB_ORDER,
+    counts,
+    ready: countsReady,
+    onSwitch: handleTabChange,
+  });
 
   const handlePlan = (fault: FaultCard) => {
     setPlanningFault(fault);

@@ -4,19 +4,14 @@
   gap: 10px;
 }
 
-.lines {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.lineRow {
+/* Compose row: item select + qty + blue add button. */
+.composeRow {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.lineItem {
+.composeItem {
   flex: 1;
   min-width: 0;
 }
@@ -31,41 +26,113 @@
   font-size: 14px;
 }
 
-.remove {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 6px;
-  background: #f3f4f6;
-  cursor: pointer;
-  color: #374151;
-  flex-shrink: 0;
-}
-
-.remove:hover {
-  color: #b91c1c;
-}
-
-.remove svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-}
-
-.btnRow {
-  display: flex;
-  gap: 16px;
-  align-items: center;
+/* Keep the native number spinners always visible (Chrome hides them
+   until hover by default). */
+.qty::-webkit-outer-spin-button,
+.qty::-webkit-inner-spin-button {
+  opacity: 1;
 }
 
 .addBtn {
-  font-size: 13px;
-  color: #1e40af;
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
   border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
   cursor: pointer;
-  padding: 2px 0;
+  transition: background 0.15s ease;
+}
+
+.addBtn:hover {
+  background: #1e40af;
+}
+
+.addBtn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+}
+
+.empty {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.warn {
+  font-size: 12px;
+  color: #b45309;
+  margin: 0;
+}
+
+/* The confirmed materials, one card per row (editable qty + delete). */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listRow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  height: 36px;
+  padding: 0 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.listName {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listQty {
+  width: 52px;
+  height: 22px;
+  border-radius: 6px;
+  background: #f3f3f5;
+  border: none;
+  padding: 0 8px;
+  font-size: 12px;
+}
+
+.removeBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #374151;
+  transition: color 0.15s;
+}
+
+.removeBtn:hover {
+  color: #b91c1c;
+}
+
+.removeBtn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
 }

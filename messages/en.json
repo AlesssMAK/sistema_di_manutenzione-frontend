@@ -1193,6 +1193,7 @@
       "searchPlaceholder": "Search item…",
       "lowOnly": "Low stock only",
       "low": "Low",
+      "materialsUsed": "Materials Used",
       "empty": "No stock",
       "pickWarehouseTitle": "Select a warehouse",
       "pickWarehouseHint": "Choose a warehouse to see its stock.",
@@ -1244,6 +1245,10 @@
         "warningsIntro": "Warning, some stock is low or negative:",
         "negative": "negative",
         "addAtLeastOne": "Add at least one valid line",
+        "add": "Add",
+        "remove": "Remove",
+        "noMaterials": "No materials added",
+        "selectWarehouseFirst": "Select a warehouse to issue the materials.",
         "ref": {
           "label": "Reference",
           "none": "None",

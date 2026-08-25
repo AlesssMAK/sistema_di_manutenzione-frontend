@@ -2,6 +2,8 @@
 
 import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
 import OvertimeAlertModal from '@/components/MaintenanceWorker/OvertimeAlertModal/OvertimeAlertModal';
+import FaultMaterialsUsed from '@/components/Warehouse/FaultMaterialsUsed/FaultMaterialsUsed';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import { ALLOWED_TRANSITIONS } from '@/lib/validation/maintenanceWorkerUpdateValidation';
 import Button from '@/components/UI/Button/Button';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
@@ -280,7 +282,7 @@ export default function FaultDetailPage({
                   {t('badges.rescheduled')}
                 </span>
               )}
-              <span className={css.idBadge}>{fault.faultId}</span>
+              <FaultIdBadge id={fault.faultId} />
             </div>
           </header>
 
@@ -421,6 +423,8 @@ export default function FaultDetailPage({
                 <p>{fault.materialRequest}</p>
               </div>
             )}
+
+            <FaultMaterialsUsed faultId={fault._id} />
 
             {/* Phase C: claim audit trail (any non-Created fault that
                 has been picked up). */}

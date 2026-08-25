@@ -1,0 +1,57 @@
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Matches the `.infoItem label` used across the fault detail pages. */
+.label {
+  display: block;
+  font-size: 12px;
+  color: #717182;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.name {
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #11101c;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.code {
+  color: #6b7280;
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.qty {
+  flex-shrink: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e40af;
+}

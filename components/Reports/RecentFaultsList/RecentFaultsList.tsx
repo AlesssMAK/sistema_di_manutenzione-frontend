@@ -6,6 +6,7 @@ import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import type { FaultCard } from '@/types/faultType';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './RecentFaultsList.module.css';
 
 interface RecentFaultsListProps {
@@ -81,7 +82,7 @@ const RecentFaultsList = ({ items, isLoading, isError }: RecentFaultsListProps) 
           <div className={css.head_container}>
             <div className={css.item_id}>
               <h3 className={css.title}>{t('sections.recentFaults.labels.id')}</h3>
-              <p className={css.faultId}>{fault.faultId}</p>
+              <FaultIdBadge id={fault.faultId} />
             </div>
             <div className={css.item_date}>
               <h3 className={css.title}>{t('sections.recentFaults.labels.date')}</h3>

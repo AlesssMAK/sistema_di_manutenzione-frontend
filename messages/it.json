@@ -1193,6 +1193,7 @@
       "searchPlaceholder": "Cerca articolo…",
       "lowOnly": "Solo sotto scorta",
       "low": "Sotto scorta",
+      "materialsUsed": "Materiali utilizzati",
       "empty": "Nessuna giacenza",
       "pickWarehouseTitle": "Seleziona un magazzino",
       "pickWarehouseHint": "Scegli un magazzino per vedere le giacenze.",
@@ -1244,6 +1245,10 @@
         "warningsIntro": "Attenzione, alcune giacenze sono basse o negative:",
         "negative": "negativa",
         "addAtLeastOne": "Aggiungi almeno una riga valida",
+        "add": "Aggiungi",
+        "remove": "Rimuovi",
+        "noMaterials": "Nessun materiale aggiunto",
+        "selectWarehouseFirst": "Seleziona un magazzino per scaricare i materiali.",
         "ref": {
           "label": "Riferimento",
           "none": "Nessuno",

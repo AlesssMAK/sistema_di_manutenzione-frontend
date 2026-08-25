@@ -1193,6 +1193,7 @@
       "searchPlaceholder": "Buscar artículo…",
       "lowOnly": "Solo bajo mínimo",
       "low": "Bajo mínimo",
+      "materialsUsed": "Materiales utilizados",
       "empty": "Sin existencias",
       "pickWarehouseTitle": "Selecciona un almacén",
       "pickWarehouseHint": "Elige un almacén para ver sus existencias.",
@@ -1244,6 +1245,10 @@
         "warningsIntro": "Atención, algunas existencias están bajas o en negativo:",
         "negative": "negativa",
         "addAtLeastOne": "Añade al menos una línea válida",
+        "add": "Añadir",
+        "remove": "Quitar",
+        "noMaterials": "Sin materiales añadidos",
+        "selectWarehouseFirst": "Selecciona un almacén para descargar los materiales.",
         "ref": {
           "label": "Referencia",
           "none": "Ninguna",

@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import Modal from '@/components/UI/Modal/Modal';
 import Button from '@/components/UI/Button/Button';
 import { formatDuration } from '@/lib/utils/faultTime';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './OvertimeAlertModal.module.css';
 
 interface OvertimeAlertModalProps {
@@ -41,7 +42,9 @@ const OvertimeAlertModal = ({
     <Modal onClose={onClose}>
       <div className={css.wrap}>
         <h2 className={css.title}>{t('title')}</h2>
-        <p className={css.subtitle}>{displayId}</p>
+        <p className={css.subtitle}>
+          <FaultIdBadge id={displayId} />
+        </p>
 
         <p className={css.message}>
           {t('message', {

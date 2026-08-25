@@ -20,6 +20,7 @@ import {
   type MaintainerUpdateValues,
 } from '@/lib/validation/maintenanceWorkerUpdateValidation';
 import type { FaultCard } from '@/types/faultType';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './MaintenanceUpdateModal.module.css';
 import Button from '@/components/UI/Button/Button';
 import Modal from '@/components/UI/Modal/Modal';
@@ -105,6 +106,15 @@ const MaintenanceUpdateModal = ({
   const selectedStatus = watch('statusFault');
   const actualDuration = Number(watch('actualDuration') ?? 0);
 
+  // The materials picker shows on both Completed and Suspended. Reset the
+  // picked materials when the status changes so a selection made under one
+  // status doesn't linger (and get issued) under the other.
+  const [prevStatus, setPrevStatus] = useState(selectedStatus);
+  if (prevStatus !== selectedStatus) {
+    setPrevStatus(selectedStatus);
+    setMaterials(null);
+  }
+
   const mutation = useMutation({
     mutationFn: (values: MaintainerUpdateValues) =>
       updateFaultByWorker({
@@ -169,7 +179,9 @@ const MaintenanceUpdateModal = ({
         <div className={css.formContainer}>
           <div className={css.titleContainer}>
             <h1 className={css.title}>{modalTitle}</h1>
-            <p className={css.subtitle}>{displayId}</p>
+            <p className={css.subtitle}>
+            <FaultIdBadge id={displayId} />
+          </p>
           </div>
           <p className={css.emptyMessage}>
             {t('messages.noTransitions', { status: currentStatus })}
@@ -194,7 +206,9 @@ const MaintenanceUpdateModal = ({
       <div className={css.formContainer}>
         <div className={css.titleContainer}>
           <h1 className={css.title}>{modalTitle}</h1>
-          <p className={css.subtitle}>{displayId}</p>
+          <p className={css.subtitle}>
+            <FaultIdBadge id={displayId} />
+          </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className={css.form}>
@@ -254,6 +268,16 @@ const MaintenanceUpdateModal = ({
             </div>
           )}
 
+          {selectedStatus === 'Completed' &&
+            moduleEnabled &&
+            canOperateWarehouse && (
+              <div className={css.field}>
+                <p className={css.label}>{t('labels.stockMaterials')}</p>
+                <FaultMaterialsPicker onChange={setMaterials} />
+              </div>
+            )}
+
+          {/* Free-text note sits below the stock materials picker. */}
           {selectedStatus === 'Completed' && (
             <div className={css.field}>
               <p className={css.label}>{t('labels.materialUsed')}</p>
@@ -265,15 +289,6 @@ const MaintenanceUpdateModal = ({
               />
             </div>
           )}
-
-          {selectedStatus === 'Completed' &&
-            moduleEnabled &&
-            canOperateWarehouse && (
-              <div className={css.field}>
-                <p className={css.label}>{t('labels.stockMaterials')}</p>
-                <FaultMaterialsPicker onChange={setMaterials} />
-              </div>
-            )}
 
           {selectedStatus === 'Suspended' && (
             <>
@@ -289,6 +304,13 @@ const MaintenanceUpdateModal = ({
                   <p className={css.error}>{errors.suspensionReason.message}</p>
                 )}
               </div>
+              {moduleEnabled && canOperateWarehouse && (
+                <div className={css.field}>
+                  <p className={css.label}>{t('labels.stockMaterials')}</p>
+                  <FaultMaterialsPicker onChange={setMaterials} />
+                </div>
+              )}
+              {/* Free-text request sits below the stock materials picker. */}
               <div className={css.field}>
                 <p className={css.label}>{t('labels.materialRequest')}</p>
                 <textarea

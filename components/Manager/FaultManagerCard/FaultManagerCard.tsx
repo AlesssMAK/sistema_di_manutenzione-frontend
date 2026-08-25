@@ -7,6 +7,7 @@ import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import { formatDuration } from '@/lib/utils/faultTime';
 import type { FaultCard } from '@/types/faultType';
 import Button from '@/components/UI/Button/Button';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './FaultManagerCard.module.css';
 
 interface FaultManagerCardProps {
@@ -85,7 +86,7 @@ const FaultManagerCard = ({
   return (
     <li className={css.card}>
       <div className={css.header}>
-        <span className={css.faultId}>{fault.faultId}</span>
+        <FaultIdBadge id={fault.faultId} />
         <div className={css.badges}>
           {fault.autoRescheduledFrom?.plannedDate && (
             <span
