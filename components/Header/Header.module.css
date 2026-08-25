@@ -12,7 +12,7 @@
 
 .logo_container {
   display: flex;
-  gap: 4px;
+  /* gap: 4px; */
 }
 
 .logo {

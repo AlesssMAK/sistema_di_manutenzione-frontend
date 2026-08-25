@@ -1,6 +1,8 @@
 'use client';
 
 import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
+import FaultMaterialsUsed from '@/components/Warehouse/FaultMaterialsUsed/FaultMaterialsUsed';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import Button from '@/components/UI/Button/Button';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
@@ -164,7 +166,7 @@ const ManagerFaultDetailPage = ({
               </button>
               <h2 className={css.title}>{t('title')}</h2>
             </div>
-            <span className={css.idBadge}>{fault.faultId}</span>
+            <FaultIdBadge id={fault.faultId} />
           </header>
 
           <div className={css.infoGrid}>
@@ -294,6 +296,8 @@ const ManagerFaultDetailPage = ({
               </div>
             )}
           </div>
+
+          <FaultMaterialsUsed faultId={fault._id} />
 
           {fault.img && fault.img.length > 0 && (
             <div className={css.imageSection}>

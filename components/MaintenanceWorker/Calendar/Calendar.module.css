@@ -44,7 +44,12 @@
 
 .daysHeader {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  /* minmax(0, 1fr) — not the default minmax(auto, 1fr) — so every column
+     is strictly 1/7 of the width and can shrink below its content. The
+     date cells have a fixed 24px number (larger min-content than a
+     weekday label), so plain 1fr made the two grids diverge on narrow
+     screens and the numbers drifted out of line with the headers. */
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   background-color: #f1f5f9;
   border: 1px solid #e2e8f0;
   border-bottom: none;
@@ -60,13 +65,15 @@
   color: #1f2937;
   border-right: 1px solid #e2e8f0;
   text-transform: uppercase;
+  min-width: 0;
+  overflow: hidden;
 }
 .dayName:last-child {
   border-right: none;
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   border: 1px solid #e2e8f0;
   border-radius: 0 0 8px 8px;
   margin: 0 16px 16px 16px;
@@ -84,6 +91,7 @@
   justify-content: center;
   height: 40px;
   padding: 4px;
+  min-width: 0;
   border-right: 1px solid #e2e8f0;
   border-bottom: 1px solid #e2e8f0;
   cursor: pointer;

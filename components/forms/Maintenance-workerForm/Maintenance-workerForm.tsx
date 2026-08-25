@@ -15,6 +15,7 @@ import { fetchFaultById } from '@/lib/api/faults';
 
 import type { FaultCard } from '@/types/faultType';
 
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './Maintenance-workerForm.module.css';
 import nextServer from '@/lib/api/api';
 
@@ -86,7 +87,7 @@ const MaintenanceWorkerForm = () => {
     <div className={css.container}>
       <header className={css.header}>
         <h2 className={css.title}>Dettaglio Intervento</h2>
-        <span className={css.faultIdDisplay}>{faultData?.faultId}</span>
+        {faultData?.faultId && <FaultIdBadge id={faultData.faultId} />}
       </header>
 
      

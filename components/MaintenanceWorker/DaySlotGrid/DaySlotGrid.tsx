@@ -5,6 +5,7 @@ import { format, isValid, parseISO } from 'date-fns';
 import { useLocale, useTranslations } from 'next-intl';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
 import type { FaultCard } from '@/types/faultType';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './DaySlotGrid.module.css';
 
 interface DaySlotGridProps {
@@ -76,7 +77,7 @@ const DaySlotGrid = ({
                       className={`${css.slotCard} ${priorityClass[f.priority] ?? ''}`}
                       onClick={() => router.push(`/maintenance-worker/${f._id}`)}
                     >
-                      <span className={css.slotFaultId}>{f.faultId}</span>
+                      <FaultIdBadge id={f.faultId} size="sm" />
                       <span className={css.slotPlant}>
                         {f.plantId?.namePlant ?? '—'}
                       </span>

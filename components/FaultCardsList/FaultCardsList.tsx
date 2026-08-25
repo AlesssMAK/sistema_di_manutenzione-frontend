@@ -2,6 +2,7 @@
 
 import { format, isValid, parseISO } from 'date-fns';
 import Button from '../UI/Button/Button';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './FaultCardsList.module.css';
 import type { AssignedMaintainer, FaultCard } from '@/types/faultType';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
@@ -173,7 +174,7 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
               <div className={css.content}>
                 <div>
                   <div className={css.header}>
-                    <span className={css.faultId}>{fault.faultId}</span>
+                    <FaultIdBadge id={fault.faultId} />
                     {fault.autoRescheduledFrom?.plannedDate && (
                       <span
                         className={css.riprogrammatBadge}

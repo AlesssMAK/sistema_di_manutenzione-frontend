@@ -1,0 +1,29 @@
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+
+  @media screen and (min-width: 768px) {
+    padding: 4px 12px;
+    font-size: 14px;
+  }
+}
+
+/* Compact variant for tight layouts (calendar slots). Declared after
+   .badge so it overrides the base padding/font at every width. */
+.sm {
+  padding: 2px 8px;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+
+  @media screen and (min-width: 768px) {
+    padding: 2px 8px;
+    font-size: 12px;
+  }
+}

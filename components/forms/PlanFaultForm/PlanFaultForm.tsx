@@ -32,6 +32,7 @@ import type {
 } from '@/types/faultType';
 import { roundToStep } from '@/lib/utils/faultTime';
 import DurationPicker from '@/components/UI/DurationPicker/DurationPicker';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './PlanFaultForm.module.css';
 
 /**
@@ -230,7 +231,8 @@ const PlanFaultForm = ({
                   : t('titlePlan')}
           </h1>
           <p className={css.subtitle}>
-            {fault.faultId} · {fault.plantId?.namePlant ?? '—'}
+            <FaultIdBadge id={fault.faultId} /> ·{' '}
+            {fault.plantId?.namePlant ?? '—'}
           </p>
         </div>
 

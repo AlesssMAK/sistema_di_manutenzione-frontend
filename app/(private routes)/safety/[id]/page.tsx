@@ -1,6 +1,8 @@
 'use client';
 
 import Button from '@/components/UI/Button/Button';
+import FaultMaterialsUsed from '@/components/Warehouse/FaultMaterialsUsed/FaultMaterialsUsed';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
@@ -193,7 +195,7 @@ const SafetyFaultDetailPage = ({
                 <span className={css.hseBadge}>{tSafety('badge')}</span>
               </h2>
             </div>
-            <span className={css.idBadge}>{fault.faultId}</span>
+            <FaultIdBadge id={fault.faultId} />
           </header>
 
           <div className={css.infoGrid}>
@@ -295,6 +297,8 @@ const SafetyFaultDetailPage = ({
               <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
             </div>
           </div>
+
+          <FaultMaterialsUsed faultId={fault._id} />
 
           {fault.img && fault.img.length > 0 && (
             <div className={css.imageSection}>

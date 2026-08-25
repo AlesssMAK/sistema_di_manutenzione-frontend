@@ -1193,6 +1193,7 @@
       "searchPlaceholder": "Szukaj pozycji…",
       "lowOnly": "Tylko niski stan",
       "low": "Niski stan",
+      "materialsUsed": "Zużyte materiały",
       "empty": "Brak stanów",
       "pickWarehouseTitle": "Wybierz magazyn",
       "pickWarehouseHint": "Wybierz magazyn, aby zobaczyć stany.",
@@ -1244,6 +1245,10 @@
         "warningsIntro": "Uwaga, niektóre stany są niskie lub ujemne:",
         "negative": "ujemny",
         "addAtLeastOne": "Dodaj co najmniej jeden poprawny wiersz",
+        "add": "Dodaj",
+        "remove": "Usuń",
+        "noMaterials": "Brak dodanych materiałów",
+        "selectWarehouseFirst": "Wybierz magazyn, aby wydać materiały.",
         "ref": {
           "label": "Odniesienie",
           "none": "Brak",

@@ -12,6 +12,7 @@ import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
+import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './MyFaultsList.module.css';
 
 type Period = '7d' | '30d' | '3m' | 'all';
@@ -140,7 +141,7 @@ const MyFaultsList = () => {
         <ul className={css.list}>
           {items.map(fault => (
             <li key={fault._id} className={css.row}>
-              <span className={css.faultId}>{fault.faultId}</span>
+              <FaultIdBadge id={fault.faultId} />
               <span className={css.plant}>
                 {fault.plantId?.namePlant ?? '—'}{' '}
                 <span className={css.plantPart}>
