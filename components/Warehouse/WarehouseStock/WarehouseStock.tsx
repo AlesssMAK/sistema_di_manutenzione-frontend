@@ -4,8 +4,14 @@ import { useMemo, useState } from 'react';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useDebounce } from 'use-debounce';
-import { getAllWarehouses, getMovements, getStock } from '@/lib/api/warehouse';
+import {
+  getAllCategories,
+  getAllWarehouses,
+  getMovements,
+  getStock,
+} from '@/lib/api/warehouse';
 import type {
+  Category,
   ItemRef,
   StockLevel,
   StockMovement,
@@ -17,6 +23,7 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
+import { useAllowedWarehouses } from '@/lib/hooks/useAllowedWarehouses';
 import StockOpModal, { type StockOp } from './StockOpModal';
 import css from './Stock.module.css';
 
@@ -49,6 +56,7 @@ const packageInfo = (
 
 const WarehouseStock = () => {
   const t = useTranslations('WarehousePage.stock');
+  const tItems = useTranslations('WarehousePage.catalog.items');
   const tNoFound = useTranslations('NoFound');
 
   const [warehouseId, setWarehouseId] = useState('');
@@ -56,6 +64,7 @@ const WarehouseStock = () => {
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebounce(search, 500);
   const [lowOnly, setLowOnly] = useState(false);
+  const [categoryId, setCategoryId] = useState('');
   const [page, setPage] = useState(1);
   const [op, setOp] = useState<StockOp | null>(null);
   const [showHistory, setShowHistory] = useState(false);
@@ -68,16 +77,54 @@ const WarehouseStock = () => {
     () => whData?.warehouses ?? [],
     [whData]
   );
+  // Only the warehouses this user may operate on (admins/unrestricted
+  // see all).
+  const visibleWarehouses = useAllowedWarehouses(warehouses);
   const whByLabel = useMemo(() => {
     const map = new Map<string, Warehouse>();
-    warehouses.forEach((w) => map.set(w.name, w));
+    visibleWarehouses.forEach((w) => map.set(w.name, w));
     return map;
-  }, [warehouses]);
+  }, [visibleWarehouses]);
+
+  const { data: catData } = useQuery({
+    queryKey: ['warehouse', 'categories', 'active-pool'],
+    queryFn: () => getAllCategories({ status: 'active', perPage: 200 }),
+  });
+  const categories: Category[] = useMemo(
+    () => catData?.categories ?? [],
+    [catData]
+  );
+  const allCategoriesLabel = tItems('fields.allCategories');
+  const catNameById = useMemo(() => {
+    const m = new Map<string, string>();
+    categories.forEach((c) => m.set(c._id, c.name));
+    return m;
+  }, [categories]);
+  const catIdByName = useMemo(() => {
+    const m = new Map<string, string>();
+    categories.forEach((c) => m.set(c.name, c._id));
+    return m;
+  }, [categories]);
 
   const { data: stockData, isLoading, isError } = useQuery({
-    queryKey: ['warehouse', 'stock', warehouseId, debouncedSearch || undefined, lowOnly, page],
+    queryKey: [
+      'warehouse',
+      'stock',
+      warehouseId,
+      debouncedSearch || undefined,
+      categoryId,
+      lowOnly,
+      page,
+    ],
     queryFn: () =>
-      getStock({ warehouseId, search: debouncedSearch, lowOnly, page, perPage: PER_PAGE }),
+      getStock({
+        warehouseId,
+        search: debouncedSearch,
+        ...(categoryId ? { categoryId } : {}),
+        lowOnly,
+        page,
+        perPage: PER_PAGE,
+      }),
     enabled: Boolean(warehouseId),
     placeholderData: keepPreviousData,
   });
@@ -106,6 +153,21 @@ const WarehouseStock = () => {
       icon: 'search',
     },
     {
+      id: 'category',
+      type: 'select',
+      label: tItems('fields.category'),
+      value: categoryId
+        ? (catNameById.get(categoryId) ?? allCategoriesLabel)
+        : allCategoriesLabel,
+      options: [allCategoriesLabel, ...categories.map((c) => c.name)],
+      onSelect: (label) => {
+        setCategoryId(
+          label === allCategoriesLabel ? '' : (catIdByName.get(label) ?? '')
+        );
+        setPage(1);
+      },
+    },
+    {
       id: 'level',
       type: 'select',
       label: t('levelLabel'),
@@ -120,6 +182,7 @@ const WarehouseStock = () => {
   const onClearFilters = () => {
     setSearch('');
     setLowOnly(false);
+    setCategoryId('');
     setPage(1);
   };
 
@@ -132,7 +195,7 @@ const WarehouseStock = () => {
         <div className={css.filter}>
           <label className={css.filterLabel}>{t('warehouseLabel')}</label>
           <SelectDropdown
-            options={warehouses.map((w) => w.name)}
+            options={visibleWarehouses.map((w) => w.name)}
             selectedValue={warehouseText}
             placeholder={t('selectWarehouse')}
             onSelect={(label) => {

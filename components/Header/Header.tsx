@@ -52,20 +52,20 @@ const Header = () => {
             <div className={css.logo_container}>
               <div className={css.logo}>
                 <Image
-                  src="/images/logo-syllert.png"
-                  width={44}
+                  src="/images/logo_tansparent.png"
+                  width={150}
                   height={44}
                   alt="SYLLERT logo"
                 />
               </div>
               <div className={css.logo_title_container}>
                 {/* <h2 className={css.logo_title}> */}
-                <Image
+                {/* <Image
                   src="/images/syllert-logo-text.png"
                   width={120}
                   height={14}
                   alt="SYLLERT logo"
-                />
+                /> */}
                 {/* </h2> */}
                 {/* <p className={css.logo_page_name}>{pageTitle}</p> */}
               </div>

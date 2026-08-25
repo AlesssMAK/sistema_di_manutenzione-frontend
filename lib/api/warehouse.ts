@@ -2,10 +2,14 @@ import nextServer from './api';
 import { getAllUsers } from './users';
 import type { GrantedUser, UserPermissions } from '@/types/userTypes';
 import type {
+  Category,
+  CategoriesResponse,
+  CreateCategoryRequest,
   CreateItemRequest,
   CreateUnitRequest,
   CreateWarehouseRequest,
   InventoryItem,
+  UpdateCategoryRequest,
   ItemsResponse,
   MovementsQuery,
   MovementsResponse,
@@ -31,6 +35,10 @@ interface ListParams {
   status?: STATUS | string;
   page?: number;
   perPage?: number;
+}
+
+interface ItemListParams extends ListParams {
+  categoryId?: string;
 }
 
 /* --------------------- Permission grant helpers ------------------------ */
@@ -81,6 +89,40 @@ export const deleteUnit = async (unitId: string) => {
 
 /* ------------------------------ Warehouses ----------------------------- */
 
+/* ----------------------------- Categories ------------------------------ */
+
+export const getAllCategories = async (params: ListParams = {}) => {
+  const res = await nextServer.get<CategoriesResponse>(
+    '/warehouse/categories',
+    { params }
+  );
+  return res.data.data;
+};
+
+export const createCategory = async (data: CreateCategoryRequest) => {
+  const res = await nextServer.post<{ data: Category }>(
+    '/warehouse/categories',
+    data
+  );
+  return res.data.data;
+};
+
+export const updateCategory = async ({
+  categoryId,
+  data,
+}: UpdateCategoryRequest) => {
+  const res = await nextServer.put<{ data: Category }>(
+    `/warehouse/categories/${categoryId}`,
+    data
+  );
+  return res.data.data;
+};
+
+export const deleteCategory = async (categoryId: string) => {
+  const res = await nextServer.delete(`/warehouse/categories/${categoryId}`);
+  return res.data;
+};
+
 export const getAllWarehouses = async (params: ListParams = {}) => {
   const res = await nextServer.get<WarehousesResponse>(
     '/warehouse/warehouses',
@@ -115,7 +157,7 @@ export const deleteWarehouse = async (warehouseId: string) => {
 
 /* --------------------------- Inventory items --------------------------- */
 
-export const getAllItems = async (params: ListParams = {}) => {
+export const getAllItems = async (params: ItemListParams = {}) => {
   const res = await nextServer.get<ItemsResponse>('/warehouse/items', {
     params,
   });

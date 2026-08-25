@@ -24,6 +24,7 @@ import type {
 import Button from '@/components/UI/Button/Button';
 import Modal from '@/components/UI/Modal/Modal';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import { useAllowedWarehouses } from '@/lib/hooks/useAllowedWarehouses';
 import css from './Stock.module.css';
 
 export type StockOp = 'in' | 'out' | 'adjust' | 'transfer';
@@ -88,9 +89,10 @@ const StockOpModal = ({
     enabled: isTransfer,
   });
   // Destination options exclude the source warehouse.
+  const allowedWarehouses = useAllowedWarehouses(whData?.warehouses ?? []);
   const destWarehouses: Warehouse[] = useMemo(
-    () => (whData?.warehouses ?? []).filter(w => w._id !== warehouseId),
-    [whData, warehouseId]
+    () => allowedWarehouses.filter(w => w._id !== warehouseId),
+    [allowedWarehouses, warehouseId]
   );
   const whByLabel = useMemo(() => {
     const map = new Map<string, Warehouse>();

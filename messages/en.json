@@ -434,7 +434,10 @@
         "enabledHint": "When off, the Warehouse page and its features are unavailable to everyone.",
         "lowStockNotify": "Notify on Low Stock",
         "lowStockHint": "Send a push notification to the selected roles when an item drops below its reorder point.",
-        "lowStockRoles": "Roles to Notify",
+        "lowStockUsers": "Users to Notify",
+        "lowStockUsersPlaceholder": "Add a user…",
+        "lowStockUsersEmpty": "No users selected",
+        "lowStockUsersRemove": "Remove",
         "units": {
           "title": "Units of Measure",
           "symbol": "Symbol",
@@ -449,6 +452,28 @@
           "error": "Error while saving",
           "fillRequired": "Fill in code and name",
           "allowDecimals": "Allow Decimals"
+        },
+        "categories": {
+          "title": "Categories",
+          "name": "Name",
+          "add": "Add",
+          "empty": "No categories",
+          "deactivate": "Deactivate",
+          "activate": "Reactivate",
+          "created": "Category created",
+          "deactivated": "Category deactivated",
+          "activated": "Category reactivated",
+          "error": "Error while saving",
+          "fillRequired": "Enter the name"
+        },
+        "access": {
+          "title": "Warehouse Access",
+          "subtitle": "Limit which warehouses each operator can use. Empty = all.",
+          "empty": "No operators with warehouse access.",
+          "addWarehouse": "Add a warehouse…",
+          "allWarehouses": "All warehouses",
+          "remove": "Remove",
+          "error": "Error while saving"
         },
         "warehouses": {
           "title": "Warehouses",
@@ -1110,6 +1135,7 @@
   "WarehousePage": {
     "title": "Warehouse",
     "subtitle": "Manage stock, movements and the catalog.",
+    "catalogSubtitle": "Manage the warehouse items.",
     "tabs": {
       "stock": "Stock",
       "catalog": "Catalog"
@@ -1174,6 +1200,8 @@
           "packageHint": "Optional: if the item arrives in packages.",
           "unitsPerPackage": "Units per Package",
           "category": "Category",
+          "categoryPlaceholder": "Select category",
+          "allCategories": "All categories",
           "note": "Note"
         },
         "card": {

@@ -1,9 +1,72 @@
+/* Same header pattern as the admin Users page: title block stacked on
+   phone/tablet, title left + action button right on wide screens. */
 .header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 20px;
+
+  /* Tablet+: title left, action button right on the same row. */
+  @media screen and (min-width: 768px) {
+    gap: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 
-.tabContent {
-  margin-top: 20px;
+.catalogBtn {
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btnIcon {
+  fill: none;
+  stroke: currentColor;
+  transition: stroke 0.2s ease;
+}
+
+/* Catalog view header — back button + title, same chrome as the
+   fault-detail / report-fault back affordance. */
+.catalogHead {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+
+  /* Tablet+: back+title left, "new item" button right on the same row —
+     same logic as the Catalogo button on the stock view. */
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+.catalogHeadLeft {
+  display: flex;
+  gap: 12px;
+}
+
+.backButton {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0a0a0a;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.backButton:hover {
+  background: #f1f5f9;
 }
 
 .loaderWrap {

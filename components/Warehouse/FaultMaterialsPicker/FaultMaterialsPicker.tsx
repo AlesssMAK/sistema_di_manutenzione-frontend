@@ -11,6 +11,7 @@ import type {
   Warehouse,
 } from '@/types/warehouseType';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import { useAllowedWarehouses } from '@/lib/hooks/useAllowedWarehouses';
 import css from './FaultMaterialsPicker.module.css';
 
 export interface MaterialsPayload {
@@ -55,10 +56,12 @@ const FaultMaterialsPicker = ({ onChange }: FaultMaterialsPickerProps) => {
     queryKey: ['warehouse', 'items', 'active-pool'],
     queryFn: () => getAllItems({ status: 'active', perPage: 200 }),
   });
-  const warehouses: Warehouse[] = useMemo(
+  const allWarehouses: Warehouse[] = useMemo(
     () => whData?.warehouses ?? [],
     [whData]
   );
+  // Only the warehouses this user may operate on (empty/admin = all).
+  const warehouses = useAllowedWarehouses(allWarehouses);
   const items: InventoryItem[] = useMemo(
     () => itemsData?.items ?? [],
     [itemsData]

@@ -23,6 +23,8 @@ export interface User {
   status: STATUS;
   isFirstLogin: boolean;
   permissions?: UserPermissions;
+  // Warehouse ids this user may operate on. Empty/undefined = all.
+  allowedWarehouses?: string[];
 }
 
 export type UserRoles =
@@ -81,4 +83,5 @@ export interface UpdateUserValues {
   avatar?: string | null;
   personalCode?: string | undefined;
   permissions?: UserPermissions;
+  allowedWarehouses?: string[];
 }

@@ -21,6 +21,10 @@ const SelectDropdown = ({
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
+  // Nothing left to pick (e.g. every option already selected) → behave
+  // as disabled, so no empty menu opens. Applies to every dropdown.
+  const isDisabled = disabled || options.length === 0;
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -39,12 +43,12 @@ const SelectDropdown = ({
       className={css.select_dropdown_container}
       ref={ref}
       onClick={() => {
-        if (disabled) return;
+        if (isDisabled) return;
         setOpen(!open);
       }}
     >
       <div
-        className={`${css.input} ${disabled ? css.disabled : ''} ${open ? css.active : ''}`}
+        className={`${css.input} ${isDisabled ? css.disabled : ''} ${open ? css.active : ''}`}
       >
         <span
           className={`${css.value} ${!selectedValue ? css.placeholder : ''}`}
