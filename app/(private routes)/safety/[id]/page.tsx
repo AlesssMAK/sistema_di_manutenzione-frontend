@@ -298,7 +298,10 @@ const SafetyFaultDetailPage = ({
             </div>
           </div>
 
-          <FaultMaterialsUsed faultId={fault._id} />
+          <FaultMaterialsUsed
+            faultId={fault._id}
+            materialComment={fault.materialRequest}
+          />
 
           {fault.img && fault.img.length > 0 && (
             <div className={css.imageSection}>

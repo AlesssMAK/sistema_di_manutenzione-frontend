@@ -400,31 +400,22 @@ export default function FaultDetailPage({
               </div>
             )}
 
-            {/* Material used, captured on completion. */}
-            {isCompleted && fault.materialRequest && (
-              <div className={css.infoItem}>
-                <label>{t('labels.materialUsed')}</label>
-                <p>{fault.materialRequest}</p>
-              </div>
-            )}
-
-            {/* Phase C: when suspended, surface the reason + material
-                request so whoever picks the fault back up knows
-                what's needed to resume. */}
+            {/* Phase C: when suspended, surface the reason so whoever
+                picks the fault back up knows why it stalled. The material
+                note itself now lives in the materials panel below. */}
             {isSuspended && fault.suspensionReason && (
               <div className={css.infoItem}>
                 <label>{t('labels.suspensionReason')}</label>
                 <p>{fault.suspensionReason}</p>
               </div>
             )}
-            {isSuspended && fault.materialRequest && (
-              <div className={css.infoItem}>
-                <label>{t('labels.materialRequest')}</label>
-                <p>{fault.materialRequest}</p>
-              </div>
-            )}
 
-            <FaultMaterialsUsed faultId={fault._id} />
+            {/* Materials issued + the free-text material note (completion
+                or suspension), collapsed into one panel. */}
+            <FaultMaterialsUsed
+              faultId={fault._id}
+              materialComment={fault.materialRequest}
+            />
 
             {/* Phase C: claim audit trail (any non-Created fault that
                 has been picked up). */}
