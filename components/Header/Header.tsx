@@ -52,8 +52,8 @@ const Header = () => {
             <div className={css.logo_container}>
               <div className={css.logo}>
                 <Image
-                  src="/images/logo_tansparent.png"
-                  width={150}
+                  src="/images/logo_tansparent_icon.svg"
+                  width={136}
                   height={44}
                   alt="SYLLERT logo"
                 />

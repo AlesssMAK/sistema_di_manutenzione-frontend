@@ -4,14 +4,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
-import { getAllItems, getAllWarehouses } from '@/lib/api/warehouse';
+import { getAllItems } from '@/lib/api/warehouse';
 import type {
   InventoryItem,
   MovementLine,
   Warehouse,
 } from '@/types/warehouseType';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
-import { useAllowedWarehouses } from '@/lib/hooks/useAllowedWarehouses';
+import { useWarehouseContext } from '@/lib/hooks/useWarehouseContext';
 import css from './FaultMaterialsPicker.module.css';
 
 export interface MaterialsPayload {
@@ -48,20 +48,18 @@ const FaultMaterialsPicker = ({ onChange }: FaultMaterialsPickerProps) => {
   const [draftItemText, setDraftItemText] = useState('');
   const [draftQty, setDraftQty] = useState('');
 
-  const { data: whData } = useQuery({
-    queryKey: ['warehouse', 'warehouses', 'active-pool'],
-    queryFn: () => getAllWarehouses({ status: 'active', perPage: 200 }),
-  });
   const { data: itemsData } = useQuery({
     queryKey: ['warehouse', 'items', 'active-pool'],
     queryFn: () => getAllItems({ status: 'active', perPage: 200 }),
   });
-  const allWarehouses: Warehouse[] = useMemo(
-    () => whData?.warehouses ?? [],
-    [whData]
-  );
-  // Only the warehouses this user may operate on (empty/admin = all).
-  const warehouses = useAllowedWarehouses(allWarehouses);
+  // Fault write-offs draw from the maintenance warehouse set. When it
+  // resolves to one warehouse the picker is hidden and it's used
+  // implicitly.
+  const {
+    candidates: warehouses,
+    single,
+    showPicker,
+  } = useWarehouseContext('maintenance');
   const items: InventoryItem[] = useMemo(
     () => itemsData?.items ?? [],
     [itemsData]
@@ -82,14 +80,14 @@ const FaultMaterialsPicker = ({ onChange }: FaultMaterialsPickerProps) => {
     return m;
   }, [items]);
 
-  // Auto-select the warehouse when there's only one, so materials never
-  // silently fail to issue because a magazzino wasn't picked.
+  // Auto-select the warehouse when the context resolves to a single one,
+  // so materials never silently fail to issue because none was picked.
   useEffect(() => {
-    if (!warehouseId && warehouses.length === 1) {
-      setWarehouseId(warehouses[0]._id);
-      setWarehouseText(warehouses[0].name);
+    if (!warehouseId && single) {
+      setWarehouseId(single._id);
+      setWarehouseText(single.name);
     }
-  }, [warehouses, warehouseId]);
+  }, [single, warehouseId]);
 
   // Piece-like usage units stay integer; continuous ones allow decimals.
   const stepFor = (itemId: string): string => {
@@ -158,14 +156,18 @@ const FaultMaterialsPicker = ({ onChange }: FaultMaterialsPickerProps) => {
 
   return (
     <div className={css.wrap}>
-      <SelectDropdown
-        options={warehouses.map(w => w.name)}
-        selectedValue={warehouseText}
-        placeholder={t('selectWarehouse')}
-        onSelect={selectWarehouse}
-      />
+      {/* Warehouse picker only when the maintenance context is ambiguous
+          (more than one candidate); otherwise the single one is implicit. */}
+      {showPicker && (
+        <SelectDropdown
+          options={warehouses.map(w => w.name)}
+          selectedValue={warehouseText}
+          placeholder={t('selectWarehouse')}
+          onSelect={selectWarehouse}
+        />
+      )}
 
-      {lines.length > 0 && !warehouseId && (
+      {showPicker && lines.length > 0 && !warehouseId && (
         <p className={css.warn}>{tOp('selectWarehouseFirst')}</p>
       )}
 

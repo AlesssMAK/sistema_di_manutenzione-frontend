@@ -13,6 +13,7 @@ import WarehouseUnitsManager from '@/components/Admin/WarehouseUnitsManager/Ware
 import WarehouseCategoriesManager from '@/components/Admin/WarehouseCategoriesManager/WarehouseCategoriesManager';
 import WarehouseAccessManager from '@/components/Admin/WarehouseAccessManager/WarehouseAccessManager';
 import WarehouseWarehousesManager from '@/components/Admin/WarehouseWarehousesManager/WarehouseWarehousesManager';
+import WarehousesMultiSelect from '@/components/Admin/WarehousesMultiSelect/WarehousesMultiSelect';
 import Button from '@/components/UI/Button/Button';
 import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
 import Input from '@/components/UI/Input/Input';
@@ -36,6 +37,7 @@ import {
   type WeekSchedule,
 } from '@/lib/api/systemSettings';
 import {
+  getAllWarehouses,
   getWarehouseManagers,
   getWarehouseOperators,
 } from '@/lib/api/warehouse';
@@ -88,6 +90,9 @@ const AdminSystemSettingsClientPage = () => {
   });
   const [warehouse, setWarehouse] = useState<WarehouseSettings>({
     enabled: false,
+    multiWarehouse: false,
+    defaultWarehouseId: null,
+    faultWarehousesByRole: [],
     lowStock: { notify: false, userIds: [] },
     labels: { qr: true, barcode: true },
   });
@@ -97,6 +102,21 @@ const AdminSystemSettingsClientPage = () => {
     queryFn: fetchFullSystemSettings,
     refetchOnWindowFocus: false,
   });
+
+  // Active-warehouse pool for the multi-warehouse config (default +
+  // maintenance selectors). Only fetched once the module is on.
+  const { data: whPool } = useQuery({
+    queryKey: ['warehouse', 'warehouses', 'active-pool'],
+    queryFn: () => getAllWarehouses({ status: 'active', perPage: 200 }),
+    enabled: warehouse.enabled,
+  });
+  const warehousePool = whPool?.warehouses ?? [];
+  // The warehouse unconfigured roles fall back to (mirrors the backend:
+  // defaultWarehouseId, else the first active by code).
+  const effectiveDefaultWh =
+    warehousePool.find(w => w._id === warehouse.defaultWarehouseId) ??
+    [...warehousePool].sort((a, b) => a.code.localeCompare(b.code))[0] ??
+    null;
 
   // Seed local editable state once the settings arrive. Done during render
   // instead of in an effect: the reset belongs to the same pass that first
@@ -113,6 +133,9 @@ const AdminSystemSettingsClientPage = () => {
     setMaintenance(data.maintenance ?? { overtimeAlertHours: 2 });
     setWarehouse({
       enabled: data.warehouse?.enabled ?? false,
+      multiWarehouse: data.warehouse?.multiWarehouse ?? false,
+      defaultWarehouseId: data.warehouse?.defaultWarehouseId ?? null,
+      faultWarehousesByRole: data.warehouse?.faultWarehousesByRole ?? [],
       lowStock: data.warehouse?.lowStock ?? { notify: false, userIds: [] },
       labels: data.warehouse?.labels ?? { qr: true, barcode: true },
     });
@@ -528,7 +551,7 @@ const AdminSystemSettingsClientPage = () => {
           <Toggle
             id="warehouse-enabled"
             checked={warehouse.enabled}
-            onChange={checked => setWarehouse({ enabled: checked })}
+            onChange={checked => setWarehouse({ ...warehouse, enabled: checked })}
             label={t('warehouse.enabledLabel')}
           />
           <p style={{ fontSize: '13px', color: '#64748b', marginTop: '6px' }}>
@@ -538,6 +561,188 @@ const AdminSystemSettingsClientPage = () => {
 
         {warehouse.enabled && (
           <>
+            <div className={css.field}>
+              <Toggle
+                id="warehouse-multi"
+                checked={warehouse.multiWarehouse ?? false}
+                onChange={checked =>
+                  setWarehouse({ ...warehouse, multiWarehouse: checked })
+                }
+                label={t('warehouse.multiLabel')}
+              />
+              <p
+                style={{ fontSize: '13px', color: '#64748b', marginTop: '6px' }}
+              >
+                {t('warehouse.multiHint')}
+              </p>
+            </div>
+
+            {warehouse.multiWarehouse && (
+              <>
+                <div className={css.field}>
+                  <label className={css.fieldLabel}>
+                    {t('warehouse.defaultWarehouse')}
+                  </label>
+                  <SelectDropdown
+                    options={[
+                      t('warehouse.defaultAuto'),
+                      ...warehousePool.map(w => w.name),
+                    ]}
+                    selectedValue={
+                      warehousePool.find(
+                        w => w._id === warehouse.defaultWarehouseId
+                      )?.name ?? t('warehouse.defaultAuto')
+                    }
+                    placeholder={t('warehouse.defaultWarehouse')}
+                    onSelect={name => {
+                      const w = warehousePool.find(x => x.name === name);
+                      setWarehouse({
+                        ...warehouse,
+                        defaultWarehouseId: w?._id ?? null,
+                      });
+                    }}
+                  />
+                  <p
+                    style={{
+                      fontSize: '13px',
+                      color: '#64748b',
+                      marginTop: '6px',
+                    }}
+                  >
+                    {t('warehouse.defaultHint')}
+                  </p>
+                </div>
+
+                <div className={css.field}>
+                  <label className={css.fieldLabel}>
+                    {t('warehouse.faultWh')}
+                  </label>
+                  <p
+                    style={{
+                      fontSize: '13px',
+                      color: '#64748b',
+                      marginTop: '6px',
+                    }}
+                  >
+                    {t('warehouse.faultWhHint')}
+                  </p>
+
+                  {/* Laconic note: which warehouse unconfigured roles fall
+                      back to. Shown only when several warehouses exist. */}
+                  {warehousePool.length > 1 && effectiveDefaultWh && (
+                    <p className={css.note}>
+                      {t('warehouse.faultWhDefaultNote', {
+                        name: `${effectiveDefaultWh.code} · ${effectiveDefaultWh.name}`,
+                      })}
+                    </p>
+                  )}
+
+                  {/* Pick a role first — only roles not yet configured. */}
+                  <div style={{ marginTop: '10px' }}>
+                    <SelectDropdown
+                      options={grantRoleOptions
+                        .filter(
+                          r =>
+                            !(warehouse.faultWarehousesByRole ?? []).some(
+                              e => e.role === r.value
+                            )
+                        )
+                        .map(r => r.label)}
+                      selectedValue={''}
+                      placeholder={t('warehouse.faultWhAddRole')}
+                      onSelect={label => {
+                        const role = grantRoleOptions.find(
+                          r => r.label === label
+                        );
+                        if (!role) return;
+                        setWarehouse({
+                          ...warehouse,
+                          faultWarehousesByRole: [
+                            ...(warehouse.faultWarehousesByRole ?? []),
+                            { role: role.value, warehouseIds: [] },
+                          ],
+                        });
+                      }}
+                    />
+                  </div>
+
+                  {/* Configured roles only. */}
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '14px',
+                      marginTop: '12px',
+                    }}
+                  >
+                    {(warehouse.faultWarehousesByRole ?? []).map(entry => {
+                      const roleLabel =
+                        grantRoleOptions.find(r => r.value === entry.role)
+                          ?.label ?? entry.role;
+                      return (
+                        <div key={entry.role}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              marginBottom: '8px',
+                            }}
+                          >
+                            <p style={{ fontSize: '13px', fontWeight: 600 }}>
+                              {roleLabel}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setWarehouse({
+                                  ...warehouse,
+                                  faultWarehousesByRole: (
+                                    warehouse.faultWarehousesByRole ?? []
+                                  ).filter(e => e.role !== entry.role),
+                                })
+                              }
+                              aria-label={t('warehouse.faultWhRemoveRole')}
+                              title={t('warehouse.faultWhRemoveRole')}
+                              style={{
+                                border: 'none',
+                                background: 'none',
+                                color: '#64748b',
+                                fontSize: '18px',
+                                lineHeight: 1,
+                                cursor: 'pointer',
+                              }}
+                            >
+                              ×
+                            </button>
+                          </div>
+                          <WarehousesMultiSelect
+                            warehouses={warehousePool}
+                            selectedIds={entry.warehouseIds}
+                            onChange={next =>
+                              setWarehouse({
+                                ...warehouse,
+                                faultWarehousesByRole: (
+                                  warehouse.faultWarehousesByRole ?? []
+                                ).map(e =>
+                                  e.role === entry.role
+                                    ? { ...e, warehouseIds: next }
+                                    : e
+                                ),
+                              })
+                            }
+                            placeholder={t('warehouse.faultWhPlaceholder')}
+                            emptyText={t('warehouse.faultWhEmpty')}
+                            removeLabel={t('warehouse.faultWhRemove')}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+
             <div className={css.field}>
               <Toggle
                 id="warehouse-lowstock-notify"

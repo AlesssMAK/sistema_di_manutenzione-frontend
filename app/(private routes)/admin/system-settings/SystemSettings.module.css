@@ -101,6 +101,19 @@
   background: #eff6ff;
 }
 
+/* Informational note box (amber), matching the user-form notice panel
+   (.description_container / .code_description). */
+.note {
+  border: 1.17px solid #fee685;
+  border-radius: 8px;
+  background: #fffbeb;
+  padding: 14px 16px;
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #973c00;
+}
+
 .dayChipActive {
   background: #2563eb;
   color: #fff;

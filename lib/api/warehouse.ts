@@ -16,8 +16,10 @@ import type {
   StockAdjustRequest,
   StockTransferRequest,
   StockInRequest,
+  StockMinResult,
   StockMutationResult,
   StockOutRequest,
+  StockSetMinRequest,
   StockQuery,
   StockResponse,
   Unit,
@@ -235,6 +237,14 @@ export const stockAdjust = async (data: StockAdjustRequest) => {
 export const stockTransfer = async (data: StockTransferRequest) => {
   const res = await nextServer.post<{ data: StockMutationResult }>(
     '/warehouse/movements/transfer',
+    data
+  );
+  return res.data.data;
+};
+
+export const stockSetMin = async (data: StockSetMinRequest) => {
+  const res = await nextServer.patch<{ data: StockMinResult }>(
+    '/warehouse/stock/min',
     data
   );
   return res.data.data;

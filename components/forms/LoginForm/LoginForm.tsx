@@ -91,10 +91,10 @@ const LoginForm = () => {
       <div className={css.img_contaainer}>
         <Image
           className={css.img}
-          src="/images/syllert-login.png"
+          src="/images/logo_tansparent_icon.svg"
           alt="Syllert image"
-          width={720}
-          height={720}
+          width={680}
+          height={680}
         />
       </div>
       <div className={css.login_container}>

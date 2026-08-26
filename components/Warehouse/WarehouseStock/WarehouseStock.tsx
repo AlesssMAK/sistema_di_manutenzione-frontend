@@ -1,21 +1,26 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
+import toast from 'react-hot-toast';
 import { useDebounce } from 'use-debounce';
 import {
   getAllCategories,
-  getAllWarehouses,
   getMovements,
   getStock,
+  stockSetMin,
 } from '@/lib/api/warehouse';
 import type {
   Category,
   ItemRef,
   StockLevel,
   StockMovement,
-  Warehouse,
 } from '@/types/warehouseType';
 import Button from '@/components/UI/Button/Button';
 import Loader from '@/components/UI/Loader/Loader';
@@ -23,7 +28,7 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
-import { useAllowedWarehouses } from '@/lib/hooks/useAllowedWarehouses';
+import { useWarehouseContext } from '@/lib/hooks/useWarehouseContext';
 import StockOpModal, { type StockOp } from './StockOpModal';
 import css from './Stock.module.css';
 
@@ -36,6 +41,8 @@ const unitCode = (item: StockLevel['itemId']): string => {
 };
 const itemName = (item: StockLevel['itemId']): string =>
   typeof item === 'string' ? item : (item as ItemRef).name;
+const itemIdOf = (item: StockLevel['itemId']): string =>
+  typeof item === 'string' ? item : (item as ItemRef)._id;
 
 // For package-tracked items, how many whole-ish packages the on-hand
 // represents (informational only). Rounded to one decimal.
@@ -69,22 +76,24 @@ const WarehouseStock = () => {
   const [op, setOp] = useState<StockOp | null>(null);
   const [showHistory, setShowHistory] = useState(false);
 
-  const { data: whData } = useQuery({
-    queryKey: ['warehouse', 'warehouses', 'active-pool'],
-    queryFn: () => getAllWarehouses({ status: 'active', perPage: 200 }),
-  });
-  const warehouses: Warehouse[] = useMemo(
-    () => whData?.warehouses ?? [],
-    [whData]
-  );
-  // Only the warehouses this user may operate on (admins/unrestricted
-  // see all).
-  const visibleWarehouses = useAllowedWarehouses(warehouses);
+  // Keeper (management) context: all active warehouses narrowed by the
+  // user's access. When it resolves to one, the picker is hidden and it
+  // is selected implicitly.
+  const {
+    candidates: visibleWarehouses,
+    single,
+    showPicker,
+  } = useWarehouseContext('management');
   const whByLabel = useMemo(() => {
-    const map = new Map<string, Warehouse>();
+    const map = new Map<string, (typeof visibleWarehouses)[number]>();
     visibleWarehouses.forEach((w) => map.set(w.name, w));
     return map;
   }, [visibleWarehouses]);
+
+  // The warehouse the table operates on: the explicit pick when the
+  // picker is shown, otherwise the sole warehouse (single-warehouse
+  // case). Derived at render so no effect is needed to auto-select it.
+  const activeWarehouseId = warehouseId || single?._id || '';
 
   const { data: catData } = useQuery({
     queryKey: ['warehouse', 'categories', 'active-pool'],
@@ -110,7 +119,7 @@ const WarehouseStock = () => {
     queryKey: [
       'warehouse',
       'stock',
-      warehouseId,
+      activeWarehouseId,
       debouncedSearch || undefined,
       categoryId,
       lowOnly,
@@ -118,26 +127,53 @@ const WarehouseStock = () => {
     ],
     queryFn: () =>
       getStock({
-        warehouseId,
+        warehouseId: activeWarehouseId,
         search: debouncedSearch,
         ...(categoryId ? { categoryId } : {}),
         lowOnly,
         page,
         perPage: PER_PAGE,
       }),
-    enabled: Boolean(warehouseId),
+    enabled: Boolean(activeWarehouseId),
     placeholderData: keepPreviousData,
   });
 
   const { data: movData } = useQuery({
-    queryKey: ['warehouse', 'movements', warehouseId],
-    queryFn: () => getMovements({ warehouseId, perPage: 20 }),
-    enabled: Boolean(warehouseId) && showHistory,
+    queryKey: ['warehouse', 'movements', activeWarehouseId],
+    queryFn: () => getMovements({ warehouseId: activeWarehouseId, perPage: 20 }),
+    enabled: Boolean(activeWarehouseId) && showHistory,
   });
 
   const levels = stockData?.levels ?? [];
   const totalPages = stockData?.pagination.totalPages ?? 0;
   const movements: StockMovement[] = movData?.movements ?? [];
+
+  // Inline reorder-point editor: click the MIN cell to edit, commit on
+  // blur/Enter. The server writes to this (item x warehouse) stock line.
+  const queryClient = useQueryClient();
+  const [editMinId, setEditMinId] = useState<string | null>(null);
+  const [editMinValue, setEditMinValue] = useState('');
+  const setMin = useMutation({
+    mutationFn: (vars: { itemId: string; minLevel: number }) =>
+      stockSetMin({
+        itemId: vars.itemId,
+        warehouseId: activeWarehouseId,
+        minLevel: vars.minLevel,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['warehouse', 'stock'] });
+      setEditMinId(null);
+    },
+    onError: () => toast.error(t('minError')),
+  });
+  const commitMin = (itemId: string) => {
+    const n = Number(editMinValue);
+    if (!Number.isFinite(n) || n < 0) {
+      setEditMinId(null);
+      return;
+    }
+    setMin.mutate({ itemId, minLevel: n });
+  };
 
   const filters: FiltersItem[] = [
     {
@@ -192,28 +228,30 @@ const WarehouseStock = () => {
   return (
     <div>
       <div className={css.toolbar}>
-        <div className={css.filter}>
-          <label className={css.filterLabel}>{t('warehouseLabel')}</label>
-          <SelectDropdown
-            options={visibleWarehouses.map((w) => w.name)}
-            selectedValue={warehouseText}
-            placeholder={t('selectWarehouse')}
-            onSelect={(label) => {
-              const w = whByLabel.get(label);
-              if (w) {
-                setWarehouseId(w._id);
-                setWarehouseText(label);
-                setPage(1);
-              }
-            }}
-          />
-        </div>
+        {showPicker && (
+          <div className={css.filter}>
+            <label className={css.filterLabel}>{t('warehouseLabel')}</label>
+            <SelectDropdown
+              options={visibleWarehouses.map((w) => w.name)}
+              selectedValue={warehouseText}
+              placeholder={t('selectWarehouse')}
+              onSelect={(label) => {
+                const w = whByLabel.get(label);
+                if (w) {
+                  setWarehouseId(w._id);
+                  setWarehouseText(label);
+                  setPage(1);
+                }
+              }}
+            />
+          </div>
+        )}
         <div className={css.spacer} />
         <div className={css.actions}>
           <Button
             type="button"
             className={`${css.actionBtn} button button--blue`}
-            disabled={!warehouseId}
+            disabled={!activeWarehouseId}
             onClick={() => setOp('in')}
           >
             {t('actions.in')}
@@ -221,7 +259,7 @@ const WarehouseStock = () => {
           <Button
             type="button"
             className={`${css.actionBtn} button button--white`}
-            disabled={!warehouseId}
+            disabled={!activeWarehouseId}
             onClick={() => setOp('out')}
           >
             {t('actions.out')}
@@ -229,29 +267,31 @@ const WarehouseStock = () => {
           <Button
             type="button"
             className={`${css.actionBtn} button button--white`}
-            disabled={!warehouseId}
+            disabled={!activeWarehouseId}
             onClick={() => setOp('adjust')}
           >
             {t('actions.adjust')}
           </Button>
-          <Button
-            type="button"
-            className={`${css.actionBtn} button button--white`}
-            disabled={!warehouseId}
-            onClick={() => setOp('transfer')}
-          >
-            {t('actions.transfer')}
-          </Button>
+          {showPicker && (
+            <Button
+              type="button"
+              className={`${css.actionBtn} button button--white`}
+              disabled={!activeWarehouseId}
+              onClick={() => setOp('transfer')}
+            >
+              {t('actions.transfer')}
+            </Button>
+          )}
         </div>
       </div>
 
-      {warehouseId && (
+      {activeWarehouseId && (
         <div className={css.filtersGap}>
           <Filters items={filters} onClear={onClearFilters} />
         </div>
       )}
 
-      {!warehouseId ? (
+      {!activeWarehouseId ? (
         <NoFound title={t('pickWarehouseTitle')} message={t('pickWarehouseHint')} hideIcon />
       ) : isLoading ? (
         <div className={css.loaderWrap}>
@@ -291,7 +331,36 @@ const WarehouseStock = () => {
                         </span>
                       )}
                     </td>
-                    <td>{lvl.minLevel}</td>
+                    <td className={css.minCell}>
+                      {editMinId === lvl._id ? (
+                        <input
+                          className={css.minInput}
+                          type="number"
+                          min={0}
+                          autoFocus
+                          value={editMinValue}
+                          onChange={(e) => setEditMinValue(e.target.value)}
+                          onBlur={() => commitMin(itemIdOf(lvl.itemId))}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter')
+                              commitMin(itemIdOf(lvl.itemId));
+                            if (e.key === 'Escape') setEditMinId(null);
+                          }}
+                        />
+                      ) : (
+                        <button
+                          type="button"
+                          className={css.minValue}
+                          onClick={() => {
+                            setEditMinId(lvl._id);
+                            setEditMinValue(String(lvl.minLevel));
+                          }}
+                          title={t('setMinTitle')}
+                        >
+                          {lvl.minLevel}
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 );
               })}
@@ -306,7 +375,7 @@ const WarehouseStock = () => {
         </div>
       )}
 
-      {warehouseId && (
+      {activeWarehouseId && (
         <>
           <div className={css.historyHeader}>
             <span className={css.historyTitle}>{t('history.title')}</span>
@@ -357,7 +426,7 @@ const WarehouseStock = () => {
       {op && (
         <StockOpModal
           op={op}
-          warehouseId={warehouseId}
+          warehouseId={activeWarehouseId}
           onClose={() => setOp(null)}
           onDone={() => setOp(null)}
         />

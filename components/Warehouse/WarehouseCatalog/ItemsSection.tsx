@@ -16,9 +16,11 @@ import {
   getAllCategories,
   getAllItems,
   getAllUnits,
+  getStock,
   updateItem,
 } from '@/lib/api/warehouse';
 import type { Category, InventoryItem, Unit } from '@/types/warehouseType';
+import { useWarehouseContext } from '@/lib/hooks/useWarehouseContext';
 import Button from '@/components/UI/Button/Button';
 import Modal from '@/components/UI/Modal/Modal';
 import Loader from '@/components/UI/Loader/Loader';
@@ -181,8 +183,11 @@ const ItemsSection = forwardRef<ItemsSectionHandle, ItemsSectionProps>(
   };
   const labelsEnabled = labelFormats.qr || labelFormats.barcode;
 
-  const invalidate = () =>
+  const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: ['warehouse', 'items'] });
+    // A minimum set from the form lands on a stock line — refresh Giacenze.
+    queryClient.invalidateQueries({ queryKey: ['warehouse', 'stock'] });
+  };
 
   const close = () => setIsOpen(false);
 
@@ -364,7 +369,28 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
   const [unitsPerPackage, setUnitsPerPackage] = useState(
     item?.unitsPerPackage != null ? String(item.unitsPerPackage) : ''
   );
+  const [minLevel, setMinLevel] = useState('');
   const [active, setActive] = useState(item ? item.status === 'active' : true);
+
+  // The reorder point lives on the (item x warehouse) stock line, so it's
+  // only offered here when the warehouse is unambiguous (single). In
+  // multi-warehouse mode it's edited per row in Giacenze instead.
+  const { single, showPicker } = useWarehouseContext('management');
+  const showMin = !showPicker && Boolean(single);
+
+  // On edit, prefill the current minimum from the effective warehouse's
+  // stock line.
+  const { data: minData } = useQuery({
+    queryKey: ['warehouse', 'stock', 'item-min', item?._id, single?._id],
+    queryFn: () => getStock({ itemId: item!._id, warehouseId: single!._id }),
+    enabled: Boolean(item && single && showMin),
+  });
+  const [minSeeded, setMinSeeded] = useState(false);
+  if (minData && !minSeeded) {
+    setMinSeeded(true);
+    const lvl = minData.levels[0];
+    if (lvl) setMinLevel(String(lvl.minLevel));
+  }
 
   // Active units only — the pool for the picker.
   const { data: unitsData } = useQuery({
@@ -398,6 +424,10 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
       const perPackage = unitsPerPackage.trim()
         ? Number(unitsPerPackage)
         : undefined;
+      // Only carry the minimum when the field is shown (single warehouse)
+      // and filled; otherwise leave the stock line untouched.
+      const min =
+        showMin && minLevel.trim() !== '' ? Number(minLevel) : undefined;
       if (isEdit && item) {
         return updateItem({
           itemId: item._id,
@@ -410,6 +440,7 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
             // null clears a previously set package on the item.
             packageLabel: packageLabel.trim() || null,
             unitsPerPackage: perPackage ?? null,
+            minLevel: min,
             note: note.trim(),
             status: active ? 'active' : 'deactivated',
           },
@@ -422,6 +453,7 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
         unitId,
         packageLabel: packageLabel.trim() || undefined,
         unitsPerPackage: perPackage,
+        minLevel: min,
         note: note.trim() || undefined,
       });
     },
@@ -527,6 +559,20 @@ const ItemFormModal = ({ item, onClose, onSaved }: ItemFormModalProps) => {
               onChange={e => setUnitsPerPackage(e.target.value)}
             />
           </div>
+          {showMin && (
+            <div className={css.field}>
+              <label className={css.label}>{t('fields.minLevel')}</label>
+              <input
+                className={css.input}
+                type="number"
+                min={0}
+                step="any"
+                value={minLevel}
+                onChange={e => setMinLevel(e.target.value)}
+              />
+              <span className={css.hint}>{t('fields.minLevelHint')}</span>
+            </div>
+          )}
           <div className={css.field}>
             <label className={css.label}>{t('fields.category')}</label>
             <SelectDropdown
