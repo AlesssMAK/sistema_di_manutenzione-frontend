@@ -1,18 +1,3 @@
-.section {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Matches the `.infoItem label` used across the fault detail pages. */
-.label {
-  display: block;
-  font-size: 12px;
-  color: #717182;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  letter-spacing: 0.5px;
-}
-
 .list {
   display: flex;
   flex-direction: column;
@@ -54,4 +39,30 @@
   font-size: 14px;
   font-weight: 600;
   color: #1e40af;
+}
+
+/* Free-text material note at the bottom of the panel. */
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 4px 2px;
+}
+.commentDivided {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+.commentLabel {
+  font-size: 12px;
+  color: #717182;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.commentText {
+  margin: 0;
+  font-size: 14px;
+  color: #11101c;
+  white-space: pre-wrap;
+  word-break: break-word;
 }

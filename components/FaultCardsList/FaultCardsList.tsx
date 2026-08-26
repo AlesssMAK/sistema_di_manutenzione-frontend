@@ -232,6 +232,17 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                       <p className={css.value}>
                         {formatDay(fault.deadline, locale)}
                       </p>
+                      {fault.statusFault === 'Completed' &&
+                        fault.completedAt && (
+                          <>
+                            <span className={css.label}>
+                              {t('labels.completedAt')}
+                            </span>
+                            <p className={css.value}>
+                              {formatDay(fault.completedAt, locale)}
+                            </p>
+                          </>
+                        )}
                     </div>
 
                     {/* Colonna destra */}

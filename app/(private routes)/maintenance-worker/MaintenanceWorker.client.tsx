@@ -164,9 +164,14 @@ const MaintenanceWorkerClient = () => {
           ...baseParams,
           page: pageNum,
           perPage: PER_PAGE,
-          // My assigned interventions are listed oldest-first (creation
-          // order); pool/all keep the default newest-first ordering.
-          ...(currentScope === 'mine' ? { sort: 'asc' as const } : {}),
+          // Completed history is ordered by closing time, most recent
+          // first. Otherwise: my assigned interventions oldest-first
+          // (creation order); pool/all keep the default newest-first.
+          ...(currentMode === 'completed'
+            ? { sortBy: 'completedAt' as const, sortOrder: 'desc' as const }
+            : currentScope === 'mine'
+              ? { sort: 'asc' as const }
+              : {}),
           ...scopeParams,
         });
 
@@ -305,6 +310,9 @@ const MaintenanceWorkerClient = () => {
     setViewMode(newMode);
     setSelectedDate('');
     setPage(1);
+    // 'Libere' (pool) is meaningless in the completed history — completed
+    // faults are always assigned. Drop back to 'Mie' when entering it.
+    if (newMode === 'completed' && scope === 'pool') setScope('mine');
     // Viewing a tab clears its unseen badge.
     markSeen(newMode);
 
@@ -488,6 +496,7 @@ const MaintenanceWorkerClient = () => {
                 activeScope={scope}
                 onScopeChange={handleScopeChange}
                 counts={scopeCounts}
+                scopes={isCompletedMode ? ['mine', 'all'] : undefined}
               />
             </div>
 

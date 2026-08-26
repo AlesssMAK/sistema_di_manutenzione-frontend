@@ -18,6 +18,9 @@ interface FetchParams {
   createdById?: string;
   /** Direction of the createdAt sort. 'asc' = oldest first. */
   sort?: 'asc' | 'desc';
+  /** Sort by a specific field (e.g. 'completedAt' for the closed history). */
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
 }
 export interface FetchFaultCardsParams {
   fault: FaultCard[];
@@ -91,6 +94,8 @@ export const fetchFaultCards = async ({
   assignedToEmpty,
   createdById,
   sort,
+  sortBy,
+  sortOrder,
 }: FetchParams): Promise<FetchFaultCardsParams> => {
   const res = await nextServer.get('/faults', {
     params: {
@@ -108,6 +113,8 @@ export const fetchFaultCards = async ({
       ...(assignedToEmpty ? { assignedToEmpty: 'true' } : {}),
       ...(createdById ? { createdById } : {}),
       ...(sort ? { sort } : {}),
+      ...(sortBy ? { sortBy } : {}),
+      ...(sortOrder ? { sortOrder } : {}),
     },
   });
 
