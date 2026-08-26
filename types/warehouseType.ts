@@ -168,6 +168,8 @@ export interface CreateItemRequest {
   unitId: string;
   packageLabel?: string;
   unitsPerPackage?: number;
+  /** Reorder point, applied to the effective warehouse (single-warehouse case). */
+  minLevel?: number;
   note?: string;
 }
 
@@ -178,6 +180,8 @@ export interface UpdateItem {
   unitId?: string;
   packageLabel?: string | null;
   unitsPerPackage?: number | null;
+  /** Reorder point for the effective warehouse (single-warehouse case). */
+  minLevel?: number | null;
   note?: string;
   status?: STATUS;
 }
@@ -280,23 +284,38 @@ export interface MovementLine {
 }
 
 export interface StockInRequest {
-  warehouseId: string;
+  /** Optional: omitted when the context has a single candidate warehouse. */
+  warehouseId?: string;
   lines: MovementLine[];
   note?: string;
 }
 
 export interface StockOutRequest {
-  warehouseId: string;
+  warehouseId?: string;
   lines: MovementLine[];
   reference?: MovementReference;
   note?: string;
 }
 
 export interface StockAdjustRequest {
-  warehouseId: string;
+  warehouseId?: string;
   itemId: string;
   quantity: number;
   note?: string;
+}
+
+export interface StockSetMinRequest {
+  itemId: string;
+  warehouseId?: string;
+  minLevel: number;
+}
+
+export interface StockMinResult {
+  itemId: string;
+  warehouseId: string;
+  minLevel: number;
+  quantity: number;
+  low: boolean;
 }
 
 export interface StockTransferRequest {

@@ -284,3 +284,28 @@
   background: #e0e7ff;
   color: #3730a3;
 }
+
+/* Inline reorder-point (MIN) editor. */
+.minCell {
+  white-space: nowrap;
+}
+.minValue {
+  background: none;
+  border: 1px dashed transparent;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.minValue:hover {
+  border-color: #cbd5e1;
+  color: #1e40af;
+}
+.minInput {
+  width: 72px;
+  padding: 4px 8px;
+  border: 1px solid #2563eb;
+  border-radius: 6px;
+  font: inherit;
+}

@@ -46,9 +46,20 @@ export interface WarehouseLabelSettings {
   barcode: boolean;
 }
 
+export interface FaultWarehousesForRole {
+  role: string;
+  warehouseIds: string[];
+}
+
 export interface WarehouseSettings {
   /** Global on/off for the whole inventory module. */
   enabled: boolean;
+  /** Multi-warehouse mode. Off = single warehouse, pickers hidden. */
+  multiWarehouse?: boolean;
+  /** Effective warehouse used when a context has no explicit choice. */
+  defaultWarehouseId?: string | null;
+  /** Per-role warehouses usable when working on a fault (maintenance context). */
+  faultWarehousesByRole?: FaultWarehousesForRole[];
   lowStock?: WarehouseLowStockSettings;
   labels?: WarehouseLabelSettings;
 }
