@@ -14,6 +14,7 @@ import WarehouseCategoriesManager from '@/components/Admin/WarehouseCategoriesMa
 import WarehouseAccessManager from '@/components/Admin/WarehouseAccessManager/WarehouseAccessManager';
 import WarehouseWarehousesManager from '@/components/Admin/WarehouseWarehousesManager/WarehouseWarehousesManager';
 import WarehousesMultiSelect from '@/components/Admin/WarehousesMultiSelect/WarehousesMultiSelect';
+import WorkScheduleOverridesEditor from '@/components/Admin/WorkScheduleOverrides/WorkScheduleOverridesEditor';
 import Button from '@/components/UI/Button/Button';
 import DatePickerInput from '@/components/UI/DatePickerInput/DatePickerInput';
 import Input from '@/components/UI/Input/Input';
@@ -35,6 +36,7 @@ import {
   type WarehouseSettings,
   type WeekDayKey,
   type WeekSchedule,
+  type WorkScheduleOverrides,
 } from '@/lib/api/systemSettings';
 import {
   getAllWarehouses,
@@ -74,6 +76,8 @@ const AdminSystemSettingsClientPage = () => {
 
   const [timezone, setTimezone] = useState('');
   const [weekSchedule, setWeekSchedule] = useState<WeekSchedule | null>(null);
+  const [workScheduleOverrides, setWorkScheduleOverrides] =
+    useState<WorkScheduleOverrides>({ roles: [], users: [] });
   const [slotDuration, setSlotDuration] = useState(30);
   const [holidays, setHolidays] = useState<string[]>([]);
   const [newHoliday, setNewHoliday] = useState('');
@@ -126,6 +130,9 @@ const AdminSystemSettingsClientPage = () => {
     setSeededData(data);
     setTimezone(data.timezone);
     setWeekSchedule(data.weekSchedule);
+    setWorkScheduleOverrides(
+      data.workScheduleOverrides ?? { roles: [], users: [] }
+    );
     setSlotDuration(data.slotDurationMinutes);
     setHolidays((data.holidays ?? []).map(h => String(h).slice(0, 10)));
     setRetention(data.retention);
@@ -232,6 +239,7 @@ const AdminSystemSettingsClientPage = () => {
     mutation.mutate({
       timezone,
       ...(weekSchedule ? { weekSchedule } : {}),
+      workScheduleOverrides,
       slotDurationMinutes: slotDuration,
       holidays,
       retention,
@@ -329,6 +337,26 @@ const AdminSystemSettingsClientPage = () => {
               maxWidth: '160px',
             }}
           />
+        </div>
+
+        <div className={css.field}>
+          <label className={css.fieldLabel}>
+            {t('schedule.overridesTitle')}
+          </label>
+          <p style={{ fontSize: '13px', color: '#64748b', margin: '4px 0 10px' }}>
+            {t('schedule.overridesHint')}
+          </p>
+          {weekSchedule && (
+            <WorkScheduleOverridesEditor
+              value={workScheduleOverrides}
+              onChange={setWorkScheduleOverrides}
+              roleOptions={grantRoleOptions}
+              factoryWorkHours={
+                data?.workHours ?? { start: '08:00', end: '17:00' }
+              }
+              factoryWeekSchedule={weekSchedule}
+            />
+          )}
         </div>
       </div>
 

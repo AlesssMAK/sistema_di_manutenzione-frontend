@@ -31,6 +31,8 @@ import type {
   TypeFault,
 } from '@/types/faultType';
 import { roundToStep } from '@/lib/utils/faultTime';
+import { fetchSystemSettings } from '@/lib/api/systemSettings';
+import { resolveWorkWindow } from '@/lib/utils/workSchedule';
 import DurationPicker from '@/components/UI/DurationPicker/DurationPicker';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './PlanFaultForm.module.css';
@@ -120,6 +122,22 @@ const PlanFaultForm = ({
     queryKey: ['users', 'maintenanceWorkers'],
     queryFn: getMaintenanceWorkers,
   });
+
+  const { data: settings } = useQuery({
+    queryKey: ['systemSettings'],
+    queryFn: fetchSystemSettings,
+    staleTime: 60 * 60 * 1000,
+  });
+  // Planned-time slots follow the assigned technician's working window:
+  // their own hours when exactly one is picked, otherwise the
+  // maintenanceWorker role's hours, falling back to the factory schedule.
+  const plannedWindow = resolveWorkWindow(
+    settings,
+    selectedMaintainers.length === 1
+      ? { userId: selectedMaintainers[0], role: 'maintenanceWorker' }
+      : { role: 'maintenanceWorker' },
+    watch('plannedDate') || undefined
+  );
 
   useEffect(() => {
     setValue('assignedMaintainers', selectedMaintainers);
@@ -298,6 +316,9 @@ const PlanFaultForm = ({
                   setValue('plannedTime', v, { shouldValidate: true })
                 }
                 placeholder={t('timePlaceholder')}
+                stepMinutes={settings?.slotDurationMinutes ?? 30}
+                minTime={plannedWindow.start}
+                maxTime={plannedWindow.end}
               />
               {errors.plannedTime && (
                 <p className={css.error}>{errors.plannedTime.message}</p>
