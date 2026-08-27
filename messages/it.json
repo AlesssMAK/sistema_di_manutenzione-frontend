@@ -346,7 +346,15 @@
           "off": "Chiuso",
           "full": "24h",
           "hours": "Orario"
-        }
+        },
+        "perDay": "Per giorno",
+        "overridesTitle": "Orari per ruolo / utente",
+        "overridesHint": "Sovrascrivi gli orari per un ruolo o un utente (es. il manutentore inizia alle 08:30). Vuoto = orario di fabbrica.",
+        "overridesRoles": "Per ruolo",
+        "overridesUsers": "Per utente",
+        "addRole": "Aggiungi un ruolo…",
+        "addUser": "Aggiungi un utente…",
+        "removeOverride": "Rimuovi"
       },
       "weekDays": {
         "mon": "Lun",
@@ -750,7 +758,7 @@
     "title": "Dettaglio Segnalazione",
     "backButton": "Torna Indietro",
     "labels": {
-      "operator": "Operatore",
+      "operator": "Segnalato da",
       "status": "Stato",
       "dateCreated": "Data Creazione",
       "lastUpdated": "Ultimo Aggiornamento",
@@ -813,7 +821,7 @@
   },
   "FaultCard": {
     "labels": {
-      "operator": "Operatore",
+      "operator": "Segnalato da",
       "dateCreated": "Data Creazione",
       "plant": "Impianto",
       "plantPart": "Parte",
@@ -1100,7 +1108,7 @@
     "newReport": "Nuova Segnalazione",
     "fillForm": "Compila il modulo per segnalare un guasto o anomalia",
     "reportId": "ID Segnalazione",
-    "operator": "Operatore",
+    "operator": "Segnalato da",
     "date": "Data",
     "time": "Ora",
     "plantMachine": "Impianto / Macchina *",

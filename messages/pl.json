@@ -346,7 +346,15 @@
           "off": "Zamknięte",
           "full": "24h",
           "hours": "Godziny"
-        }
+        },
+        "perDay": "Na dzień",
+        "overridesTitle": "Godziny wg roli / użytkownika",
+        "overridesHint": "Nadpisz godziny pracy dla roli lub użytkownika (np. technik zaczyna o 08:30). Puste = godziny fabryki.",
+        "overridesRoles": "Wg roli",
+        "overridesUsers": "Wg użytkownika",
+        "addRole": "Dodaj rolę…",
+        "addUser": "Dodaj użytkownika…",
+        "removeOverride": "Usuń"
       },
       "weekDays": {
         "mon": "Pon",
@@ -750,7 +758,7 @@
     "title": "Szczegóły Zgłoszenia",
     "backButton": "Powrót",
     "labels": {
-      "operator": "Operator",
+      "operator": "Zgłoszone przez",
       "status": "Status",
       "dateCreated": "Data Utworzenia",
       "lastUpdated": "Ostatnia Aktualizacja",
@@ -813,7 +821,7 @@
   },
   "FaultCard": {
     "labels": {
-      "operator": "Operator",
+      "operator": "Zgłoszone przez",
       "dateCreated": "Data Utworzenia",
       "plant": "Zakład",
       "plantPart": "Część",
@@ -1100,7 +1108,7 @@
     "newReport": "Nowy Raport",
     "fillForm": "Wypełnij formularz, aby zgłosić usterkę lub anomalię",
     "reportId": "ID raportu",
-    "operator": "Operator",
+    "operator": "Zgłoszone przez",
     "date": "Data",
     "time": "Godzina",
     "plantMachine": "Zakład / Maszyna *",

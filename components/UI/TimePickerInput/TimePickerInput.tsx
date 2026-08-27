@@ -16,7 +16,18 @@ interface TimePickerInputProps {
   minHour?: number;
   /** Exclusive last-hour boundary (1-24). Default 24. */
   maxHour?: number;
+  /** Minute-precise range bounds ('HH:mm'); when set they win over
+   *  minHour/maxHour, so a window can start at e.g. 08:30. */
+  minTime?: string;
+  maxTime?: string;
 }
+
+const toMinutes = (hhmm: string | undefined): number | null => {
+  if (!hhmm) return null;
+  const [h, m] = hhmm.split(':').map(Number);
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return null;
+  return h * 60 + m;
+};
 
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -35,18 +46,22 @@ const TimePickerInput = ({
   stepMinutes = 30,
   minHour = 0,
   maxHour = 24,
+  minTime,
+  maxTime,
 }: TimePickerInputProps) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const selectedRef = useRef<HTMLButtonElement>(null);
 
   const slots = useMemo(() => {
+    const startMin = toMinutes(minTime) ?? minHour * 60;
+    const endMin = toMinutes(maxTime) ?? maxHour * 60;
     const out: string[] = [];
-    for (let m = minHour * 60; m < maxHour * 60; m += stepMinutes) {
+    for (let m = startMin; m < endMin; m += stepMinutes) {
       out.push(`${pad(Math.floor(m / 60))}:${pad(m % 60)}`);
     }
     return out;
-  }, [stepMinutes, minHour, maxHour]);
+  }, [stepMinutes, minHour, maxHour, minTime, maxTime]);
 
   useEffect(() => {
     const onClickOutside = (e: MouseEvent) => {

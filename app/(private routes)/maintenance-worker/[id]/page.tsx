@@ -233,9 +233,18 @@ export default function FaultDetailPage({
   // worker reads the same signal in list and detail. "other" gets no
   // badge — there's no useful action to surface in that case.
   const myId = user?._id ? String(user._id) : '';
-  const assignedToMe =
-    myId !== '' && (fault.assignedMaintainers ?? []).map(String).includes(myId);
+  // assignedMaintainers arrives populated ({ _id, fullName, email }) from
+  // getFaultById, so normalize to the id (a bare String() cast on the
+  // object would yield "[object Object]" and never match).
+  const assignedIds = (fault.assignedMaintainers ?? []).map(m =>
+    typeof m === 'string' ? m : m._id
+  );
+  const assignedToMe = myId !== '' && assignedIds.includes(myId);
   const isPool = (fault.assignedMaintainers?.length ?? 0) === 0;
+  // Finalizza/Sospendi/Riprendi are only for the worker's own fault —
+  // never one assigned to other colleagues (the backend enforces the
+  // same: it 403s a status change from a non-assignee). Admins bypass.
+  const canAct = assignedToMe || user?.role === 'admin';
 
   return (
     <div className="container">
@@ -478,7 +487,7 @@ export default function FaultDetailPage({
           )}
           {/* One dedicated button per allowed transition. Completed and
               Created expose none (terminal / needs claim first). */}
-          {(canFinalize || canSuspend || canResume) && (
+          {canAct && (canFinalize || canSuspend || canResume) && (
             <div className={css.actions}>
               {canFinalize && (
                 <Button

@@ -53,8 +53,7 @@ const MaintenanceUpdateModal = ({
 }: MaintenanceUpdateModalProps) => {
   const t = useTranslations('MaintenanceUpdateModal');
   const queryClient = useQueryClient();
-  const { canOperate: canOperateWarehouse, moduleEnabled } =
-    useWarehouseAccess();
+  const { moduleEnabled } = useWarehouseAccess();
   // Structured materials to issue from stock on completion (optional).
   const [materials, setMaterials] = useState<MaterialsPayload | null>(null);
   const isLocked = Boolean(lockedStatus);
@@ -268,14 +267,12 @@ const MaintenanceUpdateModal = ({
             </div>
           )}
 
-          {selectedStatus === 'Completed' &&
-            moduleEnabled &&
-            canOperateWarehouse && (
-              <div className={css.field}>
-                <p className={css.label}>{t('labels.stockMaterials')}</p>
-                <FaultMaterialsPicker onChange={setMaterials} />
-              </div>
-            )}
+          {selectedStatus === 'Completed' && moduleEnabled && (
+            <div className={css.field}>
+              <p className={css.label}>{t('labels.stockMaterials')}</p>
+              <FaultMaterialsPicker onChange={setMaterials} />
+            </div>
+          )}
 
           {/* Free-text note sits below the stock materials picker. */}
           {selectedStatus === 'Completed' && (
@@ -304,7 +301,7 @@ const MaintenanceUpdateModal = ({
                   <p className={css.error}>{errors.suspensionReason.message}</p>
                 )}
               </div>
-              {moduleEnabled && canOperateWarehouse && (
+              {moduleEnabled && (
                 <div className={css.field}>
                   <p className={css.label}>{t('labels.stockMaterials')}</p>
                   <FaultMaterialsPicker onChange={setMaterials} />

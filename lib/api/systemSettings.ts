@@ -22,6 +22,25 @@ export type WeekDayKey =
 
 export type WeekSchedule = Record<WeekDayKey, DaySchedule>;
 
+/** A work-hour override for a role or a user. `perDay` false → the
+ *  single workHours range on every day; true → the per-day weekSchedule.
+ *  Both are optional so an entry only carries what it uses. */
+export interface WorkScheduleOverrideBase {
+  perDay?: boolean;
+  workHours?: WorkHours;
+  weekSchedule?: WeekSchedule;
+}
+export interface RoleWorkSchedule extends WorkScheduleOverrideBase {
+  role: string;
+}
+export interface UserWorkSchedule extends WorkScheduleOverrideBase {
+  userId: string;
+}
+export interface WorkScheduleOverrides {
+  roles: RoleWorkSchedule[];
+  users: UserWorkSchedule[];
+}
+
 export interface BachecaSettings {
   // When true the Segnalazioni tab shows all faults (paginated);
   // otherwise only those created within recentFaultsDays.
@@ -72,6 +91,7 @@ export interface PublicSystemSettings {
   weekSchedule: WeekSchedule;
   slotDurationMinutes: number;
   holidays: string[];
+  workScheduleOverrides?: WorkScheduleOverrides;
   bacheca?: BachecaSettings;
   maintenance?: MaintenanceSettings;
   warehouse?: WarehouseSettings;
@@ -119,6 +139,7 @@ export type UpdateSystemSettingsPayload = Partial<{
   weekSchedule: WeekSchedule;
   slotDurationMinutes: number;
   holidays: string[];
+  workScheduleOverrides: WorkScheduleOverrides;
   email: Partial<EmailSettings>;
   messaging: Partial<MessagingSettings>;
   retention: Partial<RetentionSettings>;

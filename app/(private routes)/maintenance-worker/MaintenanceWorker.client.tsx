@@ -26,6 +26,7 @@ import {
   type MaintenanceSeenTab,
 } from '@/lib/api/faults';
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
+import { hhmmToMinutes, resolveWorkWindow } from '@/lib/utils/workSchedule';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { FaultCard } from '@/types/faultType';
@@ -112,8 +113,19 @@ const MaintenanceWorkerClient = () => {
     const n = Number(h);
     return Number.isFinite(n) ? n : fallback;
   };
-  const startHour = parseHour(settings?.workHours?.start, 8);
-  const endHour = parseHour(settings?.workHours?.end, 17);
+  // The slot grid spans the worker's own working window (per-user →
+  // role → factory), floored/ceiled to whole hours for the hourly rows.
+  const workerWindow = resolveWorkWindow(
+    settings,
+    { userId, role: user?.role },
+    selectedDate || undefined
+  );
+  const startHour = Math.floor(
+    (hhmmToMinutes(workerWindow.start) ?? parseHour(settings?.workHours?.start, 8) * 60) / 60
+  );
+  const endHour = Math.ceil(
+    (hhmmToMinutes(workerWindow.end) ?? parseHour(settings?.workHours?.end, 17) * 60) / 60
+  );
 
   const isOverdueMode = viewMode === 'overdue';
   const isCompletedMode = viewMode === 'completed';

@@ -346,7 +346,15 @@
           "off": "Closed",
           "full": "24h",
           "hours": "Hours"
-        }
+        },
+        "perDay": "Per day",
+        "overridesTitle": "Hours by role / user",
+        "overridesHint": "Override working hours for a role or a user (e.g. the technician starts at 08:30). Empty = factory hours.",
+        "overridesRoles": "By role",
+        "overridesUsers": "By user",
+        "addRole": "Add a role…",
+        "addUser": "Add a user…",
+        "removeOverride": "Remove"
       },
       "weekDays": {
         "mon": "Mon",
@@ -750,7 +758,7 @@
     "title": "Report Details",
     "backButton": "Go Back",
     "labels": {
-      "operator": "Operator",
+      "operator": "Reported By",
       "status": "Status",
       "dateCreated": "Date Created",
       "lastUpdated": "Last Updated",
@@ -813,7 +821,7 @@
   },
   "FaultCard": {
     "labels": {
-      "operator": "Operator",
+      "operator": "Reported By",
       "dateCreated": "Date Created",
       "plant": "Plant",
       "plantPart": "Part",
@@ -1100,7 +1108,7 @@
     "newReport": "New Report",
     "fillForm": "Fill out the form to report a malfunction or anomaly",
     "reportId": "Report ID",
-    "operator": "Operator",
+    "operator": "Reported By",
     "date": "Date",
     "time": "Time",
     "plantMachine": "Plant / Machine *",
