@@ -51,6 +51,13 @@ export interface FaultCard {
   commentSafety?: string;
   actualDuration?: number;
   suspensionReason?: string;
+  /** Log of every pause the fault went through (date + reason). The
+   *  material note captured at the same time goes to `materialRequest`. */
+  suspensions?: {
+    suspendedAt: string;
+    reason?: string;
+    _id?: string;
+  }[];
   materialRequest?: string;
   completedAt?: string;
   claimedBy?: string;
@@ -64,6 +71,10 @@ export interface FaultCard {
     timestamp?: string;
   };
   updatedAt: string;
+  /** Set by the board endpoints (withUnseen=1): the viewer has not yet
+   *  seen this card (model A/B, resolved server-side). Drives the card's
+   *  "nuovo" dot. */
+  unseen?: boolean;
 }
 
 export interface FaultCardsQueryParams {

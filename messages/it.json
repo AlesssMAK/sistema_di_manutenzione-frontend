@@ -215,8 +215,7 @@
         "searchPlaceholder": "Cerca per nome...",
         "role": "Ruolo",
         "allRoles": "Tutti i Ruoli",
-        "from": "Dal",
-        "to": "Al",
+        "dateRange": "Periodo",
         "clear": "Pulisci",
         "datePlaceholder": "gg/mm/aaaa"
       },
@@ -523,8 +522,25 @@
     "headerSubtitle": "Visualizza e gestisci gli interventi pianificati",
     "tabs": {
       "active": "Attive",
+      "suspended": "Sospese",
       "overdue": "In Ritardo",
       "completed": "Completate"
+    },
+    "filters": {
+      "search": "Cerca",
+      "searchPlaceholder": "Codice, macchina o parte…",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleziona periodo",
+      "status": "Stato",
+      "allStatuses": "Tutti gli stati",
+      "sortLabel": "Ordina per",
+      "sort": {
+        "auto": "Predefinito",
+        "recent": "Più recenti",
+        "oldest": "Meno recenti",
+        "deadlineNear": "Scadenza vicina",
+        "deadlineFar": "Scadenza lontana"
+      }
     },
     "scope": {
       "mine": "Mie",
@@ -542,6 +558,7 @@
     },
     "empty": {
       "overdue": "Nessuna segnalazione in ritardo",
+      "suspended": "Nessuna segnalazione sospesa",
       "completedDate": "Nessuna segnalazione completata in questa data",
       "completed": "Nessuna segnalazione completata",
       "mineDate": "Nessuna segnalazione assegnata a te in questa data",
@@ -593,11 +610,13 @@
     "headerSubtitle": "Gestisci le segnalazioni ricevute, le attività in corso e l'archivio",
     "tabs": {
       "received": "Ricevute",
+      "suspended": "Sospese",
       "inProgress": "In Lavorazione",
       "archive": "Completate"
     },
     "empty": {
       "received": "Nessuna segnalazione in attesa",
+      "suspended": "Nessuna segnalazione sospesa",
       "inProgress": "Nessuna segnalazione in lavorazione",
       "archive": "Nessuna segnalazione archiviata"
     },
@@ -609,7 +628,16 @@
       "type": "Tipologia",
       "allTypes": "Tutte le tipologie",
       "plannedDate": "Data pianificata",
-      "datePlaceholder": "Seleziona data"
+      "datePlaceholder": "Seleziona data",
+      "status": "Stato",
+      "allStatuses": "Tutti gli stati",
+      "sortLabel": "Ordina per",
+      "sort": {
+        "recent": "Più recenti",
+        "oldest": "Meno recenti",
+        "deadlineNear": "Scadenza vicina",
+        "deadlineFar": "Scadenza lontana"
+      }
     }
   },
   "OperatorPage": {
@@ -749,6 +777,7 @@
     "headerSubtitle": "Visualizza in tempo reale le segnalazioni di sicurezza. Sola lettura.",
     "badge": "HSE",
     "statusFilter": "Stato",
+    "newBadge": "Nuove",
     "statusOptions": {
       "all": "Tutti gli Stati"
     },
@@ -838,7 +867,8 @@
       "claimedBy": "Preso in Carico",
       "planned": "Pianificato",
       "pool": "Pool",
-      "technician": "Manutentore"
+      "technician": "Manutentore",
+      "suspendedOn": "Sospeso il"
     },
     "maintainerCount": "{count, plural, one {# manutentore} other {# manutentori}}",
     "buttons": {
@@ -856,7 +886,10 @@
     },
     "badges": {
       "rescheduled": "Riprogrammata",
-      "originalLabel": "Originale:"
+      "originalLabel": "Originale:",
+      "takenOver": "Preso in carico",
+      "assigned": "Assegnato",
+      "unseen": "Nuova"
     },
     "empty": "Nessuna segnalazione"
   },
@@ -935,8 +968,16 @@
       "error": "Errore durante l'aggiornamento",
       "noTransitions": "Nessun aggiornamento possibile da stato \"{status}\".",
       "takeOverHint": " Usa \"Prendi in carico\" per iniziare.",
-      "materialsError": "Intervento aggiornato, ma lo scarico materiali non è riuscito."
+      "materialsError": "Intervento aggiornato, ma lo scarico materiali non è riuscito.",
+      "materialsOutOfStock": "Materiale esaurito: {items} (scorta a magazzino negativa)."
+    },
+    "errors": {
+      "durationBelowFloor": "Il tempo non può essere inferiore al tempo già lavorato ({min})."
     }
+  },
+  "FaultSuspensions": {
+    "title": "Sospensioni",
+    "one": "Sospensione"
   },
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Report",
@@ -1269,11 +1310,14 @@
         "out": "Scarico",
         "adjust": "Rettifica"
       },
+      "tabs": {
+        "stock": "Giacenza",
+        "movements": "Movimenti"
+      },
       "history": {
-        "title": "Movimenti",
-        "show": "Mostra",
-        "hide": "Nascondi",
         "empty": "Nessun movimento",
+        "dateRange": "Periodo",
+        "dateRangePlaceholder": "Seleziona periodo",
         "type": "Tipo",
         "item": "Articolo",
         "qty": "Quantità",

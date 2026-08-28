@@ -12,6 +12,8 @@ export async function GET(req: NextRequest) {
     const warehouseId = sp.get('warehouseId') ?? '';
     const faultId = sp.get('faultId') ?? '';
     const type = sp.get('type') ?? '';
+    const dateFrom = sp.get('dateFrom') ?? '';
+    const dateTo = sp.get('dateTo') ?? '';
     const page = Number(sp.get('page') ?? 1);
     const perPage = Number(sp.get('perPage') ?? 20);
 
@@ -21,6 +23,8 @@ export async function GET(req: NextRequest) {
         ...(warehouseId ? { warehouseId } : {}),
         ...(faultId ? { faultId } : {}),
         ...(type ? { type } : {}),
+        ...(dateFrom ? { dateFrom } : {}),
+        ...(dateTo ? { dateTo } : {}),
         page,
         perPage,
       },

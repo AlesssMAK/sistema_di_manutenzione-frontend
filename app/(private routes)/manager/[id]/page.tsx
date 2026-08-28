@@ -2,12 +2,14 @@
 
 import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
 import FaultMaterialsUsed from '@/components/Warehouse/FaultMaterialsUsed/FaultMaterialsUsed';
+import FaultSuspensions from '@/components/MaintenanceWorker/FaultSuspensions/FaultSuspensions';
+import PriorityBadge from '@/components/UI/PriorityBadge/PriorityBadge';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import Button from '@/components/UI/Button/Button';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
-import { fetchFaultById } from '@/lib/api/faults';
+import { fetchFaultById, markFaultSeen } from '@/lib/api/faults';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { useQuery } from '@tanstack/react-query';
 import { format, isValid, parseISO } from 'date-fns';
@@ -60,15 +62,6 @@ const statusClass = (
   return styles.statusCreated;
 };
 
-const priorityClass = (
-  priority: string | undefined,
-  styles: Record<string, string>
-) => {
-  if (priority === 'Low') return styles.priorityLow;
-  if (priority === 'Medium') return styles.priorityMedium;
-  if (priority === 'High') return styles.priorityHigh;
-  return '';
-};
 
 /** Urgency bucket for the deadline date — drives the color modifier. */
 const deadlineUrgencyClass = (
@@ -98,7 +91,6 @@ const ManagerFaultDetailPage = ({
   const tNoFound = useTranslations('NoFound');
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
-  const tPriority = useTranslations('Priority');
   const locale = getDateFnsLocale(useLocale());
   const resolvedParams = use(params);
   const id = resolvedParams.id;
@@ -125,6 +117,12 @@ const ManagerFaultDetailPage = ({
     return () => unsubscribeFromFault(id);
   }, [id, subscribeToFault, unsubscribeFromFault]);
 
+  // Opening the detail marks this fault individually seen — clears its
+  // unseen dot on every board.
+  useEffect(() => {
+    if (id) markFaultSeen(id);
+  }, [id]);
+
   if (isLoading)
     return (
       <div className="container">
@@ -147,6 +145,23 @@ const ManagerFaultDetailPage = ({
 
   const isReadOnly = fault.statusFault === 'Completed';
 
+  // Current pause — latest entry in the suspension log (falls back to the
+  // legacy single field / updatedAt for pre-log faults).
+  const lastSuspension = fault.suspensions?.length
+    ? fault.suspensions[fault.suspensions.length - 1]
+    : null;
+  const suspensionReasonText = lastSuspension?.reason || fault.suspensionReason;
+  const suspensionDate = formatDateTime(
+    lastSuspension?.suspendedAt ?? fault.updatedAt,
+    locale
+  );
+  // History = pauses already resumed (drop the active one while suspended).
+  const allSuspensions = fault.suspensions ?? [];
+  const suspensionHistory =
+    fault.statusFault === 'Suspended'
+      ? allSuspensions.slice(0, -1)
+      : allSuspensions;
+
   return (
     <div className="container">
       <div className={css.page_wrapper}>
@@ -168,6 +183,18 @@ const ManagerFaultDetailPage = ({
             </div>
             <FaultIdBadge id={fault.faultId} />
           </header>
+
+          {/* Current suspension reason — surfaced at the top so the pause
+              motive is the first thing seen while the fault is on hold. */}
+          {fault.statusFault === 'Suspended' && suspensionReasonText && (
+            <div className={`${css.commentBox} ${css.suspensionNote}`}>
+              <div className={css.suspensionNoteHead}>
+                <label>{t('labels.suspensionReason')}</label>
+                <span className={css.suspensionDate}>{suspensionDate}</span>
+              </div>
+              <p>{suspensionReasonText}</p>
+            </div>
+          )}
 
           <div className={css.infoGrid}>
             <div className={css.infoItem}>
@@ -220,11 +247,7 @@ const ManagerFaultDetailPage = ({
             </div>
             <div className={css.infoItem}>
               <label>{t('labels.priority')}</label>
-              <p
-                className={`${css.priority} ${priorityClass(fault.priority, css)}`}
-              >
-                {tPriority(fault.priority)}
-              </p>
+              <PriorityBadge priority={fault.priority} />
             </div>
 
             <div className={css.infoItem}>
@@ -301,6 +324,9 @@ const ManagerFaultDetailPage = ({
             faultId={fault._id}
             materialComment={fault.materialRequest}
           />
+
+          {/* History of resumed pauses (date + reason). */}
+          <FaultSuspensions suspensions={suspensionHistory} />
 
           {fault.img && fault.img.length > 0 && (
             <div className={css.imageSection}>

@@ -49,6 +49,7 @@
   left: 0;
   z-index: 50;
   width: 100%;
+  min-width: 246px;
   background: #fff;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
@@ -160,6 +161,11 @@
 
 .selected {
   background-color: #0070f3;
+}
+
+/* Days between the range endpoints (range picker mode). */
+.inRange {
+  background-color: #dbeafe;
 }
 
 .dayNumber {

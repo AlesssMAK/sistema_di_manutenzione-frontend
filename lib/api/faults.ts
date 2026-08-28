@@ -11,6 +11,9 @@ interface FetchParams {
   /** Lower bound 'created since' window (YYYY-MM-DD). */
   dataCreatedFrom?: string;
   plannedDate?: string;
+  /** Planned-date range (Filtri panel), 'YYYY-MM-DD'. */
+  plannedDateFrom?: string;
+  plannedDateTo?: string;
   statusFault?: string;
   typeFault?: string;
   assignedTo?: string;
@@ -21,6 +24,12 @@ interface FetchParams {
   /** Sort by a specific field (e.g. 'completedAt' for the closed history). */
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
+  /** Ask the board endpoint to annotate each card with `unseen` and the
+   *  response with `hasUnseen`. */
+  withUnseen?: boolean;
+  /** The current list's lastSeen timestamp (ISO). Drives model A — faults
+   *  assigned to others clear once this passes their updatedAt. */
+  seenSince?: string;
 }
 export interface FetchFaultCardsParams {
   fault: FaultCard[];
@@ -28,6 +37,9 @@ export interface FetchFaultCardsParams {
   totalPage: number;
   page: number;
   perPage: number;
+  /** Present only when withUnseen was requested: does any fault in the
+   *  whole (unpaginated) query count as unseen for the viewer? */
+  hasUnseen?: boolean;
 }
 
 export interface FaultDeadlineBucket {
@@ -88,6 +100,8 @@ export const fetchFaultCards = async ({
   dataCreated,
   dataCreatedFrom,
   plannedDate,
+  plannedDateFrom,
+  plannedDateTo,
   statusFault,
   typeFault,
   assignedTo,
@@ -96,6 +110,8 @@ export const fetchFaultCards = async ({
   sort,
   sortBy,
   sortOrder,
+  withUnseen,
+  seenSince,
 }: FetchParams): Promise<FetchFaultCardsParams> => {
   const res = await nextServer.get('/faults', {
     params: {
@@ -107,6 +123,8 @@ export const fetchFaultCards = async ({
       ...(dataCreated ? { dataCreated } : {}),
       ...(dataCreatedFrom ? { dataCreatedFrom } : {}),
       ...(plannedDate ? { plannedDate } : {}),
+      ...(plannedDateFrom ? { plannedDateFrom } : {}),
+      ...(plannedDateTo ? { plannedDateTo } : {}),
       ...(statusFault ? { statusFault } : {}),
       ...(typeFault ? { typeFault } : {}),
       ...(assignedTo ? { assignedTo } : {}),
@@ -115,6 +133,8 @@ export const fetchFaultCards = async ({
       ...(sort ? { sort } : {}),
       ...(sortBy ? { sortBy } : {}),
       ...(sortOrder ? { sortOrder } : {}),
+      ...(withUnseen ? { withUnseen: 'true' } : {}),
+      ...(seenSince ? { seenSince } : {}),
     },
   });
 
@@ -189,27 +209,37 @@ export const claimFault = async (faultId: string): Promise<FaultCard> => {
   return res.data;
 };
 
-export interface MaintenanceTabCounts {
-  active: number;
-  overdue: number;
-  completed: number;
-  pool: number;
-}
+// Dot-free `<role>_<tab>` keys for per-list lastSeen (model A). Kept in
+// sync with the backend LIST_SEEN_KEYS + patchListSeen validation.
+export type ListSeenKey =
+  | 'worker_active'
+  | 'worker_suspended'
+  | 'worker_overdue'
+  | 'worker_completed'
+  | 'worker_pool'
+  | 'manager_received'
+  | 'manager_suspended'
+  | 'manager_inprogress'
+  | 'manager_archive'
+  | 'safety_all';
 
-// Unseen-count badges for the worker board.
-export const fetchMaintenanceTabCounts =
-  async (): Promise<MaintenanceTabCounts> => {
-    const res = await nextServer.get<MaintenanceTabCounts>(
-      '/maintenance-worker/tab-counts'
-    );
-    return res.data;
-  };
+// The viewer's per-list lastSeen map ({ key: ISO }). Fed back as
+// `seenSince` when loading each board.
+export const fetchListSeen = async (): Promise<
+  Partial<Record<ListSeenKey, string>>
+> => {
+  const res = await nextServer.get('/faults/list-seen');
+  return res.data ?? {};
+};
 
-export type MaintenanceSeenTab = 'active' | 'overdue' | 'completed' | 'pool';
+// Advance one list's lastSeen to now — clears others-assigned (model A)
+// cards on that list.
+export const markListSeen = async (key: ListSeenKey): Promise<void> => {
+  await nextServer.patch('/faults/list-seen', { key });
+};
 
-// Mark a board tab as seen — clears its badge.
-export const markMaintenanceTabSeen = async (
-  tab: MaintenanceSeenTab
-): Promise<void> => {
-  await nextServer.patch('/maintenance-worker/seen', { tab });
+// Mark a single fault individually seen (detail-open) — clears its dot.
+export const markFaultSeen = async (id: string): Promise<void> => {
+  if (!id) return;
+  await nextServer.post(`/faults/${id}/seen`);
 };

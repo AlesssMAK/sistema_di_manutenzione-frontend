@@ -4,6 +4,32 @@
 
 /* Phone: tighter toolbar so the dropdown isn't drowning in chrome
    on a 320px viewport (16+16 padding kills ~64px otherwise). */
+/* "Nuove segnalazioni" indicator — shown when the board holds unseen
+   safety faults (individual dots sit on the cards themselves). */
+.newBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: center;
+  margin-left: auto;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.newDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex: 0 0 auto;
+}
+
 .toolbar {
   display: flex;
   flex-wrap: wrap;

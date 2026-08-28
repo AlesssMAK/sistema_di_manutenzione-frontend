@@ -5,10 +5,18 @@ import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
-import { fetchFaultCards } from '@/lib/api/faults';
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import {
+  fetchFaultCards,
+  fetchListSeen,
+  markListSeen,
+} from '@/lib/api/faults';
+import {
+  keepPreviousData,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import css from './Safety.module.css';
 
 const PER_PAGE = 8;
@@ -30,17 +38,44 @@ const SafetyClient = () => {
   const [statusFault, setStatusFault] = useState<string>('');
   const [page, setPage] = useState(1);
 
+  const queryClient = useQueryClient();
+
+  // Per-list lastSeen (drives model A for assigned safety faults).
+  const { data: listSeen } = useQuery({
+    queryKey: ['listSeen'],
+    queryFn: fetchListSeen,
+    staleTime: 30 * 1000,
+  });
+  const since = listSeen?.safety_all;
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['faults', 'safety', statusFault || 'all', page],
+    queryKey: ['faults', 'safety', statusFault || 'all', page, since ?? null],
     queryFn: () =>
       fetchFaultCards({
         page,
         perPage: PER_PAGE,
         typeFault: 'Safety',
         ...(statusFault ? { statusFault } : {}),
+        withUnseen: true,
+        ...(since ? { seenSince: since } : {}),
       }),
     placeholderData: keepPreviousData,
   });
+
+  // Mark the safety board seen once on landing — clears its assigned
+  // (model A) cards. Unassigned safety faults (pool / model B) keep their
+  // dots until opened individually.
+  const landedRef = useRef(false);
+  useEffect(() => {
+    if (landedRef.current) return;
+    landedRef.current = true;
+    markListSeen('safety_all')
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['listSeen'] });
+        queryClient.invalidateQueries({ queryKey: ['faults', 'safety'] });
+      })
+      .catch(() => {});
+  }, [queryClient]);
 
   const faults = data?.fault ?? [];
   const totalPage = data?.totalPage ?? 0;
@@ -73,6 +108,12 @@ const SafetyClient = () => {
               onSelect={handleStatusChange}
             />
           </div>
+          {data?.hasUnseen && (
+            <span className={css.newBadge}>
+              <span className={css.newDot} aria-hidden="true" />
+              {t('newBadge')}
+            </span>
+          )}
         </div>
 
         <div className={css.contentSection}>

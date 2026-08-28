@@ -111,3 +111,17 @@
   background: #dbeafe;
   color: #1e40af;
 }
+
+/* Unseen marker — a small red dot beside the label/count, shown when the
+   tab holds faults the viewer hasn't seen yet. */
+.tabDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex: 0 0 auto;
+
+  @media screen and (min-width: 768px) {
+    margin-left: 6px;
+  }
+}

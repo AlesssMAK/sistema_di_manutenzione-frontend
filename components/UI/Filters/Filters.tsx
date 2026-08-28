@@ -5,12 +5,13 @@ import Button from '../Button/Button';
 import Input from '../Input/Input';
 import SelectDropdown from '../SelectDropdown/SelectDropdown';
 import DatePickerInput from '../DatePickerInput/DatePickerInput';
+import DateRangePickerInput from '../DateRangePickerInput/DateRangePickerInput';
 import css from './Filters.module.css';
 
 interface FiltersTypes {
   id: string;
   label: string;
-  type: 'input' | 'select' | 'date';
+  type: 'input' | 'select' | 'date' | 'daterange';
 }
 
 interface FiltersInput extends FiltersTypes {
@@ -38,14 +39,30 @@ interface FiltersDate extends FiltersTypes {
   placeholder?: string;
 }
 
-export type FiltersItem = FiltersInput | FiltersSelect | FiltersDate;
+interface FiltersDateRange extends FiltersTypes {
+  type: 'daterange';
+  // Both ISO 'YYYY-MM-DD' or '' — picked on one calendar.
+  from: string;
+  to: string;
+  onChange: (from: string, to: string) => void;
+  placeholder?: string;
+}
+
+export type FiltersItem =
+  | FiltersInput
+  | FiltersSelect
+  | FiltersDate
+  | FiltersDateRange;
 
 export interface FiltersProps {
   items: FiltersItem[];
   onClear: () => void;
+  /** Force a single stacked column at every width (e.g. in a narrow
+   *  sidebar), overriding the desktop single-row layout. */
+  stacked?: boolean;
 }
 
-const Filters = ({ items, onClear }: FiltersProps) => {
+const Filters = ({ items, onClear, stacked = false }: FiltersProps) => {
   const t = useTranslations('Filters');
 
   return (
@@ -66,7 +83,9 @@ const Filters = ({ items, onClear }: FiltersProps) => {
           {t('clear')}
         </Button>
       </div>
-      <div className={css.select_container}>
+      <div
+        className={`${css.select_container} ${stacked ? css.stacked : ''}`}
+      >
         {items.map(item => {
           if (item.type === 'input') {
             return (
@@ -109,6 +128,20 @@ const Filters = ({ items, onClear }: FiltersProps) => {
                 <p className={css.label}>{item.label}</p>
                 <DatePickerInput
                   value={item.value}
+                  onChange={item.onChange}
+                  placeholder={item.placeholder}
+                />
+              </div>
+            );
+          }
+
+          if (item.type === 'daterange') {
+            return (
+              <div key={item.id} className={css.filter_item}>
+                <p className={css.label}>{item.label}</p>
+                <DateRangePickerInput
+                  from={item.from}
+                  to={item.to}
                   onChange={item.onChange}
                   placeholder={item.placeholder}
                 />

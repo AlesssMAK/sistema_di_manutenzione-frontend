@@ -53,6 +53,19 @@
   margin: 0;
 }
 
+/* Submit-blocking error (e.g. out-of-stock) — a prominent banner above the
+   actions so it's clear why the fault didn't close. */
+.submitError {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .emptyMessage {
   margin: 0;
   font-size: 14px;

@@ -135,19 +135,15 @@ const AdminLogsAuditClientPage = () => {
         ),
     },
     {
-      id: 'from',
-      type: 'date',
-      label: t('filters.from'),
-      value: from,
-      onChange: setFrom,
-      placeholder: t('filters.datePlaceholder'),
-    },
-    {
-      id: 'to',
-      type: 'date',
-      label: t('filters.to'),
-      value: to,
-      onChange: setTo,
+      id: 'range',
+      type: 'daterange',
+      label: t('filters.dateRange'),
+      from,
+      to,
+      onChange: (f, tv) => {
+        setFrom(f);
+        setTo(tv);
+      },
       placeholder: t('filters.datePlaceholder'),
     },
   ];

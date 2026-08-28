@@ -215,8 +215,7 @@
         "searchPlaceholder": "Search by name...",
         "role": "Role",
         "allRoles": "All Roles",
-        "from": "From",
-        "to": "To",
+        "dateRange": "Period",
         "clear": "Clear",
         "datePlaceholder": "dd/mm/yyyy"
       },
@@ -524,7 +523,24 @@
     "tabs": {
       "active": "Active",
       "overdue": "Overdue",
-      "completed": "Completed"
+      "completed": "Completed",
+      "suspended": "Suspended"
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Code, machine or part…",
+      "dateRange": "Period",
+      "dateRangePlaceholder": "Select period",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "sortLabel": "Sort by",
+      "sort": {
+        "auto": "Default",
+        "recent": "Newest",
+        "oldest": "Oldest",
+        "deadlineNear": "Deadline soonest",
+        "deadlineFar": "Deadline latest"
+      }
     },
     "scope": {
       "mine": "Mine",
@@ -542,6 +558,7 @@
     },
     "empty": {
       "overdue": "No overdue reports",
+      "suspended": "No suspended reports",
       "completedDate": "No completed reports on this date",
       "completed": "No completed reports",
       "mineDate": "No reports assigned to you on this date",
@@ -594,11 +611,13 @@
     "tabs": {
       "received": "Received",
       "inProgress": "In Progress",
+      "suspended": "Suspended",
       "archive": "Completed"
     },
     "empty": {
       "received": "No pending reports",
       "inProgress": "No reports in progress",
+      "suspended": "No suspended reports",
       "archive": "No archived reports"
     },
     "filters": {
@@ -609,7 +628,16 @@
       "type": "Type",
       "allTypes": "All types",
       "plannedDate": "Planned date",
-      "datePlaceholder": "Select date"
+      "datePlaceholder": "Select date",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "sortLabel": "Sort by",
+      "sort": {
+        "recent": "Newest",
+        "oldest": "Oldest",
+        "deadlineNear": "Deadline soonest",
+        "deadlineFar": "Deadline latest"
+      }
     }
   },
   "OperatorPage": {
@@ -749,6 +777,7 @@
     "headerSubtitle": "View safety reports in real time. Read-only.",
     "badge": "HSE",
     "statusFilter": "Status",
+    "newBadge": "New",
     "statusOptions": {
       "all": "All Statuses"
     },
@@ -838,7 +867,8 @@
       "claimedBy": "Taken Over by",
       "planned": "Planned",
       "pool": "Pool",
-      "technician": "Maintenance Worker"
+      "technician": "Maintenance Worker",
+      "suspendedOn": "Suspended on"
     },
     "maintainerCount": "{count, plural, one {# maintainer} other {# maintainers}}",
     "buttons": {
@@ -856,7 +886,10 @@
     },
     "badges": {
       "rescheduled": "Rescheduled",
-      "originalLabel": "Original:"
+      "originalLabel": "Original:",
+      "takenOver": "Taken over",
+      "assigned": "Assigned",
+      "unseen": "New"
     },
     "empty": "No reports"
   },
@@ -935,8 +968,16 @@
       "error": "Error during update",
       "noTransitions": "No update possible from status \"{status}\".",
       "takeOverHint": " Use \"Take over\" to start.",
-      "materialsError": "Fault updated, but issuing the materials failed."
+      "materialsError": "Fault updated, but issuing the materials failed.",
+      "materialsOutOfStock": "Out of stock: {items} (warehouse stock is now negative)."
+    },
+    "errors": {
+      "durationBelowFloor": "The time cannot be less than the time already worked ({min})."
     }
+  },
+  "FaultSuspensions": {
+    "title": "Suspensions",
+    "one": "Suspension"
   },
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Reports",
@@ -1269,11 +1310,14 @@
         "out": "Issue",
         "adjust": "Adjust"
       },
+      "tabs": {
+        "stock": "Stock",
+        "movements": "Movements"
+      },
       "history": {
-        "title": "Movements",
-        "show": "Show",
-        "hide": "Hide",
         "empty": "No movements",
+        "dateRange": "Period",
+        "dateRangePlaceholder": "Select period",
         "type": "Type",
         "item": "Item",
         "qty": "Quantity",

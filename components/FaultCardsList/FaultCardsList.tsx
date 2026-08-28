@@ -3,6 +3,7 @@
 import { format, isValid, parseISO } from 'date-fns';
 import Button from '../UI/Button/Button';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
+import PriorityBadge from '@/components/UI/PriorityBadge/PriorityBadge';
 import css from './FaultCardsList.module.css';
 import type { AssignedMaintainer, FaultCard } from '@/types/faultType';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
@@ -47,15 +48,6 @@ const toId = (m: AssignedMaintainer): string =>
 const toName = (m: AssignedMaintainer): string | null =>
   typeof m === 'object' && m !== null && 'fullName' in m ? m.fullName : null;
 
-/** Priority → badge colour class, same palette as FaultManagerCard so
- *  the value stands out (High=red / Medium=amber / Low=green) instead of
- *  rendering as plain text like it used to. */
-const priorityClass: Record<string, string> = {
-  Low: css.priorityLow,
-  Medium: css.priorityMedium,
-  High: css.priorityHigh,
-};
-
 /** Priority → card perimeter-border colour (same canonical palette).
  *  The scope modifier keeps the 4px left strip; this tints the rest. */
 const cardPriorityClass: Record<string, string> = {
@@ -78,7 +70,6 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
   const router = useRouter();
   const t = useTranslations('FaultCard');
   const tStatus = useTranslations('StatusFault');
-  const tPriority = useTranslations('Priority');
   const tDur = useTranslations('Duration');
   const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
@@ -154,6 +145,25 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                   ? populatedNames.join(', ')
                   : t('maintainerCount', { count: assigned.length });
           const assigneeIcon = scope === 'mine' ? 'user' : 'users';
+          // For my faults, tell apart the ones I actively took into work
+          // (claimed → In progress) from the ones merely assigned to me and
+          // still waiting to be started.
+          const inWork = String(fault.claimedBy ?? '') === userId;
+
+          // Current pause info (shown on the card while the fault is
+          // Suspended): date + reason of the latest suspension.
+          const isSuspended = fault.statusFault === 'Suspended';
+          // A closed fault only keeps its status badge — the assignment /
+          // rescheduled pills are noise once it's done.
+          const isCompleted = fault.statusFault === 'Completed';
+          const lastSusp = fault.suspensions?.length
+            ? fault.suspensions[fault.suspensions.length - 1]
+            : null;
+          const suspReason = lastSusp?.reason || fault.suspensionReason;
+          const suspDate = formatDay(
+            lastSusp?.suspendedAt ?? fault.updatedAt,
+            locale
+          );
 
           return (
             <li
@@ -175,7 +185,19 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                 <div>
                   <div className={css.header}>
                     <FaultIdBadge id={fault.faultId} />
-                    {fault.autoRescheduledFrom?.plannedDate && (
+                    {fault.unseen && (
+                      <span
+                        className={css.unseenBadge}
+                        title={t('badges.unseen')}
+                      >
+                        <span
+                          className={css.unseenDot}
+                          aria-hidden="true"
+                        />
+                        {t('badges.unseen')}
+                      </span>
+                    )}
+                    {!isCompleted && fault.autoRescheduledFrom?.plannedDate && (
                       <span
                         className={css.riprogrammatBadge}
                         title={`${t('badges.originalLabel')} ${fault.autoRescheduledFrom.plannedDate}${
@@ -188,6 +210,17 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                       </span>
                     )}
                     <div className={css.headerButton}>
+                      {scope === 'mine' && !isCompleted && (
+                        <span
+                          className={`${css.assignBadge} ${
+                            inWork ? css.assignBadgeWork : css.assignBadgeIdle
+                          }`}
+                        >
+                          {inWork
+                            ? t('badges.takenOver')
+                            : t('badges.assigned')}
+                        </span>
+                      )}
                       <span
                         className={`${css.statusBadge} ${
                           css[
@@ -248,13 +281,10 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                     {/* Colonna destra */}
                     <div className={css.detailItem}>
                       <span className={css.label}>{t('labels.priority')}</span>
-                      <p
-                        className={`${css.priorityBadge} ${
-                          priorityClass[fault.priority] ?? ''
-                        }`}
-                      >
-                        {tPriority(fault.priority)}
-                      </p>
+                      <PriorityBadge
+                        priority={fault.priority}
+                        className={css.priorityGap}
+                      />
                       <span className={css.label}>
                         {t('labels.estimatedDuration')}
                       </span>
@@ -267,6 +297,13 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                             })
                           : '—'}
                       </p>
+                      <span className={css.label}>
+                        {t('labels.dateCreated')}
+                      </span>
+                      <p className={css.value}>
+                        {formatDay(fault.dataCreated, locale)}
+                        {fault.timeCreated ? ` ${fault.timeCreated}` : ''}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -275,6 +312,18 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                   <div className={css.commentContainer}>
                     <h4 className={css.commentLabel}>{t('labels.comment')}:</h4>
                     <p className={css.commentText}>{fault.comment}</p>
+                  </div>
+                )}
+
+                {isSuspended && suspReason && (
+                  <div className={css.suspensionContainer}>
+                    <div className={css.suspensionHead}>
+                      <h4 className={css.suspensionLabel}>
+                        {t('labels.suspendedOn')}
+                      </h4>
+                      <span className={css.suspensionDate}>{suspDate}</span>
+                    </div>
+                    <p className={css.suspensionText}>{suspReason}</p>
                   </div>
                 )}
               </div>

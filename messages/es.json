@@ -215,8 +215,7 @@
         "searchPlaceholder": "Buscar por nombre...",
         "role": "Rol",
         "allRoles": "Todos los Roles",
-        "from": "Desde",
-        "to": "Hasta",
+        "dateRange": "Periodo",
         "clear": "Limpiar",
         "datePlaceholder": "dd/mm/aaaa"
       },
@@ -524,7 +523,24 @@
     "tabs": {
       "active": "Activas",
       "overdue": "En Retraso",
-      "completed": "Completadas"
+      "completed": "Completadas",
+      "suspended": "Suspendidas"
+    },
+    "filters": {
+      "search": "Buscar",
+      "searchPlaceholder": "Código, máquina o parte…",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleccionar periodo",
+      "status": "Estado",
+      "allStatuses": "Todos los estados",
+      "sortLabel": "Ordenar por",
+      "sort": {
+        "auto": "Predeterminado",
+        "recent": "Más recientes",
+        "oldest": "Más antiguos",
+        "deadlineNear": "Vencimiento próximo",
+        "deadlineFar": "Vencimiento lejano"
+      }
     },
     "scope": {
       "mine": "Mías",
@@ -542,6 +558,7 @@
     },
     "empty": {
       "overdue": "No hay señalaciones en retraso",
+      "suspended": "No hay señalaciones suspendidas",
       "completedDate": "No hay señalaciones completadas en esta fecha",
       "completed": "No hay señalaciones completadas",
       "mineDate": "No hay señalaciones asignadas a ti en esta fecha",
@@ -594,11 +611,13 @@
     "tabs": {
       "received": "Recibidas",
       "inProgress": "En Curso",
+      "suspended": "Suspendidas",
       "archive": "Completadas"
     },
     "empty": {
       "received": "No hay señalaciones pendientes",
       "inProgress": "No hay señalaciones en curso",
+      "suspended": "No hay señalaciones suspendidas",
       "archive": "No hay señalaciones archivadas"
     },
     "filters": {
@@ -609,7 +628,16 @@
       "type": "Tipo",
       "allTypes": "Todos los tipos",
       "plannedDate": "Fecha planificada",
-      "datePlaceholder": "Seleccionar fecha"
+      "datePlaceholder": "Seleccionar fecha",
+      "status": "Estado",
+      "allStatuses": "Todos los estados",
+      "sortLabel": "Ordenar por",
+      "sort": {
+        "recent": "Más recientes",
+        "oldest": "Más antiguos",
+        "deadlineNear": "Vencimiento próximo",
+        "deadlineFar": "Vencimiento lejano"
+      }
     }
   },
   "OperatorPage": {
@@ -749,6 +777,7 @@
     "headerSubtitle": "Visualiza en tiempo real las señalaciones de seguridad. Solo lectura.",
     "badge": "HSE",
     "statusFilter": "Estado",
+    "newBadge": "Nuevas",
     "statusOptions": {
       "all": "Todos los Estados"
     },
@@ -838,7 +867,8 @@
       "claimedBy": "Tomado por",
       "planned": "Planificado",
       "pool": "Pool",
-      "technician": "Mantenedor"
+      "technician": "Mantenedor",
+      "suspendedOn": "Suspendido el"
     },
     "maintainerCount": "{count, plural, one {# mantenedor} other {# mantenedores}}",
     "buttons": {
@@ -856,7 +886,10 @@
     },
     "badges": {
       "rescheduled": "Reprogramada",
-      "originalLabel": "Original:"
+      "originalLabel": "Original:",
+      "takenOver": "Asumido",
+      "assigned": "Asignado",
+      "unseen": "Nueva"
     },
     "empty": "No hay señalaciones"
   },
@@ -935,8 +968,16 @@
       "error": "Error durante la actualización",
       "noTransitions": "No es posible actualizar desde el estado \"{status}\".",
       "takeOverHint": " Usa \"Tomar a cargo\" para empezar.",
-      "materialsError": "Avería actualizada, pero la salida de materiales falló."
+      "materialsError": "Avería actualizada, pero la salida de materiales falló.",
+      "materialsOutOfStock": "Sin stock: {items} (las existencias quedaron en negativo)."
+    },
+    "errors": {
+      "durationBelowFloor": "El tiempo no puede ser inferior al tiempo ya trabajado ({min})."
     }
+  },
+  "FaultSuspensions": {
+    "title": "Suspensiones",
+    "one": "Suspensión"
   },
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Reportes",
@@ -1269,11 +1310,14 @@
         "out": "Salida",
         "adjust": "Ajuste"
       },
+      "tabs": {
+        "stock": "Existencias",
+        "movements": "Movimientos"
+      },
       "history": {
-        "title": "Movimientos",
-        "show": "Mostrar",
-        "hide": "Ocultar",
         "empty": "Sin movimientos",
+        "dateRange": "Periodo",
+        "dateRangePlaceholder": "Seleccionar periodo",
         "type": "Tipo",
         "item": "Artículo",
         "qty": "Cantidad",

@@ -182,21 +182,6 @@
   color: #15803d;
 }
 
-.priority {
-  font-weight: 600;
-}
-
-/* Priority by severity. Double-class selector bumps specificity
-   above `.infoItem p` (0,1,1) so the modifier wins. */
-.priority.priorityLow {
-  color: #15803d;
-}
-.priority.priorityMedium {
-  color: #d97706;
-}
-.priority.priorityHigh {
-  color: #dc2626;
-}
 
 /* Deadline urgency — buckets by days-to-due. Same specificity trick
    as priority above. */
@@ -248,6 +233,34 @@
   font-size: 14px;
   line-height: 1.5;
   color: #0a0a0a;
+}
+
+/* Suspension reason — surfaced at the top as a highlighted amber callout
+   with a proper full border (like the admin message cards). */
+.suspensionNote {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.suspensionNote label {
+  color: #92400e;
+}
+
+.suspensionNoteHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.suspensionDate {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b45309;
+  white-space: nowrap;
 }
 
 .imageSection {

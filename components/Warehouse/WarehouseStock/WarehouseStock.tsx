@@ -26,6 +26,7 @@ import Button from '@/components/UI/Button/Button';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
+import Tabs from '@/components/UI/Tabs/Tabs';
 import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
 import { useWarehouseContext } from '@/lib/hooks/useWarehouseContext';
@@ -74,7 +75,9 @@ const WarehouseStock = () => {
   const [categoryId, setCategoryId] = useState('');
   const [page, setPage] = useState(1);
   const [op, setOp] = useState<StockOp | null>(null);
-  const [showHistory, setShowHistory] = useState(false);
+  const [view, setView] = useState<'stock' | 'movements'>('stock');
+  const [movFrom, setMovFrom] = useState('');
+  const [movTo, setMovTo] = useState('');
 
   // Keeper (management) context: all active warehouses narrowed by the
   // user's access. When it resolves to one, the picker is hidden and it
@@ -139,9 +142,15 @@ const WarehouseStock = () => {
   });
 
   const { data: movData } = useQuery({
-    queryKey: ['warehouse', 'movements', activeWarehouseId],
-    queryFn: () => getMovements({ warehouseId: activeWarehouseId, perPage: 20 }),
-    enabled: Boolean(activeWarehouseId) && showHistory,
+    queryKey: ['warehouse', 'movements', activeWarehouseId, movFrom, movTo],
+    queryFn: () =>
+      getMovements({
+        warehouseId: activeWarehouseId,
+        perPage: 50,
+        ...(movFrom ? { dateFrom: movFrom } : {}),
+        ...(movTo ? { dateTo: movTo } : {}),
+      }),
+    enabled: Boolean(activeWarehouseId) && view === 'movements',
   });
 
   const levels = stockData?.levels ?? [];
@@ -188,21 +197,28 @@ const WarehouseStock = () => {
       },
       icon: 'search',
     },
-    {
-      id: 'category',
-      type: 'select',
-      label: tItems('fields.category'),
-      value: categoryId
-        ? (catNameById.get(categoryId) ?? allCategoriesLabel)
-        : allCategoriesLabel,
-      options: [allCategoriesLabel, ...categories.map((c) => c.name)],
-      onSelect: (label) => {
-        setCategoryId(
-          label === allCategoriesLabel ? '' : (catIdByName.get(label) ?? '')
-        );
-        setPage(1);
-      },
-    },
+    // Category filter only when categories exist (created in admin).
+    ...(categories.length > 0
+      ? [
+          {
+            id: 'category',
+            type: 'select' as const,
+            label: tItems('fields.category'),
+            value: categoryId
+              ? (catNameById.get(categoryId) ?? allCategoriesLabel)
+              : allCategoriesLabel,
+            options: [allCategoriesLabel, ...categories.map((c) => c.name)],
+            onSelect: (label: string) => {
+              setCategoryId(
+                label === allCategoriesLabel
+                  ? ''
+                  : (catIdByName.get(label) ?? '')
+              );
+              setPage(1);
+            },
+          },
+        ]
+      : []),
     {
       id: 'level',
       type: 'select',
@@ -214,11 +230,26 @@ const WarehouseStock = () => {
         setPage(1);
       },
     },
+    // Date range for the movements (Movimenti) history below.
+    {
+      id: 'movRange',
+      type: 'daterange',
+      label: t('history.dateRange'),
+      from: movFrom,
+      to: movTo,
+      onChange: (f, tv) => {
+        setMovFrom(f);
+        setMovTo(tv);
+      },
+      placeholder: t('history.dateRangePlaceholder'),
+    },
   ];
   const onClearFilters = () => {
     setSearch('');
     setLowOnly(false);
     setCategoryId('');
+    setMovFrom('');
+    setMovTo('');
     setPage(1);
   };
 
@@ -291,8 +322,54 @@ const WarehouseStock = () => {
         </div>
       )}
 
+      {activeWarehouseId && (
+        <div className={css.filtersGap}>
+          <Tabs<'stock' | 'movements'>
+            tabs={[
+              { value: 'stock', label: t('tabs.stock'), icon: 'clipboard' },
+              { value: 'movements', label: t('tabs.movements'), icon: 'reload' },
+            ]}
+            activeTab={view}
+            onTabChange={setView}
+          />
+        </div>
+      )}
+
       {!activeWarehouseId ? (
         <NoFound title={t('pickWarehouseTitle')} message={t('pickWarehouseHint')} hideIcon />
+      ) : view === 'movements' ? (
+        movements.length === 0 ? (
+          <NoFound title={tNoFound('emptyTitle')} message={t('history.empty')} hideIcon />
+        ) : (
+          <div className={css.tableWrap}>
+            <table className={css.table}>
+              <thead>
+                <tr>
+                  <th>{t('history.type')}</th>
+                  <th>{t('history.item')}</th>
+                  <th>{t('history.qty')}</th>
+                  <th>{t('history.by')}</th>
+                  <th>{t('history.when')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {movements.map((m) => (
+                  <tr key={m._id}>
+                    <td>
+                      <span className={`${css.movType} ${movTypeClass(m.type)}`}>
+                        {t(`type.${m.type}`)}
+                      </span>
+                    </td>
+                    <td>{itemName(m.itemId)}</td>
+                    <td>{m.quantity}</td>
+                    <td>{m.userName}</td>
+                    <td>{new Date(m.createdAt).toLocaleString()}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
       ) : isLoading ? (
         <div className={css.loaderWrap}>
           <Loader />
@@ -369,58 +446,10 @@ const WarehouseStock = () => {
         </div>
       )}
 
-      {totalPages > 1 && (
+      {view === 'stock' && totalPages > 1 && (
         <div style={{ marginTop: '20px' }}>
           <Pagination totalPages={totalPages} page={page} onPageChange={setPage} />
         </div>
-      )}
-
-      {activeWarehouseId && (
-        <>
-          <div className={css.historyHeader}>
-            <span className={css.historyTitle}>{t('history.title')}</span>
-            <Button
-              type="button"
-              className="button button--white"
-              onClick={() => setShowHistory((v) => !v)}
-            >
-              {showHistory ? t('history.hide') : t('history.show')}
-            </Button>
-          </div>
-          {showHistory &&
-            (movements.length === 0 ? (
-              <NoFound title={tNoFound('emptyTitle')} message={t('history.empty')} hideIcon />
-            ) : (
-              <div className={css.tableWrap}>
-                <table className={css.table}>
-                  <thead>
-                    <tr>
-                      <th>{t('history.type')}</th>
-                      <th>{t('history.item')}</th>
-                      <th>{t('history.qty')}</th>
-                      <th>{t('history.by')}</th>
-                      <th>{t('history.when')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {movements.map((m) => (
-                      <tr key={m._id}>
-                        <td>
-                          <span className={`${css.movType} ${movTypeClass(m.type)}`}>
-                            {t(`type.${m.type}`)}
-                          </span>
-                        </td>
-                        <td>{itemName(m.itemId)}</td>
-                        <td>{m.quantity}</td>
-                        <td>{m.userName}</td>
-                        <td>{new Date(m.createdAt).toLocaleString()}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            ))}
-        </>
       )}
 
       {op && (

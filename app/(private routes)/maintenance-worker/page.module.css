@@ -65,7 +65,7 @@
   padding: 32px 0;
 }
 
-.loadMoreButton {
+.paginationWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
