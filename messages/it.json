@@ -215,8 +215,7 @@
         "searchPlaceholder": "Cerca per nome...",
         "role": "Ruolo",
         "allRoles": "Tutti i Ruoli",
-        "from": "Dal",
-        "to": "Al",
+        "dateRange": "Periodo",
         "clear": "Pulisci",
         "datePlaceholder": "gg/mm/aaaa"
       },
@@ -526,6 +525,22 @@
       "overdue": "In Ritardo",
       "completed": "Completate"
     },
+    "filters": {
+      "search": "Cerca",
+      "searchPlaceholder": "Codice, macchina o parte…",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleziona periodo",
+      "status": "Stato",
+      "allStatuses": "Tutti gli stati",
+      "sortLabel": "Ordina per",
+      "sort": {
+        "auto": "Predefinito",
+        "recent": "Più recenti",
+        "oldest": "Meno recenti",
+        "deadlineNear": "Scadenza vicina",
+        "deadlineFar": "Scadenza lontana"
+      }
+    },
     "scope": {
       "mine": "Mie",
       "pool": "Libere",
@@ -609,7 +624,16 @@
       "type": "Tipologia",
       "allTypes": "Tutte le tipologie",
       "plannedDate": "Data pianificata",
-      "datePlaceholder": "Seleziona data"
+      "datePlaceholder": "Seleziona data",
+      "status": "Stato",
+      "allStatuses": "Tutti gli stati",
+      "sortLabel": "Ordina per",
+      "sort": {
+        "recent": "Più recenti",
+        "oldest": "Meno recenti",
+        "deadlineNear": "Scadenza vicina",
+        "deadlineFar": "Scadenza lontana"
+      }
     }
   },
   "OperatorPage": {
@@ -856,7 +880,9 @@
     },
     "badges": {
       "rescheduled": "Riprogrammata",
-      "originalLabel": "Originale:"
+      "originalLabel": "Originale:",
+      "takenOver": "Preso in carico",
+      "assigned": "Assegnato"
     },
     "empty": "Nessuna segnalazione"
   },
@@ -1269,11 +1295,14 @@
         "out": "Scarico",
         "adjust": "Rettifica"
       },
+      "tabs": {
+        "stock": "Giacenza",
+        "movements": "Movimenti"
+      },
       "history": {
-        "title": "Movimenti",
-        "show": "Mostra",
-        "hide": "Nascondi",
         "empty": "Nessun movimento",
+        "dateRange": "Periodo",
+        "dateRangePlaceholder": "Seleziona periodo",
         "type": "Tipo",
         "item": "Articolo",
         "qty": "Quantità",

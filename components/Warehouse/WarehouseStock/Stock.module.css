@@ -249,20 +249,7 @@
   color: #9a3412;
 }
 
-/* History */
-.historyHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 24px 0 12px;
-}
-
-.historyTitle {
-  font-size: 15px;
-  font-weight: 600;
-  color: #111827;
-}
-
+/* Movements */
 .movType {
   font-size: 11px;
   padding: 2px 8px;

@@ -1,0 +1,24 @@
+.badge {
+  display: inline-block;
+  width: fit-content;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.low {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.medium {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.high {
+  background: #fef2f2;
+  color: #dc2626;
+}

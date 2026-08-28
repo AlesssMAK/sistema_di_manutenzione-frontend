@@ -8,7 +8,10 @@ import ScopeFilterBar, {
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useDebounce } from 'use-debounce';
+import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
 import css from './page.module.css';
 
 import { type PlannedDayBucket } from '@/components/MaintenanceWorker/Calendar/Calendar';
@@ -35,13 +38,59 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 export type FaultViewMode = 'active' | 'overdue' | 'completed';
 
 const ACTIVE_STATUSES = 'Created,In progress,Suspended,Overdue';
+// Specific statuses the "Attive" tab groups — drive the status filter.
+const ACTIVE_STATUS_LIST = ['Created', 'In progress', 'Suspended', 'Overdue'];
+const STATUS_KEY: Record<string, string> = {
+  Created: 'CREATED',
+  'In progress': 'IN_PROGRESS',
+  Suspended: 'SUSPENDED',
+  Overdue: 'OVERDUE',
+};
+
+// Date-sort presets. 'auto' keeps the per-tab default (completed → most
+// recently closed; mine → oldest first; else newest). The rest override.
+type SortKey = 'auto' | 'recent' | 'oldest' | 'deadlineNear' | 'deadlineFar';
+const SORT_CONFIG: Record<
+  Exclude<SortKey, 'auto'>,
+  { sort?: 'asc' | 'desc'; sortBy?: string; sortOrder?: 'asc' | 'desc' }
+> = {
+  recent: { sort: 'desc' },
+  oldest: { sort: 'asc' },
+  deadlineNear: { sortBy: 'deadline', sortOrder: 'asc' },
+  deadlineFar: { sortBy: 'deadline', sortOrder: 'desc' },
+};
+
 const PER_PAGE = 6;
 
 const MaintenanceWorkerClient = () => {
   const t = useTranslations('maintenanceWorkerPage');
   const tNoFound = useTranslations('NoFound');
+  const tStatus = useTranslations('StatusFault');
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
+
+  const sortMapper = useMemo(
+    () =>
+      createOptionMapper<SortKey>([
+        { value: 'auto', label: t('filters.sort.auto') },
+        { value: 'recent', label: t('filters.sort.recent') },
+        { value: 'oldest', label: t('filters.sort.oldest') },
+        { value: 'deadlineNear', label: t('filters.sort.deadlineNear') },
+        { value: 'deadlineFar', label: t('filters.sort.deadlineFar') },
+      ]),
+    [t]
+  );
+  const statusMapper = useMemo(
+    () =>
+      createOptionMapper<string>([
+        { value: '', label: t('filters.allStatuses') },
+        ...ACTIVE_STATUS_LIST.map(s => ({
+          value: s,
+          label: tStatus(STATUS_KEY[s]),
+        })),
+      ]),
+    [t, tStatus]
+  );
 
   const VIEW_MODE_TABS: TabItem<FaultViewMode>[] = [
     { value: 'active', label: t('tabs.active'), icon: 'wrench' },
@@ -53,6 +102,14 @@ const MaintenanceWorkerClient = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [priority, setPriority] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<string>('');
+  // Filtri panel (under the calendar): free-text search + planned-date
+  // range. The range wins over the calendar's single-day selection.
+  const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebounce(search, 400);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const [sortOption, setSortOption] = useState<SortKey>('auto');
+  const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [viewMode, setViewMode] = useState<FaultViewMode>('active');
@@ -137,7 +194,14 @@ const MaintenanceWorkerClient = () => {
       currentDate: string,
       currentMode: FaultViewMode,
       currentScope: FaultScope,
-      currentUserId: string
+      currentUserId: string,
+      filters: {
+        search?: string;
+        dateFrom?: string;
+        dateTo?: string;
+        sort?: SortKey;
+        status?: string;
+      } = {}
     ) => {
       const reqId = ++requestIdRef.current;
 
@@ -153,16 +217,32 @@ const MaintenanceWorkerClient = () => {
             ? 'Overdue'
             : currentMode === 'completed'
               ? 'Completed'
-              : ACTIVE_STATUSES;
+              : // "Attive" groups several statuses; a picked status narrows it.
+                filters.status || ACTIVE_STATUSES;
+
+        // Date filter applied in active/completed modes only — overdue
+        // shows everything in ritardo regardless of plannedDate. A range
+        // from the Filtri panel wins over the calendar's single day.
+        const hasRange = Boolean(filters.dateFrom || filters.dateTo);
+        const dateParams =
+          currentMode === 'overdue'
+            ? {}
+            : hasRange
+              ? {
+                  ...(filters.dateFrom
+                    ? { plannedDateFrom: filters.dateFrom }
+                    : {}),
+                  ...(filters.dateTo ? { plannedDateTo: filters.dateTo } : {}),
+                }
+              : currentDate
+                ? { plannedDate: currentDate }
+                : {};
 
         const baseParams = {
           priority: currentPriority,
           statusFault,
-          // Date filter applied in active/completed modes only — overdue
-          // shows everything in ritardo regardless of plannedDate.
-          ...(currentMode !== 'overdue' && currentDate
-            ? { plannedDate: currentDate }
-            : {}),
+          ...(filters.search ? { search: filters.search } : {}),
+          ...dateParams,
         };
 
         const scopeParams =
@@ -172,18 +252,23 @@ const MaintenanceWorkerClient = () => {
               ? { assignedToEmpty: true }
               : {};
 
+        // An explicit date sort wins; 'auto' keeps the per-tab default:
+        // completed → most recently closed, mine → oldest first (creation
+        // order), pool/all → newest first.
+        const sortParams =
+          filters.sort && filters.sort !== 'auto'
+            ? SORT_CONFIG[filters.sort]
+            : currentMode === 'completed'
+              ? { sortBy: 'completedAt' as const, sortOrder: 'desc' as const }
+              : currentScope === 'mine'
+                ? { sort: 'asc' as const }
+                : {};
+
         const data = await fetchFaultCards({
           ...baseParams,
           page: pageNum,
           perPage: PER_PAGE,
-          // Completed history is ordered by closing time, most recent
-          // first. Otherwise: my assigned interventions oldest-first
-          // (creation order); pool/all keep the default newest-first.
-          ...(currentMode === 'completed'
-            ? { sortBy: 'completedAt' as const, sortOrder: 'desc' as const }
-            : currentScope === 'mine'
-              ? { sort: 'asc' as const }
-              : {}),
+          ...sortParams,
           ...scopeParams,
         });
 
@@ -322,6 +407,8 @@ const MaintenanceWorkerClient = () => {
     setViewMode(newMode);
     setSelectedDate('');
     setPage(1);
+    // The status filter belongs to the "Attive" tab only.
+    if (newMode !== 'active') setStatusFilter('');
     // 'Libere' (pool) is meaningless in the completed history — completed
     // faults are always assigned. Drop back to 'Mie' when entering it.
     if (newMode === 'completed' && scope === 'pool') setScope('mine');
@@ -367,7 +454,13 @@ const MaintenanceWorkerClient = () => {
     // A fresh load reflects current state, so the "new since load"
     // counter starts over.
     setNewFaultCount(0);
-    loadData(1, priority, selectedDate, viewMode, scope, userId);
+    loadData(1, priority, selectedDate, viewMode, scope, userId, {
+      search: debouncedSearch,
+      dateFrom,
+      dateTo,
+      sort: sortOption,
+      status: statusFilter,
+    });
   }, [
     scopeResolved,
     t,
@@ -377,6 +470,11 @@ const MaintenanceWorkerClient = () => {
     viewMode,
     scope,
     userId,
+    debouncedSearch,
+    sortOption,
+    statusFilter,
+    dateFrom,
+    dateTo,
   ]);
 
   useEffect(() => {
@@ -417,7 +515,13 @@ const MaintenanceWorkerClient = () => {
   const handleRefreshNew = () => {
     setNewFaultCount(0);
     setPage(1);
-    loadData(1, priority, selectedDate, viewMode, scope, userId);
+    loadData(1, priority, selectedDate, viewMode, scope, userId, {
+      search: debouncedSearch,
+      dateFrom,
+      dateTo,
+      sort: sortOption,
+      status: statusFilter,
+    });
   };
 
   // After a claim the backend returns the updated fault (now In progress
@@ -476,7 +580,88 @@ const MaintenanceWorkerClient = () => {
             deadlineDates={isOverdueMode ? overdueDeadlineDates : []}
             isDeadlineMode={isOverdueMode}
             plannedDays={plannedDays}
-          />
+          >
+            {/* Filtri live in the sidebar under the priority legend. */}
+            <div style={{ marginTop: '8px' }}>
+              <Filters
+                stacked
+                items={
+                  [
+                    {
+                      id: 'search',
+                      type: 'input',
+                      label: t('filters.search'),
+                      value: search,
+                      placeholder: t('filters.searchPlaceholder'),
+                      onChange: (v: string) => {
+                        setSearch(v);
+                        setPage(1);
+                      },
+                      icon: 'search',
+                    },
+                    // Status filter — only on "Attive" (which groups
+                    // several statuses); narrows the group to one status.
+                    ...(viewMode === 'active'
+                      ? [
+                          {
+                            id: 'status',
+                            type: 'select' as const,
+                            label: t('filters.status'),
+                            value:
+                              statusMapper.getLabelByValue(statusFilter) ??
+                              t('filters.allStatuses'),
+                            options: statusMapper.labelsArray,
+                            onSelect: (label: string) => {
+                              setStatusFilter(
+                                statusMapper.getValueByLabel(label) ?? ''
+                              );
+                              setPage(1);
+                            },
+                          },
+                        ]
+                      : []),
+                    {
+                      id: 'range',
+                      type: 'daterange',
+                      label: t('filters.dateRange'),
+                      from: dateFrom,
+                      to: dateTo,
+                      onChange: (f: string, tv: string) => {
+                        setDateFrom(f);
+                        setDateTo(tv);
+                        setPage(1);
+                      },
+                      placeholder: t('filters.dateRangePlaceholder'),
+                    },
+                    {
+                      id: 'sort',
+                      type: 'select',
+                      label: t('filters.sortLabel'),
+                      value:
+                        sortMapper.getLabelByValue(sortOption) ??
+                        t('filters.sort.auto'),
+                      options: sortMapper.labelsArray,
+                      onSelect: (label: string) => {
+                        setSortOption(
+                          (sortMapper.getValueByLabel(label) ??
+                            'auto') as SortKey
+                        );
+                        setPage(1);
+                      },
+                    },
+                  ] as FiltersItem[]
+                }
+                onClear={() => {
+                  setSearch('');
+                  setDateFrom('');
+                  setDateTo('');
+                  setStatusFilter('');
+                  setSortOption('auto');
+                  setPage(1);
+                }}
+              />
+            </div>
+          </CalendarBlock>
 
           <div className={css.contentSection}>
             {/* Tabs sit inside contentSection so on phone/tablet they
@@ -549,7 +734,14 @@ const MaintenanceWorkerClient = () => {
                         selectedDate,
                         viewMode,
                         scope,
-                        userId
+                        userId,
+                        {
+                          search: debouncedSearch,
+                          dateFrom,
+                          dateTo,
+                          sort: sortOption,
+                          status: statusFilter,
+                        }
                       );
                     }}
                   />

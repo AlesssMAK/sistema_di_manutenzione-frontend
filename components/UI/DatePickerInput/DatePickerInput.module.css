@@ -162,6 +162,11 @@
   background-color: #0070f3;
 }
 
+/* Days between the range endpoints (range picker mode). */
+.inRange {
+  background-color: #dbeafe;
+}
+
 .dayNumber {
   font-size: 14px;
   display: flex;

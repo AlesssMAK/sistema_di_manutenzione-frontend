@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import Calendar, {
   type PlannedDayBucket,
@@ -13,6 +14,9 @@ interface CalendarBlockProps {
   deadlineDates?: string[];
   isDeadlineMode?: boolean;
   plannedDays?: Record<string, PlannedDayBucket>;
+  /** Extra content shown in the sidebar below the priority legend
+   *  (e.g. the Filtri panel). */
+  children?: ReactNode;
 }
 const CalendarBlock = ({
   activePriority,
@@ -22,6 +26,7 @@ const CalendarBlock = ({
   deadlineDates = [],
   isDeadlineMode = false,
   plannedDays = {},
+  children,
 }: CalendarBlockProps) => {
   const t = useTranslations('maintenanceWorkerPage.calendar');
   return (
@@ -38,6 +43,7 @@ const CalendarBlock = ({
         activePriority={activePriority}
         onPriorityChange={onPriorityChange}
       />
+      {children}
     </div>
   );
 };

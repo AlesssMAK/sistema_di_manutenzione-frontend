@@ -55,3 +55,10 @@
   color: #0a0a0a;
   margin-bottom: 8px;
 }
+
+/* Force a single stacked column at every width (sidebar placement). */
+.stacked {
+  @media screen and (min-width: 1440px) {
+    flex-direction: column;
+  }
+}

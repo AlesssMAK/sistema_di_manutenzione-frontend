@@ -215,8 +215,7 @@
         "searchPlaceholder": "Buscar por nombre...",
         "role": "Rol",
         "allRoles": "Todos los Roles",
-        "from": "Desde",
-        "to": "Hasta",
+        "dateRange": "Periodo",
         "clear": "Limpiar",
         "datePlaceholder": "dd/mm/aaaa"
       },
@@ -526,6 +525,22 @@
       "overdue": "En Retraso",
       "completed": "Completadas"
     },
+    "filters": {
+      "search": "Buscar",
+      "searchPlaceholder": "Código, máquina o parte…",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleccionar periodo",
+      "status": "Estado",
+      "allStatuses": "Todos los estados",
+      "sortLabel": "Ordenar por",
+      "sort": {
+        "auto": "Predeterminado",
+        "recent": "Más recientes",
+        "oldest": "Más antiguos",
+        "deadlineNear": "Vencimiento próximo",
+        "deadlineFar": "Vencimiento lejano"
+      }
+    },
     "scope": {
       "mine": "Mías",
       "pool": "Libres",
@@ -609,7 +624,16 @@
       "type": "Tipo",
       "allTypes": "Todos los tipos",
       "plannedDate": "Fecha planificada",
-      "datePlaceholder": "Seleccionar fecha"
+      "datePlaceholder": "Seleccionar fecha",
+      "status": "Estado",
+      "allStatuses": "Todos los estados",
+      "sortLabel": "Ordenar por",
+      "sort": {
+        "recent": "Más recientes",
+        "oldest": "Más antiguos",
+        "deadlineNear": "Vencimiento próximo",
+        "deadlineFar": "Vencimiento lejano"
+      }
     }
   },
   "OperatorPage": {
@@ -856,7 +880,9 @@
     },
     "badges": {
       "rescheduled": "Reprogramada",
-      "originalLabel": "Original:"
+      "originalLabel": "Original:",
+      "takenOver": "Asumido",
+      "assigned": "Asignado"
     },
     "empty": "No hay señalaciones"
   },
@@ -1269,11 +1295,14 @@
         "out": "Salida",
         "adjust": "Ajuste"
       },
+      "tabs": {
+        "stock": "Existencias",
+        "movements": "Movimientos"
+      },
       "history": {
-        "title": "Movimientos",
-        "show": "Mostrar",
-        "hide": "Ocultar",
         "empty": "Sin movimientos",
+        "dateRange": "Periodo",
+        "dateRangePlaceholder": "Seleccionar periodo",
         "type": "Tipo",
         "item": "Artículo",
         "qty": "Cantidad",

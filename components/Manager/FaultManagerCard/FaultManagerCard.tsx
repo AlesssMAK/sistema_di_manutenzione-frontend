@@ -8,6 +8,7 @@ import { formatDuration } from '@/lib/utils/faultTime';
 import type { FaultCard } from '@/types/faultType';
 import Button from '@/components/UI/Button/Button';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
+import PriorityBadge from '@/components/UI/PriorityBadge/PriorityBadge';
 import css from './FaultManagerCard.module.css';
 
 interface FaultManagerCardProps {
@@ -25,11 +26,6 @@ const formatDate = (
   return isValid(parsed) ? format(parsed, 'dd/MM/yyyy', { locale }) : value;
 };
 
-const priorityClass: Record<string, string> = {
-  Low: css.priorityLow,
-  Medium: css.priorityMedium,
-  High: css.priorityHigh,
-};
 
 const statusClass: Record<string, string> = {
   Created: css.statusCreated,
@@ -57,7 +53,6 @@ const FaultManagerCard = ({
   const t = useTranslations('FaultCard');
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
-  const tPriority = useTranslations('Priority');
   const tDur = useTranslations('Duration');
   const locale = getDateFnsLocale(useLocale());
   const durUnits = { d: tDur('d'), h: tDur('h'), m: tDur('m') };
@@ -166,13 +161,7 @@ const FaultManagerCard = ({
         <div className={css.planningBlock}>
           <div className={css.row}>
             <span className={css.label}>{t('labels.priority')}</span>
-            <span
-              className={`${css.priorityBadge} ${
-                priorityClass[fault.priority] ?? ''
-              }`}
-            >
-              {tPriority(fault.priority)}
-            </span>
+            <PriorityBadge priority={fault.priority} />
           </div>
           {fault.plannedDate && (
             <div className={css.row}>

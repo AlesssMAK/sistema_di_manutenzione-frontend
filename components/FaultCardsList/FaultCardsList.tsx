@@ -3,6 +3,7 @@
 import { format, isValid, parseISO } from 'date-fns';
 import Button from '../UI/Button/Button';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
+import PriorityBadge from '@/components/UI/PriorityBadge/PriorityBadge';
 import css from './FaultCardsList.module.css';
 import type { AssignedMaintainer, FaultCard } from '@/types/faultType';
 import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
@@ -47,15 +48,6 @@ const toId = (m: AssignedMaintainer): string =>
 const toName = (m: AssignedMaintainer): string | null =>
   typeof m === 'object' && m !== null && 'fullName' in m ? m.fullName : null;
 
-/** Priority → badge colour class, same palette as FaultManagerCard so
- *  the value stands out (High=red / Medium=amber / Low=green) instead of
- *  rendering as plain text like it used to. */
-const priorityClass: Record<string, string> = {
-  Low: css.priorityLow,
-  Medium: css.priorityMedium,
-  High: css.priorityHigh,
-};
-
 /** Priority → card perimeter-border colour (same canonical palette).
  *  The scope modifier keeps the 4px left strip; this tints the rest. */
 const cardPriorityClass: Record<string, string> = {
@@ -78,7 +70,6 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
   const router = useRouter();
   const t = useTranslations('FaultCard');
   const tStatus = useTranslations('StatusFault');
-  const tPriority = useTranslations('Priority');
   const tDur = useTranslations('Duration');
   const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
@@ -154,6 +145,10 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                   ? populatedNames.join(', ')
                   : t('maintainerCount', { count: assigned.length });
           const assigneeIcon = scope === 'mine' ? 'user' : 'users';
+          // For my faults, tell apart the ones I actively took into work
+          // (claimed → In progress) from the ones merely assigned to me and
+          // still waiting to be started.
+          const inWork = String(fault.claimedBy ?? '') === userId;
 
           return (
             <li
@@ -188,6 +183,17 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                       </span>
                     )}
                     <div className={css.headerButton}>
+                      {scope === 'mine' && (
+                        <span
+                          className={`${css.assignBadge} ${
+                            inWork ? css.assignBadgeWork : css.assignBadgeIdle
+                          }`}
+                        >
+                          {inWork
+                            ? t('badges.takenOver')
+                            : t('badges.assigned')}
+                        </span>
+                      )}
                       <span
                         className={`${css.statusBadge} ${
                           css[
@@ -248,13 +254,10 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                     {/* Colonna destra */}
                     <div className={css.detailItem}>
                       <span className={css.label}>{t('labels.priority')}</span>
-                      <p
-                        className={`${css.priorityBadge} ${
-                          priorityClass[fault.priority] ?? ''
-                        }`}
-                      >
-                        {tPriority(fault.priority)}
-                      </p>
+                      <PriorityBadge
+                        priority={fault.priority}
+                        className={css.priorityGap}
+                      />
                       <span className={css.label}>
                         {t('labels.estimatedDuration')}
                       </span>
@@ -266,6 +269,13 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                               m: tDur('m'),
                             })
                           : '—'}
+                      </p>
+                      <span className={css.label}>
+                        {t('labels.dateCreated')}
+                      </span>
+                      <p className={css.value}>
+                        {formatDay(fault.dataCreated, locale)}
+                        {fault.timeCreated ? ` ${fault.timeCreated}` : ''}
                       </p>
                     </div>
                   </div>

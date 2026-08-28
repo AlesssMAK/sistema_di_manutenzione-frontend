@@ -2,6 +2,7 @@
 
 import PlanFaultForm from '@/components/forms/PlanFaultForm/PlanFaultForm';
 import FaultMaterialsUsed from '@/components/Warehouse/FaultMaterialsUsed/FaultMaterialsUsed';
+import PriorityBadge from '@/components/UI/PriorityBadge/PriorityBadge';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import Button from '@/components/UI/Button/Button';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
@@ -60,15 +61,6 @@ const statusClass = (
   return styles.statusCreated;
 };
 
-const priorityClass = (
-  priority: string | undefined,
-  styles: Record<string, string>
-) => {
-  if (priority === 'Low') return styles.priorityLow;
-  if (priority === 'Medium') return styles.priorityMedium;
-  if (priority === 'High') return styles.priorityHigh;
-  return '';
-};
 
 /** Urgency bucket for the deadline date — drives the color modifier. */
 const deadlineUrgencyClass = (
@@ -98,7 +90,6 @@ const ManagerFaultDetailPage = ({
   const tNoFound = useTranslations('NoFound');
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
-  const tPriority = useTranslations('Priority');
   const locale = getDateFnsLocale(useLocale());
   const resolvedParams = use(params);
   const id = resolvedParams.id;
@@ -220,11 +211,7 @@ const ManagerFaultDetailPage = ({
             </div>
             <div className={css.infoItem}>
               <label>{t('labels.priority')}</label>
-              <p
-                className={`${css.priority} ${priorityClass(fault.priority, css)}`}
-              >
-                {tPriority(fault.priority)}
-              </p>
+              <PriorityBadge priority={fault.priority} />
             </div>
 
             <div className={css.infoItem}>
@@ -289,6 +276,12 @@ const ManagerFaultDetailPage = ({
               <label>{t('comments.maintainerNote')}</label>
               <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
             </div>
+            {fault.statusFault === 'Suspended' && fault.suspensionReason && (
+              <div className={css.commentBox}>
+                <label>{t('labels.suspensionReason')}</label>
+                <p>{fault.suspensionReason}</p>
+              </div>
+            )}
             {fault.typeFault === 'Safety' && (
               <div className={css.commentBox}>
                 <label>{t('comments.hseNote')}</label>

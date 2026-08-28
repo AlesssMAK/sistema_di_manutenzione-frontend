@@ -273,6 +273,9 @@ export interface MovementsQuery {
   warehouseId?: string;
   faultId?: string;
   type?: MovementType;
+  /** Date range over the movement timestamp, 'YYYY-MM-DD'. */
+  dateFrom?: string;
+  dateTo?: string;
   page?: number;
   perPage?: number;
 }

@@ -201,23 +201,6 @@
   color: #15803d;
 }
 
-.priority {
-  font-weight: 700;
-}
-
-/* Color-coded by severity — matches FaultManagerCard palette so the
-   value reads the same in lists, cards, and detail pages.
-   Double-class selector bumps specificity above `.infoItem p` (0,1,1)
-   which would otherwise force the value back to black. */
-.priority.priorityLow {
-  color: #15803d;
-}
-.priority.priorityMedium {
-  color: #d97706;
-}
-.priority.priorityHigh {
-  color: #dc2626;
-}
 
 /* Deadline color reflects urgency — same palette as priority. The
    double-class selector bumps specificity above `.infoItem p`

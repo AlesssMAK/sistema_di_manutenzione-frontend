@@ -215,8 +215,7 @@
         "searchPlaceholder": "Szukaj po nazwie...",
         "role": "Rola",
         "allRoles": "Wszystkie Role",
-        "from": "Od",
-        "to": "Do",
+        "dateRange": "Okres",
         "clear": "Wyczyść",
         "datePlaceholder": "dd.mm.rrrr"
       },
@@ -526,6 +525,22 @@
       "overdue": "Opóźnione",
       "completed": "Zakończone"
     },
+    "filters": {
+      "search": "Szukaj",
+      "searchPlaceholder": "Kod, maszyna lub część…",
+      "dateRange": "Okres",
+      "dateRangePlaceholder": "Wybierz okres",
+      "status": "Status",
+      "allStatuses": "Wszystkie statusy",
+      "sortLabel": "Sortuj według",
+      "sort": {
+        "auto": "Domyślnie",
+        "recent": "Najnowsze",
+        "oldest": "Najstarsze",
+        "deadlineNear": "Termin najbliższy",
+        "deadlineFar": "Termin najdalszy"
+      }
+    },
     "scope": {
       "mine": "Moje",
       "pool": "Wolne",
@@ -609,7 +624,16 @@
       "type": "Typ",
       "allTypes": "Wszystkie typy",
       "plannedDate": "Data planowana",
-      "datePlaceholder": "Wybierz datę"
+      "datePlaceholder": "Wybierz datę",
+      "status": "Status",
+      "allStatuses": "Wszystkie statusy",
+      "sortLabel": "Sortuj według",
+      "sort": {
+        "recent": "Najnowsze",
+        "oldest": "Najstarsze",
+        "deadlineNear": "Termin najbliższy",
+        "deadlineFar": "Termin najdalszy"
+      }
     }
   },
   "OperatorPage": {
@@ -856,7 +880,9 @@
     },
     "badges": {
       "rescheduled": "Przeplanowane",
-      "originalLabel": "Oryginał:"
+      "originalLabel": "Oryginał:",
+      "takenOver": "Podjęte",
+      "assigned": "Przypisane"
     },
     "empty": "Brak zgłoszeń"
   },
@@ -1269,11 +1295,14 @@
         "out": "Wydanie",
         "adjust": "Korekta"
       },
+      "tabs": {
+        "stock": "Stan",
+        "movements": "Ruchy"
+      },
       "history": {
-        "title": "Ruchy",
-        "show": "Pokaż",
-        "hide": "Ukryj",
         "empty": "Brak ruchów",
+        "dateRange": "Okres",
+        "dateRangePlaceholder": "Wybierz okres",
         "type": "Typ",
         "item": "Pozycja",
         "qty": "Ilość",

@@ -28,6 +28,33 @@ const TAB_TO_STATUS: Record<ManagerTab, string> = {
 
 const TAB_ORDER: ManagerTab[] = ['received', 'inProgress', 'archive'];
 
+// Specific statuses inside each tab's group — drive the status filter.
+const TAB_STATUSES: Record<ManagerTab, string[]> = {
+  received: ['Created'],
+  inProgress: ['In progress', 'Suspended', 'Overdue'],
+  archive: ['Completed'],
+};
+const STATUS_KEY: Record<string, string> = {
+  Created: 'CREATED',
+  'In progress': 'IN_PROGRESS',
+  Suspended: 'SUSPENDED',
+  Overdue: 'OVERDUE',
+  Completed: 'COMPLETED',
+};
+
+// Date sort presets → fetchFaultCards params (createdAt via `sort`,
+// other fields via sortBy/sortOrder).
+type SortKey = 'recent' | 'oldest' | 'deadlineNear' | 'deadlineFar';
+const SORT_CONFIG: Record<
+  SortKey,
+  { sort?: 'asc' | 'desc'; sortBy?: string; sortOrder?: 'asc' | 'desc' }
+> = {
+  recent: { sort: 'desc' },
+  oldest: { sort: 'asc' },
+  deadlineNear: { sortBy: 'deadline', sortOrder: 'asc' },
+  deadlineFar: { sortBy: 'deadline', sortOrder: 'desc' },
+};
+
 const PER_PAGE = 8;
 
 const ManagerClient = () => {
@@ -35,6 +62,7 @@ const ManagerClient = () => {
   const tNoFound = useTranslations('NoFound');
   const tPriority = useTranslations('Priority');
   const tType = useTranslations('TypeFault');
+  const tStatus = useTranslations('StatusFault');
   const TABS: TabItem<ManagerTab>[] = [
     { value: 'received', label: t('tabs.received'), icon: 'clipboard' },
     { value: 'inProgress', label: t('tabs.inProgress'), icon: 'reload' },
@@ -52,11 +80,14 @@ const ManagerClient = () => {
   const [priority, setPriority] = useState<PriorityFaultType | ''>('');
   const [typeFault, setTypeFault] = useState<TypeFault | ''>('');
   const [plannedDate, setPlannedDate] = useState('');
+  // Date sort + a specific-status filter (narrows the tab's status group).
+  const [sortOption, setSortOption] = useState<SortKey>('recent');
+  const [statusFilter, setStatusFilter] = useState('');
 
   // Any filter change resets pagination back to the first page. Adjusted
   // during render rather than in an effect so the reset lands in the same
   // pass as the filter change (no cascading render).
-  const filterKey = `${debouncedSearch}|${priority}|${typeFault}|${plannedDate}`;
+  const filterKey = `${debouncedSearch}|${priority}|${typeFault}|${plannedDate}|${statusFilter}|${sortOption}`;
   const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
   if (prevFilterKey !== filterKey) {
     setPrevFilterKey(filterKey);
@@ -84,6 +115,30 @@ const ManagerClient = () => {
     [t, tType]
   );
 
+  const sortMapper = useMemo(
+    () =>
+      createOptionMapper<SortKey>([
+        { value: 'recent', label: t('filters.sort.recent') },
+        { value: 'oldest', label: t('filters.sort.oldest') },
+        { value: 'deadlineNear', label: t('filters.sort.deadlineNear') },
+        { value: 'deadlineFar', label: t('filters.sort.deadlineFar') },
+      ]),
+    [t]
+  );
+
+  // Status options are the specific statuses inside the active tab.
+  const statusMapper = useMemo(
+    () =>
+      createOptionMapper<string>([
+        { value: '', label: t('filters.allStatuses') },
+        ...TAB_STATUSES[activeTab].map(s => ({
+          value: s,
+          label: tStatus(STATUS_KEY[s]),
+        })),
+      ]),
+    [t, tStatus, activeTab]
+  );
+
   // Active filters shared by the list query and the tab counters, so
   // the badges reflect the same filtered totals as the list.
   const filters = {
@@ -94,13 +149,24 @@ const ManagerClient = () => {
   };
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['faults', 'manager', activeTab, page, filters],
+    queryKey: [
+      'faults',
+      'manager',
+      activeTab,
+      page,
+      filters,
+      statusFilter,
+      sortOption,
+    ],
     queryFn: () =>
       fetchFaultCards({
         page,
         perPage: PER_PAGE,
-        statusFault: TAB_TO_STATUS[activeTab],
+        // A specific status narrows the tab's group; otherwise the whole
+        // group is shown.
+        statusFault: statusFilter || TAB_TO_STATUS[activeTab],
         ...filters,
+        ...SORT_CONFIG[sortOption],
       }),
     placeholderData: keepPreviousData,
   });
@@ -131,6 +197,8 @@ const ManagerClient = () => {
   const handleTabChange = (tab: ManagerTab) => {
     if (tab === activeTab) return;
     setActiveTab(tab);
+    // The status options belong to the tab, so drop a stale selection.
+    setStatusFilter('');
     setPage(1);
   };
 
@@ -157,6 +225,8 @@ const ManagerClient = () => {
     setPriority('');
     setTypeFault('');
     setPlannedDate('');
+    setStatusFilter('');
+    setSortOption('recent');
   };
 
   const filterItems: FiltersItem[] = [
@@ -169,6 +239,23 @@ const ManagerClient = () => {
       placeholder: t('filters.searchPlaceholder'),
       icon: 'search',
     },
+    // Status filter — only where the tab groups more than one status
+    // (In lavorazione). Narrows the group to a single status.
+    ...(TAB_STATUSES[activeTab].length > 1
+      ? [
+          {
+            id: 'status',
+            type: 'select' as const,
+            label: t('filters.status'),
+            value:
+              statusMapper.getLabelByValue(statusFilter) ??
+              t('filters.allStatuses'),
+            options: statusMapper.labelsArray,
+            onSelect: (label: string) =>
+              setStatusFilter(statusMapper.getValueByLabel(label) ?? ''),
+          },
+        ]
+      : []),
     {
       id: 'priority',
       type: 'select',
@@ -194,6 +281,15 @@ const ManagerClient = () => {
       value: plannedDate,
       onChange: setPlannedDate,
       placeholder: t('filters.datePlaceholder'),
+    },
+    {
+      id: 'sort',
+      type: 'select',
+      label: t('filters.sortLabel'),
+      value: sortMapper.getLabelByValue(sortOption) ?? t('filters.sort.recent'),
+      options: sortMapper.labelsArray,
+      onSelect: label =>
+        setSortOption((sortMapper.getValueByLabel(label) ?? 'recent') as SortKey),
     },
   ];
 

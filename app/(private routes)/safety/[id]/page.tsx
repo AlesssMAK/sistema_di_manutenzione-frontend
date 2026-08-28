@@ -2,6 +2,7 @@
 
 import Button from '@/components/UI/Button/Button';
 import FaultMaterialsUsed from '@/components/Warehouse/FaultMaterialsUsed/FaultMaterialsUsed';
+import PriorityBadge from '@/components/UI/PriorityBadge/PriorityBadge';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
@@ -41,15 +42,6 @@ const formatDateTime = (
     : value;
 };
 
-const priorityClass = (
-  priority: string | undefined,
-  styles: Record<string, string>
-) => {
-  if (priority === 'Low') return styles.priorityLow;
-  if (priority === 'Medium') return styles.priorityMedium;
-  if (priority === 'High') return styles.priorityHigh;
-  return '';
-};
 
 /** Map raw backend statusFault to the StatusFault i18n key. */
 const statusKey = (status: string | undefined) => {
@@ -83,7 +75,6 @@ const SafetyFaultDetailPage = ({
   const tNoFound = useTranslations('NoFound');
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
-  const tPriority = useTranslations('Priority');
   const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
@@ -260,11 +251,7 @@ const SafetyFaultDetailPage = ({
               </div>
               <div className={css.infoItem}>
                 <label>{t('labels.priority')}</label>
-                <p
-                  className={`${css.priority} ${priorityClass(fault.priority, css)}`}
-                >
-                  {tPriority(fault.priority)}
-                </p>
+                <PriorityBadge priority={fault.priority} />
               </div>
             </div>
 
@@ -296,6 +283,12 @@ const SafetyFaultDetailPage = ({
               <label>{t('comments.maintainerNote')}</label>
               <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
             </div>
+            {fault.statusFault === 'Suspended' && fault.suspensionReason && (
+              <div className={css.commentBox}>
+                <label>{t('labels.suspensionReason')}</label>
+                <p>{fault.suspensionReason}</p>
+              </div>
+            )}
           </div>
 
           <FaultMaterialsUsed

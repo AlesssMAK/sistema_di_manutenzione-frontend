@@ -3,6 +3,7 @@
 import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
 import OvertimeAlertModal from '@/components/MaintenanceWorker/OvertimeAlertModal/OvertimeAlertModal';
 import FaultMaterialsUsed from '@/components/Warehouse/FaultMaterialsUsed/FaultMaterialsUsed';
+import PriorityBadge from '@/components/UI/PriorityBadge/PriorityBadge';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import { ALLOWED_TRANSITIONS } from '@/lib/validation/maintenanceWorkerUpdateValidation';
 import Button from '@/components/UI/Button/Button';
@@ -23,15 +24,6 @@ import { useRouter } from 'next/navigation';
 import { use, useEffect, useState } from 'react';
 import css from './page.module.css';
 
-const priorityClass = (
-  priority: string | undefined,
-  styles: Record<string, string>
-) => {
-  if (priority === 'Low') return styles.priorityLow;
-  if (priority === 'Medium') return styles.priorityMedium;
-  if (priority === 'High') return styles.priorityHigh;
-  return '';
-};
 
 /** Map raw backend statusFault to the StatusFault i18n key. */
 const statusKey = (status: string | undefined) => {
@@ -104,7 +96,6 @@ export default function FaultDetailPage({
   const tNoFound = useTranslations('NoFound');
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
-  const tPriority = useTranslations('Priority');
   const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
   const { subscribeToFault, unsubscribeFromFault } = useSocket();
@@ -352,11 +343,7 @@ export default function FaultDetailPage({
               </div>
               <div className={css.infoItem}>
                 <label>{t('labels.priority')}</label>
-                <p
-                  className={`${css.priority} ${priorityClass(fault.priority, css)}`}
-                >
-                  {tPriority(fault.priority)}
-                </p>
+                <PriorityBadge priority={fault.priority} />
               </div>
             </div>
 
@@ -409,16 +396,6 @@ export default function FaultDetailPage({
               </div>
             )}
 
-            {/* Phase C: when suspended, surface the reason so whoever
-                picks the fault back up knows why it stalled. The material
-                note itself now lives in the materials panel below. */}
-            {isSuspended && fault.suspensionReason && (
-              <div className={css.infoItem}>
-                <label>{t('labels.suspensionReason')}</label>
-                <p>{fault.suspensionReason}</p>
-              </div>
-            )}
-
             {/* Materials issued + the free-text material note (completion
                 or suspension), collapsed into one panel. */}
             <FaultMaterialsUsed
@@ -454,6 +431,16 @@ export default function FaultDetailPage({
               <label>{t('comments.maintainerNote')}</label>
               <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
             </div>
+
+            {/* Suspension reason sits with the other notes (moved out of
+                the top info grid). Only shown when the fault is/was
+                suspended. */}
+            {isSuspended && fault.suspensionReason && (
+              <div className={css.commentBox}>
+                <label>{t('labels.suspensionReason')}</label>
+                <p>{fault.suspensionReason}</p>
+              </div>
+            )}
 
             {/* Nota HSE — visibile solo per i fault Safety */}
             {fault.typeFault === 'Safety' && (

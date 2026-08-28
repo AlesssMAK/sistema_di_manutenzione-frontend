@@ -21,6 +21,10 @@ export const maintainerUpdateSchema = yup.object({
         .typeError('Durata effettiva richiesta')
         .min(1, 'Minimo 1 minuto')
         .required('Durata effettiva obbligatoria'),
+    // For non-completion transitions (Suspend / Resume) the actual
+    // duration is neither shown nor sent, so it must never block the
+    // submit — a freshly-claimed fault has ~0 worked minutes, and a
+    // min(1) here silently failed validation on a hidden field.
     otherwise: schema =>
       schema
         .transform((value, original) =>
@@ -28,7 +32,6 @@ export const maintainerUpdateSchema = yup.object({
             ? undefined
             : value
         )
-        .min(1, 'Minimo 1 minuto')
         .optional(),
   }),
   suspensionReason: yup.string().when('statusFault', {

@@ -185,23 +185,6 @@
   color: #15803d;
 }
 
-.priority {
-  font-weight: 600;
-}
-
-/* Priority text color matches the badge palette used in
-   FaultManagerCard so the UI reads the same across cards and detail.
-   Double-class selector bumps specificity above `.infoItem p` (0,1,1)
-   which would otherwise force the value back to black. */
-.priority.priorityLow {
-  color: #15803d;
-}
-.priority.priorityMedium {
-  color: #d97706;
-}
-.priority.priorityHigh {
-  color: #dc2626;
-}
 
 .deadline {
   font-weight: 600;

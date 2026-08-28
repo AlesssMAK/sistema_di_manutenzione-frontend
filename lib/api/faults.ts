@@ -11,6 +11,9 @@ interface FetchParams {
   /** Lower bound 'created since' window (YYYY-MM-DD). */
   dataCreatedFrom?: string;
   plannedDate?: string;
+  /** Planned-date range (Filtri panel), 'YYYY-MM-DD'. */
+  plannedDateFrom?: string;
+  plannedDateTo?: string;
   statusFault?: string;
   typeFault?: string;
   assignedTo?: string;
@@ -88,6 +91,8 @@ export const fetchFaultCards = async ({
   dataCreated,
   dataCreatedFrom,
   plannedDate,
+  plannedDateFrom,
+  plannedDateTo,
   statusFault,
   typeFault,
   assignedTo,
@@ -107,6 +112,8 @@ export const fetchFaultCards = async ({
       ...(dataCreated ? { dataCreated } : {}),
       ...(dataCreatedFrom ? { dataCreatedFrom } : {}),
       ...(plannedDate ? { plannedDate } : {}),
+      ...(plannedDateFrom ? { plannedDateFrom } : {}),
+      ...(plannedDateTo ? { plannedDateTo } : {}),
       ...(statusFault ? { statusFault } : {}),
       ...(typeFault ? { typeFault } : {}),
       ...(assignedTo ? { assignedTo } : {}),

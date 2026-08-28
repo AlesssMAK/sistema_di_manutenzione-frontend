@@ -261,34 +261,9 @@
   margin: 0 0 8px 0;
 }
 
-/* Priority badge — colour-coded pill using the canonical priority
-   palette shared with the priority filter, detail page and calendar
-   (#15803d / #d97706 / #dc2626), so the card matches the rest of the app
-   and High/Alta reads as urgent. Replaces the old unstyled .priorityValue. */
-.priorityBadge {
-  display: inline-block;
-  width: fit-content;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.2;
-  margin: 0 0 8px 0;
-}
-
-.priorityLow {
-  background: #f0fdf4;
-  color: #15803d;
-}
-
-.priorityMedium {
-  background: #fffbeb;
-  color: #d97706;
-}
-
-.priorityHigh {
-  background: #fef2f2;
-  color: #dc2626;
+/* Spacing below the shared PriorityBadge inside the card grid. */
+.priorityGap {
+  margin-bottom: 6px;
 }
 
 .commentContainer {
@@ -359,4 +334,24 @@
   letter-spacing: 0.4px;
   text-transform: uppercase;
   cursor: help;
+}
+
+/* Mine-scope badge: distinguishes faults I took into work vs merely
+   assigned to me and awaiting start. */
+.assignBadge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+.assignBadgeWork {
+  background: #dbeafe;
+  color: #1e40af;
+}
+.assignBadgeIdle {
+  background: #fef3c7;
+  color: #92400e;
 }
