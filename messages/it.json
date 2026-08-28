@@ -522,6 +522,7 @@
     "headerSubtitle": "Visualizza e gestisci gli interventi pianificati",
     "tabs": {
       "active": "Attive",
+      "suspended": "Sospese",
       "overdue": "In Ritardo",
       "completed": "Completate"
     },
@@ -557,6 +558,7 @@
     },
     "empty": {
       "overdue": "Nessuna segnalazione in ritardo",
+      "suspended": "Nessuna segnalazione sospesa",
       "completedDate": "Nessuna segnalazione completata in questa data",
       "completed": "Nessuna segnalazione completata",
       "mineDate": "Nessuna segnalazione assegnata a te in questa data",
@@ -608,11 +610,13 @@
     "headerSubtitle": "Gestisci le segnalazioni ricevute, le attività in corso e l'archivio",
     "tabs": {
       "received": "Ricevute",
+      "suspended": "Sospese",
       "inProgress": "In Lavorazione",
       "archive": "Completate"
     },
     "empty": {
       "received": "Nessuna segnalazione in attesa",
+      "suspended": "Nessuna segnalazione sospesa",
       "inProgress": "Nessuna segnalazione in lavorazione",
       "archive": "Nessuna segnalazione archiviata"
     },
@@ -773,6 +777,7 @@
     "headerSubtitle": "Visualizza in tempo reale le segnalazioni di sicurezza. Sola lettura.",
     "badge": "HSE",
     "statusFilter": "Stato",
+    "newBadge": "Nuove",
     "statusOptions": {
       "all": "Tutti gli Stati"
     },
@@ -862,7 +867,8 @@
       "claimedBy": "Preso in Carico",
       "planned": "Pianificato",
       "pool": "Pool",
-      "technician": "Manutentore"
+      "technician": "Manutentore",
+      "suspendedOn": "Sospeso il"
     },
     "maintainerCount": "{count, plural, one {# manutentore} other {# manutentori}}",
     "buttons": {
@@ -882,7 +888,8 @@
       "rescheduled": "Riprogrammata",
       "originalLabel": "Originale:",
       "takenOver": "Preso in carico",
-      "assigned": "Assegnato"
+      "assigned": "Assegnato",
+      "unseen": "Nuova"
     },
     "empty": "Nessuna segnalazione"
   },
@@ -961,8 +968,16 @@
       "error": "Errore durante l'aggiornamento",
       "noTransitions": "Nessun aggiornamento possibile da stato \"{status}\".",
       "takeOverHint": " Usa \"Prendi in carico\" per iniziare.",
-      "materialsError": "Intervento aggiornato, ma lo scarico materiali non è riuscito."
+      "materialsError": "Intervento aggiornato, ma lo scarico materiali non è riuscito.",
+      "materialsOutOfStock": "Materiale esaurito: {items} (scorta a magazzino negativa)."
+    },
+    "errors": {
+      "durationBelowFloor": "Il tempo non può essere inferiore al tempo già lavorato ({min})."
     }
+  },
+  "FaultSuspensions": {
+    "title": "Sospensioni",
+    "one": "Sospensione"
   },
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Report",

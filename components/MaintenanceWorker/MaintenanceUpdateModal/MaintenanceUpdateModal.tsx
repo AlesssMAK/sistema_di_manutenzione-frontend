@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useForm, type Resolver } from 'react-hook-form';
-import { roundToStep } from '@/lib/utils/faultTime';
+import { formatDuration, roundToStep } from '@/lib/utils/faultTime';
 import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
 import { stockOut } from '@/lib/api/warehouse';
 import FaultMaterialsPicker, {
@@ -38,9 +38,29 @@ interface MaintenanceUpdateModalProps {
   /** Auto-computed worked minutes used to prefill the (editable)
    *  "actual duration" field on completion. */
   defaultActualDuration?: number;
+  /** Floor for the actual duration: the time already booked before this
+   *  completion (up to the last suspension). The stated value can't go
+   *  below it. */
+  minDuration?: number;
   onClose: () => void;
   onSuccess: (updatedFault: FaultCard) => void;
 }
+
+// Pull the backend's human message out of an axios error (the Next proxy
+// wraps it as { error: { message } }); falls back to a generic string.
+const errorMessage = (err: unknown, fallback: string): string => {
+  if (err && typeof err === 'object' && 'response' in err) {
+    const data = (err as { response?: { data?: unknown } }).response?.data as
+      | { error?: { message?: string } | string; message?: string }
+      | undefined;
+    const msg =
+      (typeof data?.error === 'object' ? data?.error?.message : undefined) ??
+      (typeof data?.error === 'string' ? data.error : undefined) ??
+      data?.message;
+    if (typeof msg === 'string' && msg) return msg;
+  }
+  return fallback;
+};
 
 const MaintenanceUpdateModal = ({
   faultId,
@@ -48,14 +68,18 @@ const MaintenanceUpdateModal = ({
   currentStatus,
   lockedStatus,
   defaultActualDuration,
+  minDuration = 0,
   onClose,
   onSuccess,
 }: MaintenanceUpdateModalProps) => {
   const t = useTranslations('MaintenanceUpdateModal');
+  const tDur = useTranslations('Duration');
   const queryClient = useQueryClient();
   const { moduleEnabled } = useWarehouseAccess();
   // Structured materials to issue from stock on completion (optional).
   const [materials, setMaterials] = useState<MaterialsPayload | null>(null);
+  // Submit-blocking error shown inline in the modal (e.g. out-of-stock).
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const isLocked = Boolean(lockedStatus);
   const availableStatuses = ALLOWED_TRANSITIONS[currentStatus] ?? [];
 
@@ -81,6 +105,7 @@ const MaintenanceUpdateModal = ({
     register,
     handleSubmit,
     setValue,
+    setError,
     watch,
     formState: { errors },
   } = useForm<MaintainerUpdateValues>({
@@ -115,8 +140,22 @@ const MaintenanceUpdateModal = ({
   }
 
   const mutation = useMutation({
-    mutationFn: (values: MaintainerUpdateValues) =>
-      updateFaultByWorker({
+    mutationFn: async (values: MaintainerUpdateValues) => {
+      // Issue the picked materials FIRST, in strict mode: if any item is
+      // out of stock this rejects (writing nothing) and the fault is never
+      // updated — a fault can't be closed against stock that isn't there.
+      if (materials) {
+        await stockOut({
+          warehouseId: materials.warehouseId,
+          lines: materials.lines,
+          reference: { type: 'fault', faultId },
+          strict: true,
+        });
+        queryClient.invalidateQueries({ queryKey: ['warehouse', 'stock'] });
+        queryClient.invalidateQueries({ queryKey: ['warehouse', 'movements'] });
+      }
+
+      return updateFaultByWorker({
         faultId,
         statusFault: values.statusFault,
         // For Suspended the suspensionReason field below already
@@ -134,41 +173,45 @@ const MaintenanceUpdateModal = ({
           suspensionReason: values.suspensionReason,
           materialRequest: values.materialRequest || undefined,
         }),
-      }),
-    onSuccess: async data => {
+      });
+    },
+    onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: ['faults'] });
       queryClient.invalidateQueries({ queryKey: ['fault', faultId] });
-      // Best-effort: issue the picked materials against this fault. The
-      // fault is already updated, so a stock failure only warns.
-      if (materials) {
-        try {
-          await stockOut({
-            warehouseId: materials.warehouseId,
-            lines: materials.lines,
-            reference: { type: 'fault', faultId },
-          });
-          queryClient.invalidateQueries({ queryKey: ['warehouse', 'stock'] });
-          queryClient.invalidateQueries({
-            queryKey: ['warehouse', 'movements'],
-          });
-        } catch {
-          toast.error(t('messages.materialsError'));
-        }
-      }
       toast.success(t('messages.success'));
       onSuccess(data);
       onClose();
     },
     onError: (err: unknown) => {
-      const message =
-        err && typeof err === 'object' && 'message' in err
-          ? String((err as { message: unknown }).message)
-          : t('messages.error');
+      const message = errorMessage(err, t('messages.error'));
+      setSubmitError(message);
       toast.error(message);
     },
   });
 
   const onSubmit = (values: MaintainerUpdateValues) => {
+    setSubmitError(null);
+    if (values.statusFault === 'Completed') {
+      let d = Number(values.actualDuration ?? 0);
+      // Can't state less than what was already worked (up to the last pause).
+      if (d > 0 && d < minDuration) {
+        setError('actualDuration', {
+          type: 'min',
+          message: t('errors.durationBelowFloor', {
+            min: formatDuration(minDuration, {
+              d: tDur('d'),
+              h: tDur('h'),
+              m: tDur('m'),
+            }),
+          }),
+        });
+        return;
+      }
+      // Left at zero → sensible default (never below the floor).
+      if (d <= 0) d = Math.max(15, minDuration);
+      mutation.mutate({ ...values, actualDuration: d });
+      return;
+    }
     mutation.mutate(values);
   };
 
@@ -318,6 +361,12 @@ const MaintenanceUpdateModal = ({
                 />
               </div>
             </>
+          )}
+
+          {submitError && (
+            <p className={css.submitError} role="alert">
+              {submitError}
+            </p>
           )}
 
           <div className={css.actions}>

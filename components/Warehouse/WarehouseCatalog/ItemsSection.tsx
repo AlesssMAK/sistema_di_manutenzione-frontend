@@ -124,19 +124,26 @@ const ItemsSection = forwardRef<ItemsSectionHandle, ItemsSectionProps>(
       onChange: setSearch,
       icon: 'search',
     },
-    {
-      id: 'category',
-      type: 'select',
-      label: t('fields.category'),
-      value: categoryId
-        ? (catNameById.get(categoryId) ?? allCategoriesLabel)
-        : allCategoriesLabel,
-      options: [allCategoriesLabel, ...categories.map(c => c.name)],
-      onSelect: label =>
-        setCategoryId(
-          label === allCategoriesLabel ? '' : (catIdByName.get(label) ?? '')
-        ),
-    },
+    // Category filter only when categories exist (created in admin).
+    ...(categories.length > 0
+      ? [
+          {
+            id: 'category',
+            type: 'select' as const,
+            label: t('fields.category'),
+            value: categoryId
+              ? (catNameById.get(categoryId) ?? allCategoriesLabel)
+              : allCategoriesLabel,
+            options: [allCategoriesLabel, ...categories.map(c => c.name)],
+            onSelect: (label: string) =>
+              setCategoryId(
+                label === allCategoriesLabel
+                  ? ''
+                  : (catIdByName.get(label) ?? '')
+              ),
+          },
+        ]
+      : []),
     {
       id: 'status',
       type: 'select',

@@ -7,31 +7,59 @@ import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
-import { fetchFaultCards } from '@/lib/api/faults';
+import {
+  fetchFaultCards,
+  fetchListSeen,
+  markListSeen,
+  type ListSeenKey,
+} from '@/lib/api/faults';
 
 import { useAutoTabSwitch } from '@/lib/hooks/useAutoTabSwitch';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import { FaultCard, PriorityFaultType, TypeFault } from '@/types/faultType';
-import { keepPreviousData, useQueries, useQuery } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import css from './Manager.module.css';
 
-type ManagerTab = 'received' | 'inProgress' | 'archive';
+type ManagerTab = 'received' | 'suspended' | 'inProgress' | 'archive';
 
 const TAB_TO_STATUS: Record<ManagerTab, string> = {
   received: 'Created',
-  inProgress: 'In progress,Suspended,Overdue',
+  suspended: 'Suspended',
+  // Suspended has its own tab, so it's excluded here — a paused fault
+  // shows only under "Sospese", not also under "In Lavorazione".
+  inProgress: 'In progress,Overdue',
   archive: 'Completed',
 };
 
-const TAB_ORDER: ManagerTab[] = ['received', 'inProgress', 'archive'];
+const TAB_ORDER: ManagerTab[] = [
+  'received',
+  'inProgress',
+  'suspended',
+  'archive',
+];
+
+// Dot-free listSeen keys (model A: faults assigned to technicians clear
+// on tab open; unassigned "received" faults are model B).
+const TAB_SEEN_KEY: Record<ManagerTab, ListSeenKey> = {
+  received: 'manager_received',
+  suspended: 'manager_suspended',
+  inProgress: 'manager_inprogress',
+  archive: 'manager_archive',
+};
 
 // Specific statuses inside each tab's group — drive the status filter.
 const TAB_STATUSES: Record<ManagerTab, string[]> = {
   received: ['Created'],
-  inProgress: ['In progress', 'Suspended', 'Overdue'],
+  suspended: ['Suspended'],
+  inProgress: ['In progress', 'Overdue'],
   archive: ['Completed'],
 };
 const STATUS_KEY: Record<string, string> = {
@@ -66,6 +94,7 @@ const ManagerClient = () => {
   const TABS: TabItem<ManagerTab>[] = [
     { value: 'received', label: t('tabs.received'), icon: 'clipboard' },
     { value: 'inProgress', label: t('tabs.inProgress'), icon: 'reload' },
+    { value: 'suspended', label: t('tabs.suspended'), icon: 'exclamation-circle' },
     { value: 'archive', label: t('tabs.archive'), icon: 'archive' },
   ];
 
@@ -148,6 +177,16 @@ const ManagerClient = () => {
     ...(plannedDate ? { plannedDate } : {}),
   };
 
+  const queryClient = useQueryClient();
+
+  // Per-list lastSeen timestamps (drive model A for technician-assigned
+  // faults). Fed back as seenSince per tab.
+  const { data: listSeen } = useQuery({
+    queryKey: ['listSeen'],
+    queryFn: fetchListSeen,
+    staleTime: 30 * 1000,
+  });
+
   const { data, isLoading, isError } = useQuery({
     queryKey: [
       'faults',
@@ -157,6 +196,7 @@ const ManagerClient = () => {
       filters,
       statusFilter,
       sortOption,
+      listSeen?.[TAB_SEEN_KEY[activeTab]] ?? null,
     ],
     queryFn: () =>
       fetchFaultCards({
@@ -167,22 +207,31 @@ const ManagerClient = () => {
         statusFault: statusFilter || TAB_TO_STATUS[activeTab],
         ...filters,
         ...SORT_CONFIG[sortOption],
+        withUnseen: true,
+        ...(listSeen?.[TAB_SEEN_KEY[activeTab]]
+          ? { seenSince: listSeen[TAB_SEEN_KEY[activeTab]] }
+          : {}),
       }),
     placeholderData: keepPreviousData,
   });
 
   const countsResults = useQueries({
-    queries: TAB_ORDER.map(tab => ({
-      queryKey: ['faults', 'manager', tab, 'count', filters],
-      queryFn: () =>
-        fetchFaultCards({
-          page: 1,
-          perPage: 1,
-          statusFault: TAB_TO_STATUS[tab],
-          ...filters,
-        }),
-      placeholderData: keepPreviousData,
-    })),
+    queries: TAB_ORDER.map(tab => {
+      const since = listSeen?.[TAB_SEEN_KEY[tab]];
+      return {
+        queryKey: ['faults', 'manager', tab, 'count', filters, since ?? null],
+        queryFn: () =>
+          fetchFaultCards({
+            page: 1,
+            perPage: 1,
+            statusFault: TAB_TO_STATUS[tab],
+            ...filters,
+            withUnseen: true,
+            ...(since ? { seenSince: since } : {}),
+          }),
+        placeholderData: keepPreviousData,
+      };
+    }),
   });
 
   const counts = TAB_ORDER.reduce<Partial<Record<ManagerTab, number>>>(
@@ -194,13 +243,42 @@ const ManagerClient = () => {
     {}
   );
 
+  // Per-tab unseen dots.
+  const dots = TAB_ORDER.reduce<Partial<Record<ManagerTab, boolean>>>(
+    (acc, tab, i) => {
+      if (countsResults[i].data?.hasUnseen) acc[tab] = true;
+      return acc;
+    },
+    {}
+  );
+
+  const markTabSeen = (tab: ManagerTab) => {
+    markListSeen(TAB_SEEN_KEY[tab])
+      .then(() => {
+        queryClient.invalidateQueries({ queryKey: ['listSeen'] });
+        queryClient.invalidateQueries({ queryKey: ['faults', 'manager'] });
+      })
+      .catch(() => {});
+  };
+
   const handleTabChange = (tab: ManagerTab) => {
     if (tab === activeTab) return;
     setActiveTab(tab);
     // The status options belong to the tab, so drop a stale selection.
     setStatusFilter('');
     setPage(1);
+    // Opening a tab clears its technician-assigned (model A) cards.
+    markTabSeen(tab);
   };
+
+  // Mark the landing tab seen once, so its model-A cards start cleared.
+  const landedRef = useRef(false);
+  useEffect(() => {
+    if (landedRef.current) return;
+    landedRef.current = true;
+    markTabSeen(activeTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // When the active filter leaves the current tab empty but matches in
   // another, jump to the first tab (in order) that has results. Waits
@@ -312,6 +390,7 @@ const ManagerClient = () => {
             activeTab={activeTab}
             onTabChange={handleTabChange}
             counts={counts}
+            dots={dots}
           />
         </div>
 

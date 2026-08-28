@@ -7,7 +7,7 @@ import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
-import { fetchFaultById } from '@/lib/api/faults';
+import { fetchFaultById, markFaultSeen } from '@/lib/api/faults';
 import { updateSafetyComment } from '@/lib/api/safety';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
@@ -103,6 +103,12 @@ const SafetyFaultDetailPage = ({
     subscribeToFault(id);
     return () => unsubscribeFromFault(id);
   }, [id, subscribeToFault, unsubscribeFromFault]);
+
+  // Opening the detail marks this fault individually seen — clears its
+  // unseen dot on every board.
+  useEffect(() => {
+    if (id) markFaultSeen(id);
+  }, [id]);
 
   // Sync draft with server value when fault loads / updates via socket.
   // Adjusted during render rather than in an effect so the draft is already

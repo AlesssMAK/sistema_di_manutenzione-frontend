@@ -197,21 +197,28 @@ const WarehouseStock = () => {
       },
       icon: 'search',
     },
-    {
-      id: 'category',
-      type: 'select',
-      label: tItems('fields.category'),
-      value: categoryId
-        ? (catNameById.get(categoryId) ?? allCategoriesLabel)
-        : allCategoriesLabel,
-      options: [allCategoriesLabel, ...categories.map((c) => c.name)],
-      onSelect: (label) => {
-        setCategoryId(
-          label === allCategoriesLabel ? '' : (catIdByName.get(label) ?? '')
-        );
-        setPage(1);
-      },
-    },
+    // Category filter only when categories exist (created in admin).
+    ...(categories.length > 0
+      ? [
+          {
+            id: 'category',
+            type: 'select' as const,
+            label: tItems('fields.category'),
+            value: categoryId
+              ? (catNameById.get(categoryId) ?? allCategoriesLabel)
+              : allCategoriesLabel,
+            options: [allCategoriesLabel, ...categories.map((c) => c.name)],
+            onSelect: (label: string) => {
+              setCategoryId(
+                label === allCategoriesLabel
+                  ? ''
+                  : (catIdByName.get(label) ?? '')
+              );
+              setPage(1);
+            },
+          },
+        ]
+      : []),
     {
       id: 'level',
       type: 'select',

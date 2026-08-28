@@ -138,7 +138,11 @@
 
 /* Status badge — color depends on statusFault */
 .statusBadge {
-  padding: 4px 12px;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  box-sizing: border-box;
+  padding: 0 12px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
@@ -292,6 +296,50 @@
   margin: 0;
 }
 
+/* Current pause info on the card — amber "attention" tint, matching the
+   detail-page callout, showing when it was suspended and why. */
+.suspensionContainer {
+  background-color: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+
+.suspensionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.suspensionLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: #92400e;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0;
+}
+
+.suspensionDate {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b45309;
+  white-space: nowrap;
+}
+
+.suspensionText {
+  font-size: 14px;
+  color: #1e293b;
+  margin: 0;
+}
+
 /* Footer (action buttons row). Phone & tablet: stack each button
    full-width for easy tap targets. Desktop: standard right-aligned
    row. */
@@ -324,8 +372,10 @@
 .riprogrammatBadge {
   display: inline-flex;
   align-items: center;
+  height: 20px;
+  box-sizing: border-box;
   margin-left: 10px;
-  padding: 3px 10px;
+  padding: 0 10px;
   border-radius: 999px;
   background: #fef3c7;
   color: #92400e;
@@ -336,11 +386,40 @@
   cursor: help;
 }
 
+/* "Not seen yet" marker — red pill next to the fault id. */
+.unseenBadge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  box-sizing: border-box;
+  gap: 5px;
+  margin-left: 10px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.unseenDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex: 0 0 auto;
+}
+
 /* Mine-scope badge: distinguishes faults I took into work vs merely
    assigned to me and awaiting start. */
 .assignBadge {
-  display: inline-block;
-  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  box-sizing: border-box;
+  padding: 0 8px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;

@@ -298,6 +298,9 @@ export interface StockOutRequest {
   lines: MovementLine[];
   reference?: MovementReference;
   note?: string;
+  /** Reject (don't complete) if any line would go negative — used by the
+   *  fault-completion write-off so a fault can't close against missing stock. */
+  strict?: boolean;
 }
 
 export interface StockAdjustRequest {

@@ -523,7 +523,8 @@
     "tabs": {
       "active": "Aktywne",
       "overdue": "Opóźnione",
-      "completed": "Zakończone"
+      "completed": "Zakończone",
+      "suspended": "Zawieszone"
     },
     "filters": {
       "search": "Szukaj",
@@ -557,6 +558,7 @@
     },
     "empty": {
       "overdue": "Brak opóźnionych zgłoszeń",
+      "suspended": "Brak zawieszonych zgłoszeń",
       "completedDate": "Brak zgłoszeń zakończonych w tym dniu",
       "completed": "Brak zakończonych zgłoszeń",
       "mineDate": "Brak zgłoszeń przypisanych do Ciebie w tym dniu",
@@ -609,11 +611,13 @@
     "tabs": {
       "received": "Otrzymane",
       "inProgress": "W Trakcie",
+      "suspended": "Zawieszone",
       "archive": "Zakończone"
     },
     "empty": {
       "received": "Brak oczekujących zgłoszeń",
       "inProgress": "Brak zgłoszeń w trakcie",
+      "suspended": "Brak zawieszonych zgłoszeń",
       "archive": "Brak zarchiwizowanych zgłoszeń"
     },
     "filters": {
@@ -773,6 +777,7 @@
     "headerSubtitle": "Przeglądaj zgłoszenia bezpieczeństwa w czasie rzeczywistym. Tylko do odczytu.",
     "badge": "BHP",
     "statusFilter": "Status",
+    "newBadge": "Nowe",
     "statusOptions": {
       "all": "Wszystkie Statusy"
     },
@@ -862,7 +867,8 @@
       "claimedBy": "Przejęte Przez",
       "planned": "Zaplanowane",
       "pool": "Pula",
-      "technician": "Konserwator"
+      "technician": "Konserwator",
+      "suspendedOn": "Zawieszono"
     },
     "maintainerCount": "{count, plural, one {# konserwator} few {# konserwatorów} many {# konserwatorów} other {# konserwatorów}}",
     "buttons": {
@@ -882,7 +888,8 @@
       "rescheduled": "Przeplanowane",
       "originalLabel": "Oryginał:",
       "takenOver": "Podjęte",
-      "assigned": "Przypisane"
+      "assigned": "Przypisane",
+      "unseen": "Nowa"
     },
     "empty": "Brak zgłoszeń"
   },
@@ -961,8 +968,16 @@
       "error": "Błąd podczas aktualizacji",
       "noTransitions": "Brak możliwości aktualizacji ze statusu \"{status}\".",
       "takeOverHint": " Użyj \"Przejmij\", aby rozpocząć.",
-      "materialsError": "Awaria zaktualizowana, ale wydanie materiałów nie powiodło się."
+      "materialsError": "Awaria zaktualizowana, ale wydanie materiałów nie powiodło się.",
+      "materialsOutOfStock": "Brak na stanie: {items} (stan magazynowy jest ujemny)."
+    },
+    "errors": {
+      "durationBelowFloor": "Czas nie może być krótszy niż już przepracowany ({min})."
     }
+  },
+  "FaultSuspensions": {
+    "title": "Zawieszenia",
+    "one": "Zawieszenie"
   },
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Raporty",

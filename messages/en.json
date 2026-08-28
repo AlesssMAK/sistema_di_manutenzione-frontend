@@ -523,7 +523,8 @@
     "tabs": {
       "active": "Active",
       "overdue": "Overdue",
-      "completed": "Completed"
+      "completed": "Completed",
+      "suspended": "Suspended"
     },
     "filters": {
       "search": "Search",
@@ -557,6 +558,7 @@
     },
     "empty": {
       "overdue": "No overdue reports",
+      "suspended": "No suspended reports",
       "completedDate": "No completed reports on this date",
       "completed": "No completed reports",
       "mineDate": "No reports assigned to you on this date",
@@ -609,11 +611,13 @@
     "tabs": {
       "received": "Received",
       "inProgress": "In Progress",
+      "suspended": "Suspended",
       "archive": "Completed"
     },
     "empty": {
       "received": "No pending reports",
       "inProgress": "No reports in progress",
+      "suspended": "No suspended reports",
       "archive": "No archived reports"
     },
     "filters": {
@@ -773,6 +777,7 @@
     "headerSubtitle": "View safety reports in real time. Read-only.",
     "badge": "HSE",
     "statusFilter": "Status",
+    "newBadge": "New",
     "statusOptions": {
       "all": "All Statuses"
     },
@@ -862,7 +867,8 @@
       "claimedBy": "Taken Over by",
       "planned": "Planned",
       "pool": "Pool",
-      "technician": "Maintenance Worker"
+      "technician": "Maintenance Worker",
+      "suspendedOn": "Suspended on"
     },
     "maintainerCount": "{count, plural, one {# maintainer} other {# maintainers}}",
     "buttons": {
@@ -882,7 +888,8 @@
       "rescheduled": "Rescheduled",
       "originalLabel": "Original:",
       "takenOver": "Taken over",
-      "assigned": "Assigned"
+      "assigned": "Assigned",
+      "unseen": "New"
     },
     "empty": "No reports"
   },
@@ -961,8 +968,16 @@
       "error": "Error during update",
       "noTransitions": "No update possible from status \"{status}\".",
       "takeOverHint": " Use \"Take over\" to start.",
-      "materialsError": "Fault updated, but issuing the materials failed."
+      "materialsError": "Fault updated, but issuing the materials failed.",
+      "materialsOutOfStock": "Out of stock: {items} (warehouse stock is now negative)."
+    },
+    "errors": {
+      "durationBelowFloor": "The time cannot be less than the time already worked ({min})."
     }
+  },
+  "FaultSuspensions": {
+    "title": "Suspensions",
+    "one": "Suspension"
   },
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Reports",

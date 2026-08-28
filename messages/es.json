@@ -523,7 +523,8 @@
     "tabs": {
       "active": "Activas",
       "overdue": "En Retraso",
-      "completed": "Completadas"
+      "completed": "Completadas",
+      "suspended": "Suspendidas"
     },
     "filters": {
       "search": "Buscar",
@@ -557,6 +558,7 @@
     },
     "empty": {
       "overdue": "No hay señalaciones en retraso",
+      "suspended": "No hay señalaciones suspendidas",
       "completedDate": "No hay señalaciones completadas en esta fecha",
       "completed": "No hay señalaciones completadas",
       "mineDate": "No hay señalaciones asignadas a ti en esta fecha",
@@ -609,11 +611,13 @@
     "tabs": {
       "received": "Recibidas",
       "inProgress": "En Curso",
+      "suspended": "Suspendidas",
       "archive": "Completadas"
     },
     "empty": {
       "received": "No hay señalaciones pendientes",
       "inProgress": "No hay señalaciones en curso",
+      "suspended": "No hay señalaciones suspendidas",
       "archive": "No hay señalaciones archivadas"
     },
     "filters": {
@@ -773,6 +777,7 @@
     "headerSubtitle": "Visualiza en tiempo real las señalaciones de seguridad. Solo lectura.",
     "badge": "HSE",
     "statusFilter": "Estado",
+    "newBadge": "Nuevas",
     "statusOptions": {
       "all": "Todos los Estados"
     },
@@ -862,7 +867,8 @@
       "claimedBy": "Tomado por",
       "planned": "Planificado",
       "pool": "Pool",
-      "technician": "Mantenedor"
+      "technician": "Mantenedor",
+      "suspendedOn": "Suspendido el"
     },
     "maintainerCount": "{count, plural, one {# mantenedor} other {# mantenedores}}",
     "buttons": {
@@ -882,7 +888,8 @@
       "rescheduled": "Reprogramada",
       "originalLabel": "Original:",
       "takenOver": "Asumido",
-      "assigned": "Asignado"
+      "assigned": "Asignado",
+      "unseen": "Nueva"
     },
     "empty": "No hay señalaciones"
   },
@@ -961,8 +968,16 @@
       "error": "Error durante la actualización",
       "noTransitions": "No es posible actualizar desde el estado \"{status}\".",
       "takeOverHint": " Usa \"Tomar a cargo\" para empezar.",
-      "materialsError": "Avería actualizada, pero la salida de materiales falló."
+      "materialsError": "Avería actualizada, pero la salida de materiales falló.",
+      "materialsOutOfStock": "Sin stock: {items} (las existencias quedaron en negativo)."
+    },
+    "errors": {
+      "durationBelowFloor": "El tiempo no puede ser inferior al tiempo ya trabajado ({min})."
     }
+  },
+  "FaultSuspensions": {
+    "title": "Suspensiones",
+    "one": "Suspensión"
   },
   "reportsAndCommunicationsPage": {
     "titlePageForStore": "Reportes",

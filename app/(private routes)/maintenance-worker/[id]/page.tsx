@@ -3,6 +3,7 @@
 import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
 import OvertimeAlertModal from '@/components/MaintenanceWorker/OvertimeAlertModal/OvertimeAlertModal';
 import FaultMaterialsUsed from '@/components/Warehouse/FaultMaterialsUsed/FaultMaterialsUsed';
+import FaultSuspensions from '@/components/MaintenanceWorker/FaultSuspensions/FaultSuspensions';
 import PriorityBadge from '@/components/UI/PriorityBadge/PriorityBadge';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import { ALLOWED_TRANSITIONS } from '@/lib/validation/maintenanceWorkerUpdateValidation';
@@ -10,7 +11,11 @@ import Button from '@/components/UI/Button/Button';
 import ImageModal from '@/components/UI/ImageModal/ImageModal';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
-import { fetchFaultById, updateFaultByWorker } from '@/lib/api/faults';
+import {
+  fetchFaultById,
+  markFaultSeen,
+  updateFaultByWorker,
+} from '@/lib/api/faults';
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
@@ -140,6 +145,12 @@ export default function FaultDetailPage({
     return () => unsubscribeFromFault(id);
   }, [id, subscribeToFault, unsubscribeFromFault]);
 
+  // Opening the detail marks this fault individually seen — clears its
+  // unseen dot on every board (fire-and-forget).
+  useEffect(() => {
+    if (id) markFaultSeen(id);
+  }, [id]);
+
   const handleBack = () => {
     router.push('/maintenance-worker');
   };
@@ -197,6 +208,23 @@ export default function FaultDetailPage({
   const isCompleted = fault.statusFault === 'Completed';
   const isSuspended = fault.statusFault === 'Suspended';
   const wasRescheduled = Boolean(fault.autoRescheduledFrom?.plannedDate);
+
+  // Current pause — latest entry in the suspension log (falls back to the
+  // legacy single field / updatedAt for pre-log faults).
+  const lastSuspension = fault.suspensions?.length
+    ? fault.suspensions[fault.suspensions.length - 1]
+    : null;
+  const suspensionReasonText = lastSuspension?.reason || fault.suspensionReason;
+  const suspensionDate = formatDateTime(
+    lastSuspension?.suspendedAt ?? fault.updatedAt,
+    locale
+  );
+  // History = only pauses already resumed. While the fault is still paused
+  // the last entry is the active one (shown in the callout above), so drop it.
+  const allSuspensions = fault.suspensions ?? [];
+  const suspensionHistory = isSuspended
+    ? allSuspensions.slice(0, -1)
+    : allSuspensions;
 
   // In-app overtime alert: fault still In progress and worked time is
   // past the planned duration by the configured threshold.
@@ -285,6 +313,19 @@ export default function FaultDetailPage({
               <FaultIdBadge id={fault.faultId} />
             </div>
           </header>
+
+          {/* Current suspension reason — surfaced at the top (right under
+              the header) so the pause motive is the first thing seen while
+              the fault is on hold. */}
+          {isSuspended && suspensionReasonText && (
+            <div className={`${css.commentBox} ${css.suspensionNote}`}>
+              <div className={css.suspensionNoteHead}>
+                <label>{t('labels.suspensionReason')}</label>
+                <span className={css.suspensionDate}>{suspensionDate}</span>
+              </div>
+              <p>{suspensionReasonText}</p>
+            </div>
+          )}
 
           <div className={css.infoGrid}>
             {/* Short pair on phone: operator + status badge */}
@@ -403,6 +444,9 @@ export default function FaultDetailPage({
               materialComment={fault.materialRequest}
             />
 
+            {/* History of resumed pauses (date + reason). */}
+            <FaultSuspensions suspensions={suspensionHistory} />
+
             {/* Phase C: claim audit trail (any non-Created fault that
                 has been picked up). */}
             {fault.claimedAt && (
@@ -431,16 +475,6 @@ export default function FaultDetailPage({
               <label>{t('comments.maintainerNote')}</label>
               <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
             </div>
-
-            {/* Suspension reason sits with the other notes (moved out of
-                the top info grid). Only shown when the fault is/was
-                suspended. */}
-            {isSuspended && fault.suspensionReason && (
-              <div className={css.commentBox}>
-                <label>{t('labels.suspensionReason')}</label>
-                <p>{fault.suspensionReason}</p>
-              </div>
-            )}
 
             {/* Nota HSE — visibile solo per i fault Safety */}
             {fault.typeFault === 'Safety' && (
@@ -515,6 +549,7 @@ export default function FaultDetailPage({
           currentStatus={fault.statusFault}
           lockedStatus={modalStatus}
           defaultActualDuration={liveWorkedMinutes(fault)}
+          minDuration={Math.round((fault.workedMs ?? 0) / 60000)}
           onClose={() => setModalStatus(null)}
           onSuccess={handleUpdateSuccess}
         />

@@ -22,6 +22,11 @@ interface TabsProps<T extends string = string> {
    * counts only on the active tab if that's all the backend returns.
    */
   counts?: Partial<Record<T, number>>;
+  /**
+   * Optional per-tab "unseen" markers. A truthy entry renders a small red
+   * dot next to the label — the tab has faults the viewer hasn't seen yet.
+   */
+  dots?: Partial<Record<T, boolean>>;
 }
 
 const Tabs = <T extends string = string>({
@@ -29,12 +34,14 @@ const Tabs = <T extends string = string>({
   activeTab,
   onTabChange,
   counts,
+  dots,
 }: TabsProps<T>) => {
   return (
     <div className={css.tabsBar} role="tablist">
       {tabs.map(tab => {
         const isActive = activeTab === tab.value;
         const count = counts?.[tab.value];
+        const hasDot = Boolean(dots?.[tab.value]);
         return (
           <button
             key={tab.value}
@@ -54,6 +61,9 @@ const Tabs = <T extends string = string>({
             <span className={tab.icon ? css.tabLabel : ''}>{tab.label}</span>
             {count !== undefined && (
               <span className={css.tabCount}>{count}</span>
+            )}
+            {hasDot && (
+              <span className={css.tabDot} aria-hidden="true" />
             )}
           </button>
         );

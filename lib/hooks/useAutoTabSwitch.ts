@@ -15,11 +15,11 @@ interface UseAutoTabSwitchParams<T extends string> {
   onSwitch: (tab: T) => void;
 }
 
-// Keeps the user on a tab that actually has results for the active
-// filter. When the current tab is empty but another tab has matches,
-// it switches to the first (in `order`) non-empty tab. If the current
-// tab has results — including the case where every tab does — it stays
-// put; if nothing matches anywhere, it also stays. Meant for Tabs that
+// Picks a sensible LANDING tab: on the first render where every count is
+// known, if the initial tab is empty but another has matches, it switches
+// once to the first (in `order`) non-empty tab. It runs a single time and
+// then never again — after landing, the user is free to open any tab,
+// including empty ones, without being bounced away. Meant for Tabs that
 // partition ONE filtered dataset (e.g. faults by status).
 export function useAutoTabSwitch<T extends string>({
   activeTab,
@@ -40,14 +40,20 @@ export function useAutoTabSwitch<T extends string>({
   });
 
   // A stable string that only changes when the actual counts change, so
-  // the switch effect fires on filter/data changes, not every render and
-  // not on a manual tab change (which leaves the counts untouched).
+  // the switch effect re-evaluates once counts settle (not every render).
   const signature = ready
     ? order.map(tab => `${tab}:${counts[tab] ?? 'x'}`).join('|')
     : '';
 
+  // One-shot: the landing switch happens the first time counts are ready
+  // and then is disabled forever. Without this, later count refetches
+  // (e.g. mark-seen invalidations) would re-fire it and bounce the user
+  // off an empty tab they deliberately opened.
+  const didLandRef = useRef(false);
+
   useEffect(() => {
-    if (!ready) return;
+    if (!ready || didLandRef.current) return;
+    didLandRef.current = true;
     const { order, counts, onSwitch, activeTab } = latest.current;
     const current = counts[activeTab];
     // Unknown or non-empty current tab → stay.

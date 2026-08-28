@@ -247,6 +247,39 @@
   display: block;
 }
 
+/* Suspension reason — surfaced at the top as a highlighted amber callout
+   with a proper full border (like the admin message cards) rather than a
+   left-only accent. */
+.suspensionNote {
+  background: #fffbeb;
+  border: 1px solid #fcd34d;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.suspensionNote label {
+  color: #92400e;
+}
+
+.suspensionNoteHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.suspensionNoteHead label {
+  margin-bottom: 0;
+}
+
+.suspensionDate {
+  font-size: 12px;
+  font-weight: 600;
+  color: #b45309;
+  white-space: nowrap;
+}
+
 .imageSection {
   margin-top: 20px;
 }

@@ -71,6 +71,14 @@ const FaultManagerCard = ({
 
   const isPlanned = Boolean(fault.plannedDate);
   const isReadOnly = fault.statusFault === 'Completed';
+
+  // Current pause info (shown while the fault is Suspended): date + reason.
+  const isSuspended = fault.statusFault === 'Suspended';
+  const lastSusp = fault.suspensions?.length
+    ? fault.suspensions[fault.suspensions.length - 1]
+    : null;
+  const suspReason = lastSusp?.reason || fault.suspensionReason;
+  const suspDate = formatDate(lastSusp?.suspendedAt ?? fault.updatedAt, locale);
   const showAssignedSection =
     isPlanned || (fault.assignedMaintainers?.length ?? 0) > 0;
 
@@ -83,7 +91,13 @@ const FaultManagerCard = ({
       <div className={css.header}>
         <FaultIdBadge id={fault.faultId} />
         <div className={css.badges}>
-          {fault.autoRescheduledFrom?.plannedDate && (
+          {fault.unseen && (
+            <span className={css.unseenBadge} title={t('badges.unseen')}>
+              <span className={css.unseenDot} aria-hidden="true" />
+              {t('badges.unseen')}
+            </span>
+          )}
+          {!isReadOnly && fault.autoRescheduledFrom?.plannedDate && (
             <span
               className={css.riprogrammatBadge}
               title={`${t('badges.originalLabel')} ${fault.autoRescheduledFrom.plannedDate}${
@@ -154,6 +168,18 @@ const FaultManagerCard = ({
         <div className={css.commentBlock}>
           <span className={css.label}>{t('labels.description')}</span>
           <p className={css.commentText}>{fault.comment}</p>
+        </div>
+      )}
+
+      {isSuspended && suspReason && (
+        <div className={css.suspensionBlock}>
+          <div className={css.suspensionHead}>
+            <span className={css.suspensionLabel}>
+              {t('labels.suspendedOn')}
+            </span>
+            <span className={css.suspensionDate}>{suspDate}</span>
+          </div>
+          <p className={css.commentText}>{suspReason}</p>
         </div>
       )}
 

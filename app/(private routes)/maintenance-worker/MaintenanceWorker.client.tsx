@@ -1,7 +1,7 @@
 'use client';
 
 import FaultCardsList from '@/components/FaultCardsList/FaultCardsList';
-import LoadMoreButton from '@/components/LoadMoreButton/LoadMoreButton';
+import Pagination from '@/components/UI/Pagination/Pagination';
 import ScopeFilterBar, {
   type FaultScope,
 } from '@/components/MaintenanceWorker/ScopeFilterBar/ScopeFilterBar';
@@ -24,22 +24,24 @@ import NoFound from '@/components/UI/NoFound/NoFound';
 import {
   fetchFaultCards,
   fetchFaultDeadlines,
-  fetchMaintenanceTabCounts,
-  markMaintenanceTabSeen,
-  type MaintenanceSeenTab,
+  fetchListSeen,
+  markListSeen,
+  type ListSeenKey,
 } from '@/lib/api/faults';
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { hhmmToMinutes, resolveWorkWindow } from '@/lib/utils/workSchedule';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { FaultCard } from '@/types/faultType';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export type FaultViewMode = 'active' | 'overdue' | 'completed';
+export type FaultViewMode = 'active' | 'suspended' | 'overdue' | 'completed';
 
-const ACTIVE_STATUSES = 'Created,In progress,Suspended,Overdue';
+// Suspended has its own "Sospese" tab, so it's excluded from the broad
+// "Attive" group — a paused fault shows only under Sospese.
+const ACTIVE_STATUSES = 'Created,In progress,Overdue';
 // Specific statuses the "Attive" tab groups — drive the status filter.
-const ACTIVE_STATUS_LIST = ['Created', 'In progress', 'Suspended', 'Overdue'];
+const ACTIVE_STATUS_LIST = ['Created', 'In progress', 'Overdue'];
 const STATUS_KEY: Record<string, string> = {
   Created: 'CREATED',
   'In progress': 'IN_PROGRESS',
@@ -60,7 +62,7 @@ const SORT_CONFIG: Record<
   deadlineFar: { sortBy: 'deadline', sortOrder: 'desc' },
 };
 
-const PER_PAGE = 6;
+const PER_PAGE = 3;
 
 const MaintenanceWorkerClient = () => {
   const t = useTranslations('maintenanceWorkerPage');
@@ -94,6 +96,7 @@ const MaintenanceWorkerClient = () => {
 
   const VIEW_MODE_TABS: TabItem<FaultViewMode>[] = [
     { value: 'active', label: t('tabs.active'), icon: 'wrench' },
+    { value: 'suspended', label: t('tabs.suspended'), icon: 'exclamation-circle' },
     { value: 'overdue', label: t('tabs.overdue'), icon: 'clock' },
     { value: 'completed', label: t('tabs.completed'), icon: 'check-circle' },
   ];
@@ -143,19 +146,98 @@ const MaintenanceWorkerClient = () => {
 
   const queryClient = useQueryClient();
 
-  // Unseen-count badges for the board tabs (persisted per user).
-  const { data: tabCounts } = useQuery({
-    queryKey: ['maintenanceTabCounts'],
-    queryFn: fetchMaintenanceTabCounts,
+  // Per-list lastSeen timestamps (drive model A for faults assigned to
+  // others). Kept in a ref so loadData can read the latest without being
+  // a hook dep (which would reload the list on every mark-seen).
+  const { data: listSeen } = useQuery({
+    queryKey: ['listSeen'],
+    queryFn: fetchListSeen,
     staleTime: 30 * 1000,
+  });
+  const listSeenRef = useRef<Partial<Record<ListSeenKey, string>>>({});
+  listSeenRef.current = listSeen ?? {};
+
+  const seenKeyForMode = (m: FaultViewMode): ListSeenKey =>
+    `worker_${m}` as ListSeenKey;
+
+  // Board-state per view-mode tab: total (current scope) + a "has unseen"
+  // flag. Mirrors the list's scope so the tab number matches what's shown.
+  const scopeParamsFor = useCallback(
+    (s: FaultScope) =>
+      s === 'mine' && userId
+        ? { assignedTo: userId }
+        : s === 'pool'
+          ? { assignedToEmpty: true }
+          : {},
+    [userId]
+  );
+  const statusForMode = (m: FaultViewMode) =>
+    m === 'overdue'
+      ? 'Overdue'
+      : m === 'completed'
+        ? 'Completed'
+        : m === 'suspended'
+          ? 'Suspended'
+          : ACTIVE_STATUSES;
+
+  const BOARD_MODES: FaultViewMode[] = [
+    'active',
+    'suspended',
+    'overdue',
+    'completed',
+  ];
+  const boardResults = useQueries({
+    queries: BOARD_MODES.map(m => {
+      // Completed history has no pool; fall back to 'mine' so the count
+      // matches the list (handleModeChange does the same on entry).
+      const effScope: FaultScope =
+        m === 'completed' && scope === 'pool' ? 'mine' : scope;
+      const key = seenKeyForMode(m);
+      const since = listSeen?.[key];
+      return {
+        queryKey: ['workerBoard', m, effScope, userId, since ?? null],
+        queryFn: () =>
+          fetchFaultCards({
+            page: 1,
+            perPage: 1,
+            statusFault: statusForMode(m),
+            ...scopeParamsFor(effScope),
+            withUnseen: true,
+            ...(since ? { seenSince: since } : {}),
+          }),
+        enabled: scopeResolved,
+        staleTime: 15 * 1000,
+      };
+    }),
+  });
+
+  // Pool (Libere) unseen dot — pool cards are model B (tracked
+  // individually), so this is a boolean, not a cleared-on-open count.
+  const { data: poolState } = useQuery({
+    queryKey: ['workerPool', userId, listSeen?.worker_pool ?? null],
+    queryFn: () =>
+      fetchFaultCards({
+        page: 1,
+        perPage: 1,
+        statusFault: 'Created,Overdue',
+        assignedToEmpty: true,
+        withUnseen: true,
+        ...(listSeen?.worker_pool
+          ? { seenSince: listSeen.worker_pool }
+          : {}),
+      }),
+    enabled: scopeResolved,
+    staleTime: 15 * 1000,
   });
 
   const markSeen = useCallback(
-    (tab: MaintenanceSeenTab) => {
-      markMaintenanceTabSeen(tab)
-        .then(() =>
-          queryClient.invalidateQueries({ queryKey: ['maintenanceTabCounts'] })
-        )
+    (key: ListSeenKey) => {
+      markListSeen(key)
+        .then(() => {
+          queryClient.invalidateQueries({ queryKey: ['listSeen'] });
+          queryClient.invalidateQueries({ queryKey: ['workerBoard'] });
+          queryClient.invalidateQueries({ queryKey: ['workerPool'] });
+        })
         .catch(() => {});
     },
     [queryClient]
@@ -186,6 +268,7 @@ const MaintenanceWorkerClient = () => {
 
   const isOverdueMode = viewMode === 'overdue';
   const isCompletedMode = viewMode === 'completed';
+  const isSuspendedMode = viewMode === 'suspended';
 
   const loadData = useCallback(
     async (
@@ -217,8 +300,10 @@ const MaintenanceWorkerClient = () => {
             ? 'Overdue'
             : currentMode === 'completed'
               ? 'Completed'
-              : // "Attive" groups several statuses; a picked status narrows it.
-                filters.status || ACTIVE_STATUSES;
+              : currentMode === 'suspended'
+                ? 'Suspended'
+                : // "Attive" groups several statuses; a picked status narrows it.
+                  filters.status || ACTIVE_STATUSES;
 
         // Date filter applied in active/completed modes only — overdue
         // shows everything in ritardo regardless of plannedDate. A range
@@ -270,15 +355,19 @@ const MaintenanceWorkerClient = () => {
           perPage: PER_PAGE,
           ...sortParams,
           ...scopeParams,
+          // Per-card unseen dots. seenSince (this tab's lastSeen) drives
+          // model A for faults assigned to others; read from the ref so a
+          // mark-seen doesn't force a list reload.
+          withUnseen: true,
+          ...(listSeenRef.current[seenKeyForMode(currentMode)]
+            ? { seenSince: listSeenRef.current[seenKeyForMode(currentMode)] }
+            : {}),
         });
 
         if (reqId !== requestIdRef.current) return;
 
-        if (pageNum === 1) {
-          setItems(data.fault || []);
-        } else {
-          setItems(prev => [...prev, ...(data.fault || [])]);
-        }
+        // Paginated (not infinite-scroll): each page replaces the list.
+        setItems(data.fault || []);
         setTotalPage(data.totalPage || 0);
       } catch (error) {
         if (reqId !== requestIdRef.current) return;
@@ -398,8 +487,8 @@ const MaintenanceWorkerClient = () => {
     if (newScope === scope) return;
     setScope(newScope);
     setPage(1);
-    // Viewing the pool clears its unseen badge.
-    if (newScope === 'pool') markSeen('pool');
+    // Pool cards are model B (tracked individually), so entering the pool
+    // does NOT clear the dot — it stays until each card is opened.
   };
 
   const handleModeChange = (newMode: FaultViewMode) => {
@@ -412,8 +501,9 @@ const MaintenanceWorkerClient = () => {
     // 'Libere' (pool) is meaningless in the completed history — completed
     // faults are always assigned. Drop back to 'Mie' when entering it.
     if (newMode === 'completed' && scope === 'pool') setScope('mine');
-    // Viewing a tab clears its unseen badge.
-    markSeen(newMode);
+    // Opening a tab clears its others-assigned (model A) cards; mine/pool
+    // (model B) cards stay flagged until opened individually.
+    markSeen(seenKeyForMode(newMode));
 
     if (newMode === 'overdue') {
       fetchOverdueDeadlines(priority);
@@ -481,12 +571,12 @@ const MaintenanceWorkerClient = () => {
     fetchPlannedCounts(scope, userId, viewMode);
   }, [scope, userId, viewMode, fetchPlannedCounts]);
 
-  // Mark the landing tab (and pool if landing there) seen once resolved,
-  // so its badge starts cleared — like opening a message inbox.
+  // Mark the landing tab seen once resolved, so its others-assigned
+  // (model A) cards start cleared. Mine/pool (model B) cards keep their
+  // dots until opened individually.
   useEffect(() => {
     if (!scopeResolved) return;
-    markSeen(viewMode);
-    if (scope === 'pool') markSeen('pool');
+    markSeen(seenKeyForMode(viewMode));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scopeResolved]);
 
@@ -496,8 +586,10 @@ const MaintenanceWorkerClient = () => {
   // (the list is manually fetched, so it doesn't auto-refresh).
   useEffect(() => {
     if (!socket) return;
-    const invalidateCounts = () =>
-      queryClient.invalidateQueries({ queryKey: ['maintenanceTabCounts'] });
+    const invalidateCounts = () => {
+      queryClient.invalidateQueries({ queryKey: ['workerBoard'] });
+      queryClient.invalidateQueries({ queryKey: ['workerPool'] });
+    };
     const onCreated = () => {
       setNewFaultCount(c => c + 1);
       invalidateCounts();
@@ -524,6 +616,18 @@ const MaintenanceWorkerClient = () => {
     });
   };
 
+  const handlePageChange = (newPage: number) => {
+    if (newPage === page) return;
+    setPage(newPage);
+    loadData(newPage, priority, selectedDate, viewMode, scope, userId, {
+      search: debouncedSearch,
+      dateFrom,
+      dateTo,
+      sort: sortOption,
+      status: statusFilter,
+    });
+  };
+
   // After a claim the backend returns the updated fault (now In progress
   // and assigned to the worker). Replace it in place so the card reflects
   // the new state and the "take over" button drops out immediately —
@@ -536,6 +640,8 @@ const MaintenanceWorkerClient = () => {
   let emptyText = t('empty.default');
   if (isOverdueMode) {
     emptyText = t('empty.overdue');
+  } else if (isSuspendedMode) {
+    emptyText = t('empty.suspended');
   } else if (isCompletedMode) {
     emptyText = selectedDate ? t('empty.completedDate') : t('empty.completed');
   } else if (selectedDate) {
@@ -556,13 +662,18 @@ const MaintenanceWorkerClient = () => {
 
   const showResetButton = !isOverdueMode && (selectedDate || scope !== 'all');
 
-  // Only non-zero counts become badges.
+  // Tab badges: always-visible total (per current scope) + a red dot when
+  // the tab holds unseen faults.
   const viewCounts: Partial<Record<FaultViewMode, number>> = {};
-  if (tabCounts?.active) viewCounts.active = tabCounts.active;
-  if (tabCounts?.overdue) viewCounts.overdue = tabCounts.overdue;
-  if (tabCounts?.completed) viewCounts.completed = tabCounts.completed;
-  const scopeCounts: Partial<Record<FaultScope, number>> = tabCounts?.pool
-    ? { pool: tabCounts.pool }
+  const viewDots: Partial<Record<FaultViewMode, boolean>> = {};
+  BOARD_MODES.forEach((m, i) => {
+    const d = boardResults[i].data;
+    if (d?.totalFault !== undefined) viewCounts[m] = d.totalFault;
+    if (d?.hasUnseen) viewDots[m] = true;
+  });
+  // Pool (Libere) gets an unseen dot only.
+  const scopeDots: Partial<Record<FaultScope, boolean>> = poolState?.hasUnseen
+    ? { pool: true }
     : {};
 
   return (
@@ -674,6 +785,7 @@ const MaintenanceWorkerClient = () => {
                 activeTab={viewMode}
                 onTabChange={handleModeChange}
                 counts={viewCounts}
+                dots={viewDots}
               />
             </div>
 
@@ -692,7 +804,7 @@ const MaintenanceWorkerClient = () => {
               <ScopeFilterBar
                 activeScope={scope}
                 onScopeChange={handleScopeChange}
-                counts={scopeCounts}
+                dots={scopeDots}
                 scopes={isCompletedMode ? ['mine', 'all'] : undefined}
               />
             </div>
@@ -720,32 +832,15 @@ const MaintenanceWorkerClient = () => {
               <>
                 <FaultCardsList faults={items} onClaimed={handleClaimed} />
 
-                <div className={css.loadMoreButton}>
-                  <LoadMoreButton
-                    page={page}
-                    totalPage={totalPage}
-                    isLoading={isLoading}
-                    onLoadMore={() => {
-                      const nextPage = page + 1;
-                      setPage(nextPage);
-                      loadData(
-                        nextPage,
-                        priority,
-                        selectedDate,
-                        viewMode,
-                        scope,
-                        userId,
-                        {
-                          search: debouncedSearch,
-                          dateFrom,
-                          dateTo,
-                          sort: sortOption,
-                          status: statusFilter,
-                        }
-                      );
-                    }}
-                  />
-                </div>
+                {totalPage > 1 && (
+                  <div className={css.paginationWrapper}>
+                    <Pagination
+                      totalPages={totalPage}
+                      page={page}
+                      onPageChange={handlePageChange}
+                    />
+                  </div>
+                )}
               </>
             ) : (
               <div className={css.noResults}>
