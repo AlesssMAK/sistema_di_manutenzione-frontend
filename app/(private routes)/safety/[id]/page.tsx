@@ -277,18 +277,22 @@ const SafetyFaultDetailPage = ({
           </div>
 
           <div className={css.detailsBlock}>
-            <div className={css.commentBox}>
+            <div className={`${css.commentBox} ${css.operatorNote}`}>
               <label>{t('comments.operatorDescription')}</label>
               <p>{fault.comment || t('comments.noDescription')}</p>
             </div>
-            <div className={css.commentBox}>
-              <label>{t('comments.managerNote')}</label>
-              <p>{fault.managerComment || t('comments.noNote')}</p>
-            </div>
-            <div className={css.commentBox}>
-              <label>{t('comments.maintainerNote')}</label>
-              <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
-            </div>
+            {fault.managerComment && (
+              <div className={css.commentBox}>
+                <label>{t('comments.managerNote')}</label>
+                <p>{fault.managerComment}</p>
+              </div>
+            )}
+            {fault.commentMaintenanceWorker && (
+              <div className={css.commentBox}>
+                <label>{t('comments.maintainerNote')}</label>
+                <p>{fault.commentMaintenanceWorker}</p>
+              </div>
+            )}
             {fault.statusFault === 'Suspended' && fault.suspensionReason && (
               <div className={css.commentBox}>
                 <label>{t('labels.suspensionReason')}</label>

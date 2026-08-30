@@ -522,6 +522,7 @@
     "headerSubtitle": "Visualizza e gestisci gli interventi pianificati",
     "tabs": {
       "active": "Attive",
+      "inProgress": "In lavorazione",
       "suspended": "Sospese",
       "overdue": "In Ritardo",
       "completed": "Completate"
@@ -558,6 +559,7 @@
     },
     "empty": {
       "overdue": "Nessuna segnalazione in ritardo",
+      "inProgress": "Non stai lavorando a nessuna segnalazione",
       "suspended": "Nessuna segnalazione sospesa",
       "completedDate": "Nessuna segnalazione completata in questa data",
       "completed": "Nessuna segnalazione completata",
@@ -577,6 +579,7 @@
     "calendar": {
       "header": "Calendario",
       "interventionsCount": "{count} intervento/i pianificato/i",
+      "completedCount": "{count} completata/e",
       "daysOfWeek": {
         "mon": "LUN",
         "tue": "MAR",
@@ -819,8 +822,7 @@
       "managerNote": "Note responsabile",
       "maintainerNote": "Note manutentore",
       "hseNote": "Nota HSE (Sicurezza)",
-      "noDescription": "Nessuna descrizione",
-      "noNote": "Nessuna nota"
+      "noDescription": "Nessuna descrizione"
     },
     "actions": {
       "planIntervention": "Pianifica intervento",
@@ -928,6 +930,17 @@
       "modifySuccess": "Pianificazione Aggiornata",
       "saveError": "Errore durante il salvataggio"
     }
+  },
+  "AlreadyWorkingModal": {
+    "title": "Sei già al lavoro",
+    "message": "Stai già lavorando alla segnalazione",
+    "hint": "Per passare a un'altra, finalizza o sospendi il lavoro attuale, oppure continua su quello in corso.",
+    "buttons": {
+      "finalize": "Finalizza",
+      "suspend": "Sospendi",
+      "continue": "Continua"
+    },
+    "resumeError": "Impossibile riprendere la segnalazione"
   },
   "MaintenanceUpdateModal": {
     "title": "Aggiorna Intervento",

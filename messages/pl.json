@@ -522,6 +522,7 @@
     "headerSubtitle": "Przeglądaj i zarządzaj zaplanowanymi interwencjami",
     "tabs": {
       "active": "Aktywne",
+      "inProgress": "W toku",
       "overdue": "Opóźnione",
       "completed": "Zakończone",
       "suspended": "Zawieszone"
@@ -558,6 +559,7 @@
     },
     "empty": {
       "overdue": "Brak opóźnionych zgłoszeń",
+      "inProgress": "Nie pracujesz nad żadnym zgłoszeniem",
       "suspended": "Brak zawieszonych zgłoszeń",
       "completedDate": "Brak zgłoszeń zakończonych w tym dniu",
       "completed": "Brak zakończonych zgłoszeń",
@@ -577,6 +579,7 @@
     "calendar": {
       "header": "Kalendarz",
       "interventionsCount": "{count} zaplanowana(e) interwencja(e)",
+      "completedCount": "{count} zakończona(e)",
       "daysOfWeek": {
         "mon": "PON",
         "tue": "WT",
@@ -819,8 +822,7 @@
       "managerNote": "Notatki kierownika",
       "maintainerNote": "Notatki konserwatora",
       "hseNote": "Notatka BHP (Bezpieczeństwo)",
-      "noDescription": "Brak opisu",
-      "noNote": "Brak notatki"
+      "noDescription": "Brak opisu"
     },
     "actions": {
       "planIntervention": "Zaplanuj interwencję",
@@ -928,6 +930,17 @@
       "modifySuccess": "Planowanie zaktualizowane",
       "saveError": "Błąd podczas zapisywania"
     }
+  },
+  "AlreadyWorkingModal": {
+    "title": "Już pracujesz",
+    "message": "Już pracujesz nad zgłoszeniem",
+    "hint": "Aby przejść do innego, zakończ lub wstrzymaj bieżącą pracę albo kontynuuj ją.",
+    "buttons": {
+      "finalize": "Zakończ",
+      "suspend": "Wstrzymaj",
+      "continue": "Kontynuuj"
+    },
+    "resumeError": "Nie można wznowić zgłoszenia"
   },
   "MaintenanceUpdateModal": {
     "title": "Aktualizuj Interwencję",

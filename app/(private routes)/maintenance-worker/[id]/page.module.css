@@ -261,6 +261,22 @@
   color: #92400e;
 }
 
+/* Operator's original report highlighted in blue — the same callout
+   palette as the admin notes — so the segnalazione stands out from the
+   follow-up notes below it. */
+.operatorNote {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+}
+
+.operatorNote label {
+  color: #1e40af;
+}
+
+.operatorNote p {
+  color: #1e3a8a;
+}
+
 .suspensionNoteHead {
   display: flex;
   align-items: baseline;

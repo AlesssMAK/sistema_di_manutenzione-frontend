@@ -20,6 +20,9 @@ interface TimePickerInputProps {
    *  minHour/maxHour, so a window can start at e.g. 08:30. */
   minTime?: string;
   maxTime?: string;
+  /** Blocks the picker (e.g. the chosen day is a non-working day, so no
+   *  slots exist). The trigger is inert and the popover won't open. */
+  disabled?: boolean;
 }
 
 const toMinutes = (hhmm: string | undefined): number | null => {
@@ -48,6 +51,7 @@ const TimePickerInput = ({
   maxHour = 24,
   minTime,
   maxTime,
+  disabled = false,
 }: TimePickerInputProps) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -91,6 +95,7 @@ const TimePickerInput = ({
       <button
         type="button"
         id={id}
+        disabled={disabled}
         className={`${css.trigger} ${open ? css.triggerOpen : ''}`}
         onClick={() => setOpen((o) => !o)}
       >
@@ -116,7 +121,7 @@ const TimePickerInput = ({
         </svg>
       </button>
 
-      {open && (
+      {open && !disabled && (
         <div className={css.popover}>
           <ul className={css.list}>
             {slots.map((slot) => {

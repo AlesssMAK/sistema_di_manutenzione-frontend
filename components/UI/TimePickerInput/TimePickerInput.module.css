@@ -29,6 +29,16 @@
   background: #ffffff;
 }
 
+.trigger:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.trigger:disabled:hover {
+  border-color: transparent;
+  background: #f3f3f5;
+}
+
 .triggerLabel {
   line-height: 1;
 }

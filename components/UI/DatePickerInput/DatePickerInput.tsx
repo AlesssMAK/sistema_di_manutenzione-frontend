@@ -25,6 +25,9 @@ interface DatePickerInputProps {
   onChange: (value: string) => void;
   placeholder?: string;
   id?: string;
+  /** Optional predicate to block days (e.g. non-working days). Blocked
+   *  cells render struck-through and aren't selectable. */
+  isDateDisabled?: (day: Date) => boolean;
 }
 
 const DatePickerInput = ({
@@ -32,6 +35,7 @@ const DatePickerInput = ({
   onChange,
   placeholder,
   id,
+  isDateDisabled,
 }: DatePickerInputProps) => {
   const localeCode = useLocale();
   const locale = getDateFnsLocale(localeCode);
@@ -64,6 +68,7 @@ const DatePickerInput = ({
   };
 
   const pick = (day: Date) => {
+    if (isDateDisabled?.(day)) return;
     onChange(format(day, 'yyyy-MM-dd'));
     setOpen(false);
   };
@@ -154,13 +159,15 @@ const DatePickerInput = ({
               const isSelected = selectedDate
                 ? isSameDay(day, selectedDate)
                 : false;
+              const disabled = isDateDisabled?.(day) ?? false;
               return (
                 <button
                   type="button"
                   key={idx}
+                  disabled={disabled}
                   className={`${css.cell} ${!inMonth ? css.otherMonth : ''} ${
                     isSelected ? css.selected : ''
-                  }`}
+                  } ${disabled ? css.disabled : ''}`}
                   onClick={() => pick(day)}
                 >
                   <span
@@ -189,6 +196,7 @@ const DatePickerInput = ({
             <button
               type="button"
               className={css.footerBtn}
+              disabled={isDateDisabled?.(new Date()) ?? false}
               onClick={() => pick(new Date())}
             >
               {t('today')}

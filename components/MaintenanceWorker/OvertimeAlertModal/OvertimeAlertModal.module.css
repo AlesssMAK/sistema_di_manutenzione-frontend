@@ -65,7 +65,21 @@
 
 .actions {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: stretch;
   gap: 10px;
+
+  @media screen and (min-width: 768px) {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+}
+
+.actions > :global(button) {
+  width: 100%;
+
+  @media screen and (min-width: 768px) {
+    width: auto;
+  }
 }

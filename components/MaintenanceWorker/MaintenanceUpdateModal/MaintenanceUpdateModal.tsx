@@ -13,7 +13,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
-import { updateFaultByWorker } from '@/lib/api/faults';
+import {
+  updateFaultByWorker,
+  getAlreadyWorkingFault,
+  type ActiveWorkFault,
+} from '@/lib/api/faults';
 import {
   ALLOWED_TRANSITIONS,
   maintainerUpdateSchema,
@@ -44,6 +48,10 @@ interface MaintenanceUpdateModalProps {
   minDuration?: number;
   onClose: () => void;
   onSuccess: (updatedFault: FaultCard) => void;
+  /** Called instead of the generic error toast when the update is a resume
+   *  (→ In progress) blocked because the technician is already working on
+   *  another fault. Lets the parent surface the "già al lavoro" modal. */
+  onBlockedByActiveWork?: (active: ActiveWorkFault) => void;
 }
 
 // Pull the backend's human message out of an axios error (the Next proxy
@@ -71,6 +79,7 @@ const MaintenanceUpdateModal = ({
   minDuration = 0,
   onClose,
   onSuccess,
+  onBlockedByActiveWork,
 }: MaintenanceUpdateModalProps) => {
   const t = useTranslations('MaintenanceUpdateModal');
   const tDur = useTranslations('Duration');
@@ -183,6 +192,14 @@ const MaintenanceUpdateModal = ({
       onClose();
     },
     onError: (err: unknown) => {
+      // Resuming while another fault is running → let the parent open the
+      // "già al lavoro" modal instead of a dead-end error toast.
+      const active = getAlreadyWorkingFault(err);
+      if (active && onBlockedByActiveWork) {
+        onBlockedByActiveWork(active);
+        onClose();
+        return;
+      }
       const message = errorMessage(err, t('messages.error'));
       setSubmitError(message);
       toast.error(message);

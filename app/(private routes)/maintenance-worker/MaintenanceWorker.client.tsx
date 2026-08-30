@@ -35,18 +35,43 @@ import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { FaultCard } from '@/types/faultType';
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export type FaultViewMode = 'active' | 'suspended' | 'overdue' | 'completed';
+export type FaultViewMode =
+  | 'active'
+  | 'inProgress'
+  | 'suspended'
+  | 'overdue'
+  | 'completed';
 
-// Suspended has its own "Sospese" tab, so it's excluded from the broad
-// "Attive" group — a paused fault shows only under Sospese.
+// Landing-scope probe + pool query still use the narrow "there is active
+// assigned work" set (no Suspended).
 const ACTIVE_STATUSES = 'Created,In progress,Overdue';
-// Specific statuses the "Attive" tab groups — drive the status filter.
-const ACTIVE_STATUS_LIST = ['Created', 'In progress', 'Overdue'];
+// "Attive" is now the umbrella tab: everything that isn't closed.
+const ALL_OPEN_STATUSES = 'Created,In progress,Overdue,Suspended';
+// Statuses the "Attive" status dropdown can narrow to.
+const ACTIVE_STATUS_LIST = ['Created', 'In progress', 'Suspended', 'Overdue'];
 const STATUS_KEY: Record<string, string> = {
   Created: 'CREATED',
   'In progress': 'IN_PROGRESS',
   Suspended: 'SUSPENDED',
   Overdue: 'OVERDUE',
+};
+
+// Which Fault date column the calendar badges + day-click filter use.
+type CalendarField = 'plannedDate' | 'deadline' | 'completedAt';
+
+// Per-tab config: the statuses it shows (calendar badges + list) and the
+// date column those are bucketed / filtered by. This is what decouples the
+// calendar from a single hard-coded "active" mode — every tab drives its
+// own badges and day filter, narrowed only by the scope bar.
+const MODE_CONFIG: Record<
+  FaultViewMode,
+  { statuses: string; field: CalendarField }
+> = {
+  active: { statuses: ALL_OPEN_STATUSES, field: 'plannedDate' },
+  inProgress: { statuses: 'In progress', field: 'plannedDate' },
+  suspended: { statuses: 'Suspended', field: 'plannedDate' },
+  overdue: { statuses: 'Overdue', field: 'deadline' },
+  completed: { statuses: 'Completed', field: 'completedAt' },
 };
 
 // Date-sort presets. 'auto' keeps the per-tab default (completed → most
@@ -96,6 +121,7 @@ const MaintenanceWorkerClient = () => {
 
   const VIEW_MODE_TABS: TabItem<FaultViewMode>[] = [
     { value: 'active', label: t('tabs.active'), icon: 'wrench' },
+    { value: 'inProgress', label: t('tabs.inProgress'), icon: 'reload' },
     { value: 'suspended', label: t('tabs.suspended'), icon: 'exclamation-circle' },
     { value: 'overdue', label: t('tabs.overdue'), icon: 'clock' },
     { value: 'completed', label: t('tabs.completed'), icon: 'check-circle' },
@@ -125,9 +151,8 @@ const MaintenanceWorkerClient = () => {
   // was last loaded — surfaced as a "N new" refresh pill.
   const [newFaultCount, setNewFaultCount] = useState(0);
   const { socket } = useSocket();
-  const [overdueDeadlineDates, setOverdueDeadlineDates] = useState<string[]>(
-    []
-  );
+  // Per-day calendar badges for the current tab (buckets keyed by the tab's
+  // date column: plannedDate / deadline / completedAt).
   const [plannedDays, setPlannedDays] = useState<
     Record<string, PlannedDayBucket>
   >({});
@@ -171,17 +196,11 @@ const MaintenanceWorkerClient = () => {
           : {},
     [userId]
   );
-  const statusForMode = (m: FaultViewMode) =>
-    m === 'overdue'
-      ? 'Overdue'
-      : m === 'completed'
-        ? 'Completed'
-        : m === 'suspended'
-          ? 'Suspended'
-          : ACTIVE_STATUSES;
+  const statusForMode = (m: FaultViewMode) => MODE_CONFIG[m].statuses;
 
   const BOARD_MODES: FaultViewMode[] = [
     'active',
+    'inProgress',
     'suspended',
     'overdue',
     'completed',
@@ -295,33 +314,39 @@ const MaintenanceWorkerClient = () => {
       setIsLoading(true);
 
       try {
+        // "Attive" groups several statuses; a picked status narrows it.
+        // Every other tab is a single fixed status set.
         const statusFault =
-          currentMode === 'overdue'
-            ? 'Overdue'
-            : currentMode === 'completed'
-              ? 'Completed'
-              : currentMode === 'suspended'
-                ? 'Suspended'
-                : // "Attive" groups several statuses; a picked status narrows it.
-                  filters.status || ACTIVE_STATUSES;
+          currentMode === 'active'
+            ? filters.status || MODE_CONFIG.active.statuses
+            : MODE_CONFIG[currentMode].statuses;
 
-        // Date filter applied in active/completed modes only — overdue
-        // shows everything in ritardo regardless of plannedDate. A range
-        // from the Filtri panel wins over the calendar's single day.
+        // The day-click / Filtri range filters by the tab's own date column
+        // (plannedDate / deadline / completedAt). A range from the Filtri
+        // panel wins over the calendar's single selected day.
+        const field = MODE_CONFIG[currentMode].field;
         const hasRange = Boolean(filters.dateFrom || filters.dateTo);
-        const dateParams =
-          currentMode === 'overdue'
-            ? {}
-            : hasRange
-              ? {
-                  ...(filters.dateFrom
-                    ? { plannedDateFrom: filters.dateFrom }
-                    : {}),
-                  ...(filters.dateTo ? { plannedDateTo: filters.dateTo } : {}),
-                }
-              : currentDate
-                ? { plannedDate: currentDate }
-                : {};
+        const rangeKeys: Record<CalendarField, [string, string]> = {
+          plannedDate: ['plannedDateFrom', 'plannedDateTo'],
+          deadline: ['deadlineFrom', 'deadlineTo'],
+          completedAt: ['completedFrom', 'completedTo'],
+        };
+        const [fromKey, toKey] = rangeKeys[field];
+        let dateParams: Record<string, string> = {};
+        if (hasRange) {
+          dateParams = {
+            ...(filters.dateFrom ? { [fromKey]: filters.dateFrom } : {}),
+            ...(filters.dateTo ? { [toKey]: filters.dateTo } : {}),
+          };
+        } else if (currentDate) {
+          // A single calendar day → a one-day window on the tab's field.
+          // plannedDate matches exactly; deadline/completedAt use the
+          // from/to bounds (completedAt is a Date, needs a day range).
+          dateParams =
+            field === 'plannedDate'
+              ? { plannedDate: currentDate }
+              : { [fromKey]: currentDate, [toKey]: currentDate };
+        }
 
         const baseParams = {
           priority: currentPriority,
@@ -381,37 +406,38 @@ const MaintenanceWorkerClient = () => {
     [t]
   );
 
-  const fetchPlannedCounts = useCallback(
+  const fetchCalendarCounts = useCallback(
     async (
       currentScope: FaultScope,
       currentUserId: string,
       currentMode: FaultViewMode
     ) => {
-      // Badges are only meaningful for active work — overdue uses the red
-      // deadlineCell highlighting; completed is just historical browsing.
-      if (currentMode !== 'active') {
-        setPlannedDays({});
-        return;
-      }
       try {
+        // Completed history has no pool — fall back to 'mine' so the badges
+        // match the list (mirrors the board + handleModeChange).
+        const effScope: FaultScope =
+          currentMode === 'completed' && currentScope === 'pool'
+            ? 'mine'
+            : currentScope;
         const scopeParams =
-          currentScope === 'mine' && currentUserId
+          effScope === 'mine' && currentUserId
             ? { assignedTo: currentUserId }
-            : currentScope === 'pool'
+            : effScope === 'pool'
               ? { assignedToEmpty: true }
               : {};
 
-        // Per-day planned counts via the aggregated endpoint
-        // (replaces the old perPage:200 trick). Window = current
-        // month ± 1, which is what the calendar can show anyway.
+        // Per-day counts for the current tab via the aggregated endpoint,
+        // bucketed by that tab's date column. Window = current month ± 1,
+        // which is what the calendar can show anyway.
+        const { field, statuses } = MODE_CONFIG[currentMode];
         const today = new Date();
         const from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
         const to = new Date(today.getFullYear(), today.getMonth() + 2, 0);
         const data = await fetchFaultDeadlines({
-          field: 'plannedDate',
+          field,
           dateFrom: from.toISOString().slice(0, 10),
           dateTo: to.toISOString().slice(0, 10),
-          statusFault: ACTIVE_STATUSES,
+          statusFault: statuses,
           ...scopeParams,
         });
 
@@ -437,37 +463,10 @@ const MaintenanceWorkerClient = () => {
     [t]
   );
 
-  const fetchOverdueDeadlines = useCallback(
-    async (currentPriority: string) => {
-      try {
-        // Overdue heatmap via the aggregated endpoint. Wide window so
-        // we catch deadlines that drifted past the visible month.
-        const today = new Date();
-        const from = new Date(today.getFullYear() - 1, 0, 1);
-        const to = new Date(today.getFullYear() + 1, 11, 31);
-        const data = await fetchFaultDeadlines({
-          field: 'deadline',
-          dateFrom: from.toISOString().slice(0, 10),
-          dateTo: to.toISOString().slice(0, 10),
-          statusFault: 'Overdue',
-          ...(currentPriority ? { priority: currentPriority } : {}),
-        });
-
-        const dates = data.dates.map(bucket => bucket.date);
-
-        setOverdueDeadlineDates(dates);
-      } catch (error) {
-        console.error(t('errors.loadDeadlines'), error);
-      }
-    },
-    [t]
-  );
-
   const handlePriorityChange = (newPriority: string) => {
     const newValue = priority === newPriority ? '' : newPriority;
     setPriority(newValue);
     setPage(1);
-    if (isOverdueMode) fetchOverdueDeadlines(newValue);
   };
 
   const handleDateChange = (date: string) => {
@@ -487,8 +486,9 @@ const MaintenanceWorkerClient = () => {
     if (newScope === scope) return;
     setScope(newScope);
     setPage(1);
-    // Pool cards are model B (tracked individually), so entering the pool
-    // does NOT clear the dot — it stays until each card is opened.
+    // Plan A for the pool: opening Libere surfaces the free faults, so its
+    // unseen dot clears on entry (the new fault is now "in view").
+    if (newScope === 'pool') markSeen('worker_pool');
   };
 
   const handleModeChange = (newMode: FaultViewMode) => {
@@ -504,12 +504,6 @@ const MaintenanceWorkerClient = () => {
     // Opening a tab clears its others-assigned (model A) cards; mine/pool
     // (model B) cards stay flagged until opened individually.
     markSeen(seenKeyForMode(newMode));
-
-    if (newMode === 'overdue') {
-      fetchOverdueDeadlines(priority);
-    } else {
-      setOverdueDeadlineDates([]);
-    }
   };
 
   // One-shot landing-scope auto-select: 'mine' if the worker has any
@@ -568,8 +562,8 @@ const MaintenanceWorkerClient = () => {
   ]);
 
   useEffect(() => {
-    fetchPlannedCounts(scope, userId, viewMode);
-  }, [scope, userId, viewMode, fetchPlannedCounts]);
+    fetchCalendarCounts(scope, userId, viewMode);
+  }, [scope, userId, viewMode, fetchCalendarCounts]);
 
   // Mark the landing tab seen once resolved, so its others-assigned
   // (model A) cards start cleared. Mine/pool (model B) cards keep their
@@ -644,6 +638,8 @@ const MaintenanceWorkerClient = () => {
     emptyText = t('empty.suspended');
   } else if (isCompletedMode) {
     emptyText = selectedDate ? t('empty.completedDate') : t('empty.completed');
+  } else if (viewMode === 'inProgress') {
+    emptyText = t('empty.inProgress');
   } else if (selectedDate) {
     emptyText =
       scope === 'mine'
@@ -660,7 +656,7 @@ const MaintenanceWorkerClient = () => {
           : t('empty.default');
   }
 
-  const showResetButton = !isOverdueMode && (selectedDate || scope !== 'all');
+  const showResetButton = Boolean(selectedDate) || scope !== 'all';
 
   // Tab badges: always-visible total (per current scope) + a red dot when
   // the tab holds unseen faults.
@@ -688,9 +684,8 @@ const MaintenanceWorkerClient = () => {
             onPriorityChange={handlePriorityChange}
             activeDate={selectedDate}
             onDateChange={handleDateChange}
-            deadlineDates={isOverdueMode ? overdueDeadlineDates : []}
-            isDeadlineMode={isOverdueMode}
             plannedDays={plannedDays}
+            variant={isCompletedMode ? 'completed' : 'planned'}
           >
             {/* Filtri live in the sidebar under the priority legend. */}
             <div style={{ marginTop: '8px' }}>
@@ -864,7 +859,9 @@ const MaintenanceWorkerClient = () => {
           </div>
         </div>
 
-        {!isOverdueMode && selectedDate && (
+        {/* The hourly slot grid only makes sense for planned work (it lays
+            faults out by plannedTime); deadline/completed tabs skip it. */}
+        {MODE_CONFIG[viewMode].field === 'plannedDate' && selectedDate && (
           <DaySlotGrid
             selectedDate={selectedDate}
             faults={items}

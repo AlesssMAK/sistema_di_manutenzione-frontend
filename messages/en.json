@@ -522,6 +522,7 @@
     "headerSubtitle": "View and manage planned interventions",
     "tabs": {
       "active": "Active",
+      "inProgress": "In progress",
       "overdue": "Overdue",
       "completed": "Completed",
       "suspended": "Suspended"
@@ -558,6 +559,7 @@
     },
     "empty": {
       "overdue": "No overdue reports",
+      "inProgress": "You're not working on any report",
       "suspended": "No suspended reports",
       "completedDate": "No completed reports on this date",
       "completed": "No completed reports",
@@ -577,6 +579,7 @@
     "calendar": {
       "header": "Calendar",
       "interventionsCount": "{count} planned intervention(s)",
+      "completedCount": "{count} completed",
       "daysOfWeek": {
         "mon": "MON",
         "tue": "TUE",
@@ -819,8 +822,7 @@
       "managerNote": "Manager note",
       "maintainerNote": "Maintainer note",
       "hseNote": "HSE Note (Safety)",
-      "noDescription": "No description",
-      "noNote": "No note"
+      "noDescription": "No description"
     },
     "actions": {
       "planIntervention": "Plan intervention",
@@ -928,6 +930,17 @@
       "modifySuccess": "Planning updated",
       "saveError": "Error during save"
     }
+  },
+  "AlreadyWorkingModal": {
+    "title": "You're already working",
+    "message": "You're already working on report",
+    "hint": "To switch to another one, finalize or suspend the current work, or continue on it.",
+    "buttons": {
+      "finalize": "Finalize",
+      "suspend": "Suspend",
+      "continue": "Continue"
+    },
+    "resumeError": "Couldn't resume the report"
   },
   "MaintenanceUpdateModal": {
     "title": "Update Intervention",

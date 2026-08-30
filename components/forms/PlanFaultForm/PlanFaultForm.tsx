@@ -32,7 +32,10 @@ import type {
 } from '@/types/faultType';
 import { roundToStep } from '@/lib/utils/faultTime';
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
-import { resolveWorkWindow } from '@/lib/utils/workSchedule';
+import {
+  resolveEffectiveWindow,
+  isWorkingDate,
+} from '@/lib/utils/workSchedule';
 import DurationPicker from '@/components/UI/DurationPicker/DurationPicker';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import css from './PlanFaultForm.module.css';
@@ -128,16 +131,32 @@ const PlanFaultForm = ({
     queryFn: fetchSystemSettings,
     staleTime: 60 * 60 * 1000,
   });
-  // Planned-time slots follow the assigned technician's working window:
-  // their own hours when exactly one is picked, otherwise the
-  // maintenanceWorker role's hours, falling back to the factory schedule.
-  const plannedWindow = resolveWorkWindow(
-    settings,
+  // Planned-time slots follow the assigned technician's working window
+  // (their own hours when exactly one is picked, otherwise the
+  // maintenanceWorker role's, falling back to the factory schedule),
+  // intersected with the factory's opening hours — a technician can't be
+  // scheduled past when the plant closes.
+  const scheduleTarget =
     selectedMaintainers.length === 1
       ? { userId: selectedMaintainers[0], role: 'maintenanceWorker' }
-      : { role: 'maintenanceWorker' },
-    watch('plannedDate') || undefined
+      : { role: 'maintenanceWorker' };
+  const plannedDateValue = watch('plannedDate');
+  const plannedWindow = resolveEffectiveWindow(
+    settings,
+    scheduleTarget,
+    plannedDateValue || undefined
   );
+  // Which calendar days are selectable is governed by the FACTORY schedule
+  // (the days the plant is open) — a role/user override only narrows the
+  // working HOURS, it must not re-open a day the factory is closed. So both
+  // pickers block non-working factory days (weekends closed / holidays),
+  // and the time slots are disabled once such a day is somehow selected
+  // (legacy faults planned before that weekday was closed).
+  const isFactoryDayClosed = (day: Date) => !isWorkingDate(settings, {}, day);
+  const plannedTimeDisabled =
+    Boolean(plannedDateValue) &&
+    (isFactoryDayClosed(new Date(plannedDateValue)) ||
+      plannedWindow.start >= plannedWindow.end);
 
   useEffect(() => {
     setValue('assignedMaintainers', selectedMaintainers);
@@ -302,6 +321,7 @@ const PlanFaultForm = ({
                   setValue('plannedDate', v, { shouldValidate: true })
                 }
                 placeholder={t('datePlaceholder')}
+                isDateDisabled={isFactoryDayClosed}
               />
               {errors.plannedDate && (
                 <p className={css.error}>{errors.plannedDate.message}</p>
@@ -319,6 +339,7 @@ const PlanFaultForm = ({
                 stepMinutes={settings?.slotDurationMinutes ?? 30}
                 minTime={plannedWindow.start}
                 maxTime={plannedWindow.end}
+                disabled={plannedTimeDisabled}
               />
               {errors.plannedTime && (
                 <p className={css.error}>{errors.plannedTime.message}</p>
@@ -332,6 +353,7 @@ const PlanFaultForm = ({
               value={watch('deadline') ?? ''}
               onChange={v => setValue('deadline', v, { shouldValidate: true })}
               placeholder={t('datePlaceholder')}
+              isDateDisabled={isFactoryDayClosed}
             />
             {errors.deadline && (
               <p className={css.error}>{errors.deadline.message}</p>

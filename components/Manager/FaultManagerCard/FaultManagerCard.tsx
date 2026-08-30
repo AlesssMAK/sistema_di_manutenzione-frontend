@@ -165,7 +165,7 @@ const FaultManagerCard = ({
       </div>
 
       {fault.comment && (
-        <div className={css.commentBlock}>
+        <div className={`${css.commentBlock} ${css.operatorNote}`}>
           <span className={css.label}>{t('labels.description')}</span>
           <p className={css.commentText}>{fault.comment}</p>
         </div>

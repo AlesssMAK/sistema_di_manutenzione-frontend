@@ -14,6 +14,12 @@ interface FetchParams {
   /** Planned-date range (Filtri panel), 'YYYY-MM-DD'. */
   plannedDateFrom?: string;
   plannedDateTo?: string;
+  /** Deadline range — the "In ritardo" tab filters by deadline. */
+  deadlineFrom?: string;
+  deadlineTo?: string;
+  /** Completed-at range — the "Completate" tab filters by the close day. */
+  completedFrom?: string;
+  completedTo?: string;
   statusFault?: string;
   typeFault?: string;
   assignedTo?: string;
@@ -49,7 +55,7 @@ export interface FaultDeadlineBucket {
 }
 
 export interface FaultDeadlinesResponse {
-  field: 'plannedDate' | 'deadline';
+  field: 'plannedDate' | 'deadline' | 'completedAt';
   dateFrom: string;
   dateTo: string;
   dates: FaultDeadlineBucket[];
@@ -58,7 +64,7 @@ export interface FaultDeadlinesResponse {
 interface FetchDeadlinesParams {
   dateFrom: string;
   dateTo: string;
-  field?: 'plannedDate' | 'deadline';
+  field?: 'plannedDate' | 'deadline' | 'completedAt';
   statusFault?: string;
   priority?: string;
   assignedTo?: string;
@@ -102,6 +108,10 @@ export const fetchFaultCards = async ({
   plannedDate,
   plannedDateFrom,
   plannedDateTo,
+  deadlineFrom,
+  deadlineTo,
+  completedFrom,
+  completedTo,
   statusFault,
   typeFault,
   assignedTo,
@@ -125,6 +135,10 @@ export const fetchFaultCards = async ({
       ...(plannedDate ? { plannedDate } : {}),
       ...(plannedDateFrom ? { plannedDateFrom } : {}),
       ...(plannedDateTo ? { plannedDateTo } : {}),
+      ...(deadlineFrom ? { deadlineFrom } : {}),
+      ...(deadlineTo ? { deadlineTo } : {}),
+      ...(completedFrom ? { completedFrom } : {}),
+      ...(completedTo ? { completedTo } : {}),
       ...(statusFault ? { statusFault } : {}),
       ...(typeFault ? { typeFault } : {}),
       ...(assignedTo ? { assignedTo } : {}),
@@ -197,6 +211,44 @@ export const updateFaultByWorker = async (
   return res.data;
 };
 
+// The fault a technician is already actively working on, returned by the
+// backend's 409 ALREADY_WORKING guard (claim / resume). Enough to render
+// the "già al lavoro" modal and navigate to it.
+export interface ActiveWorkFault {
+  _id: string;
+  faultId: string;
+  statusFault: string;
+  plannedDate?: string;
+  plannedTime?: string;
+  plantId?: { namePlant?: string; code?: string } | null;
+  partId?: { namePlantPart?: string; codePlantPart?: string } | null;
+  /** Work-time accounting, used to prefill the finalize duration when the
+   *  fault is finalized straight from the "already working" modal. */
+  workedMs?: number;
+  workStartedAt?: string | null;
+}
+
+// Pull the active fault out of an ALREADY_WORKING 409 (null for any other
+// error), so the caller can show the finalize / suspend / continue modal
+// instead of a generic toast.
+export const getAlreadyWorkingFault = (
+  err: unknown
+): ActiveWorkFault | null => {
+  if (err && typeof err === 'object' && 'response' in err) {
+    const data = (
+      err as {
+        response?: {
+          data?: { code?: string; activeFault?: ActiveWorkFault };
+        };
+      }
+    ).response?.data;
+    if (data?.code === 'ALREADY_WORKING' && data.activeFault) {
+      return data.activeFault;
+    }
+  }
+  return null;
+};
+
 export const claimFault = async (faultId: string): Promise<FaultCard> => {
   if (!faultId) {
     throw new Error('Fault ID is required');
@@ -213,6 +265,7 @@ export const claimFault = async (faultId: string): Promise<FaultCard> => {
 // sync with the backend LIST_SEEN_KEYS + patchListSeen validation.
 export type ListSeenKey =
   | 'worker_active'
+  | 'worker_inProgress'
   | 'worker_suspended'
   | 'worker_overdue'
   | 'worker_completed'

@@ -522,6 +522,7 @@
     "headerSubtitle": "Visualiza y gestiona las intervenciones planificadas",
     "tabs": {
       "active": "Activas",
+      "inProgress": "En curso",
       "overdue": "En Retraso",
       "completed": "Completadas",
       "suspended": "Suspendidas"
@@ -558,6 +559,7 @@
     },
     "empty": {
       "overdue": "No hay señalaciones en retraso",
+      "inProgress": "No estás trabajando en ninguna señalación",
       "suspended": "No hay señalaciones suspendidas",
       "completedDate": "No hay señalaciones completadas en esta fecha",
       "completed": "No hay señalaciones completadas",
@@ -577,6 +579,7 @@
     "calendar": {
       "header": "Calendario",
       "interventionsCount": "{count} intervención(es) planificada(s)",
+      "completedCount": "{count} completada(s)",
       "daysOfWeek": {
         "mon": "LUN",
         "tue": "MAR",
@@ -819,8 +822,7 @@
       "managerNote": "Notas del responsable",
       "maintainerNote": "Notas del mantenedor",
       "hseNote": "Nota HSE (Seguridad)",
-      "noDescription": "Sin descripción",
-      "noNote": "Sin notas"
+      "noDescription": "Sin descripción"
     },
     "actions": {
       "planIntervention": "Planificar intervención",
@@ -928,6 +930,17 @@
       "modifySuccess": "Planificación actualizada",
       "saveError": "Error al guardar"
     }
+  },
+  "AlreadyWorkingModal": {
+    "title": "Ya estás trabajando",
+    "message": "Ya estás trabajando en la señalación",
+    "hint": "Para cambiar a otra, finaliza o suspende el trabajo actual, o continúa con él.",
+    "buttons": {
+      "finalize": "Finalizar",
+      "suspend": "Suspender",
+      "continue": "Continuar"
+    },
+    "resumeError": "No se pudo reanudar la señalación"
   },
   "MaintenanceUpdateModal": {
     "title": "Actualizar Intervención",

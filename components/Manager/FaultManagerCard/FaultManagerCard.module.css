@@ -224,6 +224,21 @@
   overflow-wrap: anywhere;
 }
 
+/* Operator's report — blue tint (matches the admin notes / detail callout)
+   so the original segnalazione stands out from the rest of the card. */
+.operatorNote {
+  border: 1px solid #bfdbfe;
+  background: #eff6ff;
+}
+
+.operatorNote .label {
+  color: #1e40af;
+}
+
+.operatorNote .commentText {
+  color: #1e3a8a;
+}
+
 /* Current pause info — amber "attention" tint (matches the detail callout). */
 .suspensionBlock {
   display: flex;

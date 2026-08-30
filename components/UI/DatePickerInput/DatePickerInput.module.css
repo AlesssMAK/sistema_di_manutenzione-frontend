@@ -159,6 +159,21 @@
   color: #d1d5db;
 }
 
+/* Non-working day (factory closed / holiday) — not selectable. */
+.disabled {
+  background-color: #f8fafc;
+  cursor: not-allowed;
+}
+
+.disabled:hover {
+  background-color: #f8fafc;
+}
+
+.disabled .dayNumber {
+  color: #cbd5e1;
+  text-decoration: line-through;
+}
+
 .selected {
   background-color: #0070f3;
 }
@@ -212,4 +227,13 @@
 
 .footerBtn:hover {
   background: #eff6ff;
+}
+
+.footerBtn:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.footerBtn:disabled:hover {
+  background: none;
 }
