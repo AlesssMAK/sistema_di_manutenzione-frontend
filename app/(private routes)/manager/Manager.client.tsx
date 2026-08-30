@@ -47,14 +47,15 @@ const TAB_TO_STATUS: Record<ManagerTab, string> = {
   archive: 'Completed',
 };
 
-// Ricevute = Created not yet assigned; Pianificati = Created already
-// assigned (planning always sets assignedMaintainers + plannedDate). So a
-// planned fault leaves "Ricevute" and shows only under "Pianificati".
+// Ricevute = Created not yet planned (no plannedDate); Pianificate =
+// Created already planned (a plannedDate is set). Splitting by plannedDate
+// (not assignment) matches the card's own "isPlanned" logic — a fault
+// planned without assigned maintainers still leaves "Ricevute".
 const TAB_EXTRA: Partial<
-  Record<ManagerTab, { assignedToEmpty?: boolean; assignedToNotEmpty?: boolean }>
+  Record<ManagerTab, { plannedDateEmpty?: boolean; plannedDateNotEmpty?: boolean }>
 > = {
-  received: { assignedToEmpty: true },
-  planned: { assignedToNotEmpty: true },
+  received: { plannedDateEmpty: true },
+  planned: { plannedDateNotEmpty: true },
 };
 
 const TAB_ORDER: ManagerTab[] = [
@@ -125,12 +126,13 @@ const ManagerClient = () => {
   const [planningFault, setPlanningFault] = useState<FaultCard | null>(null);
 
   // Filters (status stays on the tabs). search → faultId/operator,
-  // priority/typeFault → selects, plannedDate → localized date picker.
+  // priority/typeFault → selects, "Periodo" → any-date range.
   const [search, setSearch] = useState('');
   const [debouncedSearch] = useDebounce(search, 400);
   const [priority, setPriority] = useState<PriorityFaultType | ''>('');
   const [typeFault, setTypeFault] = useState<TypeFault | ''>('');
-  const [plannedDate, setPlannedDate] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   // Date sort + a specific-status filter (narrows the tab's status group).
   const [sortOption, setSortOption] = useState<SortKey>('recent');
   const [statusFilter, setStatusFilter] = useState('');
@@ -138,7 +140,7 @@ const ManagerClient = () => {
   // Any filter change resets pagination back to the first page. Adjusted
   // during render rather than in an effect so the reset lands in the same
   // pass as the filter change (no cascading render).
-  const filterKey = `${debouncedSearch}|${priority}|${typeFault}|${plannedDate}|${statusFilter}|${sortOption}`;
+  const filterKey = `${debouncedSearch}|${priority}|${typeFault}|${dateFrom}|${dateTo}|${statusFilter}|${sortOption}`;
   const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
   if (prevFilterKey !== filterKey) {
     setPrevFilterKey(filterKey);
@@ -196,7 +198,8 @@ const ManagerClient = () => {
     ...(debouncedSearch ? { search: debouncedSearch } : {}),
     ...(priority ? { priority } : {}),
     ...(typeFault ? { typeFault } : {}),
-    ...(plannedDate ? { plannedDate } : {}),
+    ...(dateFrom ? { anyDateFrom: dateFrom } : {}),
+    ...(dateTo ? { anyDateTo: dateTo } : {}),
   };
 
   const queryClient = useQueryClient();
@@ -326,7 +329,8 @@ const ManagerClient = () => {
     setSearch('');
     setPriority('');
     setTypeFault('');
-    setPlannedDate('');
+    setDateFrom('');
+    setDateTo('');
     setStatusFilter('');
     setSortOption('recent');
   };
@@ -377,12 +381,16 @@ const ManagerClient = () => {
       onSelect: label => setTypeFault(typeMapper.getValueByLabel(label) ?? ''),
     },
     {
-      id: 'plannedDate',
-      type: 'date',
-      label: t('filters.plannedDate'),
-      value: plannedDate,
-      onChange: setPlannedDate,
-      placeholder: t('filters.datePlaceholder'),
+      id: 'range',
+      type: 'daterange',
+      label: t('filters.dateRange'),
+      from: dateFrom,
+      to: dateTo,
+      onChange: (f: string, tv: string) => {
+        setDateFrom(f);
+        setDateTo(tv);
+      },
+      placeholder: t('filters.dateRangePlaceholder'),
     },
     {
       id: 'sort',

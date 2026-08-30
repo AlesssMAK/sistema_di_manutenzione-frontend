@@ -47,14 +47,6 @@ export type FaultViewMode =
 const ACTIVE_STATUSES = 'Created,In progress,Overdue';
 // "Attive" is now the umbrella tab: everything that isn't closed.
 const ALL_OPEN_STATUSES = 'Created,In progress,Overdue,Suspended';
-// Statuses the "Attive" status dropdown can narrow to.
-const ACTIVE_STATUS_LIST = ['Created', 'In progress', 'Suspended', 'Overdue'];
-const STATUS_KEY: Record<string, string> = {
-  Created: 'CREATED',
-  'In progress': 'IN_PROGRESS',
-  Suspended: 'SUSPENDED',
-  Overdue: 'OVERDUE',
-};
 
 // Which Fault date column the calendar badges + day-click filter use.
 type CalendarField = 'plannedDate' | 'deadline' | 'completedAt';
@@ -92,7 +84,6 @@ const PER_PAGE = 3;
 const MaintenanceWorkerClient = () => {
   const t = useTranslations('maintenanceWorkerPage');
   const tNoFound = useTranslations('NoFound');
-  const tStatus = useTranslations('StatusFault');
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
 
@@ -106,17 +97,6 @@ const MaintenanceWorkerClient = () => {
         { value: 'deadlineFar', label: t('filters.sort.deadlineFar') },
       ]),
     [t]
-  );
-  const statusMapper = useMemo(
-    () =>
-      createOptionMapper<string>([
-        { value: '', label: t('filters.allStatuses') },
-        ...ACTIVE_STATUS_LIST.map(s => ({
-          value: s,
-          label: tStatus(STATUS_KEY[s]),
-        })),
-      ]),
-    [t, tStatus]
   );
 
   const VIEW_MODE_TABS: TabItem<FaultViewMode>[] = [
@@ -138,7 +118,6 @@ const MaintenanceWorkerClient = () => {
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [sortOption, setSortOption] = useState<SortKey>('auto');
-  const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [viewMode, setViewMode] = useState<FaultViewMode>('active');
@@ -198,6 +177,17 @@ const MaintenanceWorkerClient = () => {
   );
   const statusForMode = (m: FaultViewMode) => MODE_CONFIG[m].statuses;
 
+  // The Filtri narrowers that the tab counters mirror, so a badge equals the
+  // filtered list total (priority + search + the "Periodo" any-date range).
+  // The calendar day-selection is a per-tab drill-down, not part of this.
+  const countFilters = {
+    ...(priority ? { priority } : {}),
+    ...(debouncedSearch ? { search: debouncedSearch } : {}),
+    ...(dateFrom ? { anyDateFrom: dateFrom } : {}),
+    ...(dateTo ? { anyDateTo: dateTo } : {}),
+  };
+  const countFilterKey = `${priority}|${debouncedSearch}|${dateFrom}|${dateTo}`;
+
   const BOARD_MODES: FaultViewMode[] = [
     'active',
     'inProgress',
@@ -214,13 +204,21 @@ const MaintenanceWorkerClient = () => {
       const key = seenKeyForMode(m);
       const since = listSeen?.[key];
       return {
-        queryKey: ['workerBoard', m, effScope, userId, since ?? null],
+        queryKey: [
+          'workerBoard',
+          m,
+          effScope,
+          userId,
+          since ?? null,
+          countFilterKey,
+        ],
         queryFn: () =>
           fetchFaultCards({
             page: 1,
             perPage: 1,
             statusFault: statusForMode(m),
             ...scopeParamsFor(effScope),
+            ...countFilters,
             withUnseen: true,
             ...(since ? { seenSince: since } : {}),
           }),
@@ -302,7 +300,6 @@ const MaintenanceWorkerClient = () => {
         dateFrom?: string;
         dateTo?: string;
         sort?: SortKey;
-        status?: string;
       } = {}
     ) => {
       const reqId = ++requestIdRef.current;
@@ -314,34 +311,30 @@ const MaintenanceWorkerClient = () => {
       setIsLoading(true);
 
       try {
-        // "Attive" groups several statuses; a picked status narrows it.
-        // Every other tab is a single fixed status set.
-        const statusFault =
-          currentMode === 'active'
-            ? filters.status || MODE_CONFIG.active.statuses
-            : MODE_CONFIG[currentMode].statuses;
+        // Each tab is a fixed status set (no per-status narrower).
+        const statusFault = MODE_CONFIG[currentMode].statuses;
 
-        // The day-click / Filtri range filters by the tab's own date column
-        // (plannedDate / deadline / completedAt). A range from the Filtri
-        // panel wins over the calendar's single selected day.
+        // Two independent date filters:
+        //  • the Filtri "Periodo" range → any-date match (a fault shows if
+        //    ANY of its dates is in the range), and it wins over…
+        //  • the calendar's single selected day → a one-day window on the
+        //    tab's own column (plannedDate / deadline / completedAt). The
+        //    calendar stays per-tab; only the Periodo is any-date.
         const field = MODE_CONFIG[currentMode].field;
         const hasRange = Boolean(filters.dateFrom || filters.dateTo);
-        const rangeKeys: Record<CalendarField, [string, string]> = {
+        const dayKeys: Record<CalendarField, [string, string]> = {
           plannedDate: ['plannedDateFrom', 'plannedDateTo'],
           deadline: ['deadlineFrom', 'deadlineTo'],
           completedAt: ['completedFrom', 'completedTo'],
         };
-        const [fromKey, toKey] = rangeKeys[field];
+        const [fromKey, toKey] = dayKeys[field];
         let dateParams: Record<string, string> = {};
         if (hasRange) {
           dateParams = {
-            ...(filters.dateFrom ? { [fromKey]: filters.dateFrom } : {}),
-            ...(filters.dateTo ? { [toKey]: filters.dateTo } : {}),
+            ...(filters.dateFrom ? { anyDateFrom: filters.dateFrom } : {}),
+            ...(filters.dateTo ? { anyDateTo: filters.dateTo } : {}),
           };
         } else if (currentDate) {
-          // A single calendar day → a one-day window on the tab's field.
-          // plannedDate matches exactly; deadline/completedAt use the
-          // from/to bounds (completedAt is a Date, needs a day range).
           dateParams =
             field === 'plannedDate'
               ? { plannedDate: currentDate }
@@ -496,8 +489,6 @@ const MaintenanceWorkerClient = () => {
     setViewMode(newMode);
     setSelectedDate('');
     setPage(1);
-    // The status filter belongs to the "Attive" tab only.
-    if (newMode !== 'active') setStatusFilter('');
     // 'Libere' (pool) is meaningless in the completed history — completed
     // faults are always assigned. Drop back to 'Mie' when entering it.
     if (newMode === 'completed' && scope === 'pool') setScope('mine');
@@ -543,7 +534,6 @@ const MaintenanceWorkerClient = () => {
       dateFrom,
       dateTo,
       sort: sortOption,
-      status: statusFilter,
     });
   }, [
     scopeResolved,
@@ -556,7 +546,6 @@ const MaintenanceWorkerClient = () => {
     userId,
     debouncedSearch,
     sortOption,
-    statusFilter,
     dateFrom,
     dateTo,
   ]);
@@ -606,7 +595,6 @@ const MaintenanceWorkerClient = () => {
       dateFrom,
       dateTo,
       sort: sortOption,
-      status: statusFilter,
     });
   };
 
@@ -618,7 +606,6 @@ const MaintenanceWorkerClient = () => {
       dateFrom,
       dateTo,
       sort: sortOption,
-      status: statusFilter,
     });
   };
 
@@ -672,6 +659,55 @@ const MaintenanceWorkerClient = () => {
     ? { pool: true }
     : {};
 
+  // Filtri (search / status / date range / sort). Rendered under the scope
+  // bar in the content column.
+  const filterItems: FiltersItem[] = [
+    {
+      id: 'search',
+      type: 'input',
+      label: t('filters.search'),
+      value: search,
+      placeholder: t('filters.searchPlaceholder'),
+      onChange: (v: string) => {
+        setSearch(v);
+        setPage(1);
+      },
+      icon: 'search',
+    },
+    {
+      id: 'range',
+      type: 'daterange',
+      label: t('filters.dateRange'),
+      from: dateFrom,
+      to: dateTo,
+      onChange: (f: string, tv: string) => {
+        setDateFrom(f);
+        setDateTo(tv);
+        setPage(1);
+      },
+      placeholder: t('filters.dateRangePlaceholder'),
+    },
+    {
+      id: 'sort',
+      type: 'select',
+      label: t('filters.sortLabel'),
+      value:
+        sortMapper.getLabelByValue(sortOption) ?? t('filters.sort.auto'),
+      options: sortMapper.labelsArray,
+      onSelect: (label: string) => {
+        setSortOption((sortMapper.getValueByLabel(label) ?? 'auto') as SortKey);
+        setPage(1);
+      },
+    },
+  ];
+  const clearFilters = () => {
+    setSearch('');
+    setDateFrom('');
+    setDateTo('');
+    setSortOption('auto');
+    setPage(1);
+  };
+
   return (
     <div className="container">
       <div className={css.page_wrapper}>
@@ -686,88 +722,7 @@ const MaintenanceWorkerClient = () => {
             onDateChange={handleDateChange}
             plannedDays={plannedDays}
             variant={isCompletedMode ? 'completed' : 'planned'}
-          >
-            {/* Filtri live in the sidebar under the priority legend. */}
-            <div style={{ marginTop: '8px' }}>
-              <Filters
-                stacked
-                items={
-                  [
-                    {
-                      id: 'search',
-                      type: 'input',
-                      label: t('filters.search'),
-                      value: search,
-                      placeholder: t('filters.searchPlaceholder'),
-                      onChange: (v: string) => {
-                        setSearch(v);
-                        setPage(1);
-                      },
-                      icon: 'search',
-                    },
-                    // Status filter — only on "Attive" (which groups
-                    // several statuses); narrows the group to one status.
-                    ...(viewMode === 'active'
-                      ? [
-                          {
-                            id: 'status',
-                            type: 'select' as const,
-                            label: t('filters.status'),
-                            value:
-                              statusMapper.getLabelByValue(statusFilter) ??
-                              t('filters.allStatuses'),
-                            options: statusMapper.labelsArray,
-                            onSelect: (label: string) => {
-                              setStatusFilter(
-                                statusMapper.getValueByLabel(label) ?? ''
-                              );
-                              setPage(1);
-                            },
-                          },
-                        ]
-                      : []),
-                    {
-                      id: 'range',
-                      type: 'daterange',
-                      label: t('filters.dateRange'),
-                      from: dateFrom,
-                      to: dateTo,
-                      onChange: (f: string, tv: string) => {
-                        setDateFrom(f);
-                        setDateTo(tv);
-                        setPage(1);
-                      },
-                      placeholder: t('filters.dateRangePlaceholder'),
-                    },
-                    {
-                      id: 'sort',
-                      type: 'select',
-                      label: t('filters.sortLabel'),
-                      value:
-                        sortMapper.getLabelByValue(sortOption) ??
-                        t('filters.sort.auto'),
-                      options: sortMapper.labelsArray,
-                      onSelect: (label: string) => {
-                        setSortOption(
-                          (sortMapper.getValueByLabel(label) ??
-                            'auto') as SortKey
-                        );
-                        setPage(1);
-                      },
-                    },
-                  ] as FiltersItem[]
-                }
-                onClear={() => {
-                  setSearch('');
-                  setDateFrom('');
-                  setDateTo('');
-                  setStatusFilter('');
-                  setSortOption('auto');
-                  setPage(1);
-                }}
-              />
-            </div>
-          </CalendarBlock>
+          />
 
           <div className={css.contentSection}>
             {/* Tabs sit inside contentSection so on phone/tablet they
@@ -802,6 +757,11 @@ const MaintenanceWorkerClient = () => {
                 dots={scopeDots}
                 scopes={isCompletedMode ? ['mine', 'all'] : undefined}
               />
+            </div>
+
+            {/* Filtri — under the scope bar, in the content column. */}
+            <div className={css.filtersBar}>
+              <Filters items={filterItems} onClear={clearFilters} />
             </div>
 
             {newFaultCount > 0 && (

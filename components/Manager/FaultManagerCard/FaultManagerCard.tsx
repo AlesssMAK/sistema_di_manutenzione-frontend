@@ -87,7 +87,18 @@ const FaultManagerCard = ({
   };
 
   return (
-    <li className={css.card}>
+    <li
+      className={css.card}
+      role="button"
+      tabIndex={0}
+      onClick={handleDetail}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleDetail();
+        }
+      }}
+    >
       <div className={css.header}>
         <FaultIdBadge id={fault.faultId} />
         <div className={css.badges}>
@@ -237,7 +248,8 @@ const FaultManagerCard = ({
         </div>
       )}
 
-      <div className={css.footer}>
+      {/* Buttons act independently of the whole-card click. */}
+      <div className={css.footer} onClick={e => e.stopPropagation()}>
         <Button
           type="button"
           className="button button--white"

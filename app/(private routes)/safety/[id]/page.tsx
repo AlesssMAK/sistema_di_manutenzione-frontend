@@ -72,7 +72,6 @@ const SafetyFaultDetailPage = ({
   const router = useRouter();
   const t = useTranslations('FaultDetail');
   const tSafety = useTranslations('SafetyPage');
-  const tNoFound = useTranslations('NoFound');
   const tStatus = useTranslations('StatusFault');
   const tType = useTranslations('TypeFault');
   const locale = getDateFnsLocale(useLocale());

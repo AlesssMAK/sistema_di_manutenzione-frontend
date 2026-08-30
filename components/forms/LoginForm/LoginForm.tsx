@@ -25,6 +25,7 @@ import Image from 'next/image';
 
 const LoginForm = () => {
   const t = useTranslations('login');
+  const tBtn = useTranslations('btn');
   const schema = createLoginSchema(t);
   const setUser = useAuthStore(state => state.setUser);
   const router = useRouter();
@@ -141,7 +142,7 @@ const LoginForm = () => {
               width="100%"
               height={44}
             >
-              {t('submit')}
+              {isSubmitting ? tBtn('loading') : t('submit')}
             </Button>
           </div>
         </form>

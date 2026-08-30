@@ -7,12 +7,27 @@
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0 1px 3px rgba(10, 10, 10, 0.06);
+  /* Whole card opens the detail page (same as the technician list). */
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   @media screen and (min-width: 768px) {
     gap: 16px;
     padding: 20px;
     border-radius: 12px;
   }
+}
+
+.card:focus-visible {
+  border-color: #1e40af;
+  box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.2);
+}
+
+.card:hover,
+.card:focus-within {
+  border-color: #1e40af;
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.15);
 }
 
 .header {

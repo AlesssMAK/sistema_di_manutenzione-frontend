@@ -532,8 +532,6 @@
       "searchPlaceholder": "Código, máquina o parte…",
       "dateRange": "Periodo",
       "dateRangePlaceholder": "Seleccionar periodo",
-      "status": "Estado",
-      "allStatuses": "Todos los estados",
       "sortLabel": "Ordenar por",
       "sort": {
         "auto": "Predeterminado",
@@ -632,8 +630,8 @@
       "allPriorities": "Todas las prioridades",
       "type": "Tipo",
       "allTypes": "Todos los tipos",
-      "plannedDate": "Fecha planificada",
-      "datePlaceholder": "Seleccionar fecha",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleccionar periodo",
       "status": "Estado",
       "allStatuses": "Todos los estados",
       "sortLabel": "Ordenar por",
@@ -781,12 +779,41 @@
     "headerTitle": "Monitoreo de Seguridad",
     "headerSubtitle": "Visualiza en tiempo real las señalaciones de seguridad. Solo lectura.",
     "badge": "HSE",
-    "statusFilter": "Estado",
-    "newBadge": "Nuevas",
-    "statusOptions": {
-      "all": "Todos los Estados"
+    "tabs": {
+      "libere": "Libres",
+      "inProgress": "En Curso",
+      "suspended": "Suspendidas",
+      "overdue": "En Retraso",
+      "completed": "Completadas"
     },
-    "empty": "No hay señalaciones de seguridad"
+    "filters": {
+      "search": "Buscar",
+      "searchPlaceholder": "Código u operador…",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleccionar periodo",
+      "sortLabel": "Ordenar por",
+      "sort": {
+        "recent": "Más recientes",
+        "oldest": "Menos recientes",
+        "deadlineNear": "Vencimiento cercano",
+        "deadlineFar": "Vencimiento lejano"
+      }
+    },
+    "empty": {
+      "libere": "No hay señalaciones libres",
+      "inProgress": "No hay señalaciones en curso",
+      "suspended": "No hay señalaciones suspendidas",
+      "overdue": "No hay señalaciones en retraso",
+      "completed": "No hay señalaciones completadas"
+    }
+  },
+  "FaultRow": {
+    "labels": {
+      "id": "ID",
+      "plant": "Planta",
+      "date": "Fecha",
+      "status": "Estado"
+    }
   },
   "FaultDetail": {
     "title": "Detalle de la Señalación",
@@ -1002,13 +1029,7 @@
       "recentFaults": {
         "title": "Averías de los últimos 30 días",
         "subtitle": "Todas las averías registradas en el último mes.",
-        "empty": "Sin averías en los últimos 30 días",
-        "labels": {
-          "id": "ID",
-          "plant": "Planta",
-          "date": "Fecha",
-          "status": "Estado"
-        }
+        "empty": "Sin averías en los últimos 30 días"
       },
       "broadcasts": {
         "title": "Comunicaciones",
@@ -1201,7 +1222,7 @@
     "clear": "Limpiar Filtros"
   },
   "btn": {
-    "loading": "cargando..."
+    "loading": "Cargando..."
   },
   "NoFound": {
     "noResultsTitle": "No Se Encontraron Resultados",

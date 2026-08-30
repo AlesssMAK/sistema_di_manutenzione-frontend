@@ -522,7 +522,7 @@
     "headerSubtitle": "Visualizza e gestisci gli interventi pianificati",
     "tabs": {
       "active": "Attive",
-      "inProgress": "In lavorazione",
+      "inProgress": "In Corso",
       "suspended": "Sospese",
       "overdue": "In Ritardo",
       "completed": "Completate"
@@ -532,8 +532,6 @@
       "searchPlaceholder": "Codice, macchina o parte…",
       "dateRange": "Periodo",
       "dateRangePlaceholder": "Seleziona periodo",
-      "status": "Stato",
-      "allStatuses": "Tutti gli stati",
       "sortLabel": "Ordina per",
       "sort": {
         "auto": "Predefinito",
@@ -615,14 +613,14 @@
       "received": "Ricevute",
       "planned": "Pianificate",
       "suspended": "Sospese",
-      "inProgress": "In Lavorazione",
+      "inProgress": "In Corso",
       "archive": "Completate"
     },
     "empty": {
       "received": "Nessuna segnalazione in attesa",
       "planned": "Nessuna segnalazione pianificata",
       "suspended": "Nessuna segnalazione sospesa",
-      "inProgress": "Nessuna segnalazione in lavorazione",
+      "inProgress": "Nessuna segnalazione in corso",
       "archive": "Nessuna segnalazione archiviata"
     },
     "filters": {
@@ -632,8 +630,8 @@
       "allPriorities": "Tutte le priorità",
       "type": "Tipologia",
       "allTypes": "Tutte le tipologie",
-      "plannedDate": "Data pianificata",
-      "datePlaceholder": "Seleziona data",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleziona periodo",
       "status": "Stato",
       "allStatuses": "Tutti gli stati",
       "sortLabel": "Ordina per",
@@ -781,12 +779,41 @@
     "headerTitle": "Monitoraggio Sicurezza",
     "headerSubtitle": "Visualizza in tempo reale le segnalazioni di sicurezza. Sola lettura.",
     "badge": "HSE",
-    "statusFilter": "Stato",
-    "newBadge": "Nuove",
-    "statusOptions": {
-      "all": "Tutti gli Stati"
+    "tabs": {
+      "libere": "Libere",
+      "inProgress": "In Corso",
+      "suspended": "Sospese",
+      "overdue": "Scadute",
+      "completed": "Completate"
     },
-    "empty": "Nessuna segnalazione di sicurezza"
+    "filters": {
+      "search": "Ricerca",
+      "searchPlaceholder": "Codice o operatore…",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleziona periodo",
+      "sortLabel": "Ordina per",
+      "sort": {
+        "recent": "Più recenti",
+        "oldest": "Meno recenti",
+        "deadlineNear": "Scadenza vicina",
+        "deadlineFar": "Scadenza lontana"
+      }
+    },
+    "empty": {
+      "libere": "Nessuna segnalazione libera",
+      "inProgress": "Nessuna segnalazione in corso",
+      "suspended": "Nessuna segnalazione sospesa",
+      "overdue": "Nessuna segnalazione scaduta",
+      "completed": "Nessuna segnalazione completata"
+    }
+  },
+  "FaultRow": {
+    "labels": {
+      "id": "ID",
+      "plant": "Impianto",
+      "date": "Data",
+      "status": "Stato"
+    }
   },
   "FaultDetail": {
     "title": "Dettaglio Segnalazione",
@@ -1002,13 +1029,7 @@
       "recentFaults": {
         "title": "Segnalazioni degli ultimi 30 giorni",
         "subtitle": "Tutte le segnalazioni registrate nell'ultimo mese.",
-        "empty": "Nessuna segnalazione negli ultimi 30 giorni",
-        "labels": {
-          "id": "ID",
-          "plant": "Impianto",
-          "date": "Data",
-          "status": "Stato"
-        }
+        "empty": "Nessuna segnalazione negli ultimi 30 giorni"
       },
       "broadcasts": {
         "title": "Comunicazioni",
@@ -1201,7 +1222,7 @@
     "clear": "Cancella Filtri"
   },
   "btn": {
-    "loading": "caricamento..."
+    "loading": "Caricamento..."
   },
   "NoFound": {
     "noResultsTitle": "Nessun Risultato Trovato",

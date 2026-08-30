@@ -17,6 +17,15 @@ const eslintConfig = defineConfig([
     'build/**',
     'next-env.d.ts',
   ]),
+  // Project-wide rule overrides (kept last so they win over the presets).
+  {
+    rules: {
+      // The fault image grids use plain <img> for Cloudinary thumbnails in
+      // a click-to-lightbox grid; next/image would add remotePatterns +
+      // sizing overhead for little gain. Deliberate choice — silence it.
+      '@next/next/no-img-element': 'off',
+    },
+  },
 ]);
 
 export default eslintConfig;

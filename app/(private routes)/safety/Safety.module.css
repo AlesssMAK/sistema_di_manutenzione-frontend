@@ -2,73 +2,20 @@
   padding: 32px 0 48px;
 }
 
-/* Phone: tighter toolbar so the dropdown isn't drowning in chrome
-   on a 320px viewport (16+16 padding kills ~64px otherwise). */
-/* "Nuove segnalazioni" indicator — shown when the board holds unseen
-   safety faults (individual dots sit on the cards themselves). */
-.newBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  align-self: center;
-  margin-left: auto;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: #fee2e2;
-  color: #b91c1c;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-}
-
-.newDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #ef4444;
-  flex: 0 0 auto;
-}
-
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: 12px;
+/* Tabs bar — scrolls horizontally on a narrow phone if the icons don't
+   fit, no layout break. */
+.tabsBarWrap {
   margin-top: 16px;
-  padding: 12px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #fafbfd;
+  overflow-x: auto;
 
   @media screen and (min-width: 768px) {
-    gap: 16px;
     margin-top: 24px;
-    padding: 16px;
+    overflow-x: visible;
   }
 }
 
-/* Phone: field takes the full row instead of holding 220px width —
-   a 220px min-width on a ≈232px content area leaves no room and
-   forces awkward wrapping. */
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  width: 100%;
-
-  @media screen and (min-width: 768px) {
-    width: auto;
-    min-width: 220px;
-  }
-}
-
-.fieldLabel {
-  font-size: 12px;
-  font-weight: 600;
-  color: #45556c;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+.filtersWrap {
+  margin-top: 16px;
 }
 
 .contentSection {

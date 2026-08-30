@@ -20,13 +20,18 @@ interface FetchParams {
   /** Completed-at range — the "Completate" tab filters by the close day. */
   completedFrom?: string;
   completedTo?: string;
+  /** "Periodo" filter — a fault matches if ANY of its dates (created /
+   *  planned / deadline / completed) falls in [anyDateFrom, anyDateTo]. */
+  anyDateFrom?: string;
+  anyDateTo?: string;
   statusFault?: string;
   typeFault?: string;
   assignedTo?: string;
   assignedToEmpty?: boolean;
-  /** Only faults that DO have at least one assigned maintainer (manager
-   *  "Pianificati" = Created + already planned). */
-  assignedToNotEmpty?: boolean;
+  /** Presence filters on plannedDate — manager "Ricevute" (not yet planned)
+   *  vs "Pianificate" (a plannedDate has been set). */
+  plannedDateEmpty?: boolean;
+  plannedDateNotEmpty?: boolean;
   createdById?: string;
   /** Direction of the createdAt sort. 'asc' = oldest first. */
   sort?: 'asc' | 'desc';
@@ -115,11 +120,14 @@ export const fetchFaultCards = async ({
   deadlineTo,
   completedFrom,
   completedTo,
+  anyDateFrom,
+  anyDateTo,
   statusFault,
   typeFault,
   assignedTo,
   assignedToEmpty,
-  assignedToNotEmpty,
+  plannedDateEmpty,
+  plannedDateNotEmpty,
   createdById,
   sort,
   sortBy,
@@ -143,11 +151,14 @@ export const fetchFaultCards = async ({
       ...(deadlineTo ? { deadlineTo } : {}),
       ...(completedFrom ? { completedFrom } : {}),
       ...(completedTo ? { completedTo } : {}),
+      ...(anyDateFrom ? { anyDateFrom } : {}),
+      ...(anyDateTo ? { anyDateTo } : {}),
       ...(statusFault ? { statusFault } : {}),
       ...(typeFault ? { typeFault } : {}),
       ...(assignedTo ? { assignedTo } : {}),
       ...(assignedToEmpty ? { assignedToEmpty: 'true' } : {}),
-      ...(assignedToNotEmpty ? { assignedToNotEmpty: 'true' } : {}),
+      ...(plannedDateEmpty ? { plannedDateEmpty: 'true' } : {}),
+      ...(plannedDateNotEmpty ? { plannedDateNotEmpty: 'true' } : {}),
       ...(createdById ? { createdById } : {}),
       ...(sort ? { sort } : {}),
       ...(sortBy ? { sortBy } : {}),
