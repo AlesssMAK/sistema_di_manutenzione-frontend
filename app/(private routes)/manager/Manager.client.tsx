@@ -28,10 +28,18 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 import css from './Manager.module.css';
 
-type ManagerTab = 'received' | 'suspended' | 'inProgress' | 'archive';
+type ManagerTab =
+  | 'received'
+  | 'planned'
+  | 'suspended'
+  | 'inProgress'
+  | 'archive';
 
 const TAB_TO_STATUS: Record<ManagerTab, string> = {
+  // "Ricevute" and "Pianificati" are both Created — split by whether the
+  // manager has already assigned/planned them (see TAB_EXTRA below).
   received: 'Created',
+  planned: 'Created',
   suspended: 'Suspended',
   // Suspended has its own tab, so it's excluded here — a paused fault
   // shows only under "Sospese", not also under "In Lavorazione".
@@ -39,8 +47,19 @@ const TAB_TO_STATUS: Record<ManagerTab, string> = {
   archive: 'Completed',
 };
 
+// Ricevute = Created not yet assigned; Pianificati = Created already
+// assigned (planning always sets assignedMaintainers + plannedDate). So a
+// planned fault leaves "Ricevute" and shows only under "Pianificati".
+const TAB_EXTRA: Partial<
+  Record<ManagerTab, { assignedToEmpty?: boolean; assignedToNotEmpty?: boolean }>
+> = {
+  received: { assignedToEmpty: true },
+  planned: { assignedToNotEmpty: true },
+};
+
 const TAB_ORDER: ManagerTab[] = [
   'received',
+  'planned',
   'inProgress',
   'suspended',
   'archive',
@@ -50,6 +69,7 @@ const TAB_ORDER: ManagerTab[] = [
 // on tab open; unassigned "received" faults are model B).
 const TAB_SEEN_KEY: Record<ManagerTab, ListSeenKey> = {
   received: 'manager_received',
+  planned: 'manager_planned',
   suspended: 'manager_suspended',
   inProgress: 'manager_inprogress',
   archive: 'manager_archive',
@@ -58,6 +78,7 @@ const TAB_SEEN_KEY: Record<ManagerTab, ListSeenKey> = {
 // Specific statuses inside each tab's group — drive the status filter.
 const TAB_STATUSES: Record<ManagerTab, string[]> = {
   received: ['Created'],
+  planned: ['Created'],
   suspended: ['Suspended'],
   inProgress: ['In progress', 'Overdue'],
   archive: ['Completed'],
@@ -93,6 +114,7 @@ const ManagerClient = () => {
   const tStatus = useTranslations('StatusFault');
   const TABS: TabItem<ManagerTab>[] = [
     { value: 'received', label: t('tabs.received'), icon: 'clipboard' },
+    { value: 'planned', label: t('tabs.planned'), icon: 'clock' },
     { value: 'inProgress', label: t('tabs.inProgress'), icon: 'reload' },
     { value: 'suspended', label: t('tabs.suspended'), icon: 'exclamation-circle' },
     { value: 'archive', label: t('tabs.archive'), icon: 'archive' },
@@ -205,6 +227,7 @@ const ManagerClient = () => {
         // A specific status narrows the tab's group; otherwise the whole
         // group is shown.
         statusFault: statusFilter || TAB_TO_STATUS[activeTab],
+        ...(TAB_EXTRA[activeTab] ?? {}),
         ...filters,
         ...SORT_CONFIG[sortOption],
         withUnseen: true,
@@ -225,6 +248,7 @@ const ManagerClient = () => {
             page: 1,
             perPage: 1,
             statusFault: TAB_TO_STATUS[tab],
+            ...(TAB_EXTRA[tab] ?? {}),
             ...filters,
             withUnseen: true,
             ...(since ? { seenSince: since } : {}),

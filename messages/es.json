@@ -613,12 +613,14 @@
     "headerSubtitle": "Gestiona las señalaciones recibidas, las actividades en curso y el archivo",
     "tabs": {
       "received": "Recibidas",
+      "planned": "Planificadas",
       "inProgress": "En Curso",
       "suspended": "Suspendidas",
       "archive": "Completadas"
     },
     "empty": {
       "received": "No hay señalaciones pendientes",
+      "planned": "No hay señalaciones planificadas",
       "inProgress": "No hay señalaciones en curso",
       "suspended": "No hay señalaciones suspendidas",
       "archive": "No hay señalaciones archivadas"

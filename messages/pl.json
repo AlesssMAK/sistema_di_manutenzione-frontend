@@ -613,12 +613,14 @@
     "headerSubtitle": "Zarządzaj otrzymanymi zgłoszeniami, bieżącymi czynnościami i archiwum",
     "tabs": {
       "received": "Otrzymane",
+      "planned": "Zaplanowane",
       "inProgress": "W Trakcie",
       "suspended": "Zawieszone",
       "archive": "Zakończone"
     },
     "empty": {
       "received": "Brak oczekujących zgłoszeń",
+      "planned": "Brak zaplanowanych zgłoszeń",
       "inProgress": "Brak zgłoszeń w trakcie",
       "suspended": "Brak zawieszonych zgłoszeń",
       "archive": "Brak zarchiwizowanych zgłoszeń"

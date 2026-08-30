@@ -613,12 +613,14 @@
     "headerSubtitle": "Gestisci le segnalazioni ricevute, le attività in corso e l'archivio",
     "tabs": {
       "received": "Ricevute",
+      "planned": "Pianificate",
       "suspended": "Sospese",
       "inProgress": "In Lavorazione",
       "archive": "Completate"
     },
     "empty": {
       "received": "Nessuna segnalazione in attesa",
+      "planned": "Nessuna segnalazione pianificata",
       "suspended": "Nessuna segnalazione sospesa",
       "inProgress": "Nessuna segnalazione in lavorazione",
       "archive": "Nessuna segnalazione archiviata"

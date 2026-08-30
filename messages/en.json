@@ -613,12 +613,14 @@
     "headerSubtitle": "Manage received reports, ongoing activities and the archive",
     "tabs": {
       "received": "Received",
+      "planned": "Planned",
       "inProgress": "In Progress",
       "suspended": "Suspended",
       "archive": "Completed"
     },
     "empty": {
       "received": "No pending reports",
+      "planned": "No planned reports",
       "inProgress": "No reports in progress",
       "suspended": "No suspended reports",
       "archive": "No archived reports"

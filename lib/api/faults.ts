@@ -24,6 +24,9 @@ interface FetchParams {
   typeFault?: string;
   assignedTo?: string;
   assignedToEmpty?: boolean;
+  /** Only faults that DO have at least one assigned maintainer (manager
+   *  "Pianificati" = Created + already planned). */
+  assignedToNotEmpty?: boolean;
   createdById?: string;
   /** Direction of the createdAt sort. 'asc' = oldest first. */
   sort?: 'asc' | 'desc';
@@ -116,6 +119,7 @@ export const fetchFaultCards = async ({
   typeFault,
   assignedTo,
   assignedToEmpty,
+  assignedToNotEmpty,
   createdById,
   sort,
   sortBy,
@@ -143,6 +147,7 @@ export const fetchFaultCards = async ({
       ...(typeFault ? { typeFault } : {}),
       ...(assignedTo ? { assignedTo } : {}),
       ...(assignedToEmpty ? { assignedToEmpty: 'true' } : {}),
+      ...(assignedToNotEmpty ? { assignedToNotEmpty: 'true' } : {}),
       ...(createdById ? { createdById } : {}),
       ...(sort ? { sort } : {}),
       ...(sortBy ? { sortBy } : {}),
@@ -271,6 +276,7 @@ export type ListSeenKey =
   | 'worker_completed'
   | 'worker_pool'
   | 'manager_received'
+  | 'manager_planned'
   | 'manager_suspended'
   | 'manager_inprogress'
   | 'manager_archive'
