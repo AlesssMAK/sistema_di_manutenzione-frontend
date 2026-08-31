@@ -66,6 +66,12 @@ const MessageDetailModal = ({
   const locale = getDateFnsLocale(useLocale());
   const queryClient = useQueryClient();
   const isAdmin = useAuthStore(state => state.user?.role === 'admin');
+  // Replying is sending — an operator can only reply when granted the send
+  // permission (others always can). Receiving/reading stays open to all.
+  const canReply = useAuthStore(state => {
+    const u = state.user;
+    return u?.role !== 'operator' || u?.permissions?.canSendMessages === true;
+  });
   const myId = String(currentUserId);
 
   const [isReplying, setIsReplying] = useState(false);
@@ -270,7 +276,7 @@ const MessageDetailModal = ({
               >
                 {t('close')}
               </Button>
-              {replyTarget && (
+              {replyTarget && canReply && (
                 <Button
                   type="button"
                   className="button button--blue"

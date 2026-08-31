@@ -44,6 +44,11 @@ const OperatorPageClient = () => {
     ...(unreadAnnouncements > 0 ? { messages: unreadAnnouncements } : {}),
     ...(myFaultsTotal > 0 ? { myFaults: myFaultsTotal } : {}),
   };
+  // Unread announcements make the Messaggi badge blink; own reports total
+  // is just informational (no blink).
+  const dots: Partial<Record<OperatorTab, boolean>> = {
+    ...(unreadAnnouncements > 0 ? { messages: true } : {}),
+  };
 
   const tabs: TabItem<OperatorTab>[] = [
     { value: 'messages', label: t('tabs.messages'), icon: 'mail' },
@@ -62,6 +67,7 @@ const OperatorPageClient = () => {
             activeTab={activeTab}
             onTabChange={setActiveTab}
             counts={counts}
+            dots={dots}
           />
         </div>
 

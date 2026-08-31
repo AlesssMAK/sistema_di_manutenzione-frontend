@@ -23,8 +23,9 @@ interface TabsProps<T extends string = string> {
    */
   counts?: Partial<Record<T, number>>;
   /**
-   * Optional per-tab "unseen" markers. A truthy entry renders a small red
-   * dot next to the label — the tab has faults the viewer hasn't seen yet.
+   * Optional per-tab "unseen" markers. A truthy entry gives the tab's count
+   * badge a blinking red border (or a small red dot when the tab has no
+   * count) — the tab holds items the viewer hasn't seen yet.
    */
   dots?: Partial<Record<T, boolean>>;
 }
@@ -67,9 +68,18 @@ const Tabs = <T extends string = string>({
               )}
               <span className={tab.icon ? css.tabLabel : ''}>{tab.label}</span>
               {count !== undefined && (
-                <span className={css.tabCount}>{count}</span>
+                <span
+                  className={`${css.tabCount} ${
+                    hasDot ? css.tabCountUnseen : ''
+                  }`}
+                >
+                  {count}
+                </span>
               )}
-              {hasDot && <span className={css.tabDot} aria-hidden="true" />}
+              {/* Fallback dot only when there's no count to border. */}
+              {hasDot && count === undefined && (
+                <span className={css.tabDot} aria-hidden="true" />
+              )}
             </span>
           </button>
         );

@@ -7,6 +7,8 @@ import MessageInbox, {
 import Button from '@/components/UI/Button/Button';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import { useAuthStore } from '@/lib/store/authStore';
+import { getUnreadCount } from '@/lib/api/messages';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
@@ -23,11 +25,17 @@ const MessagesClient = () => {
   const [activeTab, setActiveTab] = useState<InboxKind>('direct');
   const [composeOpen, setComposeOpen] = useState(false);
 
-  // Operators now have a direct inbox too (BE opened it), but they
-  // only send person-to-person — no broadcasts. Other roles get all
-  // three channels; the backend still enforces per-channel rules.
+  // Receiving is open to everyone (both tabs show). Sending is the only
+  // restriction: an operator may send direct only when granted the
+  // permission (and never broadcasts); other roles get all three channels.
+  const canSendDirect =
+    !isOperator || user?.permissions?.canSendMessages === true;
   const allowedChannels: Array<'direct' | 'broadcastAll' | 'broadcastRole'> =
-    isOperator ? ['direct'] : ['direct', 'broadcastRole', 'broadcastAll'];
+    isOperator
+      ? canSendDirect
+        ? ['direct']
+        : []
+      : ['direct', 'broadcastRole', 'broadcastAll'];
   const canCompose = allowedChannels.length > 0;
 
   // Both tabs are shown to every role now — operators included.
@@ -38,6 +46,25 @@ const MessagesClient = () => {
     ],
     [t]
   );
+
+  // Unread badges on the tabs — the count blinks with a red border when
+  // there's something new (hidden at zero).
+  const { data: unread } = useQuery({
+    queryKey: ['messages', 'unread-count'],
+    queryFn: getUnreadCount,
+    staleTime: 30 * 1000,
+  });
+  const unreadDirect = unread?.direct ?? 0;
+  const unreadAnnouncements =
+    (unread?.roleAnnouncements ?? 0) + (unread?.allAnnouncements ?? 0);
+  const tabCounts: Partial<Record<InboxKind, number>> = {
+    ...(unreadDirect > 0 ? { direct: unreadDirect } : {}),
+    ...(unreadAnnouncements > 0 ? { announcements: unreadAnnouncements } : {}),
+  };
+  const tabDots: Partial<Record<InboxKind, boolean>> = {
+    ...(unreadDirect > 0 ? { direct: true } : {}),
+    ...(unreadAnnouncements > 0 ? { announcements: true } : {}),
+  };
 
   return (
     <div className="container">
@@ -82,6 +109,8 @@ const MessagesClient = () => {
             tabs={tabs}
             activeTab={activeTab}
             onTabChange={setActiveTab}
+            counts={tabCounts}
+            dots={tabDots}
           />
         </div>
 

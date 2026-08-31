@@ -19,6 +19,7 @@ import {
   type ActiveWorkFault,
 } from '@/lib/api/faults';
 import AlreadyWorkingModal from '@/components/MaintenanceWorker/AlreadyWorkingModal/AlreadyWorkingModal';
+import { isInPeriod, type Period } from '@/lib/utils/period';
 import { useState } from 'react';
 
 /** Map raw backend statusFault to the StatusFault i18n key. */
@@ -68,9 +69,11 @@ interface FaultCardsListProps {
    *  the card in place. Without it the claimed card stays stale until a
    *  full page reload. */
   onClaimed?: (updated: FaultCard) => void;
+  /** Active "Periodo" filter — the matched date value gets highlighted. */
+  period?: Period;
 }
 
-const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
+const FaultCardsList = ({ faults, onClaimed, period }: FaultCardsListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations('FaultCard');
@@ -283,7 +286,13 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                       </span>
                       <p className={css.value}>{fault.plannedTime}</p>
                       <span className={css.label}>{t('labels.deadline')}</span>
-                      <p className={css.value}>
+                      <p
+                        className={`${css.value} ${
+                          isInPeriod(fault.deadline, period)
+                            ? css.periodMatch
+                            : ''
+                        }`}
+                      >
                         {formatDay(fault.deadline, locale)}
                       </p>
                       {fault.statusFault === 'Completed' &&
@@ -292,7 +301,13 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                             <span className={css.label}>
                               {t('labels.completedAt')}
                             </span>
-                            <p className={css.value}>
+                            <p
+                              className={`${css.value} ${
+                                isInPeriod(fault.completedAt, period)
+                                  ? css.periodMatch
+                                  : ''
+                              }`}
+                            >
                               {formatDay(fault.completedAt, locale)}
                             </p>
                           </>
@@ -321,7 +336,13 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                       <span className={css.label}>
                         {t('labels.dateCreated')}
                       </span>
-                      <p className={css.value}>
+                      <p
+                        className={`${css.value} ${
+                          isInPeriod(fault.dataCreated, period)
+                            ? css.periodMatch
+                            : ''
+                        }`}
+                      >
                         {formatDay(fault.dataCreated, locale)}
                         {fault.timeCreated ? ` ${fault.timeCreated}` : ''}
                       </p>

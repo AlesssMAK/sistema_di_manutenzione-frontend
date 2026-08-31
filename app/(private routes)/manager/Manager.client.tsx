@@ -15,6 +15,7 @@ import {
 } from '@/lib/api/faults';
 
 import { useAutoTabSwitch } from '@/lib/hooks/useAutoTabSwitch';
+import { useAutoTabSwitchOnFilter } from '@/lib/hooks/useAutoTabSwitchOnFilter';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import { FaultCard, PriorityFaultType, TypeFault } from '@/types/faultType';
 import {
@@ -320,6 +321,16 @@ const ManagerClient = () => {
     ready: countsReady,
     onSwitch: handleTabChange,
   });
+  // Picking a "Periodo" re-jumps to the first tab with matches.
+  useAutoTabSwitchOnFilter<ManagerTab>({
+    triggerKey: `${dateFrom}|${dateTo}`,
+    active: Boolean(dateFrom || dateTo),
+    activeTab,
+    order: TAB_ORDER,
+    counts,
+    ready: countsReady,
+    onSwitch: handleTabChange,
+  });
 
   const handlePlan = (fault: FaultCard) => {
     setPlanningFault(fault);
@@ -449,6 +460,7 @@ const ManagerClient = () => {
                   key={fault._id}
                   fault={fault}
                   onPlan={activeTab === 'archive' ? undefined : handlePlan}
+                  period={{ from: dateFrom, to: dateTo }}
                 />
               ))}
             </ul>

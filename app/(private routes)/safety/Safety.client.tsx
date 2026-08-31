@@ -12,6 +12,7 @@ import {
   markListSeen,
 } from '@/lib/api/faults';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
+import { useAutoTabSwitchOnFilter } from '@/lib/hooks/useAutoTabSwitchOnFilter';
 import {
   keepPreviousData,
   useQueries,
@@ -194,6 +195,20 @@ const SafetyClient = () => {
     setPage(1);
   };
 
+  // Picking a "Periodo" re-jumps to the first tab with matches.
+  const countsReady =
+    countsResults.every(r => r.data !== undefined) &&
+    countsResults.every(r => !r.isFetching);
+  useAutoTabSwitchOnFilter<SafetyTab>({
+    triggerKey: `${dateFrom}|${dateTo}`,
+    active: Boolean(dateFrom || dateTo),
+    activeTab,
+    order: TAB_ORDER,
+    counts,
+    ready: countsReady,
+    onSwitch: handleTabChange,
+  });
+
   const handleClear = () => {
     setSearch('');
     setDateFrom('');
@@ -279,6 +294,7 @@ const SafetyClient = () => {
                   key={fault._id}
                   fault={fault}
                   detailHref={f => `/safety/${f._id}`}
+                  period={{ from: dateFrom, to: dateTo }}
                 />
               ))}
             </ul>

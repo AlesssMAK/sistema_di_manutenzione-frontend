@@ -31,6 +31,7 @@ import {
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { hhmmToMinutes, resolveWorkWindow } from '@/lib/utils/workSchedule';
 import { useAuthStore } from '@/lib/store/authStore';
+import { useAutoTabSwitchOnFilter } from '@/lib/hooks/useAutoTabSwitchOnFilter';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { FaultCard } from '@/types/faultType';
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -228,32 +229,12 @@ const MaintenanceWorkerClient = () => {
     }),
   });
 
-  // Pool (Libere) unseen dot — pool cards are model B (tracked
-  // individually), so this is a boolean, not a cleared-on-open count.
-  const { data: poolState } = useQuery({
-    queryKey: ['workerPool', userId, listSeen?.worker_pool ?? null],
-    queryFn: () =>
-      fetchFaultCards({
-        page: 1,
-        perPage: 1,
-        statusFault: 'Created,Overdue',
-        assignedToEmpty: true,
-        withUnseen: true,
-        ...(listSeen?.worker_pool
-          ? { seenSince: listSeen.worker_pool }
-          : {}),
-      }),
-    enabled: scopeResolved,
-    staleTime: 15 * 1000,
-  });
-
   const markSeen = useCallback(
     (key: ListSeenKey) => {
       markListSeen(key)
         .then(() => {
           queryClient.invalidateQueries({ queryKey: ['listSeen'] });
           queryClient.invalidateQueries({ queryKey: ['workerBoard'] });
-          queryClient.invalidateQueries({ queryKey: ['workerPool'] });
         })
         .catch(() => {});
     },
@@ -479,9 +460,6 @@ const MaintenanceWorkerClient = () => {
     if (newScope === scope) return;
     setScope(newScope);
     setPage(1);
-    // Plan A for the pool: opening Libere surfaces the free faults, so its
-    // unseen dot clears on entry (the new fault is now "in view").
-    if (newScope === 'pool') markSeen('worker_pool');
   };
 
   const handleModeChange = (newMode: FaultViewMode) => {
@@ -571,7 +549,6 @@ const MaintenanceWorkerClient = () => {
     if (!socket) return;
     const invalidateCounts = () => {
       queryClient.invalidateQueries({ queryKey: ['workerBoard'] });
-      queryClient.invalidateQueries({ queryKey: ['workerPool'] });
     };
     const onCreated = () => {
       setNewFaultCount(c => c + 1);
@@ -654,13 +631,23 @@ const MaintenanceWorkerClient = () => {
     if (d?.totalFault !== undefined) viewCounts[m] = d.totalFault;
     if (d?.hasUnseen) viewDots[m] = true;
   });
-  // Pool (Libere) gets an unseen dot only.
-  const scopeDots: Partial<Record<FaultScope, boolean>> = poolState?.hasUnseen
-    ? { pool: true }
-    : {};
+  // Picking a "Periodo" re-jumps to the first tab with matches.
+  const boardReady =
+    scopeResolved &&
+    boardResults.every(r => r.data !== undefined) &&
+    boardResults.every(r => !r.isFetching);
+  useAutoTabSwitchOnFilter<FaultViewMode>({
+    triggerKey: `${dateFrom}|${dateTo}`,
+    active: Boolean(dateFrom || dateTo),
+    activeTab: viewMode,
+    order: BOARD_MODES,
+    counts: viewCounts,
+    ready: boardReady,
+    onSwitch: handleModeChange,
+  });
 
-  // Filtri (search / status / date range / sort). Rendered under the scope
-  // bar in the content column.
+  // Filtri (search / date range / sort). Rendered under the scope bar in
+  // the content column.
   const filterItems: FiltersItem[] = [
     {
       id: 'search',
@@ -754,7 +741,6 @@ const MaintenanceWorkerClient = () => {
               <ScopeFilterBar
                 activeScope={scope}
                 onScopeChange={handleScopeChange}
-                dots={scopeDots}
                 scopes={isCompletedMode ? ['mine', 'all'] : undefined}
               />
             </div>
@@ -785,7 +771,11 @@ const MaintenanceWorkerClient = () => {
               </div>
             ) : items.length > 0 ? (
               <>
-                <FaultCardsList faults={items} onClaimed={handleClaimed} />
+                <FaultCardsList
+                  faults={items}
+                  onClaimed={handleClaimed}
+                  period={{ from: dateFrom, to: dateTo }}
+                />
 
                 {totalPage > 1 && (
                   <div className={css.paginationWrapper}>
