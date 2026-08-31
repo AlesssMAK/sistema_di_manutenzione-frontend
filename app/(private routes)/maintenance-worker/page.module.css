@@ -59,6 +59,11 @@
   }
 }
 
+/* Filtri bar under the scope row. */
+.filtersBar {
+  margin-bottom: 16px;
+}
+
 .loadingWrap {
   display: flex;
   justify-content: center;

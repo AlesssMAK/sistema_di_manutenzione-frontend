@@ -1,6 +1,7 @@
 'use client';
 
 import MaintenanceUpdateModal from '@/components/MaintenanceWorker/MaintenanceUpdateModal/MaintenanceUpdateModal';
+import AlreadyWorkingModal from '@/components/MaintenanceWorker/AlreadyWorkingModal/AlreadyWorkingModal';
 import OvertimeAlertModal from '@/components/MaintenanceWorker/OvertimeAlertModal/OvertimeAlertModal';
 import FaultMaterialsUsed from '@/components/Warehouse/FaultMaterialsUsed/FaultMaterialsUsed';
 import FaultSuspensions from '@/components/MaintenanceWorker/FaultSuspensions/FaultSuspensions';
@@ -15,7 +16,10 @@ import {
   fetchFaultById,
   markFaultSeen,
   updateFaultByWorker,
+  getAlreadyWorkingFault,
+  type ActiveWorkFault,
 } from '@/lib/api/faults';
+import toast from 'react-hot-toast';
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { useAuthStore } from '@/lib/store/authStore';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
@@ -97,6 +101,7 @@ export default function FaultDetailPage({
 }) {
   const router = useRouter();
   const t = useTranslations('FaultDetail');
+  const tAlready = useTranslations('AlreadyWorkingModal');
   const tDur = useTranslations('Duration');
   const tNoFound = useTranslations('NoFound');
   const tStatus = useTranslations('StatusFault');
@@ -115,6 +120,11 @@ export default function FaultDetailPage({
   // the running work time is re-evaluated while the page stays open.
   const [overtimeDismissed, setOvertimeDismissed] = useState(false);
   const [, setNowTick] = useState(0);
+  // Set when resuming this fault is blocked because another fault is still
+  // running — drives the "già al lavoro" modal.
+  const [blockedActive, setBlockedActive] = useState<ActiveWorkFault | null>(
+    null
+  );
 
   const { data: settings } = useQuery({
     queryKey: ['systemSettings'],
@@ -184,6 +194,19 @@ export default function FaultDetailPage({
     if (comment) continueMutation.mutate(comment);
     else setOvertimeDismissed(true);
   };
+
+  // Auto-resume THIS fault once the previously-active one has been
+  // finalized/suspended from the "già al lavoro" modal.
+  const resumeMutation = useMutation({
+    mutationFn: () =>
+      updateFaultByWorker({ faultId: id, statusFault: 'In progress' }),
+    onSuccess: handleUpdateSuccess,
+    onError: (err: unknown) => {
+      const active = getAlreadyWorkingFault(err);
+      if (active) setBlockedActive(active);
+      else toast.error(tAlready('resumeError'));
+    },
+  });
 
   if (isLoading)
     return (
@@ -461,26 +484,30 @@ export default function FaultDetailPage({
               safety/[id] so the same field reads the same on every
               detail page. */}
           <div className={css.detailsBlock}>
-            <div className={css.commentBox}>
+            <div className={`${css.commentBox} ${css.operatorNote}`}>
               <label>{t('comments.operatorDescription')}</label>
               <p>{fault.comment || t('comments.noDescription')}</p>
             </div>
 
-            <div className={css.commentBox}>
-              <label>{t('comments.managerNote')}</label>
-              <p>{fault.managerComment || t('comments.noNote')}</p>
-            </div>
+            {fault.managerComment && (
+              <div className={css.commentBox}>
+                <label>{t('comments.managerNote')}</label>
+                <p>{fault.managerComment}</p>
+              </div>
+            )}
 
-            <div className={css.commentBox}>
-              <label>{t('comments.maintainerNote')}</label>
-              <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
-            </div>
+            {fault.commentMaintenanceWorker && (
+              <div className={css.commentBox}>
+                <label>{t('comments.maintainerNote')}</label>
+                <p>{fault.commentMaintenanceWorker}</p>
+              </div>
+            )}
 
             {/* Nota HSE — visibile solo per i fault Safety */}
-            {fault.typeFault === 'Safety' && (
+            {fault.typeFault === 'Safety' && fault.commentSafety && (
               <div className={css.commentBox}>
                 <label>{t('comments.hseNote')}</label>
-                <p>{fault.commentSafety || t('comments.noNote')}</p>
+                <p>{fault.commentSafety}</p>
               </div>
             )}
           </div>
@@ -552,6 +579,22 @@ export default function FaultDetailPage({
           minDuration={Math.round((fault.workedMs ?? 0) / 60000)}
           onClose={() => setModalStatus(null)}
           onSuccess={handleUpdateSuccess}
+          onBlockedByActiveWork={active => {
+            setModalStatus(null);
+            setBlockedActive(active);
+          }}
+        />
+      )}
+
+      {blockedActive && (
+        <AlreadyWorkingModal
+          active={blockedActive}
+          onResolved={() => {
+            setBlockedActive(null);
+            // The blocking fault is freed — resume the one being viewed.
+            resumeMutation.mutate();
+          }}
+          onClose={() => setBlockedActive(null)}
         />
       )}
 

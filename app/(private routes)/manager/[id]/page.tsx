@@ -300,22 +300,26 @@ const ManagerFaultDetailPage = ({
           </div>
 
           <div className={css.detailsBlock}>
-            <div className={css.commentBox}>
+            <div className={`${css.commentBox} ${css.operatorNote}`}>
               <label>{t('comments.operatorDescription')}</label>
               <p>{fault.comment || t('comments.noDescription')}</p>
             </div>
-            <div className={css.commentBox}>
-              <label>{t('comments.managerNote')}</label>
-              <p>{fault.managerComment || t('comments.noNote')}</p>
-            </div>
-            <div className={css.commentBox}>
-              <label>{t('comments.maintainerNote')}</label>
-              <p>{fault.commentMaintenanceWorker || t('comments.noNote')}</p>
-            </div>
-            {fault.typeFault === 'Safety' && (
+            {fault.managerComment && (
+              <div className={css.commentBox}>
+                <label>{t('comments.managerNote')}</label>
+                <p>{fault.managerComment}</p>
+              </div>
+            )}
+            {fault.commentMaintenanceWorker && (
+              <div className={css.commentBox}>
+                <label>{t('comments.maintainerNote')}</label>
+                <p>{fault.commentMaintenanceWorker}</p>
+              </div>
+            )}
+            {fault.typeFault === 'Safety' && fault.commentSafety && (
               <div className={css.commentBox}>
                 <label>{t('comments.hseNote')}</label>
-                <p>{fault.commentSafety || t('comments.noNote')}</p>
+                <p>{fault.commentSafety}</p>
               </div>
             )}
           </div>

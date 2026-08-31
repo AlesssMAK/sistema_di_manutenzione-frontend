@@ -9,12 +9,15 @@ import type { FaultCard } from '@/types/faultType';
 import Button from '@/components/UI/Button/Button';
 import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
 import PriorityBadge from '@/components/UI/PriorityBadge/PriorityBadge';
+import { isInPeriod, type Period } from '@/lib/utils/period';
 import css from './FaultManagerCard.module.css';
 
 interface FaultManagerCardProps {
   fault: FaultCard;
   onPlan?: (fault: FaultCard) => void;
   detailHref?: (fault: FaultCard) => string;
+  /** Active "Periodo" filter — the matched date value gets highlighted. */
+  period?: Period;
 }
 
 const formatDate = (
@@ -48,6 +51,7 @@ const FaultManagerCard = ({
   fault,
   onPlan,
   detailHref,
+  period,
 }: FaultManagerCardProps) => {
   const router = useRouter();
   const t = useTranslations('FaultCard');
@@ -87,7 +91,18 @@ const FaultManagerCard = ({
   };
 
   return (
-    <li className={css.card}>
+    <li
+      className={css.card}
+      role="button"
+      tabIndex={0}
+      onClick={handleDetail}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleDetail();
+        }
+      }}
+    >
       <div className={css.header}>
         <FaultIdBadge id={fault.faultId} />
         <div className={css.badges}>
@@ -141,7 +156,11 @@ const FaultManagerCard = ({
         </div>
         <div className={css.row}>
           <span className={css.label}>{t('labels.dateCreated')}</span>
-          <span className={css.value}>
+          <span
+            className={`${css.value} ${
+              isInPeriod(fault.dataCreated, period) ? css.periodMatch : ''
+            }`}
+          >
             {formatDate(fault.dataCreated, locale)}
             {fault.timeCreated ? ` · ${fault.timeCreated}` : ''}
           </span>
@@ -165,7 +184,7 @@ const FaultManagerCard = ({
       </div>
 
       {fault.comment && (
-        <div className={css.commentBlock}>
+        <div className={`${css.commentBlock} ${css.operatorNote}`}>
           <span className={css.label}>{t('labels.description')}</span>
           <p className={css.commentText}>{fault.comment}</p>
         </div>
@@ -192,7 +211,11 @@ const FaultManagerCard = ({
           {fault.plannedDate && (
             <div className={css.row}>
               <span className={css.label}>{t('labels.planned')}</span>
-              <span className={css.value}>
+              <span
+                className={`${css.value} ${
+                  isInPeriod(fault.plannedDate, period) ? css.periodMatch : ''
+                }`}
+              >
                 {formatDate(fault.plannedDate, locale)}
                 {fault.plannedTime ? ` · ${fault.plannedTime}` : ''}
                 {fault.estimatedDuration
@@ -204,7 +227,13 @@ const FaultManagerCard = ({
           {fault.deadline && (
             <div className={css.row}>
               <span className={css.label}>{t('labels.deadline')}</span>
-              <span className={css.value}>{formatDate(fault.deadline, locale)}</span>
+              <span
+                className={`${css.value} ${
+                  isInPeriod(fault.deadline, period) ? css.periodMatch : ''
+                }`}
+              >
+                {formatDate(fault.deadline, locale)}
+              </span>
             </div>
           )}
           {(fault.assignedMaintainers?.length ?? 0) > 0 && (
@@ -237,7 +266,8 @@ const FaultManagerCard = ({
         </div>
       )}
 
-      <div className={css.footer}>
+      {/* Buttons act independently of the whole-card click. */}
+      <div className={css.footer} onClick={e => e.stopPropagation()}>
         <Button
           type="button"
           className="button button--white"

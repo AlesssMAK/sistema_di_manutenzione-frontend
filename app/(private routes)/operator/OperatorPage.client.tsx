@@ -4,7 +4,10 @@ import MessageInbox from '@/components/Messages/MessageInbox/MessageInbox';
 import MyFaultsList from '@/components/Operator/MyFaultsList/MyFaultsList';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import { useAuthStore } from '@/lib/store/authStore';
+import { fetchFaultCards } from '@/lib/api/faults';
+import { getUnreadCount } from '@/lib/api/messages';
 
+import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import css from './OperatorPage.module.css';
@@ -17,6 +20,35 @@ const OperatorPageClient = () => {
   const userId = String(user?._id ?? '');
 
   const [activeTab, setActiveTab] = useState<OperatorTab>('messages');
+
+  // Tab badges: unread announcements on "Messaggi", total own reports on
+  // "Le Mie Segnalazioni". Both hidden when zero.
+  const { data: unread } = useQuery({
+    queryKey: ['messages', 'unread-count'],
+    queryFn: getUnreadCount,
+    staleTime: 30 * 1000,
+  });
+  const unreadAnnouncements =
+    (unread?.roleAnnouncements ?? 0) + (unread?.allAnnouncements ?? 0);
+
+  const { data: myFaultsData } = useQuery({
+    queryKey: ['faults', 'my', 'count', userId],
+    queryFn: () =>
+      fetchFaultCards({ page: 1, perPage: 1, createdById: userId }),
+    enabled: Boolean(userId),
+    staleTime: 30 * 1000,
+  });
+  const myFaultsTotal = myFaultsData?.totalFault ?? 0;
+
+  const counts: Partial<Record<OperatorTab, number>> = {
+    ...(unreadAnnouncements > 0 ? { messages: unreadAnnouncements } : {}),
+    ...(myFaultsTotal > 0 ? { myFaults: myFaultsTotal } : {}),
+  };
+  // Unread announcements make the Messaggi badge blink; own reports total
+  // is just informational (no blink).
+  const dots: Partial<Record<OperatorTab, boolean>> = {
+    ...(unreadAnnouncements > 0 ? { messages: true } : {}),
+  };
 
   const tabs: TabItem<OperatorTab>[] = [
     { value: 'messages', label: t('tabs.messages'), icon: 'mail' },
@@ -34,6 +66,8 @@ const OperatorPageClient = () => {
             tabs={tabs}
             activeTab={activeTab}
             onTabChange={setActiveTab}
+            counts={counts}
+            dots={dots}
           />
         </div>
 

@@ -19,13 +19,15 @@
   font-size: 14px;
   color: #0a0a0a;
   cursor: pointer;
-  transition: border-color 0.15s ease;
+  transition:
+    background 0.2s ease,
+    border 0.2s ease;
 }
 
 .trigger:hover,
 .triggerOpen {
-  border-color: #1e40af;
-  background: #ffffff;
+  border: 1.17px solid rgba(0, 0, 0, 0.1);
+  background: var(--background);
 }
 
 .triggerLabel {
@@ -159,6 +161,21 @@
   color: #d1d5db;
 }
 
+/* Non-working day (factory closed / holiday) — not selectable. */
+.disabled {
+  background-color: #f8fafc;
+  cursor: not-allowed;
+}
+
+.disabled:hover {
+  background-color: #f8fafc;
+}
+
+.disabled .dayNumber {
+  color: #cbd5e1;
+  text-decoration: line-through;
+}
+
 .selected {
   background-color: #0070f3;
 }
@@ -212,4 +229,13 @@
 
 .footerBtn:hover {
   background: #eff6ff;
+}
+
+.footerBtn:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.footerBtn:disabled:hover {
+  background: none;
 }

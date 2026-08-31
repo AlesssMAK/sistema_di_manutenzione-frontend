@@ -1,10 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { format, isValid, parseISO } from 'date-fns';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import { useLocale, useTranslations } from 'next-intl';
-import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
+import { useTranslations } from 'next-intl';
 import { fetchFaultCards } from '@/lib/api/faults';
 import type { FaultCard } from '@/types/faultType';
 import { useAuthStore } from '@/lib/store/authStore';
@@ -12,29 +10,12 @@ import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import Pagination from '@/components/UI/Pagination/Pagination';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
-import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
+import { FaultRowList } from '@/components/UI/FaultRow/FaultRow';
 import css from './MyFaultsList.module.css';
 
 type Period = '7d' | '30d' | '3m' | 'all';
 
 const PER_PAGE = 20;
-
-const formatDay = (
-  value: string | undefined,
-  locale: ReturnType<typeof getDateFnsLocale>
-) => {
-  if (!value) return '—';
-  const parsed = parseISO(value);
-  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale }) : value;
-};
-
-const statusClass: Record<string, string> = {
-  Created: css.statusCreated,
-  'In progress': css.statusInProgress,
-  Suspended: css.statusSuspended,
-  Overdue: css.statusOverdue,
-  Completed: css.statusCompleted,
-};
 
 const cutoffFor = (period: Period): string | null => {
   if (period === 'all') return null;
@@ -47,9 +28,7 @@ const cutoffFor = (period: Period): string | null => {
 
 const MyFaultsList = () => {
   const t = useTranslations('OperatorPage.myFaults');
-  const tStatus = useTranslations('StatusFault');
   const tNoFound = useTranslations('NoFound');
-  const locale = getDateFnsLocale(useLocale());
 
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
@@ -103,15 +82,6 @@ const MyFaultsList = () => {
     }
   };
 
-  const statusKey = (s: string) => {
-    if (s === 'Created') return 'CREATED';
-    if (s === 'In progress') return 'IN_PROGRESS';
-    if (s === 'Completed') return 'COMPLETED';
-    if (s === 'Suspended') return 'SUSPENDED';
-    if (s === 'Overdue') return 'OVERDUE';
-    return 'CREATED';
-  };
-
   return (
     <div className={css.wrap}>
       <div className={css.toolbar}>
@@ -138,27 +108,7 @@ const MyFaultsList = () => {
       ) : items.length === 0 ? (
         <NoFound title={tNoFound('emptyTitle')} message={t('empty')} hideIcon />
       ) : (
-        <ul className={css.list}>
-          {items.map(fault => (
-            <li key={fault._id} className={css.row}>
-              <FaultIdBadge id={fault.faultId} />
-              <span className={css.plant}>
-                {fault.plantId?.namePlant ?? '—'}{' '}
-                <span className={css.plantPart}>
-                  · {fault.partId?.namePlantPart ?? '—'}
-                </span>
-              </span>
-              <span className={css.date}>{formatDay(fault.dataCreated, locale)}</span>
-              <span
-                className={`${css.status} ${
-                  statusClass[fault.statusFault] ?? ''
-                }`}
-              >
-                {tStatus(statusKey(fault.statusFault))}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <FaultRowList items={items} />
       )}
 
       {totalPages > 1 && (

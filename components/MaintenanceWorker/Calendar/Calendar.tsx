@@ -29,16 +29,16 @@ export interface PlannedDayBucket {
 interface FilterDataCreatedBarProps {
   activeDataCreated: string;
   onDataCreatedChange: (dataCreated: string) => void;
-  deadlineDates?: string[];
-  isDeadlineMode?: boolean;
   plannedDays?: Record<string, PlannedDayBucket>;
+  /** 'completed' renders the day badge in the closed-count style (neutral
+   *  green) instead of the priority-tinted planned badge. */
+  variant?: 'planned' | 'completed';
 }
 const Calendar = ({
   activeDataCreated,
   onDataCreatedChange,
-  deadlineDates = [],
-  isDeadlineMode = false,
   plannedDays = {},
+  variant = 'planned',
 }: FilterDataCreatedBarProps) => {
   const t = useTranslations('maintenanceWorkerPage.calendar');
   const locale = getDateFnsLocale(useLocale());
@@ -97,7 +97,6 @@ const Calendar = ({
       <div className={styles.grid}>
         {calendarDays.map((day, idx) => {
           const formattedDay = format(day, 'yyyy-MM-dd');
-          const hasDeadline = deadlineDates.includes(formattedDay);
           const isToday = isSameDay(day, new Date());
           const isCurrentMonth = isSameMonth(day, monthStart);
           const isSelected = activeDataCreated === formattedDay;
@@ -105,17 +104,17 @@ const Calendar = ({
             ${styles.cell}
             ${!isCurrentMonth ? styles.otherMonth : ''}
             ${isSelected ? styles.selected : ''}
-            ${isDeadlineMode && hasDeadline ? styles.deadlineCell : ''}
           `;
 
           const bucket = plannedDays[formattedDay];
-          const plannedCount = bucket?.count ?? 0;
-          // Badge tint follows the severity of the worst fault on
-          // that day so the calendar reads like a heatmap at a
-          // glance. Null priority falls back to the neutral default
-          // class.
-          const priorityClass =
-            bucket?.highestPriority === 'High'
+          const count = bucket?.count ?? 0;
+          const isCompleted = variant === 'completed';
+          // Completed badges use one neutral "closed" style; planned badges
+          // tint by the severity of the worst fault on that day so the
+          // calendar reads like a heatmap at a glance.
+          const badgeClass = isCompleted
+            ? styles.plannedBadgeCompleted
+            : bucket?.highestPriority === 'High'
               ? styles.plannedBadgeHigh
               : bucket?.highestPriority === 'Medium'
                 ? styles.plannedBadgeMedium
@@ -134,17 +133,18 @@ const Calendar = ({
               >
                 {format(day, 'd')}
               </span>
-              {/* Counter of planned interventions for this day (current scope) */}
-              {plannedCount > 0 && !isDeadlineMode && (
+              {/* Counter of faults for this day (current tab + scope) */}
+              {count > 0 && (
                 <span
-                  className={`${styles.plannedBadge} ${priorityClass}`}
-                  title={t('interventionsCount', { count: plannedCount })}
+                  className={`${styles.plannedBadge} ${badgeClass}`}
+                  title={
+                    isCompleted
+                      ? t('completedCount', { count })
+                      : t('interventionsCount', { count })
+                  }
                 >
-                  {plannedCount}
+                  {count}
                 </span>
-              )}
-              {hasDeadline && !isDeadlineMode && plannedCount === 0 && (
-                <div className={styles.deadlineDot} />
               )}
             </div>
           );

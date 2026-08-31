@@ -522,6 +522,7 @@
     "headerSubtitle": "View and manage planned interventions",
     "tabs": {
       "active": "Active",
+      "inProgress": "In progress",
       "overdue": "Overdue",
       "completed": "Completed",
       "suspended": "Suspended"
@@ -531,8 +532,6 @@
       "searchPlaceholder": "Code, machine or part…",
       "dateRange": "Period",
       "dateRangePlaceholder": "Select period",
-      "status": "Status",
-      "allStatuses": "All statuses",
       "sortLabel": "Sort by",
       "sort": {
         "auto": "Default",
@@ -558,6 +557,7 @@
     },
     "empty": {
       "overdue": "No overdue reports",
+      "inProgress": "You're not working on any report",
       "suspended": "No suspended reports",
       "completedDate": "No completed reports on this date",
       "completed": "No completed reports",
@@ -577,6 +577,7 @@
     "calendar": {
       "header": "Calendar",
       "interventionsCount": "{count} planned intervention(s)",
+      "completedCount": "{count} completed",
       "daysOfWeek": {
         "mon": "MON",
         "tue": "TUE",
@@ -610,12 +611,14 @@
     "headerSubtitle": "Manage received reports, ongoing activities and the archive",
     "tabs": {
       "received": "Received",
+      "planned": "Planned",
       "inProgress": "In Progress",
       "suspended": "Suspended",
       "archive": "Completed"
     },
     "empty": {
       "received": "No pending reports",
+      "planned": "No planned reports",
       "inProgress": "No reports in progress",
       "suspended": "No suspended reports",
       "archive": "No archived reports"
@@ -627,8 +630,8 @@
       "allPriorities": "All priorities",
       "type": "Type",
       "allTypes": "All types",
-      "plannedDate": "Planned date",
-      "datePlaceholder": "Select date",
+      "dateRange": "Period",
+      "dateRangePlaceholder": "Select period",
       "status": "Status",
       "allStatuses": "All statuses",
       "sortLabel": "Sort by",
@@ -776,12 +779,41 @@
     "headerTitle": "Safety Monitoring",
     "headerSubtitle": "View safety reports in real time. Read-only.",
     "badge": "HSE",
-    "statusFilter": "Status",
-    "newBadge": "New",
-    "statusOptions": {
-      "all": "All Statuses"
+    "tabs": {
+      "libere": "Free",
+      "inProgress": "In Progress",
+      "suspended": "Suspended",
+      "overdue": "Overdue",
+      "completed": "Completed"
     },
-    "empty": "No safety reports"
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Code or operator…",
+      "dateRange": "Period",
+      "dateRangePlaceholder": "Select period",
+      "sortLabel": "Sort by",
+      "sort": {
+        "recent": "Most recent",
+        "oldest": "Oldest",
+        "deadlineNear": "Deadline soonest",
+        "deadlineFar": "Deadline latest"
+      }
+    },
+    "empty": {
+      "libere": "No free reports",
+      "inProgress": "No reports in progress",
+      "suspended": "No suspended reports",
+      "overdue": "No overdue reports",
+      "completed": "No completed reports"
+    }
+  },
+  "FaultRow": {
+    "labels": {
+      "id": "ID",
+      "plant": "Plant",
+      "date": "Date",
+      "status": "Status"
+    }
   },
   "FaultDetail": {
     "title": "Report Details",
@@ -819,8 +851,7 @@
       "managerNote": "Manager note",
       "maintainerNote": "Maintainer note",
       "hseNote": "HSE Note (Safety)",
-      "noDescription": "No description",
-      "noNote": "No note"
+      "noDescription": "No description"
     },
     "actions": {
       "planIntervention": "Plan intervention",
@@ -929,6 +960,17 @@
       "saveError": "Error during save"
     }
   },
+  "AlreadyWorkingModal": {
+    "title": "You're already working",
+    "message": "You're already working on report",
+    "hint": "To switch to another one, finalize or suspend the current work, or continue on it.",
+    "buttons": {
+      "finalize": "Finalize",
+      "suspend": "Suspend",
+      "continue": "Continue"
+    },
+    "resumeError": "Couldn't resume the report"
+  },
   "MaintenanceUpdateModal": {
     "title": "Update Intervention",
     "titles": {
@@ -987,13 +1029,7 @@
       "recentFaults": {
         "title": "Faults in the last 30 days",
         "subtitle": "All faults reported in the past month.",
-        "empty": "No faults in the last 30 days",
-        "labels": {
-          "id": "ID",
-          "plant": "Plant",
-          "date": "Date",
-          "status": "Status"
-        }
+        "empty": "No faults in the last 30 days"
       },
       "broadcasts": {
         "title": "Communications",
@@ -1186,7 +1222,7 @@
     "clear": "Clear Filters"
   },
   "btn": {
-    "loading": "loading..."
+    "loading": "Loading..."
   },
   "NoFound": {
     "noResultsTitle": "No Results Found",

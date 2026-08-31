@@ -1,12 +1,10 @@
 'use client';
 
-import { format, isValid, parseISO } from 'date-fns';
-import { useLocale, useTranslations } from 'next-intl';
-import { getDateFnsLocale } from '@/lib/utils/dateFnsLocale';
+import { useTranslations } from 'next-intl';
 import type { FaultCard } from '@/types/faultType';
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
-import FaultIdBadge from '@/components/UI/FaultIdBadge/FaultIdBadge';
+import { FaultRowList } from '@/components/UI/FaultRow/FaultRow';
 import css from './RecentFaultsList.module.css';
 
 interface RecentFaultsListProps {
@@ -16,36 +14,9 @@ interface RecentFaultsListProps {
   isError: boolean;
 }
 
-const formatDay = (
-  value: string | undefined,
-  locale: ReturnType<typeof getDateFnsLocale>
-) => {
-  if (!value) return '—';
-  const parsed = parseISO(value);
-  return isValid(parsed) ? format(parsed, 'dd MMM yyyy', { locale }) : value;
-};
-
-const statusClass: Record<string, string> = {
-  Created: css.statusCreated,
-  'In progress': css.statusInProgress,
-  Suspended: css.statusSuspended,
-  Overdue: css.statusOverdue,
-  Completed: css.statusCompleted,
-};
-
-const statusKey = (s: string) => {
-  if (s === 'In progress') return 'IN_PROGRESS';
-  if (s === 'Completed') return 'COMPLETED';
-  if (s === 'Suspended') return 'SUSPENDED';
-  if (s === 'Overdue') return 'OVERDUE';
-  return 'CREATED';
-};
-
 const RecentFaultsList = ({ items, isLoading, isError }: RecentFaultsListProps) => {
   const t = useTranslations('reportsAndCommunicationsPage');
   const tNoFound = useTranslations('NoFound');
-  const tStatus = useTranslations('StatusFault');
-  const locale = getDateFnsLocale(useLocale());
 
   if (isLoading) {
     return (
@@ -75,43 +46,7 @@ const RecentFaultsList = ({ items, isLoading, isError }: RecentFaultsListProps) 
     );
   }
 
-  return (
-    <ul className={css.list}>
-      {items.map(fault => (
-        <li key={fault._id} className={css.row}>
-          <div className={css.head_container}>
-            <div className={css.item_id}>
-              <h3 className={css.title}>{t('sections.recentFaults.labels.id')}</h3>
-              <FaultIdBadge id={fault.faultId} />
-            </div>
-            <div className={css.item_date}>
-              <h3 className={css.title}>{t('sections.recentFaults.labels.date')}</h3>
-              <p className={css.date}>{formatDay(fault.dataCreated, locale)}</p>
-            </div>
-          </div>
-
-          <div className={css.item_plant}>
-            <h3 className={css.title}>{t('sections.recentFaults.labels.plant')}</h3>
-            <p className={css.plant}>
-              {fault.plantId?.namePlant ?? '—'}{' '}
-              <span className={css.plantPart}>
-                · {fault.partId?.namePlantPart ?? '—'}
-              </span>
-            </p>
-          </div>
-
-          <div className={css.item_status}>
-            <h3 className={css.title}>{t('sections.recentFaults.labels.status')}</h3>
-            <span
-              className={`${css.status} ${statusClass[fault.statusFault] ?? ''}`}
-            >
-              {tStatus(statusKey(fault.statusFault))}
-            </span>
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
+  return <FaultRowList items={items} />;
 };
 
 export default RecentFaultsList;

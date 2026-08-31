@@ -522,6 +522,7 @@
     "headerSubtitle": "Przeglądaj i zarządzaj zaplanowanymi interwencjami",
     "tabs": {
       "active": "Aktywne",
+      "inProgress": "W toku",
       "overdue": "Opóźnione",
       "completed": "Zakończone",
       "suspended": "Zawieszone"
@@ -531,8 +532,6 @@
       "searchPlaceholder": "Kod, maszyna lub część…",
       "dateRange": "Okres",
       "dateRangePlaceholder": "Wybierz okres",
-      "status": "Status",
-      "allStatuses": "Wszystkie statusy",
       "sortLabel": "Sortuj według",
       "sort": {
         "auto": "Domyślnie",
@@ -558,6 +557,7 @@
     },
     "empty": {
       "overdue": "Brak opóźnionych zgłoszeń",
+      "inProgress": "Nie pracujesz nad żadnym zgłoszeniem",
       "suspended": "Brak zawieszonych zgłoszeń",
       "completedDate": "Brak zgłoszeń zakończonych w tym dniu",
       "completed": "Brak zakończonych zgłoszeń",
@@ -577,6 +577,7 @@
     "calendar": {
       "header": "Kalendarz",
       "interventionsCount": "{count} zaplanowana(e) interwencja(e)",
+      "completedCount": "{count} zakończona(e)",
       "daysOfWeek": {
         "mon": "PON",
         "tue": "WT",
@@ -610,12 +611,14 @@
     "headerSubtitle": "Zarządzaj otrzymanymi zgłoszeniami, bieżącymi czynnościami i archiwum",
     "tabs": {
       "received": "Otrzymane",
+      "planned": "Zaplanowane",
       "inProgress": "W Trakcie",
       "suspended": "Zawieszone",
       "archive": "Zakończone"
     },
     "empty": {
       "received": "Brak oczekujących zgłoszeń",
+      "planned": "Brak zaplanowanych zgłoszeń",
       "inProgress": "Brak zgłoszeń w trakcie",
       "suspended": "Brak zawieszonych zgłoszeń",
       "archive": "Brak zarchiwizowanych zgłoszeń"
@@ -627,8 +630,8 @@
       "allPriorities": "Wszystkie priorytety",
       "type": "Typ",
       "allTypes": "Wszystkie typy",
-      "plannedDate": "Data planowana",
-      "datePlaceholder": "Wybierz datę",
+      "dateRange": "Okres",
+      "dateRangePlaceholder": "Wybierz okres",
       "status": "Status",
       "allStatuses": "Wszystkie statusy",
       "sortLabel": "Sortuj według",
@@ -776,12 +779,41 @@
     "headerTitle": "Monitorowanie Bezpieczeństwa",
     "headerSubtitle": "Przeglądaj zgłoszenia bezpieczeństwa w czasie rzeczywistym. Tylko do odczytu.",
     "badge": "BHP",
-    "statusFilter": "Status",
-    "newBadge": "Nowe",
-    "statusOptions": {
-      "all": "Wszystkie Statusy"
+    "tabs": {
+      "libere": "Wolne",
+      "inProgress": "W Trakcie",
+      "suspended": "Zawieszone",
+      "overdue": "Opóźnione",
+      "completed": "Zakończone"
     },
-    "empty": "Brak zgłoszeń bezpieczeństwa"
+    "filters": {
+      "search": "Szukaj",
+      "searchPlaceholder": "Kod lub operator…",
+      "dateRange": "Okres",
+      "dateRangePlaceholder": "Wybierz okres",
+      "sortLabel": "Sortuj wg",
+      "sort": {
+        "recent": "Najnowsze",
+        "oldest": "Najstarsze",
+        "deadlineNear": "Termin najbliższy",
+        "deadlineFar": "Termin najdalszy"
+      }
+    },
+    "empty": {
+      "libere": "Brak wolnych zgłoszeń",
+      "inProgress": "Brak zgłoszeń w trakcie",
+      "suspended": "Brak zawieszonych zgłoszeń",
+      "overdue": "Brak opóźnionych zgłoszeń",
+      "completed": "Brak zakończonych zgłoszeń"
+    }
+  },
+  "FaultRow": {
+    "labels": {
+      "id": "ID",
+      "plant": "Maszyna",
+      "date": "Data",
+      "status": "Status"
+    }
   },
   "FaultDetail": {
     "title": "Szczegóły Zgłoszenia",
@@ -819,8 +851,7 @@
       "managerNote": "Notatki kierownika",
       "maintainerNote": "Notatki konserwatora",
       "hseNote": "Notatka BHP (Bezpieczeństwo)",
-      "noDescription": "Brak opisu",
-      "noNote": "Brak notatki"
+      "noDescription": "Brak opisu"
     },
     "actions": {
       "planIntervention": "Zaplanuj interwencję",
@@ -929,6 +960,17 @@
       "saveError": "Błąd podczas zapisywania"
     }
   },
+  "AlreadyWorkingModal": {
+    "title": "Już pracujesz",
+    "message": "Już pracujesz nad zgłoszeniem",
+    "hint": "Aby przejść do innego, zakończ lub wstrzymaj bieżącą pracę albo kontynuuj ją.",
+    "buttons": {
+      "finalize": "Zakończ",
+      "suspend": "Wstrzymaj",
+      "continue": "Kontynuuj"
+    },
+    "resumeError": "Nie można wznowić zgłoszenia"
+  },
   "MaintenanceUpdateModal": {
     "title": "Aktualizuj Interwencję",
     "titles": {
@@ -987,13 +1029,7 @@
       "recentFaults": {
         "title": "Usterki z ostatnich 30 dni",
         "subtitle": "Wszystkie usterki zgłoszone w ciągu ostatniego miesiąca.",
-        "empty": "Brak usterek w ciągu ostatnich 30 dni",
-        "labels": {
-          "id": "ID",
-          "plant": "Maszyna",
-          "date": "Data",
-          "status": "Status"
-        }
+        "empty": "Brak usterek w ciągu ostatnich 30 dni"
       },
       "broadcasts": {
         "title": "Komunikaty",
@@ -1186,7 +1222,7 @@
     "clear": "Wyczyść Filtry"
   },
   "btn": {
-    "loading": "ładowanie..."
+    "loading": "Ładowanie..."
   },
   "NoFound": {
     "noResultsTitle": "Brak Wyników",

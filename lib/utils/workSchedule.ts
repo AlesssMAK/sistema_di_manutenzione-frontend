@@ -81,6 +81,57 @@ export const resolveWorkWindow = (
   );
 };
 
+// 'HH:mm' strings are zero-padded, so lexical compare == chronological.
+const laterTime = (a: string, b: string) => (a > b ? a : b);
+const earlierTime = (a: string, b: string) => (a < b ? a : b);
+
+const dayKeyOf = (date?: Date | string | null): WeekDayKey => {
+  const d = date ? new Date(date) : new Date();
+  return DAY_KEYS[Number.isNaN(d.getTime()) ? new Date().getDay() : d.getDay()];
+};
+
+// The window a target can actually be scheduled into: their resolved window
+// (user → role → factory) intersected with the factory's own opening hours,
+// since nobody works while the plant is closed. A role/user override only
+// narrows the hours — it can never extend past when the factory shuts. Used
+// to bound the planning time slots.
+export const resolveEffectiveWindow = (
+  settings: PublicSystemSettings | undefined,
+  target: { userId?: string; role?: string },
+  date?: Date | string | null
+): WorkWindow => {
+  const own = resolveWorkWindow(settings, target, date);
+  if (!settings) return own;
+  const factory = factoryWindow(settings, dayKeyOf(date));
+  return {
+    enabled: own.enabled && factory.enabled,
+    start: laterTime(own.start, factory.start),
+    end: earlierTime(own.end, factory.end),
+  };
+};
+
+const pad2 = (n: number) => String(n).padStart(2, '0');
+
+// Local 'yyyy-MM-dd' (no timezone shift) for comparing against the
+// configured holiday list.
+const toLocalDateKey = (d: Date) =>
+  `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+
+// Whether the factory (respecting a role/user override) actually works on
+// the given calendar date. A date is non-working when its resolved window
+// is disabled (e.g. a weekend the factory is closed) or it falls on a
+// configured holiday. Used to block non-working days in planning pickers.
+export const isWorkingDate = (
+  settings: PublicSystemSettings | undefined,
+  target: { userId?: string; role?: string },
+  date: Date
+): boolean => {
+  if (!settings || Number.isNaN(date.getTime())) return true;
+  if (!resolveWorkWindow(settings, target, date).enabled) return false;
+  const key = toLocalDateKey(date);
+  return !(settings.holidays ?? []).some(h => String(h).slice(0, 10) === key);
+};
+
 // Minutes since midnight for an 'HH:mm' string (used to drive the slot
 // picker's range).
 export const hhmmToMinutes = (hhmm: string | undefined): number | null => {

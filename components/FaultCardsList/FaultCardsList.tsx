@@ -13,7 +13,13 @@ import { useRouter } from 'next/navigation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
-import { claimFault } from '@/lib/api/faults';
+import {
+  claimFault,
+  getAlreadyWorkingFault,
+  type ActiveWorkFault,
+} from '@/lib/api/faults';
+import AlreadyWorkingModal from '@/components/MaintenanceWorker/AlreadyWorkingModal/AlreadyWorkingModal';
+import { isInPeriod, type Period } from '@/lib/utils/period';
 import { useState } from 'react';
 
 /** Map raw backend statusFault to the StatusFault i18n key. */
@@ -63,9 +69,11 @@ interface FaultCardsListProps {
    *  the card in place. Without it the claimed card stays stale until a
    *  full page reload. */
   onClaimed?: (updated: FaultCard) => void;
+  /** Active "Periodo" filter — the matched date value gets highlighted. */
+  period?: Period;
 }
 
-const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
+const FaultCardsList = ({ faults, onClaimed, period }: FaultCardsListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations('FaultCard');
@@ -75,6 +83,14 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
+
+  // When a claim is blocked because the technician is already working on
+  // another fault, we stash that fault (to show the modal) plus the id they
+  // wanted to claim (to auto-start once the current one is freed).
+  const [blockedActive, setBlockedActive] = useState<ActiveWorkFault | null>(
+    null
+  );
+  const [pendingClaimId, setPendingClaimId] = useState<string | null>(null);
 
   const claimMutation = useMutation({
     mutationFn: (id: string) => claimFault(id),
@@ -86,7 +102,15 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
       // Hand the fresh fault back so the owner can update the card.
       onClaimed?.(updated);
     },
-    onError: (err: unknown) => {
+    onError: (err: unknown, id) => {
+      // Already working on another fault → show the finalize/suspend/continue
+      // modal instead of a generic error, and remember what to start next.
+      const active = getAlreadyWorkingFault(err);
+      if (active) {
+        setPendingClaimId(id);
+        setBlockedActive(active);
+        return;
+      }
       const message =
         err && typeof err === 'object' && 'message' in err
           ? String((err as { message: unknown }).message)
@@ -262,7 +286,13 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                       </span>
                       <p className={css.value}>{fault.plannedTime}</p>
                       <span className={css.label}>{t('labels.deadline')}</span>
-                      <p className={css.value}>
+                      <p
+                        className={`${css.value} ${
+                          isInPeriod(fault.deadline, period)
+                            ? css.periodMatch
+                            : ''
+                        }`}
+                      >
                         {formatDay(fault.deadline, locale)}
                       </p>
                       {fault.statusFault === 'Completed' &&
@@ -271,7 +301,13 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                             <span className={css.label}>
                               {t('labels.completedAt')}
                             </span>
-                            <p className={css.value}>
+                            <p
+                              className={`${css.value} ${
+                                isInPeriod(fault.completedAt, period)
+                                  ? css.periodMatch
+                                  : ''
+                              }`}
+                            >
                               {formatDay(fault.completedAt, locale)}
                             </p>
                           </>
@@ -300,7 +336,13 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                       <span className={css.label}>
                         {t('labels.dateCreated')}
                       </span>
-                      <p className={css.value}>
+                      <p
+                        className={`${css.value} ${
+                          isInPeriod(fault.dataCreated, period)
+                            ? css.periodMatch
+                            : ''
+                        }`}
+                      >
                         {formatDay(fault.dataCreated, locale)}
                         {fault.timeCreated ? ` ${fault.timeCreated}` : ''}
                       </p>
@@ -309,7 +351,7 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
                 </div>
 
                 {fault.comment && (
-                  <div className={css.commentContainer}>
+                  <div className={`${css.commentContainer} ${css.operatorNote}`}>
                     <h4 className={css.commentLabel}>{t('labels.comment')}:</h4>
                     <p className={css.commentText}>{fault.comment}</p>
                   </div>
@@ -356,6 +398,24 @@ const FaultCardsList = ({ faults, onClaimed }: FaultCardsListProps) => {
           );
         })}
       </ul>
+
+      {blockedActive && (
+        <AlreadyWorkingModal
+          active={blockedActive}
+          onResolved={() => {
+            const next = pendingClaimId;
+            setBlockedActive(null);
+            setPendingClaimId(null);
+            // The active fault is now finalized/suspended — start the one
+            // the technician originally wanted.
+            if (next) claimMutation.mutate(next);
+          }}
+          onClose={() => {
+            setBlockedActive(null);
+            setPendingClaimId(null);
+          }}
+        />
+      )}
     </div>
   );
 };

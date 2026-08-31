@@ -185,7 +185,6 @@
   color: #15803d;
 }
 
-
 .deadline {
   font-weight: 600;
   color: #b91c1c;
@@ -226,6 +225,22 @@
   font-size: 14px;
   line-height: 1.5;
   color: #0a0a0a;
+}
+
+/* Operator's original report highlighted in blue — the same callout
+   palette as the admin notes — so the segnalazione stands out from the
+   follow-up notes below it. */
+.operatorNote {
+  background: #eff6ff;
+  border: 1.17px solid #bfdbfe;
+}
+
+.operatorNote label {
+  color: #1e40af;
+}
+
+.operatorNote p {
+  color: #1e3a8a;
 }
 
 .imageSection {
@@ -303,6 +318,7 @@
   line-height: 1.5;
   resize: none;
   min-height: 96px;
+  margin-bottom: 10px;
   transition: border-color 0.15s ease;
 }
 

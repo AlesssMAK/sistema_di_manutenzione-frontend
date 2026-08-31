@@ -58,17 +58,6 @@ const Header = () => {
                   alt="SYLLERT logo"
                 />
               </div>
-              <div className={css.logo_title_container}>
-                {/* <h2 className={css.logo_title}> */}
-                {/* <Image
-                  src="/images/syllert-logo-text.png"
-                  width={120}
-                  height={14}
-                  alt="SYLLERT logo"
-                /> */}
-                {/* </h2> */}
-                {/* <p className={css.logo_page_name}>{pageTitle}</p> */}
-              </div>
             </div>
           </Link>
           {isOpenModal ? (

@@ -4,41 +4,106 @@ import FaultManagerCard from '@/components/Manager/FaultManagerCard/FaultManager
 import Loader from '@/components/UI/Loader/Loader';
 import NoFound from '@/components/UI/NoFound/NoFound';
 import Pagination from '@/components/UI/Pagination/Pagination';
-import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
+import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
+import Filters, { type FiltersItem } from '@/components/UI/Filters/Filters';
 import {
   fetchFaultCards,
   fetchListSeen,
   markListSeen,
 } from '@/lib/api/faults';
+import { createOptionMapper } from '@/lib/utils/translationMapper';
+import { useAutoTabSwitchOnFilter } from '@/lib/hooks/useAutoTabSwitchOnFilter';
 import {
   keepPreviousData,
+  useQueries,
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 import css from './Safety.module.css';
+
+type SafetyTab =
+  | 'libere'
+  | 'inProgress'
+  | 'suspended'
+  | 'overdue'
+  | 'completed';
+
+// One status per tab — the tabs effectively ARE the status filter, so no
+// separate Stato dropdown is needed.
+const TAB_TO_STATUS: Record<SafetyTab, string> = {
+  libere: 'Created',
+  inProgress: 'In progress',
+  suspended: 'Suspended',
+  overdue: 'Overdue',
+  completed: 'Completed',
+};
+
+const TAB_ORDER: SafetyTab[] = [
+  'libere',
+  'inProgress',
+  'suspended',
+  'overdue',
+  'completed',
+];
+
+type SortKey = 'recent' | 'oldest' | 'deadlineNear' | 'deadlineFar';
+const SORT_CONFIG: Record<
+  SortKey,
+  { sort?: 'asc' | 'desc'; sortBy?: string; sortOrder?: 'asc' | 'desc' }
+> = {
+  recent: { sort: 'desc' },
+  oldest: { sort: 'asc' },
+  deadlineNear: { sortBy: 'deadline', sortOrder: 'asc' },
+  deadlineFar: { sortBy: 'deadline', sortOrder: 'desc' },
+};
 
 const PER_PAGE = 8;
 
 const SafetyClient = () => {
   const t = useTranslations('SafetyPage');
   const tNoFound = useTranslations('NoFound');
-  const tStatus = useTranslations('StatusFault');
+  const queryClient = useQueryClient();
 
-  const STATUS_OPTIONS = [
-    { label: t('statusOptions.all'), value: '' },
-    { label: tStatus('CREATED'), value: 'Created' },
-    { label: tStatus('IN_PROGRESS'), value: 'In progress' },
-    { label: tStatus('SUSPENDED'), value: 'Suspended' },
-    { label: tStatus('OVERDUE'), value: 'Overdue' },
-    { label: tStatus('COMPLETED'), value: 'Completed' },
+  const TABS: TabItem<SafetyTab>[] = [
+    { value: 'libere', label: t('tabs.libere'), icon: 'clipboard' },
+    { value: 'inProgress', label: t('tabs.inProgress'), icon: 'reload' },
+    { value: 'suspended', label: t('tabs.suspended'), icon: 'exclamation-circle' },
+    { value: 'overdue', label: t('tabs.overdue'), icon: 'clock' },
+    { value: 'completed', label: t('tabs.completed'), icon: 'check-circle' },
   ];
 
-  const [statusFault, setStatusFault] = useState<string>('');
+  const [activeTab, setActiveTab] = useState<SafetyTab>('libere');
   const [page, setPage] = useState(1);
 
-  const queryClient = useQueryClient();
+  // Filters: text search, a planned-date range and a date sort. (Status is
+  // the tabs themselves, so there's no separate Stato filter.)
+  const [search, setSearch] = useState('');
+  const [debouncedSearch] = useDebounce(search, 400);
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const [sortOption, setSortOption] = useState<SortKey>('recent');
+
+  // Any filter change resets pagination (same-pass reset, no effect).
+  const filterKey = `${debouncedSearch}|${dateFrom}|${dateTo}|${sortOption}`;
+  const [prevFilterKey, setPrevFilterKey] = useState(filterKey);
+  if (prevFilterKey !== filterKey) {
+    setPrevFilterKey(filterKey);
+    setPage(1);
+  }
+
+  const sortMapper = useMemo(
+    () =>
+      createOptionMapper<SortKey>([
+        { value: 'recent', label: t('filters.sort.recent') },
+        { value: 'oldest', label: t('filters.sort.oldest') },
+        { value: 'deadlineNear', label: t('filters.sort.deadlineNear') },
+        { value: 'deadlineFar', label: t('filters.sort.deadlineFar') },
+      ]),
+    [t]
+  );
 
   // Per-list lastSeen (drives model A for assigned safety faults).
   const { data: listSeen } = useQuery({
@@ -49,18 +114,62 @@ const SafetyClient = () => {
   const since = listSeen?.safety_all;
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['faults', 'safety', statusFault || 'all', page, since ?? null],
+    queryKey: [
+      'faults',
+      'safety',
+      activeTab,
+      page,
+      filterKey,
+      since ?? null,
+    ],
     queryFn: () =>
       fetchFaultCards({
         page,
         perPage: PER_PAGE,
         typeFault: 'Safety',
-        ...(statusFault ? { statusFault } : {}),
+        statusFault: TAB_TO_STATUS[activeTab],
+        ...(debouncedSearch ? { search: debouncedSearch } : {}),
+        ...(dateFrom ? { anyDateFrom: dateFrom } : {}),
+        ...(dateTo ? { anyDateTo: dateTo } : {}),
+        ...SORT_CONFIG[sortOption],
         withUnseen: true,
         ...(since ? { seenSince: since } : {}),
       }),
     placeholderData: keepPreviousData,
   });
+
+  // The Filtri narrowers the tab counters mirror (search + Periodo), so a
+  // badge equals the filtered list total.
+  const countFilters = {
+    ...(debouncedSearch ? { search: debouncedSearch } : {}),
+    ...(dateFrom ? { anyDateFrom: dateFrom } : {}),
+    ...(dateTo ? { anyDateTo: dateTo } : {}),
+  };
+  const countFilterKey = `${debouncedSearch}|${dateFrom}|${dateTo}`;
+
+  // Per-tab totals for the tab badges, filtered the same as the list.
+  const countsResults = useQueries({
+    queries: TAB_ORDER.map(tab => ({
+      queryKey: ['faults', 'safety', tab, 'count', countFilterKey],
+      queryFn: () =>
+        fetchFaultCards({
+          page: 1,
+          perPage: 1,
+          typeFault: 'Safety',
+          statusFault: TAB_TO_STATUS[tab],
+          ...countFilters,
+        }),
+      placeholderData: keepPreviousData,
+    })),
+  });
+  const counts = TAB_ORDER.reduce<Partial<Record<SafetyTab, number>>>(
+    (acc, tab, i) => {
+      const total = countsResults[i].data?.totalFault;
+      if (total !== undefined) acc[tab] = total;
+      return acc;
+    },
+    {}
+  );
 
   // Mark the safety board seen once on landing — clears its assigned
   // (model A) cards. Unassigned safety faults (pool / model B) keep their
@@ -80,15 +189,65 @@ const SafetyClient = () => {
   const faults = data?.fault ?? [];
   const totalPage = data?.totalPage ?? 0;
 
-  const handleStatusChange = (label: string) => {
-    const option = STATUS_OPTIONS.find(o => o.label === label);
-    setStatusFault(option?.value ?? '');
+  const handleTabChange = (tab: SafetyTab) => {
+    if (tab === activeTab) return;
+    setActiveTab(tab);
     setPage(1);
   };
 
-  const selectedStatusLabel =
-    STATUS_OPTIONS.find(o => o.value === statusFault)?.label ??
-    STATUS_OPTIONS[0].label;
+  // Picking a "Periodo" re-jumps to the first tab with matches.
+  const countsReady =
+    countsResults.every(r => r.data !== undefined) &&
+    countsResults.every(r => !r.isFetching);
+  useAutoTabSwitchOnFilter<SafetyTab>({
+    triggerKey: `${dateFrom}|${dateTo}`,
+    active: Boolean(dateFrom || dateTo),
+    activeTab,
+    order: TAB_ORDER,
+    counts,
+    ready: countsReady,
+    onSwitch: handleTabChange,
+  });
+
+  const handleClear = () => {
+    setSearch('');
+    setDateFrom('');
+    setDateTo('');
+    setSortOption('recent');
+  };
+
+  const filterItems: FiltersItem[] = [
+    {
+      id: 'search',
+      type: 'input',
+      label: t('filters.search'),
+      value: search,
+      placeholder: t('filters.searchPlaceholder'),
+      onChange: setSearch,
+      icon: 'search',
+    },
+    {
+      id: 'range',
+      type: 'daterange',
+      label: t('filters.dateRange'),
+      from: dateFrom,
+      to: dateTo,
+      onChange: (f: string, tv: string) => {
+        setDateFrom(f);
+        setDateTo(tv);
+      },
+      placeholder: t('filters.dateRangePlaceholder'),
+    },
+    {
+      id: 'sort',
+      type: 'select',
+      label: t('filters.sortLabel'),
+      value: sortMapper.getLabelByValue(sortOption) ?? t('filters.sort.recent'),
+      options: sortMapper.labelsArray,
+      onSelect: (label: string) =>
+        setSortOption((sortMapper.getValueByLabel(label) ?? 'recent') as SortKey),
+    },
+  ];
 
   return (
     <div className="container">
@@ -99,21 +258,17 @@ const SafetyClient = () => {
         </h2>
         <p className="subtitle">{t('headerSubtitle')}</p>
 
-        <div className={css.toolbar}>
-          <div className={css.field}>
-            <label className={css.fieldLabel}>{t('statusFilter')}</label>
-            <SelectDropdown
-              options={STATUS_OPTIONS.map(o => o.label)}
-              selectedValue={selectedStatusLabel}
-              onSelect={handleStatusChange}
-            />
-          </div>
-          {data?.hasUnseen && (
-            <span className={css.newBadge}>
-              <span className={css.newDot} aria-hidden="true" />
-              {t('newBadge')}
-            </span>
-          )}
+        <div className={css.tabsBarWrap}>
+          <Tabs<SafetyTab>
+            tabs={TABS}
+            activeTab={activeTab}
+            onTabChange={handleTabChange}
+            counts={counts}
+          />
+        </div>
+
+        <div className={css.filtersWrap}>
+          <Filters items={filterItems} onClear={handleClear} />
         </div>
 
         <div className={css.contentSection}>
@@ -128,7 +283,10 @@ const SafetyClient = () => {
               hideIcon
             />
           ) : faults.length === 0 ? (
-            <NoFound title={tNoFound('emptyTitle')} message={t('empty')} />
+            <NoFound
+              title={tNoFound('emptyTitle')}
+              message={t(`empty.${activeTab}`)}
+            />
           ) : (
             <ul className={css.cardList}>
               {faults.map(fault => (
@@ -136,6 +294,7 @@ const SafetyClient = () => {
                   key={fault._id}
                   fault={fault}
                   detailHref={f => `/safety/${f._id}`}
+                  period={{ from: dateFrom, to: dateTo }}
                 />
               ))}
             </ul>

@@ -23,8 +23,9 @@ interface TabsProps<T extends string = string> {
    */
   counts?: Partial<Record<T, number>>;
   /**
-   * Optional per-tab "unseen" markers. A truthy entry renders a small red
-   * dot next to the label — the tab has faults the viewer hasn't seen yet.
+   * Optional per-tab "unseen" markers. A truthy entry gives the tab's count
+   * badge a blinking red border (or a small red dot when the tab has no
+   * count) — the tab holds items the viewer hasn't seen yet.
    */
   dots?: Partial<Record<T, boolean>>;
 }
@@ -51,20 +52,35 @@ const Tabs = <T extends string = string>({
             aria-label={tab.label}
             title={tab.label}
             onClick={() => onTabChange(tab.value)}
-            className={`${css.tabButton} ${isActive ? css.tabActive : ''}`}
+            className={`${css.tabButton} ${isActive ? css.tabActive : ''} ${
+              tab.icon ? css.hasIcon : ''
+            }`}
           >
-            {tab.icon && (
-              <svg className={css.tabIcon} aria-hidden="true">
-                <use href={`/sprite.svg#${tab.icon}`} />
-              </svg>
-            )}
-            <span className={tab.icon ? css.tabLabel : ''}>{tab.label}</span>
-            {count !== undefined && (
-              <span className={css.tabCount}>{count}</span>
-            )}
-            {hasDot && (
-              <span className={css.tabDot} aria-hidden="true" />
-            )}
+            {/* Inner wrapper is the positioning context: on phones (icon
+                shown, label hidden) the count/dot float over the icon's
+                top-right corner like a messenger badge instead of taking
+                flow space and wrapping the tab. */}
+            <span className={css.tabInner}>
+              {tab.icon && (
+                <svg className={css.tabIcon} aria-hidden="true">
+                  <use href={`/sprite.svg#${tab.icon}`} />
+                </svg>
+              )}
+              <span className={tab.icon ? css.tabLabel : ''}>{tab.label}</span>
+              {count !== undefined && (
+                <span
+                  className={`${css.tabCount} ${
+                    hasDot ? css.tabCountUnseen : ''
+                  }`}
+                >
+                  {count}
+                </span>
+              )}
+              {/* Fallback dot only when there's no count to border. */}
+              {hasDot && count === undefined && (
+                <span className={css.tabDot} aria-hidden="true" />
+              )}
+            </span>
           </button>
         );
       })}

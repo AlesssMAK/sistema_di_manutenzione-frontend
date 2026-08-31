@@ -31,22 +31,40 @@ import {
 import { fetchSystemSettings } from '@/lib/api/systemSettings';
 import { hhmmToMinutes, resolveWorkWindow } from '@/lib/utils/workSchedule';
 import { useAuthStore } from '@/lib/store/authStore';
+import { useAutoTabSwitchOnFilter } from '@/lib/hooks/useAutoTabSwitchOnFilter';
 import { useSocket } from '@/providers/SocketProvider/SocketProvider';
 import { FaultCard } from '@/types/faultType';
 import { useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export type FaultViewMode = 'active' | 'suspended' | 'overdue' | 'completed';
+export type FaultViewMode =
+  | 'active'
+  | 'inProgress'
+  | 'suspended'
+  | 'overdue'
+  | 'completed';
 
-// Suspended has its own "Sospese" tab, so it's excluded from the broad
-// "Attive" group — a paused fault shows only under Sospese.
+// Landing-scope probe + pool query still use the narrow "there is active
+// assigned work" set (no Suspended).
 const ACTIVE_STATUSES = 'Created,In progress,Overdue';
-// Specific statuses the "Attive" tab groups — drive the status filter.
-const ACTIVE_STATUS_LIST = ['Created', 'In progress', 'Overdue'];
-const STATUS_KEY: Record<string, string> = {
-  Created: 'CREATED',
-  'In progress': 'IN_PROGRESS',
-  Suspended: 'SUSPENDED',
-  Overdue: 'OVERDUE',
+// "Attive" is now the umbrella tab: everything that isn't closed.
+const ALL_OPEN_STATUSES = 'Created,In progress,Overdue,Suspended';
+
+// Which Fault date column the calendar badges + day-click filter use.
+type CalendarField = 'plannedDate' | 'deadline' | 'completedAt';
+
+// Per-tab config: the statuses it shows (calendar badges + list) and the
+// date column those are bucketed / filtered by. This is what decouples the
+// calendar from a single hard-coded "active" mode — every tab drives its
+// own badges and day filter, narrowed only by the scope bar.
+const MODE_CONFIG: Record<
+  FaultViewMode,
+  { statuses: string; field: CalendarField }
+> = {
+  active: { statuses: ALL_OPEN_STATUSES, field: 'plannedDate' },
+  inProgress: { statuses: 'In progress', field: 'plannedDate' },
+  suspended: { statuses: 'Suspended', field: 'plannedDate' },
+  overdue: { statuses: 'Overdue', field: 'deadline' },
+  completed: { statuses: 'Completed', field: 'completedAt' },
 };
 
 // Date-sort presets. 'auto' keeps the per-tab default (completed → most
@@ -67,7 +85,6 @@ const PER_PAGE = 3;
 const MaintenanceWorkerClient = () => {
   const t = useTranslations('maintenanceWorkerPage');
   const tNoFound = useTranslations('NoFound');
-  const tStatus = useTranslations('StatusFault');
   const { user } = useAuthStore();
   const userId = String(user?._id ?? '');
 
@@ -82,20 +99,10 @@ const MaintenanceWorkerClient = () => {
       ]),
     [t]
   );
-  const statusMapper = useMemo(
-    () =>
-      createOptionMapper<string>([
-        { value: '', label: t('filters.allStatuses') },
-        ...ACTIVE_STATUS_LIST.map(s => ({
-          value: s,
-          label: tStatus(STATUS_KEY[s]),
-        })),
-      ]),
-    [t, tStatus]
-  );
 
   const VIEW_MODE_TABS: TabItem<FaultViewMode>[] = [
     { value: 'active', label: t('tabs.active'), icon: 'wrench' },
+    { value: 'inProgress', label: t('tabs.inProgress'), icon: 'reload' },
     { value: 'suspended', label: t('tabs.suspended'), icon: 'exclamation-circle' },
     { value: 'overdue', label: t('tabs.overdue'), icon: 'clock' },
     { value: 'completed', label: t('tabs.completed'), icon: 'check-circle' },
@@ -112,7 +119,6 @@ const MaintenanceWorkerClient = () => {
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [sortOption, setSortOption] = useState<SortKey>('auto');
-  const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
   const [viewMode, setViewMode] = useState<FaultViewMode>('active');
@@ -125,9 +131,8 @@ const MaintenanceWorkerClient = () => {
   // was last loaded — surfaced as a "N new" refresh pill.
   const [newFaultCount, setNewFaultCount] = useState(0);
   const { socket } = useSocket();
-  const [overdueDeadlineDates, setOverdueDeadlineDates] = useState<string[]>(
-    []
-  );
+  // Per-day calendar badges for the current tab (buckets keyed by the tab's
+  // date column: plannedDate / deadline / completedAt).
   const [plannedDays, setPlannedDays] = useState<
     Record<string, PlannedDayBucket>
   >({});
@@ -171,17 +176,22 @@ const MaintenanceWorkerClient = () => {
           : {},
     [userId]
   );
-  const statusForMode = (m: FaultViewMode) =>
-    m === 'overdue'
-      ? 'Overdue'
-      : m === 'completed'
-        ? 'Completed'
-        : m === 'suspended'
-          ? 'Suspended'
-          : ACTIVE_STATUSES;
+  const statusForMode = (m: FaultViewMode) => MODE_CONFIG[m].statuses;
+
+  // The Filtri narrowers that the tab counters mirror, so a badge equals the
+  // filtered list total (priority + search + the "Periodo" any-date range).
+  // The calendar day-selection is a per-tab drill-down, not part of this.
+  const countFilters = {
+    ...(priority ? { priority } : {}),
+    ...(debouncedSearch ? { search: debouncedSearch } : {}),
+    ...(dateFrom ? { anyDateFrom: dateFrom } : {}),
+    ...(dateTo ? { anyDateTo: dateTo } : {}),
+  };
+  const countFilterKey = `${priority}|${debouncedSearch}|${dateFrom}|${dateTo}`;
 
   const BOARD_MODES: FaultViewMode[] = [
     'active',
+    'inProgress',
     'suspended',
     'overdue',
     'completed',
@@ -195,13 +205,21 @@ const MaintenanceWorkerClient = () => {
       const key = seenKeyForMode(m);
       const since = listSeen?.[key];
       return {
-        queryKey: ['workerBoard', m, effScope, userId, since ?? null],
+        queryKey: [
+          'workerBoard',
+          m,
+          effScope,
+          userId,
+          since ?? null,
+          countFilterKey,
+        ],
         queryFn: () =>
           fetchFaultCards({
             page: 1,
             perPage: 1,
             statusFault: statusForMode(m),
             ...scopeParamsFor(effScope),
+            ...countFilters,
             withUnseen: true,
             ...(since ? { seenSince: since } : {}),
           }),
@@ -211,32 +229,12 @@ const MaintenanceWorkerClient = () => {
     }),
   });
 
-  // Pool (Libere) unseen dot — pool cards are model B (tracked
-  // individually), so this is a boolean, not a cleared-on-open count.
-  const { data: poolState } = useQuery({
-    queryKey: ['workerPool', userId, listSeen?.worker_pool ?? null],
-    queryFn: () =>
-      fetchFaultCards({
-        page: 1,
-        perPage: 1,
-        statusFault: 'Created,Overdue',
-        assignedToEmpty: true,
-        withUnseen: true,
-        ...(listSeen?.worker_pool
-          ? { seenSince: listSeen.worker_pool }
-          : {}),
-      }),
-    enabled: scopeResolved,
-    staleTime: 15 * 1000,
-  });
-
   const markSeen = useCallback(
     (key: ListSeenKey) => {
       markListSeen(key)
         .then(() => {
           queryClient.invalidateQueries({ queryKey: ['listSeen'] });
           queryClient.invalidateQueries({ queryKey: ['workerBoard'] });
-          queryClient.invalidateQueries({ queryKey: ['workerPool'] });
         })
         .catch(() => {});
     },
@@ -283,7 +281,6 @@ const MaintenanceWorkerClient = () => {
         dateFrom?: string;
         dateTo?: string;
         sort?: SortKey;
-        status?: string;
       } = {}
     ) => {
       const reqId = ++requestIdRef.current;
@@ -295,33 +292,35 @@ const MaintenanceWorkerClient = () => {
       setIsLoading(true);
 
       try {
-        const statusFault =
-          currentMode === 'overdue'
-            ? 'Overdue'
-            : currentMode === 'completed'
-              ? 'Completed'
-              : currentMode === 'suspended'
-                ? 'Suspended'
-                : // "Attive" groups several statuses; a picked status narrows it.
-                  filters.status || ACTIVE_STATUSES;
+        // Each tab is a fixed status set (no per-status narrower).
+        const statusFault = MODE_CONFIG[currentMode].statuses;
 
-        // Date filter applied in active/completed modes only — overdue
-        // shows everything in ritardo regardless of plannedDate. A range
-        // from the Filtri panel wins over the calendar's single day.
+        // Two independent date filters:
+        //  • the Filtri "Periodo" range → any-date match (a fault shows if
+        //    ANY of its dates is in the range), and it wins over…
+        //  • the calendar's single selected day → a one-day window on the
+        //    tab's own column (plannedDate / deadline / completedAt). The
+        //    calendar stays per-tab; only the Periodo is any-date.
+        const field = MODE_CONFIG[currentMode].field;
         const hasRange = Boolean(filters.dateFrom || filters.dateTo);
-        const dateParams =
-          currentMode === 'overdue'
-            ? {}
-            : hasRange
-              ? {
-                  ...(filters.dateFrom
-                    ? { plannedDateFrom: filters.dateFrom }
-                    : {}),
-                  ...(filters.dateTo ? { plannedDateTo: filters.dateTo } : {}),
-                }
-              : currentDate
-                ? { plannedDate: currentDate }
-                : {};
+        const dayKeys: Record<CalendarField, [string, string]> = {
+          plannedDate: ['plannedDateFrom', 'plannedDateTo'],
+          deadline: ['deadlineFrom', 'deadlineTo'],
+          completedAt: ['completedFrom', 'completedTo'],
+        };
+        const [fromKey, toKey] = dayKeys[field];
+        let dateParams: Record<string, string> = {};
+        if (hasRange) {
+          dateParams = {
+            ...(filters.dateFrom ? { anyDateFrom: filters.dateFrom } : {}),
+            ...(filters.dateTo ? { anyDateTo: filters.dateTo } : {}),
+          };
+        } else if (currentDate) {
+          dateParams =
+            field === 'plannedDate'
+              ? { plannedDate: currentDate }
+              : { [fromKey]: currentDate, [toKey]: currentDate };
+        }
 
         const baseParams = {
           priority: currentPriority,
@@ -381,37 +380,38 @@ const MaintenanceWorkerClient = () => {
     [t]
   );
 
-  const fetchPlannedCounts = useCallback(
+  const fetchCalendarCounts = useCallback(
     async (
       currentScope: FaultScope,
       currentUserId: string,
       currentMode: FaultViewMode
     ) => {
-      // Badges are only meaningful for active work — overdue uses the red
-      // deadlineCell highlighting; completed is just historical browsing.
-      if (currentMode !== 'active') {
-        setPlannedDays({});
-        return;
-      }
       try {
+        // Completed history has no pool — fall back to 'mine' so the badges
+        // match the list (mirrors the board + handleModeChange).
+        const effScope: FaultScope =
+          currentMode === 'completed' && currentScope === 'pool'
+            ? 'mine'
+            : currentScope;
         const scopeParams =
-          currentScope === 'mine' && currentUserId
+          effScope === 'mine' && currentUserId
             ? { assignedTo: currentUserId }
-            : currentScope === 'pool'
+            : effScope === 'pool'
               ? { assignedToEmpty: true }
               : {};
 
-        // Per-day planned counts via the aggregated endpoint
-        // (replaces the old perPage:200 trick). Window = current
-        // month ± 1, which is what the calendar can show anyway.
+        // Per-day counts for the current tab via the aggregated endpoint,
+        // bucketed by that tab's date column. Window = current month ± 1,
+        // which is what the calendar can show anyway.
+        const { field, statuses } = MODE_CONFIG[currentMode];
         const today = new Date();
         const from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
         const to = new Date(today.getFullYear(), today.getMonth() + 2, 0);
         const data = await fetchFaultDeadlines({
-          field: 'plannedDate',
+          field,
           dateFrom: from.toISOString().slice(0, 10),
           dateTo: to.toISOString().slice(0, 10),
-          statusFault: ACTIVE_STATUSES,
+          statusFault: statuses,
           ...scopeParams,
         });
 
@@ -437,37 +437,10 @@ const MaintenanceWorkerClient = () => {
     [t]
   );
 
-  const fetchOverdueDeadlines = useCallback(
-    async (currentPriority: string) => {
-      try {
-        // Overdue heatmap via the aggregated endpoint. Wide window so
-        // we catch deadlines that drifted past the visible month.
-        const today = new Date();
-        const from = new Date(today.getFullYear() - 1, 0, 1);
-        const to = new Date(today.getFullYear() + 1, 11, 31);
-        const data = await fetchFaultDeadlines({
-          field: 'deadline',
-          dateFrom: from.toISOString().slice(0, 10),
-          dateTo: to.toISOString().slice(0, 10),
-          statusFault: 'Overdue',
-          ...(currentPriority ? { priority: currentPriority } : {}),
-        });
-
-        const dates = data.dates.map(bucket => bucket.date);
-
-        setOverdueDeadlineDates(dates);
-      } catch (error) {
-        console.error(t('errors.loadDeadlines'), error);
-      }
-    },
-    [t]
-  );
-
   const handlePriorityChange = (newPriority: string) => {
     const newValue = priority === newPriority ? '' : newPriority;
     setPriority(newValue);
     setPage(1);
-    if (isOverdueMode) fetchOverdueDeadlines(newValue);
   };
 
   const handleDateChange = (date: string) => {
@@ -487,8 +460,6 @@ const MaintenanceWorkerClient = () => {
     if (newScope === scope) return;
     setScope(newScope);
     setPage(1);
-    // Pool cards are model B (tracked individually), so entering the pool
-    // does NOT clear the dot — it stays until each card is opened.
   };
 
   const handleModeChange = (newMode: FaultViewMode) => {
@@ -496,20 +467,12 @@ const MaintenanceWorkerClient = () => {
     setViewMode(newMode);
     setSelectedDate('');
     setPage(1);
-    // The status filter belongs to the "Attive" tab only.
-    if (newMode !== 'active') setStatusFilter('');
     // 'Libere' (pool) is meaningless in the completed history — completed
     // faults are always assigned. Drop back to 'Mie' when entering it.
     if (newMode === 'completed' && scope === 'pool') setScope('mine');
     // Opening a tab clears its others-assigned (model A) cards; mine/pool
     // (model B) cards stay flagged until opened individually.
     markSeen(seenKeyForMode(newMode));
-
-    if (newMode === 'overdue') {
-      fetchOverdueDeadlines(priority);
-    } else {
-      setOverdueDeadlineDates([]);
-    }
   };
 
   // One-shot landing-scope auto-select: 'mine' if the worker has any
@@ -549,7 +512,6 @@ const MaintenanceWorkerClient = () => {
       dateFrom,
       dateTo,
       sort: sortOption,
-      status: statusFilter,
     });
   }, [
     scopeResolved,
@@ -562,14 +524,13 @@ const MaintenanceWorkerClient = () => {
     userId,
     debouncedSearch,
     sortOption,
-    statusFilter,
     dateFrom,
     dateTo,
   ]);
 
   useEffect(() => {
-    fetchPlannedCounts(scope, userId, viewMode);
-  }, [scope, userId, viewMode, fetchPlannedCounts]);
+    fetchCalendarCounts(scope, userId, viewMode);
+  }, [scope, userId, viewMode, fetchCalendarCounts]);
 
   // Mark the landing tab seen once resolved, so its others-assigned
   // (model A) cards start cleared. Mine/pool (model B) cards keep their
@@ -588,7 +549,6 @@ const MaintenanceWorkerClient = () => {
     if (!socket) return;
     const invalidateCounts = () => {
       queryClient.invalidateQueries({ queryKey: ['workerBoard'] });
-      queryClient.invalidateQueries({ queryKey: ['workerPool'] });
     };
     const onCreated = () => {
       setNewFaultCount(c => c + 1);
@@ -612,7 +572,6 @@ const MaintenanceWorkerClient = () => {
       dateFrom,
       dateTo,
       sort: sortOption,
-      status: statusFilter,
     });
   };
 
@@ -624,7 +583,6 @@ const MaintenanceWorkerClient = () => {
       dateFrom,
       dateTo,
       sort: sortOption,
-      status: statusFilter,
     });
   };
 
@@ -644,6 +602,8 @@ const MaintenanceWorkerClient = () => {
     emptyText = t('empty.suspended');
   } else if (isCompletedMode) {
     emptyText = selectedDate ? t('empty.completedDate') : t('empty.completed');
+  } else if (viewMode === 'inProgress') {
+    emptyText = t('empty.inProgress');
   } else if (selectedDate) {
     emptyText =
       scope === 'mine'
@@ -660,7 +620,7 @@ const MaintenanceWorkerClient = () => {
           : t('empty.default');
   }
 
-  const showResetButton = !isOverdueMode && (selectedDate || scope !== 'all');
+  const showResetButton = Boolean(selectedDate) || scope !== 'all';
 
   // Tab badges: always-visible total (per current scope) + a red dot when
   // the tab holds unseen faults.
@@ -671,10 +631,69 @@ const MaintenanceWorkerClient = () => {
     if (d?.totalFault !== undefined) viewCounts[m] = d.totalFault;
     if (d?.hasUnseen) viewDots[m] = true;
   });
-  // Pool (Libere) gets an unseen dot only.
-  const scopeDots: Partial<Record<FaultScope, boolean>> = poolState?.hasUnseen
-    ? { pool: true }
-    : {};
+  // Picking a "Periodo" re-jumps to the first tab with matches.
+  const boardReady =
+    scopeResolved &&
+    boardResults.every(r => r.data !== undefined) &&
+    boardResults.every(r => !r.isFetching);
+  useAutoTabSwitchOnFilter<FaultViewMode>({
+    triggerKey: `${dateFrom}|${dateTo}`,
+    active: Boolean(dateFrom || dateTo),
+    activeTab: viewMode,
+    order: BOARD_MODES,
+    counts: viewCounts,
+    ready: boardReady,
+    onSwitch: handleModeChange,
+  });
+
+  // Filtri (search / date range / sort). Rendered under the scope bar in
+  // the content column.
+  const filterItems: FiltersItem[] = [
+    {
+      id: 'search',
+      type: 'input',
+      label: t('filters.search'),
+      value: search,
+      placeholder: t('filters.searchPlaceholder'),
+      onChange: (v: string) => {
+        setSearch(v);
+        setPage(1);
+      },
+      icon: 'search',
+    },
+    {
+      id: 'range',
+      type: 'daterange',
+      label: t('filters.dateRange'),
+      from: dateFrom,
+      to: dateTo,
+      onChange: (f: string, tv: string) => {
+        setDateFrom(f);
+        setDateTo(tv);
+        setPage(1);
+      },
+      placeholder: t('filters.dateRangePlaceholder'),
+    },
+    {
+      id: 'sort',
+      type: 'select',
+      label: t('filters.sortLabel'),
+      value:
+        sortMapper.getLabelByValue(sortOption) ?? t('filters.sort.auto'),
+      options: sortMapper.labelsArray,
+      onSelect: (label: string) => {
+        setSortOption((sortMapper.getValueByLabel(label) ?? 'auto') as SortKey);
+        setPage(1);
+      },
+    },
+  ];
+  const clearFilters = () => {
+    setSearch('');
+    setDateFrom('');
+    setDateTo('');
+    setSortOption('auto');
+    setPage(1);
+  };
 
   return (
     <div className="container">
@@ -688,91 +707,9 @@ const MaintenanceWorkerClient = () => {
             onPriorityChange={handlePriorityChange}
             activeDate={selectedDate}
             onDateChange={handleDateChange}
-            deadlineDates={isOverdueMode ? overdueDeadlineDates : []}
-            isDeadlineMode={isOverdueMode}
             plannedDays={plannedDays}
-          >
-            {/* Filtri live in the sidebar under the priority legend. */}
-            <div style={{ marginTop: '8px' }}>
-              <Filters
-                stacked
-                items={
-                  [
-                    {
-                      id: 'search',
-                      type: 'input',
-                      label: t('filters.search'),
-                      value: search,
-                      placeholder: t('filters.searchPlaceholder'),
-                      onChange: (v: string) => {
-                        setSearch(v);
-                        setPage(1);
-                      },
-                      icon: 'search',
-                    },
-                    // Status filter — only on "Attive" (which groups
-                    // several statuses); narrows the group to one status.
-                    ...(viewMode === 'active'
-                      ? [
-                          {
-                            id: 'status',
-                            type: 'select' as const,
-                            label: t('filters.status'),
-                            value:
-                              statusMapper.getLabelByValue(statusFilter) ??
-                              t('filters.allStatuses'),
-                            options: statusMapper.labelsArray,
-                            onSelect: (label: string) => {
-                              setStatusFilter(
-                                statusMapper.getValueByLabel(label) ?? ''
-                              );
-                              setPage(1);
-                            },
-                          },
-                        ]
-                      : []),
-                    {
-                      id: 'range',
-                      type: 'daterange',
-                      label: t('filters.dateRange'),
-                      from: dateFrom,
-                      to: dateTo,
-                      onChange: (f: string, tv: string) => {
-                        setDateFrom(f);
-                        setDateTo(tv);
-                        setPage(1);
-                      },
-                      placeholder: t('filters.dateRangePlaceholder'),
-                    },
-                    {
-                      id: 'sort',
-                      type: 'select',
-                      label: t('filters.sortLabel'),
-                      value:
-                        sortMapper.getLabelByValue(sortOption) ??
-                        t('filters.sort.auto'),
-                      options: sortMapper.labelsArray,
-                      onSelect: (label: string) => {
-                        setSortOption(
-                          (sortMapper.getValueByLabel(label) ??
-                            'auto') as SortKey
-                        );
-                        setPage(1);
-                      },
-                    },
-                  ] as FiltersItem[]
-                }
-                onClear={() => {
-                  setSearch('');
-                  setDateFrom('');
-                  setDateTo('');
-                  setStatusFilter('');
-                  setSortOption('auto');
-                  setPage(1);
-                }}
-              />
-            </div>
-          </CalendarBlock>
+            variant={isCompletedMode ? 'completed' : 'planned'}
+          />
 
           <div className={css.contentSection}>
             {/* Tabs sit inside contentSection so on phone/tablet they
@@ -804,9 +741,13 @@ const MaintenanceWorkerClient = () => {
               <ScopeFilterBar
                 activeScope={scope}
                 onScopeChange={handleScopeChange}
-                dots={scopeDots}
                 scopes={isCompletedMode ? ['mine', 'all'] : undefined}
               />
+            </div>
+
+            {/* Filtri — under the scope bar, in the content column. */}
+            <div className={css.filtersBar}>
+              <Filters items={filterItems} onClear={clearFilters} />
             </div>
 
             {newFaultCount > 0 && (
@@ -830,7 +771,11 @@ const MaintenanceWorkerClient = () => {
               </div>
             ) : items.length > 0 ? (
               <>
-                <FaultCardsList faults={items} onClaimed={handleClaimed} />
+                <FaultCardsList
+                  faults={items}
+                  onClaimed={handleClaimed}
+                  period={{ from: dateFrom, to: dateTo }}
+                />
 
                 {totalPage > 1 && (
                   <div className={css.paginationWrapper}>
@@ -864,7 +809,9 @@ const MaintenanceWorkerClient = () => {
           </div>
         </div>
 
-        {!isOverdueMode && selectedDate && (
+        {/* The hourly slot grid only makes sense for planned work (it lays
+            faults out by plannedTime); deadline/completed tabs skip it. */}
+        {MODE_CONFIG[viewMode].field === 'plannedDate' && selectedDate && (
           <DaySlotGrid
             selectedDate={selectedDate}
             faults={items}

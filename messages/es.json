@@ -522,6 +522,7 @@
     "headerSubtitle": "Visualiza y gestiona las intervenciones planificadas",
     "tabs": {
       "active": "Activas",
+      "inProgress": "En curso",
       "overdue": "En Retraso",
       "completed": "Completadas",
       "suspended": "Suspendidas"
@@ -531,8 +532,6 @@
       "searchPlaceholder": "Código, máquina o parte…",
       "dateRange": "Periodo",
       "dateRangePlaceholder": "Seleccionar periodo",
-      "status": "Estado",
-      "allStatuses": "Todos los estados",
       "sortLabel": "Ordenar por",
       "sort": {
         "auto": "Predeterminado",
@@ -558,6 +557,7 @@
     },
     "empty": {
       "overdue": "No hay señalaciones en retraso",
+      "inProgress": "No estás trabajando en ninguna señalación",
       "suspended": "No hay señalaciones suspendidas",
       "completedDate": "No hay señalaciones completadas en esta fecha",
       "completed": "No hay señalaciones completadas",
@@ -577,6 +577,7 @@
     "calendar": {
       "header": "Calendario",
       "interventionsCount": "{count} intervención(es) planificada(s)",
+      "completedCount": "{count} completada(s)",
       "daysOfWeek": {
         "mon": "LUN",
         "tue": "MAR",
@@ -610,12 +611,14 @@
     "headerSubtitle": "Gestiona las señalaciones recibidas, las actividades en curso y el archivo",
     "tabs": {
       "received": "Recibidas",
+      "planned": "Planificadas",
       "inProgress": "En Curso",
       "suspended": "Suspendidas",
       "archive": "Completadas"
     },
     "empty": {
       "received": "No hay señalaciones pendientes",
+      "planned": "No hay señalaciones planificadas",
       "inProgress": "No hay señalaciones en curso",
       "suspended": "No hay señalaciones suspendidas",
       "archive": "No hay señalaciones archivadas"
@@ -627,8 +630,8 @@
       "allPriorities": "Todas las prioridades",
       "type": "Tipo",
       "allTypes": "Todos los tipos",
-      "plannedDate": "Fecha planificada",
-      "datePlaceholder": "Seleccionar fecha",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleccionar periodo",
       "status": "Estado",
       "allStatuses": "Todos los estados",
       "sortLabel": "Ordenar por",
@@ -776,12 +779,41 @@
     "headerTitle": "Monitoreo de Seguridad",
     "headerSubtitle": "Visualiza en tiempo real las señalaciones de seguridad. Solo lectura.",
     "badge": "HSE",
-    "statusFilter": "Estado",
-    "newBadge": "Nuevas",
-    "statusOptions": {
-      "all": "Todos los Estados"
+    "tabs": {
+      "libere": "Libres",
+      "inProgress": "En Curso",
+      "suspended": "Suspendidas",
+      "overdue": "En Retraso",
+      "completed": "Completadas"
     },
-    "empty": "No hay señalaciones de seguridad"
+    "filters": {
+      "search": "Buscar",
+      "searchPlaceholder": "Código u operador…",
+      "dateRange": "Periodo",
+      "dateRangePlaceholder": "Seleccionar periodo",
+      "sortLabel": "Ordenar por",
+      "sort": {
+        "recent": "Más recientes",
+        "oldest": "Menos recientes",
+        "deadlineNear": "Vencimiento cercano",
+        "deadlineFar": "Vencimiento lejano"
+      }
+    },
+    "empty": {
+      "libere": "No hay señalaciones libres",
+      "inProgress": "No hay señalaciones en curso",
+      "suspended": "No hay señalaciones suspendidas",
+      "overdue": "No hay señalaciones en retraso",
+      "completed": "No hay señalaciones completadas"
+    }
+  },
+  "FaultRow": {
+    "labels": {
+      "id": "ID",
+      "plant": "Planta",
+      "date": "Fecha",
+      "status": "Estado"
+    }
   },
   "FaultDetail": {
     "title": "Detalle de la Señalación",
@@ -819,8 +851,7 @@
       "managerNote": "Notas del responsable",
       "maintainerNote": "Notas del mantenedor",
       "hseNote": "Nota HSE (Seguridad)",
-      "noDescription": "Sin descripción",
-      "noNote": "Sin notas"
+      "noDescription": "Sin descripción"
     },
     "actions": {
       "planIntervention": "Planificar intervención",
@@ -929,6 +960,17 @@
       "saveError": "Error al guardar"
     }
   },
+  "AlreadyWorkingModal": {
+    "title": "Ya estás trabajando",
+    "message": "Ya estás trabajando en la señalación",
+    "hint": "Para cambiar a otra, finaliza o suspende el trabajo actual, o continúa con él.",
+    "buttons": {
+      "finalize": "Finalizar",
+      "suspend": "Suspender",
+      "continue": "Continuar"
+    },
+    "resumeError": "No se pudo reanudar la señalación"
+  },
   "MaintenanceUpdateModal": {
     "title": "Actualizar Intervención",
     "titles": {
@@ -987,13 +1029,7 @@
       "recentFaults": {
         "title": "Averías de los últimos 30 días",
         "subtitle": "Todas las averías registradas en el último mes.",
-        "empty": "Sin averías en los últimos 30 días",
-        "labels": {
-          "id": "ID",
-          "plant": "Planta",
-          "date": "Fecha",
-          "status": "Estado"
-        }
+        "empty": "Sin averías en los últimos 30 días"
       },
       "broadcasts": {
         "title": "Comunicaciones",
@@ -1186,7 +1222,7 @@
     "clear": "Limpiar Filtros"
   },
   "btn": {
-    "loading": "cargando..."
+    "loading": "Cargando..."
   },
   "NoFound": {
     "noResultsTitle": "No Se Encontraron Resultados",

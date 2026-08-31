@@ -27,19 +27,6 @@
   overflow: hidden;
 }
 
-.logo_title_container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.logo_page_name {
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  color: #45556c;
-}
-
 .nav {
   display: none;
 
@@ -134,7 +121,7 @@
   padding: 8px 12px;
   background: #f1f5f9;
   min-width: 121px;
-  height: 36px;
+  height: 38px;
 }
 
 .user_icon {

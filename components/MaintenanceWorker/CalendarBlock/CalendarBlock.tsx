@@ -11,9 +11,9 @@ interface CalendarBlockProps {
   onPriorityChange: (priority: string) => void;
   activeDate: string;
   onDateChange: (d: string) => void;
-  deadlineDates?: string[];
-  isDeadlineMode?: boolean;
   plannedDays?: Record<string, PlannedDayBucket>;
+  /** 'completed' switches the day badges to the closed-count style. */
+  variant?: 'planned' | 'completed';
   /** Extra content shown in the sidebar below the priority legend
    *  (e.g. the Filtri panel). */
   children?: ReactNode;
@@ -23,9 +23,8 @@ const CalendarBlock = ({
   onPriorityChange,
   activeDate,
   onDateChange,
-  deadlineDates = [],
-  isDeadlineMode = false,
   plannedDays = {},
+  variant = 'planned',
   children,
 }: CalendarBlockProps) => {
   const t = useTranslations('maintenanceWorkerPage.calendar');
@@ -35,9 +34,8 @@ const CalendarBlock = ({
       <Calendar
         activeDataCreated={activeDate}
         onDataCreatedChange={onDateChange}
-        deadlineDates={deadlineDates}
-        isDeadlineMode={isDeadlineMode}
         plannedDays={plannedDays}
+        variant={variant}
       />
       <FilterPriorityBar
         activePriority={activePriority}
