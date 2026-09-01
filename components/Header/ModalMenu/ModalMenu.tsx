@@ -15,6 +15,7 @@ import { roleRoutes } from '@/constants/roleRoutes';
 import { IS_DEMO } from '@/lib/config/demo';
 import DemoRoleSwitcher from '../DemoRoleSwitcher/DemoRoleSwitcher';
 import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
+import { canAccessMessages } from '@/lib/utils/canAccessMessages';
 
 export interface ModalMenuProps {
   onClose: () => void;
@@ -105,10 +106,12 @@ const ModalMenu = ({
                         <use href="/sprite.svg#user"></use>
                       </svg>
                       <p className={css.user_name}>{user?.fullName}</p>
-                      <NotificationBell
-                        enabled={isAuthenticated}
-                        onClose={onClose}
-                      />
+                      {canAccessMessages(user) && (
+                        <NotificationBell
+                          enabled={isAuthenticated}
+                          onClose={onClose}
+                        />
+                      )}
                       <PushToggle />
                     </div>
                     {/* In demo there is no real session to end — the role

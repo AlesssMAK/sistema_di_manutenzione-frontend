@@ -11,7 +11,7 @@ import { getUnreadCount } from '@/lib/api/messages';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import css from './page.module.css';
 
 const MessagesClient = () => {
@@ -37,6 +37,14 @@ const MessagesClient = () => {
         : []
       : ['direct', 'broadcastRole', 'broadcastAll'];
   const canCompose = allowedChannels.length > 0;
+
+  // Operators without the send permission have no use for this page — they
+  // read direct messages on their dashboard and announcements on the Bacheca.
+  // Bounce them back to their dashboard.
+  const blocked = isOperator && !canSendDirect;
+  useEffect(() => {
+    if (blocked) router.replace('/operator');
+  }, [blocked, router]);
 
   // Both tabs are shown to every role now — operators included.
   const tabs = useMemo<TabItem<InboxKind>[]>(
@@ -65,6 +73,8 @@ const MessagesClient = () => {
     ...(unreadDirect > 0 ? { direct: true } : {}),
     ...(unreadAnnouncements > 0 ? { announcements: true } : {}),
   };
+
+  if (blocked) return null;
 
   return (
     <div className="container">
