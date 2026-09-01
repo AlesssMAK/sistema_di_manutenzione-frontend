@@ -21,15 +21,15 @@ const OperatorPageClient = () => {
 
   const [activeTab, setActiveTab] = useState<OperatorTab>('messages');
 
-  // Tab badges: unread announcements on "Messaggi", total own reports on
-  // "Le Mie Segnalazioni". Both hidden when zero.
+  // Tab badges: unread DIRECT messages on "Messaggi" (personal messages
+  // addressed to this operator), total own reports on "Le Mie Segnalazioni".
+  // General announcements live on the Bacheca, not here. Both hidden at zero.
   const { data: unread } = useQuery({
     queryKey: ['messages', 'unread-count'],
     queryFn: getUnreadCount,
     staleTime: 30 * 1000,
   });
-  const unreadAnnouncements =
-    (unread?.roleAnnouncements ?? 0) + (unread?.allAnnouncements ?? 0);
+  const unreadDirect = unread?.direct ?? 0;
 
   const { data: myFaultsData } = useQuery({
     queryKey: ['faults', 'my', 'count', userId],
@@ -41,13 +41,13 @@ const OperatorPageClient = () => {
   const myFaultsTotal = myFaultsData?.totalFault ?? 0;
 
   const counts: Partial<Record<OperatorTab, number>> = {
-    ...(unreadAnnouncements > 0 ? { messages: unreadAnnouncements } : {}),
+    ...(unreadDirect > 0 ? { messages: unreadDirect } : {}),
     ...(myFaultsTotal > 0 ? { myFaults: myFaultsTotal } : {}),
   };
-  // Unread announcements make the Messaggi badge blink; own reports total
+  // Unread direct messages make the Messaggi badge blink; own reports total
   // is just informational (no blink).
   const dots: Partial<Record<OperatorTab, boolean>> = {
-    ...(unreadAnnouncements > 0 ? { messages: true } : {}),
+    ...(unreadDirect > 0 ? { messages: true } : {}),
   };
 
   const tabs: TabItem<OperatorTab>[] = [
@@ -71,11 +71,11 @@ const OperatorPageClient = () => {
           />
         </div>
 
-        {/* Operator's "Messaggi" mirrors what the bell links to —
-            operators can't send/receive direct, so this is the
-            broadcast_role view from /messages. */}
+        {/* "Messaggi" = the operator's personal (direct) inbox. General
+            announcements are shown on the Bacheca (Comunicazioni), so they
+            aren't duplicated here. */}
         {activeTab === 'messages' && (
-          <MessageInbox kind="announcements" currentUserId={userId} />
+          <MessageInbox kind="direct" currentUserId={userId} />
         )}
 
         {activeTab === 'myFaults' && <MyFaultsList />}
