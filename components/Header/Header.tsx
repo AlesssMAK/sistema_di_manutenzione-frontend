@@ -17,6 +17,7 @@ import { roleRoutes } from '@/constants/roleRoutes';
 import { IS_DEMO } from '@/lib/config/demo';
 import DemoRoleSwitcher from './DemoRoleSwitcher/DemoRoleSwitcher';
 import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
+import { canAccessMessages } from '@/lib/utils/canAccessMessages';
 import Image from 'next/image';
 
 const Header = () => {
@@ -111,7 +112,9 @@ const Header = () => {
                     <use href="/sprite.svg#user"></use>
                   </svg>
                   <p className={css.user_name}>{user?.fullName}</p>
-                  <NotificationBell enabled={isAuthenticated} />
+                  {canAccessMessages(user) && (
+                    <NotificationBell enabled={isAuthenticated} />
+                  )}
                   <PushToggle />
                 </div>
               </>
