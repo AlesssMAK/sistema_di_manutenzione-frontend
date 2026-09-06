@@ -12,19 +12,18 @@
 
 .logo_container {
   display: flex;
-  /* gap: 4px; */
-}
-
-.logo {
-  display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 8px;
   padding: 0px;
-  width: 136px;
+  width: 170px;
   height: 44px;
   background: #fff;
   overflow: hidden;
+}
+
+.logo_icon {
+  fill: transparent;
 }
 
 .nav {
