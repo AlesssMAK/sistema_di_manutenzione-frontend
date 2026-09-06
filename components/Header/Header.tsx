@@ -51,14 +51,9 @@ const Header = () => {
         <div className={css.header_container}>
           <Link href={isAuthenticated ? `${route}` : '/'}>
             <div className={css.logo_container}>
-              <div className={css.logo}>
-                <Image
-                  src="/images/logo_tansparent_icon.svg"
-                  width={136}
-                  height={44}
-                  alt="SYLLERT logo"
-                />
-              </div>
+              <svg className={css.logo_icon} width="170" height="24">
+                <use href="/images/logo_tansparent_icon.svg"></use>
+              </svg>
             </div>
           </Link>
           {isOpenModal ? (
