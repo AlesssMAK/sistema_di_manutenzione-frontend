@@ -18,7 +18,6 @@ import { IS_DEMO } from '@/lib/config/demo';
 import DemoRoleSwitcher from './DemoRoleSwitcher/DemoRoleSwitcher';
 import { useWarehouseAccess } from '@/lib/hooks/useWarehouseAccess';
 import { canAccessMessages } from '@/lib/utils/canAccessMessages';
-import Image from 'next/image';
 
 const Header = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);

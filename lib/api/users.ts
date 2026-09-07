@@ -2,7 +2,6 @@ import {
   GetMeRespons,
   UpdateUserRequest,
   UpdateUserResponse,
-  User,
   UserRequest,
   UsersResponse,
 } from '@/types/userTypes';
@@ -29,6 +28,11 @@ export const getAllUsers = async ({
 export const getMe = async () => {
   const me = await nextServer.get<GetMeRespons>('/users/me');
   return me.data.user;
+};
+
+// Mirror the chosen UI language onto the profile (drives localized emails).
+export const setMyLocale = async (locale: string) => {
+  await nextServer.patch('/users/me/locale', { locale });
 };
 
 export const updateUser = async ({ userId, data }: UpdateUserRequest) => {

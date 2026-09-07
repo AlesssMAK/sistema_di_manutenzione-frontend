@@ -2,6 +2,10 @@
 
 import MessageInbox from '@/components/Messages/MessageInbox/MessageInbox';
 import MyFaultsList from '@/components/Operator/MyFaultsList/MyFaultsList';
+import {
+  type Period,
+  cutoffFor,
+} from '@/components/Operator/MyFaultsList/period';
 import Tabs, { type TabItem } from '@/components/UI/Tabs/Tabs';
 import { useAuthStore } from '@/lib/store/authStore';
 import { fetchFaultCards } from '@/lib/api/faults';
@@ -20,6 +24,9 @@ const OperatorPageClient = () => {
   const userId = String(user?._id ?? '');
 
   const [activeTab, setActiveTab] = useState<OperatorTab>('messages');
+  // Own-reports period, lifted here so the "Le Mie Segnalazioni" badge and
+  // the list below (MyFaultsList) share one filter and always match.
+  const [period, setPeriod] = useState<Period>('30d');
 
   // Tab badges: unread DIRECT messages on "Messaggi" (personal messages
   // addressed to this operator), total own reports on "Le Mie Segnalazioni".
@@ -31,10 +38,17 @@ const OperatorPageClient = () => {
   });
   const unreadDirect = unread?.direct ?? 0;
 
+  // Count matches the list: same createdById + period (dataCreatedFrom) filter.
+  const myFaultsCutoff = cutoffFor(period);
   const { data: myFaultsData } = useQuery({
-    queryKey: ['faults', 'my', 'count', userId],
+    queryKey: ['faults', 'my', 'count', userId, period],
     queryFn: () =>
-      fetchFaultCards({ page: 1, perPage: 1, createdById: userId }),
+      fetchFaultCards({
+        page: 1,
+        perPage: 1,
+        createdById: userId,
+        ...(myFaultsCutoff ? { dataCreatedFrom: myFaultsCutoff } : {}),
+      }),
     enabled: Boolean(userId),
     staleTime: 30 * 1000,
   });
@@ -78,7 +92,9 @@ const OperatorPageClient = () => {
           <MessageInbox kind="direct" currentUserId={userId} />
         )}
 
-        {activeTab === 'myFaults' && <MyFaultsList />}
+        {activeTab === 'myFaults' && (
+          <MyFaultsList period={period} onPeriodChange={setPeriod} />
+        )}
       </div>
     </div>
   );

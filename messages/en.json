@@ -306,6 +306,7 @@
         "section": "Email",
         "enabled": "Email notifications enabled",
         "from": "Sender address",
+        "signature": "Email signature",
         "rateLimit": "Email per recipient / hour",
         "triggers": {
           "section": "Events That Send Email",

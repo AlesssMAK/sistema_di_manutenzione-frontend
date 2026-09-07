@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useAuthStore } from '@/lib/store/authStore';
+import { setMyLocale } from '@/lib/api/users';
 import css from './LanguageSwitcher.module.css';
 
 type LocaleCode = 'it' | 'en' | 'es' | 'pl';
@@ -52,6 +54,7 @@ const LanguageButton = () => {
   );
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,9 +66,19 @@ const LanguageButton = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const localeSelect = (code: LocaleCode) => {
+  const localeSelect = async (code: LocaleCode) => {
     persistLocale(code);
     setOpen(false);
+    // For a logged-in user, mirror the choice onto their profile so
+    // localized emails follow the language they picked. Non-blocking:
+    // a failure here must never stop the UI language from switching.
+    if (isAuthenticated) {
+      try {
+        await setMyLocale(code);
+      } catch {
+        /* ignore — cookie/localStorage already updated the UI language */
+      }
+    }
     // Full reload (not router.refresh): router.refresh only revalidates
     // the current route, so other client-cached routes stay in the old
     // locale — e.g. the page you return to via router.back() after

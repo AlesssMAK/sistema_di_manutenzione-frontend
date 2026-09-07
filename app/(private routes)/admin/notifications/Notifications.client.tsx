@@ -131,6 +131,22 @@ const AdminNotificationsClientPage = () => {
           />
         </div>
 
+        <div className={css.field}>
+          <label className={css.fieldLabel}>{t('email.signature')}</label>
+          <Input
+            type="text"
+            value={email.signature ?? ''}
+            onChange={e => setEmail({ ...email, signature: e.target.value })}
+            disabled={!email.enabled}
+            style={{
+              height: '36px',
+              borderRadius: '6px',
+              background: '#f3f3f5',
+              border: 'none',
+            }}
+          />
+        </div>
+
         <h3 className={css.subTitle}>{t('email.triggers.section')}</h3>
         <div className={css.triggerList}>
           {TRIGGER_KEYS.map(key => (

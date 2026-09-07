@@ -306,6 +306,7 @@
         "section": "Email",
         "enabled": "Notifiche Email Attive",
         "from": "Indirizzo mittente",
+        "signature": "Firma email",
         "rateLimit": "Limite email per destinatario / ora",
         "triggers": {
           "section": "Eventi Che Inviano Email",
