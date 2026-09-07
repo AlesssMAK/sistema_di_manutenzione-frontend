@@ -306,6 +306,7 @@
         "section": "Correo",
         "enabled": "Notificaciones por correo activas",
         "from": "Dirección del remitente",
+        "signature": "Firma del correo",
         "rateLimit": "Correos por destinatario / hora",
         "triggers": {
           "section": "Eventos Que Envían Correo",

@@ -306,6 +306,7 @@
         "section": "E-mail",
         "enabled": "Powiadomienia e-mail włączone",
         "from": "Adres nadawcy",
+        "signature": "Podpis e-maila",
         "rateLimit": "E-maile na odbiorcę / godz.",
         "triggers": {
           "section": "Zdarzenia Wysyłające E-mail",

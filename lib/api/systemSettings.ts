@@ -110,6 +110,8 @@ export interface EmailTriggers {
 export interface EmailSettings {
   enabled: boolean;
   from: string;
+  /** Sign-off appended to every email body (language-neutral). */
+  signature: string;
   triggers: EmailTriggers;
   rateLimits: { perRecipientPerHour: number };
 }

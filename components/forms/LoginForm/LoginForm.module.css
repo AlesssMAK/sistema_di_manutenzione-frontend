@@ -91,6 +91,14 @@
   }
 }
 
+/* Button pairs (project rule): full-width stacked on mobile, EQUAL-width in
+   the desktop row — never a cramped content-width button beside a wide one.
+   Applies to any child (Button or a plain Link with .button classes). */
+.btn_container > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
 .input_container {
   position: relative;
 }
