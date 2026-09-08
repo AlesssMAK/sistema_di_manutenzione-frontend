@@ -425,6 +425,21 @@ const StockOpModal = ({
                               </svg>
                             </button>
                           )}
+                          {l.key === lines[lines.length - 1].key && (
+                            <button
+                              type="button"
+                              className={css.addLineBtn}
+                              onClick={() =>
+                                setLines(prev => [...prev, emptyLine()])
+                              }
+                              aria-label={t('addLine')}
+                              title={t('addLine')}
+                            >
+                              <svg>
+                                <use href="/sprite.svg#plus" />
+                              </svg>
+                            </button>
+                          )}
                         </div>
                         {per && (
                           <div className={css.pkgRow}>
@@ -458,13 +473,6 @@ const StockOpModal = ({
                     );
                   })}
                 </div>
-                <button
-                  type="button"
-                  className={css.addLineBtn}
-                  onClick={() => setLines(prev => [...prev, emptyLine()])}
-                >
-                  + {t('addLine')}
-                </button>
               </div>
             )}
 
