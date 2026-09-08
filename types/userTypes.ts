@@ -69,7 +69,8 @@ export interface CreateUserValues {
   role: UserRoles;
   fullName: string;
   email: string;
-  password: string | undefined;
+  // No password on create: non-operators are invited by email to set their
+  // own; operators use a personal code.
   avatar: string | null;
   personalCode: string | undefined;
 }

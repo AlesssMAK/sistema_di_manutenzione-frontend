@@ -4,7 +4,9 @@ export interface RegisterRequest {
   role: UserRoles;
   fullName: string;
   email: string;
-  password: string | undefined;
+  // Optional & unused for the invite flow — kept so the backend can still
+  // reject it (admin never sets passwords).
+  password?: string | undefined;
   personalCode: string | undefined;
   avatar: string | null;
 }

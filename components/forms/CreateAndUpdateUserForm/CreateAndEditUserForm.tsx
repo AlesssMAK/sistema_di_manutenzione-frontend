@@ -7,7 +7,7 @@ import SelectDropdown from '@/components/UI/SelectDropdown/SelectDropdown';
 import { useRoleOptions } from '@/constants/roleType';
 import { registerUser } from '@/lib/api/auth';
 import { generatePassword, generatePersonalCode } from '@/lib/api/generate';
-import { updateUser } from '@/lib/api/users';
+import { updateUser, sendUserResetLink } from '@/lib/api/users';
 import { createOptionMapper } from '@/lib/utils/translationMapper';
 import {
   createUserSchema,
@@ -55,6 +55,7 @@ const CreateAndEditUserForm = ({
   const [personalCode, setPersonalCode] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [manual, setManual] = useState(false);
+  const [sendingReset, setSendingReset] = useState(false);
 
   const t = useTranslations('AdminPage.CreateAndEditUserForm');
   const tBtn = useTranslations('btn');
@@ -110,11 +111,25 @@ const CreateAndEditUserForm = ({
     });
   };
 
+  const handleSendReset = async () => {
+    if (!userId) return;
+    setSendingReset(true);
+    try {
+      await sendUserResetLink(userId);
+      toast.success(t('resetLinkSent'));
+    } catch {
+      toast.error(t('resetLinkError'));
+    } finally {
+      setSendingReset(false);
+    }
+  };
+
   const handleGeneratePassword = async () => {
     const password = await generatePassword();
     setManual(false);
     setPassword(password);
-    createUserForm.setValue('password', password, { shouldValidate: true });
+    // Password only exists on the edit form now (admin resetting a password);
+    // create uses the email-invite flow.
     updateUserForm.setValue('password', password, { shouldValidate: true });
   };
 
@@ -124,7 +139,8 @@ const CreateAndEditUserForm = ({
         role: data.role,
         fullName: data.fullName,
         email: data.email,
-        password: data.password,
+        // No password: non-operators are invited by email to set their own;
+        // operators authenticate with the personal code below.
         personalCode: data.personalCode,
         avatar: data.avatar,
       });
@@ -282,6 +298,11 @@ const CreateAndEditUserForm = ({
               )}
             </div>
           )}
+          {/* Credential field. Operators always get a personal code (they
+              have no email). Non-operators never get a password field: on
+              CREATE they're invited by email; on EDIT the admin can (re)send
+              them an activation link instead of typing a password. */}
+          {operator ? (
           <div className={css.form_item_container}>
             <p className={css.form_label}>
               {operator ? t('accessCode') : t('password')}{' '}
@@ -327,9 +348,9 @@ const CreateAndEditUserForm = ({
                     {activeForm.formState.errors.personalCode.message}
                   </p>
                 )}
-                {activeForm.formState.errors.password && (
+                {isEditMode && updateUserForm.formState.errors.password && (
                   <p className={css.error}>
-                    {activeForm.formState.errors.password.message}
+                    {updateUserForm.formState.errors.password.message}
                   </p>
                 )}
               </div>
@@ -365,6 +386,31 @@ const CreateAndEditUserForm = ({
               </div>
             </div>
           </div>
+          ) : isEditMode ? (
+            <div className={css.form_item_container}>
+              <div className={css.description_container}>
+                <p className={css.code_description}>{t('sendResetHint')}</p>
+              </div>
+              <Button
+                type="button"
+                className={`button button--white ${css.btn}`}
+                width="100%"
+                onClick={handleSendReset}
+                disabled={sendingReset}
+              >
+                <svg width="16" height="16" className={css.btn_icon_key}>
+                  <use href="/sprite.svg#mail"></use>
+                </svg>
+                {sendingReset ? tBtn('loading') : t('sendResetLink')}
+              </Button>
+            </div>
+          ) : (
+            <div className={css.form_item_container}>
+              <div className={css.description_container}>
+                <p className={css.code_description}>{t('inviteHint')}</p>
+              </div>
+            </div>
+          )}
           <div className={css.btn_form_container}>
             <Button
               type="button"
