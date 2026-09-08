@@ -204,8 +204,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border: none;
   border-radius: 6px;
   background: #f3f4f6;
@@ -219,19 +219,38 @@
 }
 
 .lineRemove svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
+  width: 18px;
+  height: 18px;
+  /* #close is a stroke-based icon — fill leaves it invisible (empty box). */
+  fill: none;
+  stroke: currentColor;
 }
 
+/* Icon "+" square in the row — matches the add button in FaultMaterialsPicker. */
 .addLineBtn {
-  align-self: flex-start;
-  font-size: 13px;
-  color: #1e40af;
-  background: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
   border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
   cursor: pointer;
-  padding: 2px 0;
+  transition: background 0.15s ease;
+}
+
+.addLineBtn:hover {
+  background: #1e40af;
+}
+
+.addLineBtn svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
 }
 
 .formActions {
