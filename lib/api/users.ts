@@ -35,6 +35,11 @@ export const setMyLocale = async (locale: string) => {
   await nextServer.patch('/users/me/locale', { locale });
 };
 
+// Admin re-sends a set-password / activation link to an existing user.
+export const sendUserResetLink = async (userId: string) => {
+  await nextServer.post(`/users/${userId}/send-reset`);
+};
+
 export const updateUser = async ({ userId, data }: UpdateUserRequest) => {
   const res = await nextServer.put<UpdateUserResponse>(
     `/users/${userId}`,

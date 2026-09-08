@@ -22,12 +22,8 @@ export const createUserSchema = yup.object({
 
   email: yup.string().email().required('email is required'),
 
-  password: yup.string().when('role', {
-    is: (role: string) => role !== 'operator',
-    then: schema => schema.min(8).required('password is required'),
-    otherwise: schema => schema.strip(),
-  }),
-
+  // No password field: non-operators are invited by email to set their own;
+  // operators use a personal code.
   avatar: yup.string().default('').nullable(),
 
   personalCode: yup.string().when('role', {
